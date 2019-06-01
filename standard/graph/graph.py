@@ -26,7 +26,7 @@ class Graph:
 
     - `remove(node, epi=None)`: remove node, or arc by pro & epi
     - `remove_node(node)`: remove node
-    - `remove_arc(arc)`: remove arc by value
+    - `remove_arc(pro, epi)`: remove arc by pro and epi
 
     ### Mutation:
 
@@ -60,8 +60,8 @@ class Graph:
 
     ### Node-based:
 
-    1. Implement `nodes` to iterate (use a generator with the yield
-    keyword) over nodes. Alternatively, assign `self._nodes` to a 
+    1. Implement `nodes` to iterate (use an iterable or a generator
+    implementation) over nodes. Alternatively, assign `self._nodes` to a 
     collection to hold nodes
 
     2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
@@ -72,6 +72,9 @@ class Graph:
     3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
     if none exists. Return True for label-less arcs.
 
+    4. If you want to be able to remove things from the graph, implement
+    `remove_node` and `remove_arc`
+
     4. If you want to improve the efficiency of other methods, you
     can re-implement them. Especially, the default implementations of
     the following methods may be inefficient, although they will work
@@ -81,8 +84,9 @@ class Graph:
         - `pros`
         - `pro`
         - `epi`
+        - `arcs`
 
-    ### Edge-based:
+    ### Arc-based:
 
     1. lorem ipsum
 
@@ -94,7 +98,7 @@ class Graph:
         self._arcs = set()
         raise NotImplementedError(
             "Graph is abstract and cannot be initialized; \
-            use one of its implementations ")
+            use one of its implementations (or make your own!)")
 
     def nodes(self):
         """
@@ -107,7 +111,11 @@ class Graph:
 
     def arcs(self):
         """
-        Iterates over all arcs in the graph
+        Iterates over all arcs in the graph.
+
+        Default implementation: iterates over every pair of nodes and checks
+        if there is an arc between them using `self.arc(n1, n2)`. 
+        O(N * N * T(`self.arc`))
         """
         for pro in self.nodes():
             for epi in self.nodes():
@@ -120,7 +128,7 @@ class Graph:
         Iterates over the arcs that the node is a pro of
 
         Default implementation: iterates over `self.nodes()` and checks if 
-        `self._arc(node, other: Node)` exists. O(N * T(`self.arc`)) efficiency
+        `self.arc(node, other: Node)` exists. O(T(`self.nodes`) * T(`self.arcs`))
         """
         for other in self.nodes():
             arc = self.arc(node, other)
@@ -132,7 +140,7 @@ class Graph:
         Iterates over the arcs that the node is an epi of
 
         Default implementation: iterates over `self.nodes()` and checks if 
-        `self._arc(other: Node, node)` exists. O(N * T(`self.arc`)) efficiency 
+        `self.arc(other: Node, node)` exists. O(T(`self.nodes`)) * T(`self.arc`)) 
         """
         for other in self.nodes():
             arc = self.arc(other, node)
@@ -145,7 +153,7 @@ class Graph:
 
         Default implementation: iterates over `self.arcs()` and returns an arc
         where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
-        respectively 
+        respectively. O(T(`self.pro`) * T(`self.epi`) * T(`self.arc`))
         """
         for arc in self.arcs():
             if self.pro(arc) is pro and self.epi(arc) is epi:
@@ -153,7 +161,7 @@ class Graph:
 
     def has(self, node, epi=None):
         """
-        Returns whether the graph contains node
+        Returns boolean indicating whether the graph contains node
 
         If epi is specified, instead returns whether an arc exists from pro to
         epi
@@ -167,6 +175,10 @@ class Graph:
     
     def has_node(self, node):
         """
+        Returns boolean indicating whether the graph contains node
+
+        Default implementation: iterates over nodes to check against node.
+        O(T(`self.nodes`))
         """
         for n in self.nodes():
             if n is node:
@@ -175,6 +187,10 @@ class Graph:
 
     def has_arc(self, arc):
         """
+        Returns boolean indicating whether the graph contains arc
+
+        Default implementation: iterates over arcs to check against arc.
+        O(T(`self.arcs`))
         """
         for e in self.arcs():
             if e is arc:
@@ -183,6 +199,11 @@ class Graph:
     
     def pro(self, arc):
         """
+        Returns the pro of arc
+
+        Default implementation: iterates through pairs of nodes and checks if
+        arc matches the arc returned by `self.arc(n1, n2)`.
+        O(N * N * T(`self.arc`))
         """
         for n1 in self.nodes():
             for n2 in self.nodes():
@@ -191,6 +212,11 @@ class Graph:
 
     def epi(self, arc):
         """
+        Returns the epi of arc
+
+        Default implementation: iterates through pairs of nodes and checks if
+        arc matches the arc returned by `self.arc(n1, n2)`.
+        O(N * N * T(`self.arc`))
         """
         for n1 in self.nodes():
             for n2 in self.nodes():
@@ -199,6 +225,11 @@ class Graph:
     
     def add(self, node, epi=None, arc=None):
         """
+        Add node and epi to the graph (caution, if already existing they will
+        be added as duplicates in certain implementations). If epi is specified,
+        an arc from node to epi will also be added with value arc
+
+        Default implementation: routes to `self.add_node` and `self.add_arc`
         """
         if epi is not None:
             self.add_node(node)
@@ -211,16 +242,28 @@ class Graph:
 
     def add_node(self, node):
         """
+        Add a node to the graph, initialized without any arcs
+
+        Default implementation: calls `self._nodes.add(node)`
         """
         self._nodes.add(node)
 
     def add_arc(self, pro, epi, arc=True):
         """
+        Add an arc from pro to epi to the graph. By default, unlabeled arcs are
+        valued True. Does not add pro or epi to the graph explicitly
+
+        Default implementation: calls `self._arcs.add((pro, epi, arc))`
         """
         self._arcs.add((pro, epi, arc))
 
     def epis(self, node):
         """
+        Return the epis that node has arcs to
+
+        Default implementation: iterate through `self.nodes()` and check if
+        there is an arc from node to other_node using `self.arc(other_node, node)`
+        O(T(`self.nodes`) * T(`self.arc`))
         """
         for n in self.nodes():
             if self.arc(node, n) is not None:
@@ -228,6 +271,11 @@ class Graph:
 
     def pros(self, node):
         """
+        Return the pros that have arcs where node is the epi
+
+        Default implementation: iterate through `self.nodes()` and check if
+        there is an arc from node to other_node using `self.arc(node, other_node)`
+        O(T(`self.nodes`) * T(`self.arc`))
         """
         for n in self.nodes():
             if self.arc(n, node) is not None:
@@ -235,18 +283,28 @@ class Graph:
 
     def remove(self, node, epi=None):
         """
+        With one argument, removes a node from the graph.
+
+        With two arguments, removes the arc from node to epi
+
+        Default implementation: routes to `self.remove_node` and `self.remove_arc`
         """
-        pass
+        if epi is None:
+            return self.remove_node(node)
+        else:
+            return self.remove_arc(node, epi)
     
     def remove_node(self, node):
         """
+        Remove node from the graph
         """
-        pass
+        raise NotImplementedError('Implement remove_node to enable removal')
 
-    def remove_arc(self, arc):
+    def remove_arc(self, pro, epi):
         """
+        Remove an arc from the graph by specifying its pro and epi
         """
-        pass
+        raise NotImplementedError('Implement remove_arc to enable removal')
 
     def traverse(self, start, frontier, condition=None):
         """
