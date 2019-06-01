@@ -1,0 +1,12 @@
+[
+  "test/graph/test_dictionary_graph.py::test_init",
+  "test/graph/test_dictionary_graph.py::test_add",
+  "test/graph/test_graph.py::test_inheritence_nodebased",
+  "test/graph/test_graph.py::test_add_methods",
+  "test/graph/test_graph.py::test_membership",
+  "test/graph/test_graph.py::test_iteration_methods",
+  "test/graph/test_graph.py::test_node_adjacency_iterators",
+  "test/graph/test_graph.py::test_node_arc_adjacency",
+  "test/graph/test_graph.py::test_arc_node_adjacency",
+  "test/graph/test_node.py::test_init"
+]

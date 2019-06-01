@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.6.2" />
+<title>standard.graph.graph API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase;cursor:pointer}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>standard.graph.graph</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Graph:
+    &#34;&#34;&#34;
+    General graph structure
+
+    **Abstract Class**
+
+    ## Methods summary:
+
+    ### Graph-level properties:
+
+    - `nodes()`: iterate over nodes
+    - `arcs()`: iterate over arcs
+    - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
+    - `has_node(node)`: node membership
+    - `has_arc(arc)`: arc membership by arc value
+    - `number_nodes()`: count of nodes
+    - `number_arcs()`: count of arcs
+    
+    ### Construction:
+
+    - `add(node, epi=None, arc=None)`: add node, or (pro, epi, arc)
+    - `add_node(node)`: add node
+    - `add_arc(pro, epi, arc=True)`: add arc
+
+    ### Destruction:
+
+    - `remove(node, epi=None)`: remove node, or arc by pro &amp; epi
+    - `remove_node(node)`: remove node
+    - `remove_arc(arc)`: remove arc by value
+
+    ### Mutation:
+
+    - `replace_node(old, new)`: replace a node while preserving its arcs
+    - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
+
+    ### Properties for finding nodes:
+
+    - `epis(node)`: iterate over epis of a node
+    - `pros(node)`: iterate over pros of a node
+    - `pro(arc)`: returns the pro of an arc
+    - `epi(arc)`: returns the epi of an arc
+    - `number_epis(node)`: returns a count of a node&#39;s epis
+    - `number_pros(node)`: returns a count of a nodes&#39;s pros
+
+    ### Properties for finding arcs:
+
+    - `arc(pro, epi)`: returns the arc from pro to epi
+    - `arcs_out(node)`: iterate over the arcs the node is the pro of
+    - `arcs_in(node)`: iterate over the arcs the node is an epi of
+    - `number_arcs_out(node)`: count of the arcs the node is the pro of
+    - `number_arcs_in(node)`: count of the arcs the node is an epi of
+
+    ### Graph navigation:
+
+    - `traverse(start, frontier, condition=None)`: memoryless node traversal
+    - `search(start, frontier, end_condition, condition)`: path search
+    - `explore(start, frontier, end_condition, condition)`: generator search
+
+    ## Implementation patterns:
+
+    ### Node-based:
+
+    1. Implement `nodes` to iterate (use a generator with the yield
+    keyword) over nodes. Alternatively, assign `self._nodes` to a 
+    collection to hold nodes
+
+    2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
+    if you assign `self._nodes` to a collection that implements 
+    `.add(e)` and `.remove(e)` to add/remove element e, you may skip
+    this step)
+
+    3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
+    if none exists. Return True for label-less arcs.
+
+    4. If you want to improve the efficiency of other methods, you
+    can re-implement them. Especially, the default implementations of
+    the following methods may be inefficient, although they will work
+    if the above 3 steps have been followed:
+
+        - `epis`
+        - `pros`
+        - `pro`
+        - `epi`
+
+    ### Edge-based:
+
+    1. lorem ipsum
+
+    ### 
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self._nodes = set()
+        self._arcs = set()
+        raise NotImplementedError(
+            &#34;Graph is abstract and cannot be initialized; \
+            use one of its implementations &#34;)
+
+    def nodes(self):
+        &#34;&#34;&#34;
+        Iterates over all nodes in the graph
+
+        Default implementation: iterates over `self._nodes`. O(N)
+        &#34;&#34;&#34;
+        for node in self._nodes:
+            yield node
+
+    def arcs(self):
+        &#34;&#34;&#34;
+        Iterates over all arcs in the graph
+        &#34;&#34;&#34;
+        for pro in self.nodes():
+            for epi in self.nodes():
+                arc = self.arc(pro, epi)
+                if arc is not None:
+                    yield arc
+
+    def arcs_out(self, node):
+        &#34;&#34;&#34;
+        Iterates over the arcs that the node is a pro of
+
+        Default implementation: iterates over `self.nodes()` and checks if 
+        `self._arc(node, other: Node)` exists. O(N * T(`self.arc`)) efficiency
+        &#34;&#34;&#34;
+        for other in self.nodes():
+            arc = self.arc(node, other)
+            if arc is not None:
+                yield arc
+
+    def arcs_in(self, node):
+        &#34;&#34;&#34;
+        Iterates over the arcs that the node is an epi of
+
+        Default implementation: iterates over `self.nodes()` and checks if 
+        `self._arc(other: Node, node)` exists. O(N * T(`self.arc`)) efficiency 
+        &#34;&#34;&#34;
+        for other in self.nodes():
+            arc = self.arc(other, node)
+            if arc is not None:
+                yield arc
+
+    def arc(self, pro, epi):
+        &#34;&#34;&#34;
+        Returns the arc from pro to epi, or None if none exists
+
+        Default implementation: iterates over `self.arcs()` and returns an arc
+        where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
+        respectively 
+        &#34;&#34;&#34;
+        for arc in self.arcs():
+            if self.pro(arc) is pro and self.epi(arc) is epi:
+                return arc
+
+    def has(self, node, epi=None):
+        &#34;&#34;&#34;
+        Returns whether the graph contains node
+
+        If epi is specified, instead returns whether an arc exists from pro to
+        epi
+
+        Default implementation: routes to either `self.has_node` or `self.arc`
+        &#34;&#34;&#34;
+        if epi is None:
+            return self.has_node(node)
+        else:
+            return self.arc(node, epi) is not None       
+    
+    def has_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if n is node:
+                return True
+        return False
+
+    def has_arc(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for e in self.arcs():
+            if e is arc:
+                return True
+        return False
+    
+    def pro(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n1 in self.nodes():
+            for n2 in self.nodes():
+                if self.arc(n1, n2) is arc:
+                    return n1
+
+    def epi(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n1 in self.nodes():
+            for n2 in self.nodes():
+                if self.arc(n1, n2) is arc:
+                    return n2
+    
+    def add(self, node, epi=None, arc=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        if epi is not None:
+            self.add_node(node)
+            self.add_node(epi)
+            if arc is None:
+                arc = True
+            self.add_arc(node, epi, arc)
+        else:
+            self.add_node(node)
+
+    def add_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        self._nodes.add(node)
+
+    def add_arc(self, pro, epi, arc=True):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        self._arcs.add((pro, epi, arc))
+
+    def epis(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if self.arc(node, n) is not None:
+                yield n
+
+    def pros(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if self.arc(n, node) is not None:
+                yield n
+
+    def remove(self, node, epi=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+    
+    def remove_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def remove_arc(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def traverse(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def traverse_arcs(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search_arcs(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore_arcs(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    </code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="standard.graph.graph.Graph"><code class="flex name class">
+<span>class <span class="ident">Graph</span></span>
+</code></dt>
+<dd>
+<section class="desc"><p>General graph structure</p>
+<p><strong>Abstract Class</strong></p>
+<h2 id="methods-summary">Methods summary:</h2>
+<h3 id="graph-level-properties">Graph-level properties:</h3>
+<ul>
+<li><code>nodes()</code>: iterate over nodes</li>
+<li><code>arcs()</code>: iterate over arcs</li>
+<li><code>has(node, epi=None)</code>: membership of node or arc by pro &amp; epi</li>
+<li><code>has_node(node)</code>: node membership</li>
+<li><code>has_arc(arc)</code>: arc membership by arc value</li>
+<li><code>number_nodes()</code>: count of nodes</li>
+<li><code>number_arcs()</code>: count of arcs</li>
+</ul>
+<h3 id="construction">Construction:</h3>
+<ul>
+<li><code>add(node, epi=None, arc=None)</code>: add node, or (pro, epi, arc)</li>
+<li><code>add_node(node)</code>: add node</li>
+<li><code>add_arc(pro, epi, arc=True)</code>: add arc</li>
+</ul>
+<h3 id="destruction">Destruction:</h3>
+<ul>
+<li><code>remove(node, epi=None)</code>: remove node, or arc by pro &amp; epi</li>
+<li><code>remove_node(node)</code>: remove node</li>
+<li><code>remove_arc(arc)</code>: remove arc by value</li>
+</ul>
+<h3 id="mutation">Mutation:</h3>
+<ul>
+<li><code>replace_node(old, new)</code>: replace a node while preserving its arcs</li>
+<li><code>replace_arc(pro, epi, new)</code>: replace an arc by its node endpoints</li>
+</ul>
+<h3 id="properties-for-finding-nodes">Properties for finding nodes:</h3>
+<ul>
+<li><code>epis(node)</code>: iterate over epis of a node</li>
+<li><code>pros(node)</code>: iterate over pros of a node</li>
+<li><code>pro(arc)</code>: returns the pro of an arc</li>
+<li><code>epi(arc)</code>: returns the epi of an arc</li>
+<li><code>number_epis(node)</code>: returns a count of a node's epis</li>
+<li><code>number_pros(node)</code>: returns a count of a nodes's pros</li>
+</ul>
+<h3 id="properties-for-finding-arcs">Properties for finding arcs:</h3>
+<ul>
+<li><code>arc(pro, epi)</code>: returns the arc from pro to epi</li>
+<li><code>arcs_out(node)</code>: iterate over the arcs the node is the pro of</li>
+<li><code>arcs_in(node)</code>: iterate over the arcs the node is an epi of</li>
+<li><code>number_arcs_out(node)</code>: count of the arcs the node is the pro of</li>
+<li><code>number_arcs_in(node)</code>: count of the arcs the node is an epi of</li>
+</ul>
+<h3 id="graph-navigation">Graph navigation:</h3>
+<ul>
+<li><code>traverse(start, frontier, condition=None)</code>: memoryless node traversal</li>
+<li><code>search(start, frontier, end_condition, condition)</code>: path search</li>
+<li><code>explore(start, frontier, end_condition, condition)</code>: generator search</li>
+</ul>
+<h2 id="implementation-patterns">Implementation patterns:</h2>
+<h3 id="node-based">Node-based:</h3>
+<ol>
+<li>
+<p>Implement <code>nodes</code> to iterate (use a generator with the yield
+keyword) over nodes. Alternatively, assign <code>self._nodes</code> to a
+collection to hold nodes</p>
+</li>
+<li>
+<p>Implement <code>add_node(node)</code> and <code>add_arc(arc)</code> (alternatively,
+if you assign <code>self._nodes</code> to a collection that implements
+<code>.add(e)</code> and <code>.remove(e)</code> to add/remove element e, you may skip
+this step)</p>
+</li>
+<li>
+<p>Implement <code>arc(pro, epi)</code> to return the arc from pro to epi, or None
+if none exists. Return True for label-less arcs.</p>
+</li>
+<li>
+<p>If you want to improve the efficiency of other methods, you
+can re-implement them. Especially, the default implementations of
+the following methods may be inefficient, although they will work
+if the above 3 steps have been followed:</p>
+<ul>
+<li><code>epis</code></li>
+<li><code>pros</code></li>
+<li><code>pro</code></li>
+<li><code>epi</code></li>
+</ul>
+</li>
+</ol>
+<h3 id="edge-based">Edge-based:</h3>
+<ol>
+<li>lorem ipsum</li>
+</ol>
+<h3 id="_1"></h3></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Graph:
+    &#34;&#34;&#34;
+    General graph structure
+
+    **Abstract Class**
+
+    ## Methods summary:
+
+    ### Graph-level properties:
+
+    - `nodes()`: iterate over nodes
+    - `arcs()`: iterate over arcs
+    - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
+    - `has_node(node)`: node membership
+    - `has_arc(arc)`: arc membership by arc value
+    - `number_nodes()`: count of nodes
+    - `number_arcs()`: count of arcs
+    
+    ### Construction:
+
+    - `add(node, epi=None, arc=None)`: add node, or (pro, epi, arc)
+    - `add_node(node)`: add node
+    - `add_arc(pro, epi, arc=True)`: add arc
+
+    ### Destruction:
+
+    - `remove(node, epi=None)`: remove node, or arc by pro &amp; epi
+    - `remove_node(node)`: remove node
+    - `remove_arc(arc)`: remove arc by value
+
+    ### Mutation:
+
+    - `replace_node(old, new)`: replace a node while preserving its arcs
+    - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
+
+    ### Properties for finding nodes:
+
+    - `epis(node)`: iterate over epis of a node
+    - `pros(node)`: iterate over pros of a node
+    - `pro(arc)`: returns the pro of an arc
+    - `epi(arc)`: returns the epi of an arc
+    - `number_epis(node)`: returns a count of a node&#39;s epis
+    - `number_pros(node)`: returns a count of a nodes&#39;s pros
+
+    ### Properties for finding arcs:
+
+    - `arc(pro, epi)`: returns the arc from pro to epi
+    - `arcs_out(node)`: iterate over the arcs the node is the pro of
+    - `arcs_in(node)`: iterate over the arcs the node is an epi of
+    - `number_arcs_out(node)`: count of the arcs the node is the pro of
+    - `number_arcs_in(node)`: count of the arcs the node is an epi of
+
+    ### Graph navigation:
+
+    - `traverse(start, frontier, condition=None)`: memoryless node traversal
+    - `search(start, frontier, end_condition, condition)`: path search
+    - `explore(start, frontier, end_condition, condition)`: generator search
+
+    ## Implementation patterns:
+
+    ### Node-based:
+
+    1. Implement `nodes` to iterate (use a generator with the yield
+    keyword) over nodes. Alternatively, assign `self._nodes` to a 
+    collection to hold nodes
+
+    2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
+    if you assign `self._nodes` to a collection that implements 
+    `.add(e)` and `.remove(e)` to add/remove element e, you may skip
+    this step)
+
+    3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
+    if none exists. Return True for label-less arcs.
+
+    4. If you want to improve the efficiency of other methods, you
+    can re-implement them. Especially, the default implementations of
+    the following methods may be inefficient, although they will work
+    if the above 3 steps have been followed:
+
+        - `epis`
+        - `pros`
+        - `pro`
+        - `epi`
+
+    ### Edge-based:
+
+    1. lorem ipsum
+
+    ### 
+    &#34;&#34;&#34;
+
+    def __init__(self):
+        self._nodes = set()
+        self._arcs = set()
+        raise NotImplementedError(
+            &#34;Graph is abstract and cannot be initialized; \
+            use one of its implementations &#34;)
+
+    def nodes(self):
+        &#34;&#34;&#34;
+        Iterates over all nodes in the graph
+
+        Default implementation: iterates over `self._nodes`. O(N)
+        &#34;&#34;&#34;
+        for node in self._nodes:
+            yield node
+
+    def arcs(self):
+        &#34;&#34;&#34;
+        Iterates over all arcs in the graph
+        &#34;&#34;&#34;
+        for pro in self.nodes():
+            for epi in self.nodes():
+                arc = self.arc(pro, epi)
+                if arc is not None:
+                    yield arc
+
+    def arcs_out(self, node):
+        &#34;&#34;&#34;
+        Iterates over the arcs that the node is a pro of
+
+        Default implementation: iterates over `self.nodes()` and checks if 
+        `self._arc(node, other: Node)` exists. O(N * T(`self.arc`)) efficiency
+        &#34;&#34;&#34;
+        for other in self.nodes():
+            arc = self.arc(node, other)
+            if arc is not None:
+                yield arc
+
+    def arcs_in(self, node):
+        &#34;&#34;&#34;
+        Iterates over the arcs that the node is an epi of
+
+        Default implementation: iterates over `self.nodes()` and checks if 
+        `self._arc(other: Node, node)` exists. O(N * T(`self.arc`)) efficiency 
+        &#34;&#34;&#34;
+        for other in self.nodes():
+            arc = self.arc(other, node)
+            if arc is not None:
+                yield arc
+
+    def arc(self, pro, epi):
+        &#34;&#34;&#34;
+        Returns the arc from pro to epi, or None if none exists
+
+        Default implementation: iterates over `self.arcs()` and returns an arc
+        where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
+        respectively 
+        &#34;&#34;&#34;
+        for arc in self.arcs():
+            if self.pro(arc) is pro and self.epi(arc) is epi:
+                return arc
+
+    def has(self, node, epi=None):
+        &#34;&#34;&#34;
+        Returns whether the graph contains node
+
+        If epi is specified, instead returns whether an arc exists from pro to
+        epi
+
+        Default implementation: routes to either `self.has_node` or `self.arc`
+        &#34;&#34;&#34;
+        if epi is None:
+            return self.has_node(node)
+        else:
+            return self.arc(node, epi) is not None       
+    
+    def has_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if n is node:
+                return True
+        return False
+
+    def has_arc(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for e in self.arcs():
+            if e is arc:
+                return True
+        return False
+    
+    def pro(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n1 in self.nodes():
+            for n2 in self.nodes():
+                if self.arc(n1, n2) is arc:
+                    return n1
+
+    def epi(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n1 in self.nodes():
+            for n2 in self.nodes():
+                if self.arc(n1, n2) is arc:
+                    return n2
+    
+    def add(self, node, epi=None, arc=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        if epi is not None:
+            self.add_node(node)
+            self.add_node(epi)
+            if arc is None:
+                arc = True
+            self.add_arc(node, epi, arc)
+        else:
+            self.add_node(node)
+
+    def add_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        self._nodes.add(node)
+
+    def add_arc(self, pro, epi, arc=True):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        self._arcs.add((pro, epi, arc))
+
+    def epis(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if self.arc(node, n) is not None:
+                yield n
+
+    def pros(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        for n in self.nodes():
+            if self.arc(n, node) is not None:
+                yield n
+
+    def remove(self, node, epi=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+    
+    def remove_node(self, node):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def remove_arc(self, arc):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def traverse(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def traverse_arcs(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search_arcs(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore_arcs(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="standard.graph.graph.Graph.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, node, epi=None, arc=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add(self, node, epi=None, arc=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    if epi is not None:
+        self.add_node(node)
+        self.add_node(epi)
+        if arc is None:
+            arc = True
+        self.add_arc(node, epi, arc)
+    else:
+        self.add_node(node)</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.add_arc"><code class="name flex">
+<span>def <span class="ident">add_arc</span></span>(<span>self, pro, epi, arc=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_arc(self, pro, epi, arc=True):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    self._arcs.add((pro, epi, arc))</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.add_node"><code class="name flex">
+<span>def <span class="ident">add_node</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_node(self, node):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    self._nodes.add(node)</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.arc"><code class="name flex">
+<span>def <span class="ident">arc</span></span>(<span>self, pro, epi)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the arc from pro to epi, or None if none exists</p>
+<p>Default implementation: iterates over <code>self.arcs()</code> and returns an arc
+where <code>self.pro(arc)</code> and <code>self.epi(arc)</code> match pro and epi
+respectively</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def arc(self, pro, epi):
+    &#34;&#34;&#34;
+    Returns the arc from pro to epi, or None if none exists
+
+    Default implementation: iterates over `self.arcs()` and returns an arc
+    where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
+    respectively 
+    &#34;&#34;&#34;
+    for arc in self.arcs():
+        if self.pro(arc) is pro and self.epi(arc) is epi:
+            return arc</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.arcs"><code class="name flex">
+<span>def <span class="ident">arcs</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Iterates over all arcs in the graph</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def arcs(self):
+    &#34;&#34;&#34;
+    Iterates over all arcs in the graph
+    &#34;&#34;&#34;
+    for pro in self.nodes():
+        for epi in self.nodes():
+            arc = self.arc(pro, epi)
+            if arc is not None:
+                yield arc</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.arcs_in"><code class="name flex">
+<span>def <span class="ident">arcs_in</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Iterates over the arcs that the node is an epi of</p>
+<p>Default implementation: iterates over <code>self.nodes()</code> and checks if
+<code>self._arc(other: Node, node)</code> exists. O(N * T(<code>self.arc</code>)) efficiency</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def arcs_in(self, node):
+    &#34;&#34;&#34;
+    Iterates over the arcs that the node is an epi of
+
+    Default implementation: iterates over `self.nodes()` and checks if 
+    `self._arc(other: Node, node)` exists. O(N * T(`self.arc`)) efficiency 
+    &#34;&#34;&#34;
+    for other in self.nodes():
+        arc = self.arc(other, node)
+        if arc is not None:
+            yield arc</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.arcs_out"><code class="name flex">
+<span>def <span class="ident">arcs_out</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Iterates over the arcs that the node is a pro of</p>
+<p>Default implementation: iterates over <code>self.nodes()</code> and checks if
+<code>self._arc(node, other: Node)</code> exists. O(N * T(<code>self.arc</code>)) efficiency</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def arcs_out(self, node):
+    &#34;&#34;&#34;
+    Iterates over the arcs that the node is a pro of
+
+    Default implementation: iterates over `self.nodes()` and checks if 
+    `self._arc(node, other: Node)` exists. O(N * T(`self.arc`)) efficiency
+    &#34;&#34;&#34;
+    for other in self.nodes():
+        arc = self.arc(node, other)
+        if arc is not None:
+            yield arc</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.epi"><code class="name flex">
+<span>def <span class="ident">epi</span></span>(<span>self, arc)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def epi(self, arc):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for n1 in self.nodes():
+        for n2 in self.nodes():
+            if self.arc(n1, n2) is arc:
+                return n2</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.epis"><code class="name flex">
+<span>def <span class="ident">epis</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def epis(self, node):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for n in self.nodes():
+        if self.arc(node, n) is not None:
+            yield n</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.explore"><code class="name flex">
+<span>def <span class="ident">explore</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def explore(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.explore_arcs"><code class="name flex">
+<span>def <span class="ident">explore_arcs</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def explore_arcs(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.has"><code class="name flex">
+<span>def <span class="ident">has</span></span>(<span>self, node, epi=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns whether the graph contains node</p>
+<p>If epi is specified, instead returns whether an arc exists from pro to
+epi</p>
+<p>Default implementation: routes to either <code>self.has_node</code> or <code>self.arc</code></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def has(self, node, epi=None):
+    &#34;&#34;&#34;
+    Returns whether the graph contains node
+
+    If epi is specified, instead returns whether an arc exists from pro to
+    epi
+
+    Default implementation: routes to either `self.has_node` or `self.arc`
+    &#34;&#34;&#34;
+    if epi is None:
+        return self.has_node(node)
+    else:
+        return self.arc(node, epi) is not None       </code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.has_arc"><code class="name flex">
+<span>def <span class="ident">has_arc</span></span>(<span>self, arc)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def has_arc(self, arc):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for e in self.arcs():
+        if e is arc:
+            return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.has_node"><code class="name flex">
+<span>def <span class="ident">has_node</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def has_node(self, node):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for n in self.nodes():
+        if n is node:
+            return True
+    return False</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.nodes"><code class="name flex">
+<span>def <span class="ident">nodes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Iterates over all nodes in the graph</p>
+<p>Default implementation: iterates over <code>self._nodes</code>. O(N)</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def nodes(self):
+    &#34;&#34;&#34;
+    Iterates over all nodes in the graph
+
+    Default implementation: iterates over `self._nodes`. O(N)
+    &#34;&#34;&#34;
+    for node in self._nodes:
+        yield node</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.pro"><code class="name flex">
+<span>def <span class="ident">pro</span></span>(<span>self, arc)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def pro(self, arc):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for n1 in self.nodes():
+        for n2 in self.nodes():
+            if self.arc(n1, n2) is arc:
+                return n1</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.pros"><code class="name flex">
+<span>def <span class="ident">pros</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def pros(self, node):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    for n in self.nodes():
+        if self.arc(n, node) is not None:
+            yield n</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.remove"><code class="name flex">
+<span>def <span class="ident">remove</span></span>(<span>self, node, epi=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove(self, node, epi=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.remove_arc"><code class="name flex">
+<span>def <span class="ident">remove_arc</span></span>(<span>self, arc)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_arc(self, arc):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.remove_node"><code class="name flex">
+<span>def <span class="ident">remove_node</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def remove_node(self, node):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.search"><code class="name flex">
+<span>def <span class="ident">search</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def search(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.search_arcs"><code class="name flex">
+<span>def <span class="ident">search_arcs</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def search_arcs(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
+<span>def <span class="ident">traverse</span></span>(<span>self, start, frontier, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def traverse(self, start, frontier, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.traverse_arcs"><code class="name flex">
+<span>def <span class="ident">traverse_arcs</span></span>(<span>self, start, frontier, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def traverse_arcs(self, start, frontier, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="standard.graph" href="index.html">standard.graph</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="standard.graph.graph.Graph" href="#standard.graph.graph.Graph">Graph</a></code></h4>
+<ul class="two-column">
+<li><code><a title="standard.graph.graph.Graph.add" href="#standard.graph.graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_arc" href="#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_node" href="#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arc" href="#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs" href="#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_in" href="#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_out" href="#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epi" href="#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epis" href="#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.explore" href="#standard.graph.graph.Graph.explore">explore</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.explore_arcs" href="#standard.graph.graph.Graph.explore_arcs">explore_arcs</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has" href="#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes" href="#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pro" href="#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pros" href="#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove" href="#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_arc" href="#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_node" href="#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.search" href="#standard.graph.graph.Graph.search">search</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.search_arcs" href="#standard.graph.graph.Graph.search_arcs">search_arcs</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.traverse" href="#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.traverse_arcs" href="#standard.graph.graph.Graph.traverse_arcs">traverse_arcs</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.6.2</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
