@@ -320,20 +320,4 @@ class Graph:
         """
         """
         pass
-
-    def traverse_arcs(self, start, frontier, condition=None):
-        """
-        """
-        pass
-
-    def search_arcs(self, start, frontier, end_condition, condition=None):
-        """
-        """
-        pass
-
-    def explore_arcs(self, start, frontier, end_condition, condition=None):
-        """
-        """
-        pass
-
     
