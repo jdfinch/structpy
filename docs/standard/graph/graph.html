@@ -344,22 +344,6 @@
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
-
-    def traverse_arcs(self, start, frontier, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def search_arcs(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_arcs(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
     </code></pre>
 </details>
 </section>
@@ -793,21 +777,6 @@ if the above 3 steps have been followed:</p>
     def explore(self, start, frontier, end_condition, condition=None):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
-        pass
-
-    def traverse_arcs(self, start, frontier, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def search_arcs(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_arcs(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
         pass</code></pre>
 </details>
 <h3>Methods</h3>
@@ -1028,19 +997,6 @@ O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
     pass</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.explore_arcs"><code class="name flex">
-<span>def <span class="ident">explore_arcs</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def explore_arcs(self, start, frontier, end_condition, condition=None):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
 <dt id="standard.graph.graph.Graph.has"><code class="name flex">
 <span>def <span class="ident">has</span></span>(<span>self, node, epi=None)</span>
 </code></dt>
@@ -1239,19 +1195,6 @@ O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
     pass</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.search_arcs"><code class="name flex">
-<span>def <span class="ident">search_arcs</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def search_arcs(self, start, frontier, end_condition, condition=None):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
 <dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
 <span>def <span class="ident">traverse</span></span>(<span>self, start, frontier, condition=None)</span>
 </code></dt>
@@ -1260,19 +1203,6 @@ O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def traverse(self, start, frontier, condition=None):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.traverse_arcs"><code class="name flex">
-<span>def <span class="ident">traverse_arcs</span></span>(<span>self, start, frontier, condition=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def traverse_arcs(self, start, frontier, condition=None):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
@@ -1309,7 +1239,6 @@ O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
 <li><code><a title="standard.graph.graph.Graph.epi" href="#standard.graph.graph.Graph.epi">epi</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis" href="#standard.graph.graph.Graph.epis">epis</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.explore" href="#standard.graph.graph.Graph.explore">explore</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.explore_arcs" href="#standard.graph.graph.Graph.explore_arcs">explore_arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has" href="#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
@@ -1320,9 +1249,7 @@ O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
 <li><code><a title="standard.graph.graph.Graph.remove_arc" href="#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.remove_node" href="#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.search" href="#standard.graph.graph.Graph.search">search</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.search_arcs" href="#standard.graph.graph.Graph.search_arcs">search_arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.traverse" href="#standard.graph.graph.Graph.traverse">traverse</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.traverse_arcs" href="#standard.graph.graph.Graph.traverse_arcs">traverse_arcs</a></code></li>
 </ul>
 </li>
 </ul>
