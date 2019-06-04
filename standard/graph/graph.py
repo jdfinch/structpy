@@ -32,6 +32,8 @@ class Graph:
 
     - `replace_node(old, new)`: replace a node while preserving its arcs
     - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
+    - `replace_arc_pro(pro, epi, new_pro)`: change the pro of an arc
+    - `replace_arc_epi(pro, epi, new_epi)`: change the epi of an arc
 
     ### Properties for finding nodes:
 
@@ -39,16 +41,16 @@ class Graph:
     - `pros(node)`: iterate over pros of a node
     - `pro(arc)`: returns the pro of an arc
     - `epi(arc)`: returns the epi of an arc
-    - `number_epis(node)`: returns a count of a node's epis
-    - `number_pros(node)`: returns a count of a nodes's pros
+    - `epis_number(node)`: returns a count of a node's epis
+    - `pros_number(node)`: returns a count of a nodes's pros
 
     ### Properties for finding arcs:
 
     - `arc(pro, epi)`: returns the arc from pro to epi
     - `arcs_out(node)`: iterate over the arcs the node is the pro of
     - `arcs_in(node)`: iterate over the arcs the node is an epi of
-    - `number_arcs_out(node)`: count of the arcs the node is the pro of
-    - `number_arcs_in(node)`: count of the arcs the node is an epi of
+    - `arcs_out_number(node)`: count of the arcs the node is the pro of
+    - `arcs_in_number(node)`: count of the arcs the node is an epi of
 
     ### Graph navigation:
 
@@ -146,6 +148,24 @@ class Graph:
             arc = self.arc(other, node)
             if arc is not None:
                 yield arc
+
+    def arcs_in_number(self, node):
+        """
+        Returns a count of the arcs with node as their epi
+        """
+        i = 0
+        for arc in self.arcs_in(node):
+            i += 1
+        return i
+
+    def arcs_out_number(self, node):
+        """
+        Returns a count of the arcs with node as their pro
+        """
+        i = 0
+        for arc in self.arcs_out(node):
+            i += 1
+        return i
 
     def arc(self, pro, epi):
         """
@@ -281,6 +301,30 @@ class Graph:
             if self.arc(n, node) is not None:
                 yield n
 
+    def epis_number(self, node):
+        """
+        Return the number of epis of node
+
+        Default implementations: iterate and count `self.epis(node)`.
+        O(T(`self.epis`))
+        """
+        i = 0
+        for epi in self.epis(node):
+            i += 1
+        return i
+
+    def pros_number(self, node):
+        """
+        Return the number of pros of node
+
+        Default implementations: iterate and count `self.pros(node)`.
+        O(T(`self.pros`))
+        """
+        i = 0
+        for pro in self.pros(node):
+            i += 1
+        return i
+
     def remove(self, node, epi=None):
         """
         With one argument, removes a node from the graph.
@@ -298,13 +342,48 @@ class Graph:
         """
         Remove node from the graph
         """
-        raise NotImplementedError('Implement remove_node to enable removal')
+        self._nodes.remove(node)        
 
     def remove_arc(self, pro, epi):
         """
         Remove an arc from the graph by specifying its pro and epi
         """
-        raise NotImplementedError('Implement remove_arc to enable removal')
+        self._arcs.remove(self.arc(pro, epi))
+
+    def replace_node(self, old, new):
+        """
+        Replace the value of the node old with new, while preserving all
+        node arcs
+        """
+        self.remove_node(old)
+        self.add_node(new)
+        for pro in self.pros(old):
+            self.replace_arc_epi(pro, old, new)
+        for epi in self.epis(old):
+            self.replace_arc_pro(old, epi, new)
+
+    def replace_arc(self, pro, epi, new):
+        """
+        Replace the value of the arc specified by pro and epi with new
+        """
+        self.remove_arc(pro, epi)
+        self.add_arc(pro, epi, new)
+
+    def replace_arc_pro(self, pro, epi, new_pro):
+        """
+        Change the epi of the arc specified by pro and epi to new_epi
+        """
+        arc = self.arc(pro, epi)
+        self.remove_arc(pro, epi)
+        self.add_arc(new_pro, epi, arc)
+
+    def replace_arc_epi(self, pro, epi, new_epi):
+        """
+        Change the pro of the arc specified by pro and epi to new_epi
+        """
+        arc = self.arc(pro, epi)
+        self.remove_arc(pro, epi)
+        self.add_arc(pro, new_epi, arc)
 
     def traverse(self, start, frontier, condition=None):
         """
