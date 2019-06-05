@@ -104,6 +104,9 @@ class Graph(ABC):
     def __init__(self):
         self._nodes = set()
         self._arcs = set()
+        raise NotImplementedError(
+            "Graph is abstract and cannot be initialized; \
+            use one of its implementations (or make your own!)")
 
     def nodes(self):
         """

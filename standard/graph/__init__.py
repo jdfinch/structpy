@@ -2,22 +2,10 @@
 General Purpose Graph Framework
 ---
 
-1. Node values
-2. Node types
-3. Node objects
-4. Edge values
-5. Edge types
-6. Edge objects
-
-```
- . TypedEdgeTypedGraph
-
-    one
-    two
-        three
-        four
-    five
-```
 """
 
+import standard.graph
 from standard.graph.graph import Graph
+from standard.graph.dag import Dag
+from standard.graph.tree import Tree
+from standard.graph.sequence import Sequence

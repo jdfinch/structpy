@@ -1,7 +1,6 @@
-import standard.graph.tree
-Tree = standard.graph.tree.Tree
+import standard.graph.tree as tree
 
-class Sequence(Tree):
+class Sequence(tree.Tree):
     """
     """
 

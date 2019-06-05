@@ -1,7 +1,6 @@
-import standard.graph.graph
-Graph = standard.graph.graph.Graph
+import standard.graph.graph as graph
 
-class Dag(Graph):
+class Dag(graph.Graph):
     """
     """
 
@@ -20,3 +19,5 @@ class Dag(Graph):
         Generator for Sequence objects spanning the Dag from roots to leaves
         """
         pass
+
+    

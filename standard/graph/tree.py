@@ -1,7 +1,6 @@
-import standard.graph.dag
-Dag = standard.graph.dag.Dag
+import standard.graph.dag as dag
 
-class Tree(Dag):
+class Tree(dag.Dag):
     """
     """
     
