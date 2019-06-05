@@ -1,10 +1,14 @@
 from standard.graph.sequence import Sequence
+from standard.utilities.collection import Collection
 from standard.utilities.simple import rfind
 
-class List(Sequence):
+class Stack(Sequence, Collection):
 
     def __init__(self, iterable):
         self._nodes = [e for e in iterable]
+
+    def pop(self):
+        return self._nodes.pop()
 
     def add_node(self, node):
         """
@@ -52,4 +56,4 @@ class List(Sequence):
         return self._nodes.__getitem__(index)
 
     def __str__(self):
-        return 'List(' + ','.join(self._nodes) + ')'
+        return 'Stack(' + ','.join(self._nodes) + ')'

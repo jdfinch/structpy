@@ -75,7 +75,7 @@ class Graph(ABC):
 
     2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
     if you assign `self._nodes` to a collection that implements 
-    `.add(e)` and `.remove(e)` to add/remove element e, you may skip
+    `.add(e)` and `.pop(e)` to add/remove element e, you may skip
     this step)
 
     3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
@@ -355,7 +355,7 @@ class Graph(ABC):
         """
         Remove node from the graph
         """
-        self._nodes.remove(node)        
+        self._nodes.pop(node)        
 
     def remove_arc(self, pro, epi):
         """
