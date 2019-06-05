@@ -1,4 +1,6 @@
-class Graph:
+from abc import ABC, abstractmethod
+
+class Graph(ABC):
     """
     General graph structure
 
@@ -98,12 +100,10 @@ class Graph:
     ### 
     """
 
+    @abstractmethod
     def __init__(self):
         self._nodes = set()
         self._arcs = set()
-        raise NotImplementedError(
-            "Graph is abstract and cannot be initialized; \
-            use one of its implementations (or make your own!)")
 
     def nodes(self):
         """
