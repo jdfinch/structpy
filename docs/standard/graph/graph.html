@@ -22,11 +22,17 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Graph:
+<pre><code class="python">from abc import ABC, abstractmethod
+
+class Graph(ABC):
     &#34;&#34;&#34;
     General graph structure
 
     **Abstract Class**
+
+    ## Guidelines:
+
+    - nodes and arcs are assumed to be sets without duplicates
 
     ## Methods summary:
 
@@ -122,6 +128,7 @@
     ### 
     &#34;&#34;&#34;
 
+    @abstractmethod
     def __init__(self):
         self._nodes = set()
         self._arcs = set()
@@ -140,7 +147,9 @@
 
     def arcs(self):
         &#34;&#34;&#34;
-        Iterates over all arcs in the graph.
+        Iterates over all arcs in the graph
+
+        Guideline implementation: return tuples in form (pro, epi, arc_value)
 
         Default implementation: iterates over every pair of nodes and checks
         if there is an arc between them using `self.arc(n1, n2)`. 
@@ -197,6 +206,9 @@
     def arc(self, pro, epi):
         &#34;&#34;&#34;
         Returns the arc from pro to epi, or None if none exists
+
+        Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
+        `(pro, epi)` if the arc is valueless
 
         Default implementation: iterates over `self.arcs()` and returns an arc
         where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
@@ -441,7 +453,16 @@
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
-    </code></pre>
+    
+    def __eq__(self, other):
+        &#34;&#34;&#34;
+        Checks set equality between this graph and graph other
+        &#34;&#34;&#34;
+        arcs = set(self.arcs())
+        nodes = set(self.nodes())
+        other_arcs = set(other.arcs())
+        other_nodes = set(other.nodes())
+        return arcs == other_arcs and nodes == other_nodes</code></pre>
 </details>
 </section>
 <section>
@@ -459,6 +480,10 @@
 <dd>
 <section class="desc"><p>General graph structure</p>
 <p><strong>Abstract Class</strong></p>
+<h2 id="guidelines">Guidelines:</h2>
+<ul>
+<li>nodes and arcs are assumed to be sets without duplicates</li>
+</ul>
 <h2 id="methods-summary">Methods summary:</h2>
 <h3 id="graph-level-properties">Graph-level properties:</h3>
 <ul>
@@ -558,11 +583,15 @@ if the above 3 steps have been followed:</p>
 <h3 id="_1"></h3></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Graph:
+<pre><code class="python">class Graph(ABC):
     &#34;&#34;&#34;
     General graph structure
 
     **Abstract Class**
+
+    ## Guidelines:
+
+    - nodes and arcs are assumed to be sets without duplicates
 
     ## Methods summary:
 
@@ -658,6 +687,7 @@ if the above 3 steps have been followed:</p>
     ### 
     &#34;&#34;&#34;
 
+    @abstractmethod
     def __init__(self):
         self._nodes = set()
         self._arcs = set()
@@ -676,7 +706,9 @@ if the above 3 steps have been followed:</p>
 
     def arcs(self):
         &#34;&#34;&#34;
-        Iterates over all arcs in the graph.
+        Iterates over all arcs in the graph
+
+        Guideline implementation: return tuples in form (pro, epi, arc_value)
 
         Default implementation: iterates over every pair of nodes and checks
         if there is an arc between them using `self.arc(n1, n2)`. 
@@ -733,6 +765,9 @@ if the above 3 steps have been followed:</p>
     def arc(self, pro, epi):
         &#34;&#34;&#34;
         Returns the arc from pro to epi, or None if none exists
+
+        Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
+        `(pro, epi)` if the arc is valueless
 
         Default implementation: iterates over `self.arcs()` and returns an arc
         where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
@@ -976,8 +1011,22 @@ if the above 3 steps have been followed:</p>
     def explore_reverse(self, start, frontier, end_condition, condition=None):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
-        pass</code></pre>
+        pass
+    
+    def __eq__(self, other):
+        &#34;&#34;&#34;
+        Checks set equality between this graph and graph other
+        &#34;&#34;&#34;
+        arcs = set(self.arcs())
+        nodes = set(self.nodes())
+        other_arcs = set(other.arcs())
+        other_nodes = set(other.nodes())
+        return arcs == other_arcs and nodes == other_nodes</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
@@ -1053,6 +1102,8 @@ valued True. Does not add pro or epi to the graph explicitly</p>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns the arc from pro to epi, or None if none exists</p>
+<p>Guideline implementation: return a tuple <code>(pro, epi, arc_value)</code>, or
+<code>(pro, epi)</code> if the arc is valueless</p>
 <p>Default implementation: iterates over <code>self.arcs()</code> and returns an arc
 where <code>self.pro(arc)</code> and <code>self.epi(arc)</code> match pro and epi
 respectively. O(T(<code>self.pro</code>) * T(<code>self.epi</code>) * T(<code>self.arc</code>))</p></section>
@@ -1061,6 +1112,9 @@ respectively. O(T(<code>self.pro</code>) * T(<code>self.epi</code>) * T(<code>se
 <pre><code class="python">def arc(self, pro, epi):
     &#34;&#34;&#34;
     Returns the arc from pro to epi, or None if none exists
+
+    Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
+    `(pro, epi)` if the arc is valueless
 
     Default implementation: iterates over `self.arcs()` and returns an arc
     where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
@@ -1075,7 +1129,8 @@ respectively. O(T(<code>self.pro</code>) * T(<code>self.epi</code>) * T(<code>se
 <span>def <span class="ident">arcs</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Iterates over all arcs in the graph.</p>
+<section class="desc"><p>Iterates over all arcs in the graph</p>
+<p>Guideline implementation: return tuples in form (pro, epi, arc_value)</p>
 <p>Default implementation: iterates over every pair of nodes and checks
 if there is an arc between them using <code>self.arc(n1, n2)</code>.
 O(N * N * T(<code>self.arc</code>))</p></section>
@@ -1083,7 +1138,9 @@ O(N * N * T(<code>self.arc</code>))</p></section>
 <summary>Source code</summary>
 <pre><code class="python">def arcs(self):
     &#34;&#34;&#34;
-    Iterates over all arcs in the graph.
+    Iterates over all arcs in the graph
+
+    Guideline implementation: return tuples in form (pro, epi, arc_value)
 
     Default implementation: iterates over every pair of nodes and checks
     if there is an arc between them using `self.arc(n1, n2)`. 

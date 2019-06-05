@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.dag API documentation</title>
+<title>standard.graph.sequence API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,34 +17,21 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.dag</code></h1>
+<h1 class="title">Module <code>standard.graph.sequence</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">import standard.graph.graph as graph
+<pre><code class="python">import standard.graph.tree as tree
 
-class Dag(graph.Graph):
+class Sequence(tree.Tree):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
 
-    def Roots(self):
+    def NodeAt(self, index):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
-        pass
-
-    def Leaves(self):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def Sequences(self):
-        &#34;&#34;&#34;
-        Generator for Sequence objects spanning the Dag from roots to leaves
-        &#34;&#34;&#34;
-        pass
-
-    </code></pre>
+        pass</code></pre>
 </details>
 </section>
 <section>
@@ -56,80 +43,44 @@ class Dag(graph.Graph):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.dag.Dag"><code class="flex name class">
-<span>class <span class="ident">Dag</span></span>
+<dt id="standard.graph.sequence.Sequence"><code class="flex name class">
+<span>class <span class="ident">Sequence</span></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Dag(graph.Graph):
+<pre><code class="python">class Sequence(tree.Tree):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
 
-    def Roots(self):
+    def NodeAt(self, index):
         &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def Leaves(self):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def Sequences(self):
-        &#34;&#34;&#34;
-        Generator for Sequence objects spanning the Dag from roots to leaves
         &#34;&#34;&#34;
         pass</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></li>
+<li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></li>
+<li><a title="standard.graph.list.List" href="list.html#standard.graph.list.List">List</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.dag.Dag.Leaves"><code class="name flex">
-<span>def <span class="ident">Leaves</span></span>(<span>self)</span>
+<dt id="standard.graph.sequence.Sequence.NodeAt"><code class="name flex">
+<span>def <span class="ident">NodeAt</span></span>(<span>self, index)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def Leaves(self):
+<pre><code class="python">def NodeAt(self, index):
     &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.dag.Dag.Roots"><code class="name flex">
-<span>def <span class="ident">Roots</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def Roots(self):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.dag.Dag.Sequences"><code class="name flex">
-<span>def <span class="ident">Sequences</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Generator for Sequence objects spanning the Dag from roots to leaves</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def Sequences(self):
-    &#34;&#34;&#34;
-    Generator for Sequence objects spanning the Dag from roots to leaves
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
@@ -137,34 +88,35 @@ class Dag(graph.Graph):
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="standard.graph.graph.Graph" href="graph.html#standard.graph.graph.Graph">Graph</a></b></code>:
+<li><code><b><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.graph.Graph.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epis" href="graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has" href="graph.html#standard.graph.graph.Graph.has">has</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove" href="graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove_arc" href="graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove_node" href="graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc" href="graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc_epi" href="graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.Sequences" href="dag.html#standard.graph.dag.Dag.Sequences">Sequences</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.epis" href="graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.has" href="graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.remove" href="graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.remove_arc" href="graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.remove_node" href="graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.replace_arc" href="graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.replace_arc_epi" href="graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 </ul>
 </li>
 </ul>
@@ -186,11 +138,9 @@ class Dag(graph.Graph):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.dag.Dag" href="#standard.graph.dag.Dag">Dag</a></code></h4>
+<h4><code><a title="standard.graph.sequence.Sequence" href="#standard.graph.sequence.Sequence">Sequence</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.dag.Dag.Leaves" href="#standard.graph.dag.Dag.Leaves">Leaves</a></code></li>
-<li><code><a title="standard.graph.dag.Dag.Roots" href="#standard.graph.dag.Dag.Roots">Roots</a></code></li>
-<li><code><a title="standard.graph.dag.Dag.Sequences" href="#standard.graph.dag.Dag.Sequences">Sequences</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.NodeAt" href="#standard.graph.sequence.Sequence.NodeAt">NodeAt</a></code></li>
 </ul>
 </li>
 </ul>

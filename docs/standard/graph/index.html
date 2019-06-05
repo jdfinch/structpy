@@ -6,7 +6,7 @@
 <meta name="generator" content="pdoc 0.6.2" />
 <title>standard.graph API documentation</title>
 <meta name="description" content="General Purpose Graph Framework
---- …" />
+---" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -22,49 +22,20 @@
 </header>
 <section id="section-intro">
 <h2 id="general-purpose-graph-framework">General Purpose Graph Framework</h2>
-<ol>
-<li>Node values</li>
-<li>Node types</li>
-<li>Node objects</li>
-<li>Edge values</li>
-<li>Edge types</li>
-<li>Edge objects</li>
-</ol>
-<pre><code> . TypedEdgeTypedGraph
-
-    one
-    two
-        three
-        four
-    five
-</code></pre>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">&#34;&#34;&#34;
 General Purpose Graph Framework
 ---
 
-1. Node values
-2. Node types
-3. Node objects
-4. Edge values
-5. Edge types
-6. Edge objects
-
-```
- . TypedEdgeTypedGraph
-
-    one
-    two
-        three
-        four
-    five
-```
 &#34;&#34;&#34;
 
-from standard.graph.node import Node
-from standard.graph.dictionary_graph import DictionaryGraph
-from standard.graph.graph import Graph</code></pre>
+import standard.graph
+from standard.graph.graph import Graph
+from standard.graph.dag import Dag
+from standard.graph.tree import Tree
+from standard.graph.sequence import Sequence
+from standard.graph.list import List</code></pre>
 </details>
 </section>
 <section>
@@ -74,19 +45,23 @@ from standard.graph.graph import Graph</code></pre>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="standard.graph.dictionary_graph" href="dictionary_graph.html">standard.graph.dictionary_graph</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
 <dt><code class="name"><a title="standard.graph.graph" href="graph.html">standard.graph.graph</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="standard.graph.node" href="node.html">standard.graph.node</a></code></dt>
+<dt><code class="name"><a title="standard.graph.list" href="list.html">standard.graph.list</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.sequence" href="sequence.html">standard.graph.sequence</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
 <dt><code class="name"><a title="standard.graph.templates" href="templates/index.html">standard.graph.templates</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.tree" href="tree.html">standard.graph.tree</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -115,10 +90,11 @@ from standard.graph.graph import Graph</code></pre>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="standard.graph.dag" href="dag.html">standard.graph.dag</a></code></li>
-<li><code><a title="standard.graph.dictionary_graph" href="dictionary_graph.html">standard.graph.dictionary_graph</a></code></li>
 <li><code><a title="standard.graph.graph" href="graph.html">standard.graph.graph</a></code></li>
-<li><code><a title="standard.graph.node" href="node.html">standard.graph.node</a></code></li>
+<li><code><a title="standard.graph.list" href="list.html">standard.graph.list</a></code></li>
+<li><code><a title="standard.graph.sequence" href="sequence.html">standard.graph.sequence</a></code></li>
 <li><code><a title="standard.graph.templates" href="templates/index.html">standard.graph.templates</a></code></li>
+<li><code><a title="standard.graph.tree" href="tree.html">standard.graph.tree</a></code></li>
 </ul>
 </li>
 </ul>

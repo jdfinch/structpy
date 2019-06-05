@@ -6,6 +6,10 @@ class Graph(ABC):
 
     **Abstract Class**
 
+    ## Guidelines:
+
+    - nodes and arcs are assumed to be sets without duplicates
+
     ## Methods summary:
 
     ### Graph-level properties:
@@ -119,7 +123,9 @@ class Graph(ABC):
 
     def arcs(self):
         """
-        Iterates over all arcs in the graph.
+        Iterates over all arcs in the graph
+
+        Guideline implementation: return tuples in form (pro, epi, arc_value)
 
         Default implementation: iterates over every pair of nodes and checks
         if there is an arc between them using `self.arc(n1, n2)`. 
@@ -176,6 +182,9 @@ class Graph(ABC):
     def arc(self, pro, epi):
         """
         Returns the arc from pro to epi, or None if none exists
+
+        Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
+        `(pro, epi)` if the arc is valueless
 
         Default implementation: iterates over `self.arcs()` and returns an arc
         where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
@@ -421,3 +430,12 @@ class Graph(ABC):
         """
         pass
     
+    def __eq__(self, other):
+        """
+        Checks set equality between this graph and graph other
+        """
+        arcs = set(self.arcs())
+        nodes = set(self.nodes())
+        other_arcs = set(other.arcs())
+        other_nodes = set(other.nodes())
+        return arcs == other_arcs and nodes == other_nodes

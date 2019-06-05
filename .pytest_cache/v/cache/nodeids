@@ -1,4 +1,6 @@
 [
+  "test/test_list.py::test_constructor",
+  "test/test_list.py::test_add",
   "test/graph/test_graph.py::test_inheritence_nodebased",
   "test/graph/test_graph.py::test_add_methods",
   "test/graph/test_graph.py::test_membership",
