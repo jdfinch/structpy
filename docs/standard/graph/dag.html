@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph API documentation</title>
-<meta name="description" content="General Purpose Graph Framework
---- …" />
+<title>standard.graph.dag API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -18,107 +17,97 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph</code></h1>
+<h1 class="title">Module <code>standard.graph.dag</code></h1>
 </header>
 <section id="section-intro">
-<h2 id="general-purpose-graph-framework">General Purpose Graph Framework</h2>
-<ol>
-<li>Node values</li>
-<li>Node types</li>
-<li>Node objects</li>
-<li>Edge values</li>
-<li>Edge types</li>
-<li>Edge objects</li>
-</ol>
-<pre><code> . TypedEdgeTypedGraph
-
-    one
-    two
-        three
-        four
-    five
-</code></pre>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">&#34;&#34;&#34;
-General Purpose Graph Framework
----
+<pre><code class="python">from standard.graph.graph import Graph
 
-1. Node values
-2. Node types
-3. Node objects
-4. Edge values
-5. Edge types
-6. Edge objects
+class Dag(Graph):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
 
-```
- . TypedEdgeTypedGraph
-
-    one
-    two
-        three
-        four
-    five
-```
-&#34;&#34;&#34;
-
-from standard.graph.node import Node
-from standard.graph.dictionary_graph import DictionaryGraph
-from standard.graph.graph import Graph</code></pre>
+    </code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="standard.graph.dag" href="dag.html">standard.graph.dag</a></code></dt>
+<dt id="standard.graph.dag.Dag"><code class="flex name class">
+<span>class <span class="ident">Dag</span></span>
+</code></dt>
 <dd>
 <section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="standard.graph.dictionary_graph" href="dictionary_graph.html">standard.graph.dictionary_graph</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="standard.graph.graph" href="graph.html">standard.graph.graph</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="standard.graph.node" href="node.html">standard.graph.node</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="standard.graph.templates" href="templates/index.html">standard.graph.templates</a></code></dt>
-<dd>
-<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Dag(Graph):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="standard.graph.graph.Graph" href="graph.html#standard.graph.graph.Graph">Graph</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="standard.graph.graph.Graph" href="graph.html#standard.graph.graph.Graph">Graph</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.graph.graph.Graph.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epis" href="graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has" href="graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove" href="graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_arc" href="graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_node" href="graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc" href="graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc_epi" href="graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
 </section>
 </article>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#general-purpose-graph-framework">General Purpose Graph Framework</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="standard" href="../index.html">standard</a></code></li>
+<li><code><a title="standard.graph" href="index.html">standard.graph</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="standard.graph.dag" href="dag.html">standard.graph.dag</a></code></li>
-<li><code><a title="standard.graph.dictionary_graph" href="dictionary_graph.html">standard.graph.dictionary_graph</a></code></li>
-<li><code><a title="standard.graph.graph" href="graph.html">standard.graph.graph</a></code></li>
-<li><code><a title="standard.graph.node" href="node.html">standard.graph.node</a></code></li>
-<li><code><a title="standard.graph.templates" href="templates/index.html">standard.graph.templates</a></code></li>
+<li>
+<h4><code><a title="standard.graph.dag.Dag" href="#standard.graph.dag.Dag">Dag</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

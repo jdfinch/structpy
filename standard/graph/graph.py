@@ -55,8 +55,11 @@ class Graph:
     ### Graph navigation:
 
     - `traverse(start, frontier, condition=None)`: memoryless node traversal
-    - `search(start, frontier, end_condition, condition)`: path search
-    - `explore(start, frontier, end_condition, condition)`: generator search
+    - `search(start, frontier, end_condition, condition=None)`: path search
+    - `explore(start, frontier, end_condition, condition=None)`: yield search
+    - `traverse_reverse(start, frontier, condition=None)`
+    - `search_reverse(start, frontier, end_condition, condition=None)`
+    - `explore_reverse(start, frontier, end_condition, condition=None)`
 
     ## Implementation patterns:
 
@@ -396,6 +399,21 @@ class Graph:
         pass
 
     def explore(self, start, frontier, end_condition, condition=None):
+        """
+        """
+        pass
+
+    def traverse_reverse(self, start, frontier, condition=None):
+        """
+        """
+        pass
+
+    def search_reverse(self, start, frontier, end_condition, condition=None):
+        """
+        """
+        pass
+
+    def explore_reverse(self, start, frontier, end_condition, condition=None):
         """
         """
         pass

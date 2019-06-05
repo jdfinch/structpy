@@ -79,8 +79,11 @@
     ### Graph navigation:
 
     - `traverse(start, frontier, condition=None)`: memoryless node traversal
-    - `search(start, frontier, end_condition, condition)`: path search
-    - `explore(start, frontier, end_condition, condition)`: generator search
+    - `search(start, frontier, end_condition, condition=None)`: path search
+    - `explore(start, frontier, end_condition, condition=None)`: yield search
+    - `traverse_reverse(start, frontier, condition=None)`
+    - `search_reverse(start, frontier, end_condition, condition=None)`
+    - `explore_reverse(start, frontier, end_condition, condition=None)`
 
     ## Implementation patterns:
 
@@ -423,6 +426,21 @@
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
+
+    def traverse_reverse(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search_reverse(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore_reverse(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
     </code></pre>
 </details>
 </section>
@@ -491,8 +509,11 @@
 <h3 id="graph-navigation">Graph navigation:</h3>
 <ul>
 <li><code>traverse(start, frontier, condition=None)</code>: memoryless node traversal</li>
-<li><code>search(start, frontier, end_condition, condition)</code>: path search</li>
-<li><code>explore(start, frontier, end_condition, condition)</code>: generator search</li>
+<li><code>search(start, frontier, end_condition, condition=None)</code>: path search</li>
+<li><code>explore(start, frontier, end_condition, condition=None)</code>: yield search</li>
+<li><code>traverse_reverse(start, frontier, condition=None)</code></li>
+<li><code>search_reverse(start, frontier, end_condition, condition=None)</code></li>
+<li><code>explore_reverse(start, frontier, end_condition, condition=None)</code></li>
 </ul>
 <h2 id="implementation-patterns">Implementation patterns:</h2>
 <h3 id="node-based">Node-based:</h3>
@@ -594,8 +615,11 @@ if the above 3 steps have been followed:</p>
     ### Graph navigation:
 
     - `traverse(start, frontier, condition=None)`: memoryless node traversal
-    - `search(start, frontier, end_condition, condition)`: path search
-    - `explore(start, frontier, end_condition, condition)`: generator search
+    - `search(start, frontier, end_condition, condition=None)`: path search
+    - `explore(start, frontier, end_condition, condition=None)`: yield search
+    - `traverse_reverse(start, frontier, condition=None)`
+    - `search_reverse(start, frontier, end_condition, condition=None)`
+    - `explore_reverse(start, frontier, end_condition, condition=None)`
 
     ## Implementation patterns:
 
@@ -937,8 +961,27 @@ if the above 3 steps have been followed:</p>
     def explore(self, start, frontier, end_condition, condition=None):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
+        pass
+
+    def traverse_reverse(self, start, frontier, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def search_reverse(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        pass
+
+    def explore_reverse(self, start, frontier, end_condition, condition=None):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
         pass</code></pre>
 </details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="standard.graph.graph.Graph.add"><code class="name flex">
@@ -1208,6 +1251,19 @@ O(T(<code>self.epis</code>))</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def explore(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.explore_reverse"><code class="name flex">
+<span>def <span class="ident">explore_reverse</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def explore_reverse(self, start, frontier, end_condition, condition=None):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
@@ -1501,6 +1557,19 @@ node arcs</p></section>
     pass</code></pre>
 </details>
 </dd>
+<dt id="standard.graph.graph.Graph.search_reverse"><code class="name flex">
+<span>def <span class="ident">search_reverse</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def search_reverse(self, start, frontier, end_condition, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
 <dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
 <span>def <span class="ident">traverse</span></span>(<span>self, start, frontier, condition=None)</span>
 </code></dt>
@@ -1509,6 +1578,19 @@ node arcs</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def traverse(self, start, frontier, condition=None):
+    &#34;&#34;&#34;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.traverse_reverse"><code class="name flex">
+<span>def <span class="ident">traverse_reverse</span></span>(<span>self, start, frontier, condition=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def traverse_reverse(self, start, frontier, condition=None):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
@@ -1548,6 +1630,7 @@ node arcs</p></section>
 <li><code><a title="standard.graph.graph.Graph.epis" href="#standard.graph.graph.Graph.epis">epis</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis_number" href="#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.explore" href="#standard.graph.graph.Graph.explore">explore</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.explore_reverse" href="#standard.graph.graph.Graph.explore_reverse">explore_reverse</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has" href="#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
@@ -1563,7 +1646,9 @@ node arcs</p></section>
 <li><code><a title="standard.graph.graph.Graph.replace_arc_pro" href="#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.replace_node" href="#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.search" href="#standard.graph.graph.Graph.search">search</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.search_reverse" href="#standard.graph.graph.Graph.search_reverse">search_reverse</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.traverse" href="#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.traverse_reverse" href="#standard.graph.graph.Graph.traverse_reverse">traverse_reverse</a></code></li>
 </ul>
 </li>
 </ul>
