@@ -15,4 +15,8 @@ class Dag(Graph):
         """
         pass
 
-    
+    def Sequences(self):
+        """
+        Generator for Sequence objects spanning the Dag from roots to leaves
+        """
+        pass
