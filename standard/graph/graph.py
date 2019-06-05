@@ -4,8 +4,6 @@ class Graph(ABC):
     """
     General graph structure
 
-    **Abstract Class**
-
     ## Guidelines:
 
     - nodes and arcs are assumed to be sets without duplicates

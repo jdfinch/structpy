@@ -4,17 +4,17 @@ class Dag(graph.Graph):
     """
     """
 
-    def Roots(self):
+    def roots(self):
         """
         """
         pass
 
-    def Leaves(self):
+    def leaves(self):
         """
         """
         pass
 
-    def Sequences(self):
+    def sequences(self):
         """
         Generator for Sequence objects spanning the Dag from roots to leaves
         """

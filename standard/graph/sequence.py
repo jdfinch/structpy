@@ -4,7 +4,7 @@ class Sequence(tree.Tree):
     """
     """
 
-    def NodeAt(self, index):
+    def node_at(self, index):
         """
         """
         pass

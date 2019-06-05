@@ -4,7 +4,7 @@ class Tree(dag.Dag):
     """
     """
     
-    def Root(self):
+    def root(self):
         """
         """
         pass
