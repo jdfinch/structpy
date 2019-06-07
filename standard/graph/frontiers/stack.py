@@ -1,13 +1,23 @@
 from standard.graph.sequence import Sequence
-from standard.utilities.collection import Collection
+from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
 
-class Stack(Sequence, Collection):
+class Stack(FrontierSequence):
 
     def __init__(self, iterable):
         self._nodes = [e for e in iterable]
 
+    def end(self):
+        """
+        Returns the last node, or None if the sequence is empty
+        """
+        if self._nodes:
+            return self._nodes[-1]
+
     def pop(self):
+        """
+        Returns the node added most recently (on right)
+        """
         return self._nodes.pop()
 
     def add_node(self, node):
@@ -45,6 +55,12 @@ class Stack(Sequence, Collection):
         if epi_index != 1 + pro_index:
             return (pro, epi)
         return None
+
+    def node_at(self, index):
+        """
+        Returns the node at a certain index, where the root is index 0
+        """
+        return self._nodes.__getitem__(index)
 
     def __iter__(self):
         return self._nodes.__iter__()

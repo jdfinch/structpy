@@ -26,12 +26,33 @@
 
 class Sequence(tree.Tree):
     &#34;&#34;&#34;
+    A linear, complete ordering of nodes, where ordering is represented by
+    arc direction
     &#34;&#34;&#34;
 
-    def NodeAt(self, index):
+    def end(self):
         &#34;&#34;&#34;
+        Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
-        pass</code></pre>
+        raise NotImplementedError()
+
+    def child(self, node):
+        &#34;&#34;&#34;
+        Returns the child (epi) of node
+        &#34;&#34;&#34;
+        for epi in self.epis(node):
+            return epi
+
+    def node_at(self, index):
+        &#34;&#34;&#34;
+        Returns the node at a certain index, where the root is index 0
+        &#34;&#34;&#34;
+        i = 0
+        node = self.root()
+        while i &lt; index:
+            node = self.child(node)
+            i += 1
+        return node</code></pre>
 </details>
 </section>
 <section>
@@ -47,17 +68,39 @@ class Sequence(tree.Tree):
 <span>class <span class="ident">Sequence</span></span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A linear, complete ordering of nodes, where ordering is represented by
+arc direction</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Sequence(tree.Tree):
     &#34;&#34;&#34;
+    A linear, complete ordering of nodes, where ordering is represented by
+    arc direction
     &#34;&#34;&#34;
 
-    def NodeAt(self, index):
+    def end(self):
         &#34;&#34;&#34;
+        Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
-        pass</code></pre>
+        raise NotImplementedError()
+
+    def child(self, node):
+        &#34;&#34;&#34;
+        Returns the child (epi) of node
+        &#34;&#34;&#34;
+        for epi in self.epis(node):
+            return epi
+
+    def node_at(self, index):
+        &#34;&#34;&#34;
+        Returns the node at a certain index, where the root is index 0
+        &#34;&#34;&#34;
+        i = 0
+        node = self.root()
+        while i &lt; index:
+            node = self.child(node)
+            i += 1
+        return node</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -68,21 +111,56 @@ class Sequence(tree.Tree):
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="standard.graph.list.List" href="list.html#standard.graph.list.List">List</a></li>
+<li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontiers/frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.sequence.Sequence.NodeAt"><code class="name flex">
-<span>def <span class="ident">NodeAt</span></span>(<span>self, index)</span>
+<dt id="standard.graph.sequence.Sequence.child"><code class="name flex">
+<span>def <span class="ident">child</span></span>(<span>self, node)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns the child (epi) of node</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def NodeAt(self, index):
+<pre><code class="python">def child(self, node):
     &#34;&#34;&#34;
+    Returns the child (epi) of node
     &#34;&#34;&#34;
-    pass</code></pre>
+    for epi in self.epis(node):
+        return epi</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.sequence.Sequence.end"><code class="name flex">
+<span>def <span class="ident">end</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the last node, or None if the sequence is empty</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def end(self):
+    &#34;&#34;&#34;
+    Returns the last node, or None if the sequence is empty
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.sequence.Sequence.node_at"><code class="name flex">
+<span>def <span class="ident">node_at</span></span>(<span>self, index)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the node at a certain index, where the root is index 0</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def node_at(self, index):
+    &#34;&#34;&#34;
+    Returns the node at a certain index, where the root is index 0
+    &#34;&#34;&#34;
+    i = 0
+    node = self.root()
+    while i &lt; index:
+        node = self.child(node)
+        i += 1
+    return node</code></pre>
 </details>
 </dd>
 </dl>
@@ -90,7 +168,6 @@ class Sequence(tree.Tree):
 <ul class="hlist">
 <li><code><b><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.tree.Tree.Sequences" href="dag.html#standard.graph.dag.Dag.Sequences">Sequences</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
@@ -98,6 +175,7 @@ class Sequence(tree.Tree):
 <li><code><a title="standard.graph.tree.Tree.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.arcs_number" href="graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
@@ -107,6 +185,7 @@ class Sequence(tree.Tree):
 <li><code><a title="standard.graph.tree.Tree.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.nodes_number" href="graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
@@ -117,6 +196,7 @@ class Sequence(tree.Tree):
 <li><code><a title="standard.graph.tree.Tree.replace_arc_epi" href="graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.sequences" href="dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 </ul>
 </li>
 </ul>
@@ -140,7 +220,9 @@ class Sequence(tree.Tree):
 <li>
 <h4><code><a title="standard.graph.sequence.Sequence" href="#standard.graph.sequence.Sequence">Sequence</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.sequence.Sequence.NodeAt" href="#standard.graph.sequence.Sequence.NodeAt">NodeAt</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.child" href="#standard.graph.sequence.Sequence.child">child</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.end" href="#standard.graph.sequence.Sequence.end">end</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.node_at" href="#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
 </ul>
 </li>
 </ul>

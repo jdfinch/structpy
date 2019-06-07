@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.utilities API documentation</title>
-<meta name="description" content="Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods" />
+<title>standard.graph.frontiers API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -18,30 +17,41 @@ collections and have things like rfind where appropriate as class methods" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.utilities</code></h1>
+<h1 class="title">Module <code>standard.graph.frontiers</code></h1>
 </header>
 <section id="section-intro">
-<p>Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods</p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods
-&#34;&#34;&#34;
-
-from standard.utilities.collection import Collection
-from standard.utilities.simple import rfind</code></pre>
+<pre><code class="python">from standard.graph.frontiers.frontier import Frontier
+from standard.graph.frontiers.queue import Queue
+from standard.graph.frontiers.stack import Stack
+from standard.graph.frontiers.mem_queue import MemQueue</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="standard.utilities.collection" href="collection.html">standard.utilities.collection</a></code></dt>
+<dt><code class="name"><a title="standard.graph.frontiers.frontier" href="frontier.html">standard.graph.frontiers.frontier</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="standard.utilities.simple" href="simple.html">standard.utilities.simple</a></code></dt>
+<dt><code class="name"><a title="standard.graph.frontiers.frontier_sequence" href="frontier_sequence.html">standard.graph.frontiers.frontier_sequence</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.frontiers.frontier_tree" href="frontier_tree.html">standard.graph.frontiers.frontier_tree</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.frontiers.mem_queue" href="mem_queue.html">standard.graph.frontiers.mem_queue</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.frontiers.queue" href="queue.html">standard.graph.frontiers.queue</a></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt><code class="name"><a title="standard.graph.frontiers.stack" href="stack.html">standard.graph.frontiers.stack</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -62,13 +72,17 @@ from standard.utilities.simple import rfind</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="standard" href="../index.html">standard</a></code></li>
+<li><code><a title="standard.graph" href="../index.html">standard.graph</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="standard.utilities.collection" href="collection.html">standard.utilities.collection</a></code></li>
-<li><code><a title="standard.utilities.simple" href="simple.html">standard.utilities.simple</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier" href="frontier.html">standard.graph.frontiers.frontier</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier_sequence" href="frontier_sequence.html">standard.graph.frontiers.frontier_sequence</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier_tree" href="frontier_tree.html">standard.graph.frontiers.frontier_tree</a></code></li>
+<li><code><a title="standard.graph.frontiers.mem_queue" href="mem_queue.html">standard.graph.frontiers.mem_queue</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue" href="queue.html">standard.graph.frontiers.queue</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack" href="stack.html">standard.graph.frontiers.stack</a></code></li>
 </ul>
 </li>
 </ul>

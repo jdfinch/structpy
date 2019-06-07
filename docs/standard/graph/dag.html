@@ -28,17 +28,17 @@ class Dag(graph.Graph):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
 
-    def Roots(self):
+    def roots(self):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def Leaves(self):
+    def leaves(self):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def Sequences(self):
+    def sequences(self):
         &#34;&#34;&#34;
         Generator for Sequence objects spanning the Dag from roots to leaves
         &#34;&#34;&#34;
@@ -67,17 +67,17 @@ class Dag(graph.Graph):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
 
-    def Roots(self):
+    def roots(self):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def Leaves(self):
+    def leaves(self):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def Sequences(self):
+    def sequences(self):
         &#34;&#34;&#34;
         Generator for Sequence objects spanning the Dag from roots to leaves
         &#34;&#34;&#34;
@@ -94,40 +94,40 @@ class Dag(graph.Graph):
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.dag.Dag.Leaves"><code class="name flex">
-<span>def <span class="ident">Leaves</span></span>(<span>self)</span>
+<dt id="standard.graph.dag.Dag.leaves"><code class="name flex">
+<span>def <span class="ident">leaves</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def Leaves(self):
+<pre><code class="python">def leaves(self):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.dag.Dag.Roots"><code class="name flex">
-<span>def <span class="ident">Roots</span></span>(<span>self)</span>
+<dt id="standard.graph.dag.Dag.roots"><code class="name flex">
+<span>def <span class="ident">roots</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def Roots(self):
+<pre><code class="python">def roots(self):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.dag.Dag.Sequences"><code class="name flex">
-<span>def <span class="ident">Sequences</span></span>(<span>self)</span>
+<dt id="standard.graph.dag.Dag.sequences"><code class="name flex">
+<span>def <span class="ident">sequences</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Generator for Sequence objects spanning the Dag from roots to leaves</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def Sequences(self):
+<pre><code class="python">def sequences(self):
     &#34;&#34;&#34;
     Generator for Sequence objects spanning the Dag from roots to leaves
     &#34;&#34;&#34;
@@ -146,6 +146,7 @@ class Dag(graph.Graph):
 <li><code><a title="standard.graph.graph.Graph.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_number" href="graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
@@ -155,6 +156,7 @@ class Dag(graph.Graph):
 <li><code><a title="standard.graph.graph.Graph.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes_number" href="graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
@@ -188,9 +190,9 @@ class Dag(graph.Graph):
 <li>
 <h4><code><a title="standard.graph.dag.Dag" href="#standard.graph.dag.Dag">Dag</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.dag.Dag.Leaves" href="#standard.graph.dag.Dag.Leaves">Leaves</a></code></li>
-<li><code><a title="standard.graph.dag.Dag.Roots" href="#standard.graph.dag.Dag.Roots">Roots</a></code></li>
-<li><code><a title="standard.graph.dag.Dag.Sequences" href="#standard.graph.dag.Dag.Sequences">Sequences</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.leaves" href="#standard.graph.dag.Dag.leaves">leaves</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.roots" href="#standard.graph.dag.Dag.roots">roots</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.sequences" href="#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 </ul>
 </li>
 </ul>

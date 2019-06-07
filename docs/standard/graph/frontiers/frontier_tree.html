@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.utilities API documentation</title>
-<meta name="description" content="Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods" />
+<title>standard.graph.frontiers.frontier_tree API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -18,40 +17,61 @@ collections and have things like rfind where appropriate as class methods" />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.utilities</code></h1>
+<h1 class="title">Module <code>standard.graph.frontiers.frontier_tree</code></h1>
 </header>
 <section id="section-intro">
-<p>Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods</p>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Note to self: later, you should make a convincing inheritance hierarchy for
-collections and have things like rfind where appropriate as class methods
-&#34;&#34;&#34;
+<pre><code class="python">from standard.graph.frontiers.frontier import Frontier
 
-from standard.utilities.collection import Collection
-from standard.utilities.simple import rfind</code></pre>
+class FrontierTree(Frontier):
+    &#34;&#34;&#34;
+    Frontier for searches and explorations, since it maintains graph paths
+    &#34;&#34;&#34;
+
+    pass</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="standard.utilities.collection" href="collection.html">standard.utilities.collection</a></code></dt>
+<dt id="standard.graph.frontiers.frontier_tree.FrontierTree"><code class="flex name class">
+<span>class <span class="ident">FrontierTree</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
 <dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="standard.utilities.simple" href="simple.html">standard.utilities.simple</a></code></dt>
-<dd>
-<section class="desc"></section>
+<section class="desc"><p>Frontier for searches and explorations, since it maintains graph paths</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class FrontierTree(Frontier):
+    &#34;&#34;&#34;
+    Frontier for searches and explorations, since it maintains graph paths
+    &#34;&#34;&#34;
+
+    pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -62,13 +82,14 @@ from standard.utilities.simple import rfind</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="standard" href="../index.html">standard</a></code></li>
+<li><code><a title="standard.graph.frontiers" href="index.html">standard.graph.frontiers</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="standard.utilities.collection" href="collection.html">standard.utilities.collection</a></code></li>
-<li><code><a title="standard.utilities.simple" href="simple.html">standard.utilities.simple</a></code></li>
+<li>
+<h4><code><a title="standard.graph.frontiers.frontier_tree.FrontierTree" href="#standard.graph.frontiers.frontier_tree.FrontierTree">FrontierTree</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

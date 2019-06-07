@@ -9,5 +9,5 @@ from standard.graph.graph import Graph
 from standard.graph.dag import Dag
 from standard.graph.tree import Tree
 from standard.graph.sequence import Sequence
-from standard.graph.stack import Stack
-from standard.graph.queue import Queue
+from standard.graph.frontiers.queue import Queue
+from standard.graph.frontiers.stack import Stack

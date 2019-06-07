@@ -1,15 +1,41 @@
 from standard.graph.sequence import Sequence
-from standard.utilities.collection import Collection
+from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
 from collections import deque
 
-class Queue(Sequence, Collection):
+class Queue(FrontierSequence):
+    """
+    First-in-first-out sequence of nodes functioning as a .add/.pop collection
+
+    Arcs in the Queue point from recently-inserted nodes to more historical
+    nodes, with the next node in the queue being the `.top` of the Queue
+    """
 
     def __init__(self, iterable):
         self._nodes = deque(iterable)
 
+    def end(self):
+        """
+        Returns the next node in the Queue, or None if the Queue is empty
+        """
+        if self._nodes:
+            return self._nodes[0]
+
     def pop(self):
+        """
+        Returns the latest-added node (on left)
+        """
         return self._nodes.popleft()
+
+    def add(self, node, epi=None, arc=None):
+        """
+        Adds node to the end of the queue, or adds epi if epi is specified
+        and node is the last item in the current queue
+        """
+        if epi is None:
+            self._nodes.append(node)
+        elif node is self._nodes[-1]:
+            self.add_node(epi)
 
     def add_node(self, node):
         """
@@ -20,9 +46,9 @@ class Queue(Sequence, Collection):
 
     def add_arc(self, pro, epi, arc=True):
         """
-        Adding an arc to the List may create a non-Sequence
+        Adding an arc to the Queue may create a non-Sequence
         """
-        pass
+        raise NotImplementedError()
 
     def remove_node(self, node):
         """
@@ -32,9 +58,9 @@ class Queue(Sequence, Collection):
 
     def remove_arc(self, pro, epi):
         """
-        Removing an arc from the List may create a non-Sequence
+        Removing an arc from the Queue may create a non-Sequence
         """
-        pass
+        raise NotImplementedError()
 
     def arc(self, pro, epi):
         """
@@ -46,6 +72,12 @@ class Queue(Sequence, Collection):
         if epi_index != 1 + pro_index:
             return (pro, epi)
         return None
+
+    def node_at(self, index):
+        """
+        Returns the node at a certain index, where the root is index 0
+        """
+        return self._nodes.__getitem__(index)
 
     def __iter__(self):
         return self._nodes.__iter__()

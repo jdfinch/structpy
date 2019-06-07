@@ -28,8 +28,6 @@ class Graph(ABC):
     &#34;&#34;&#34;
     General graph structure
 
-    **Abstract Class**
-
     ## Guidelines:
 
     - nodes and arcs are assumed to be sets without duplicates
@@ -43,8 +41,8 @@ class Graph(ABC):
     - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
     - `has_node(node)`: node membership
     - `has_arc(arc)`: arc membership by arc value
-    - `number_nodes()`: count of nodes
-    - `number_arcs()`: count of arcs
+    - `nodes_number()`: count of nodes
+    - `arcs_number()`: count of arcs
     
     ### Construction:
 
@@ -101,7 +99,7 @@ class Graph(ABC):
 
     2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
     if you assign `self._nodes` to a collection that implements 
-    `.add(e)` and `.remove(e)` to add/remove element e, you may skip
+    `.add(e)` and `.pop(e)` to add/remove element e, you may skip
     this step)
 
     3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
@@ -160,6 +158,28 @@ class Graph(ABC):
                 arc = self.arc(pro, epi)
                 if arc is not None:
                     yield arc
+
+    def nodes_number(self):
+        &#34;&#34;&#34;
+        Returns the number of nodes in the graph
+
+        Default implementation: counts number of nodes O(N)
+        &#34;&#34;&#34;
+        i = 0
+        for node in self.nodes():
+            i += 1
+        return i
+
+    def arcs_number(self):
+        &#34;&#34;&#34;
+        Returns the number of arcs in the graph
+
+        Default implementation: counts the number of arcs O(A)
+        &#34;&#34;&#34;
+        i = 0
+        for arc in self.arcs():
+            i += 1
+        return i
 
     def arcs_out(self, node):
         &#34;&#34;&#34;
@@ -381,7 +401,7 @@ class Graph(ABC):
         &#34;&#34;&#34;
         Remove node from the graph
         &#34;&#34;&#34;
-        self._nodes.remove(node)        
+        self._nodes.pop(node)        
 
     def remove_arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -424,32 +444,36 @@ class Graph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi, arc)
 
-    def traverse(self, start, frontier, condition=None):
+    def traverse(self, frontier, start):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        frontier.add(start)
+        while frontier:
+            new = frontier.pop()
+            for epi in self.epis(new):
+                frontier.add(epi)
+
+    def search(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def search(self, start, frontier, end_condition, condition=None):
+    def explore(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def explore(self, start, frontier, end_condition, condition=None):
+    def traverse_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def traverse_reverse(self, start, frontier, condition=None):
+    def search_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def search_reverse(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_reverse(self, start, frontier, end_condition, condition=None):
+    def explore_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
@@ -479,7 +503,6 @@ class Graph(ABC):
 </code></dt>
 <dd>
 <section class="desc"><p>General graph structure</p>
-<p><strong>Abstract Class</strong></p>
 <h2 id="guidelines">Guidelines:</h2>
 <ul>
 <li>nodes and arcs are assumed to be sets without duplicates</li>
@@ -492,8 +515,8 @@ class Graph(ABC):
 <li><code>has(node, epi=None)</code>: membership of node or arc by pro &amp; epi</li>
 <li><code>has_node(node)</code>: node membership</li>
 <li><code>has_arc(arc)</code>: arc membership by arc value</li>
-<li><code>number_nodes()</code>: count of nodes</li>
-<li><code>number_arcs()</code>: count of arcs</li>
+<li><code>nodes_number()</code>: count of nodes</li>
+<li><code>arcs_number()</code>: count of arcs</li>
 </ul>
 <h3 id="construction">Construction:</h3>
 <ul>
@@ -551,7 +574,7 @@ collection to hold nodes</p>
 <li>
 <p>Implement <code>add_node(node)</code> and <code>add_arc(arc)</code> (alternatively,
 if you assign <code>self._nodes</code> to a collection that implements
-<code>.add(e)</code> and <code>.remove(e)</code> to add/remove element e, you may skip
+<code>.add(e)</code> and <code>.pop(e)</code> to add/remove element e, you may skip
 this step)</p>
 </li>
 <li>
@@ -587,8 +610,6 @@ if the above 3 steps have been followed:</p>
     &#34;&#34;&#34;
     General graph structure
 
-    **Abstract Class**
-
     ## Guidelines:
 
     - nodes and arcs are assumed to be sets without duplicates
@@ -602,8 +623,8 @@ if the above 3 steps have been followed:</p>
     - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
     - `has_node(node)`: node membership
     - `has_arc(arc)`: arc membership by arc value
-    - `number_nodes()`: count of nodes
-    - `number_arcs()`: count of arcs
+    - `nodes_number()`: count of nodes
+    - `arcs_number()`: count of arcs
     
     ### Construction:
 
@@ -660,7 +681,7 @@ if the above 3 steps have been followed:</p>
 
     2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
     if you assign `self._nodes` to a collection that implements 
-    `.add(e)` and `.remove(e)` to add/remove element e, you may skip
+    `.add(e)` and `.pop(e)` to add/remove element e, you may skip
     this step)
 
     3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
@@ -719,6 +740,28 @@ if the above 3 steps have been followed:</p>
                 arc = self.arc(pro, epi)
                 if arc is not None:
                     yield arc
+
+    def nodes_number(self):
+        &#34;&#34;&#34;
+        Returns the number of nodes in the graph
+
+        Default implementation: counts number of nodes O(N)
+        &#34;&#34;&#34;
+        i = 0
+        for node in self.nodes():
+            i += 1
+        return i
+
+    def arcs_number(self):
+        &#34;&#34;&#34;
+        Returns the number of arcs in the graph
+
+        Default implementation: counts the number of arcs O(A)
+        &#34;&#34;&#34;
+        i = 0
+        for arc in self.arcs():
+            i += 1
+        return i
 
     def arcs_out(self, node):
         &#34;&#34;&#34;
@@ -940,7 +983,7 @@ if the above 3 steps have been followed:</p>
         &#34;&#34;&#34;
         Remove node from the graph
         &#34;&#34;&#34;
-        self._nodes.remove(node)        
+        self._nodes.pop(node)        
 
     def remove_arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -983,32 +1026,36 @@ if the above 3 steps have been followed:</p>
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi, arc)
 
-    def traverse(self, start, frontier, condition=None):
+    def traverse(self, frontier, start):
+        &#34;&#34;&#34;
+        &#34;&#34;&#34;
+        frontier.add(start)
+        while frontier:
+            new = frontier.pop()
+            for epi in self.epis(new):
+                frontier.add(epi)
+
+    def search(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def search(self, start, frontier, end_condition, condition=None):
+    def explore(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def explore(self, start, frontier, end_condition, condition=None):
+    def traverse_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def traverse_reverse(self, start, frontier, condition=None):
+    def search_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
 
-    def search_reverse(self, start, frontier, end_condition, condition=None):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_reverse(self, start, frontier, end_condition, condition=None):
+    def explore_reverse(self, frontier, start):
         &#34;&#34;&#34;
         &#34;&#34;&#34;
         pass
@@ -1192,6 +1239,26 @@ O(N * N * T(<code>self.arc</code>))</p></section>
     return i</code></pre>
 </details>
 </dd>
+<dt id="standard.graph.graph.Graph.arcs_number"><code class="name flex">
+<span>def <span class="ident">arcs_number</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the number of arcs in the graph</p>
+<p>Default implementation: counts the number of arcs O(A)</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def arcs_number(self):
+    &#34;&#34;&#34;
+    Returns the number of arcs in the graph
+
+    Default implementation: counts the number of arcs O(A)
+    &#34;&#34;&#34;
+    i = 0
+    for arc in self.arcs():
+        i += 1
+    return i</code></pre>
+</details>
+</dd>
 <dt id="standard.graph.graph.Graph.arcs_out"><code class="name flex">
 <span>def <span class="ident">arcs_out</span></span>(<span>self, node)</span>
 </code></dt>
@@ -1301,26 +1368,26 @@ O(T(<code>self.epis</code>))</p></section>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.explore"><code class="name flex">
-<span>def <span class="ident">explore</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+<span>def <span class="ident">explore</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def explore(self, start, frontier, end_condition, condition=None):
+<pre><code class="python">def explore(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.explore_reverse"><code class="name flex">
-<span>def <span class="ident">explore_reverse</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+<span>def <span class="ident">explore_reverse</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def explore_reverse(self, start, frontier, end_condition, condition=None):
+<pre><code class="python">def explore_reverse(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
@@ -1411,6 +1478,26 @@ O(T(<code>self.nodes</code>))</p></section>
     &#34;&#34;&#34;
     for node in self._nodes:
         yield node</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.nodes_number"><code class="name flex">
+<span>def <span class="ident">nodes_number</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the number of nodes in the graph</p>
+<p>Default implementation: counts number of nodes O(N)</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def nodes_number(self):
+    &#34;&#34;&#34;
+    Returns the number of nodes in the graph
+
+    Default implementation: counts number of nodes O(N)
+    &#34;&#34;&#34;
+    i = 0
+    for node in self.nodes():
+        i += 1
+    return i</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.pro"><code class="name flex">
@@ -1530,7 +1617,7 @@ O(T(<code>self.pros</code>))</p></section>
     &#34;&#34;&#34;
     Remove node from the graph
     &#34;&#34;&#34;
-    self._nodes.remove(node)        </code></pre>
+    self._nodes.pop(node)        </code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.replace_arc"><code class="name flex">
@@ -1602,52 +1689,56 @@ node arcs</p></section>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+<span>def <span class="ident">search</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def search(self, start, frontier, end_condition, condition=None):
+<pre><code class="python">def search(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.search_reverse"><code class="name flex">
-<span>def <span class="ident">search_reverse</span></span>(<span>self, start, frontier, end_condition, condition=None)</span>
+<span>def <span class="ident">search_reverse</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def search_reverse(self, start, frontier, end_condition, condition=None):
+<pre><code class="python">def search_reverse(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
-<span>def <span class="ident">traverse</span></span>(<span>self, start, frontier, condition=None)</span>
+<span>def <span class="ident">traverse</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def traverse(self, start, frontier, condition=None):
+<pre><code class="python">def traverse(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
-    pass</code></pre>
+    frontier.add(start)
+    while frontier:
+        new = frontier.pop()
+        for epi in self.epis(new):
+            frontier.add(epi)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.traverse_reverse"><code class="name flex">
-<span>def <span class="ident">traverse_reverse</span></span>(<span>self, start, frontier, condition=None)</span>
+<span>def <span class="ident">traverse_reverse</span></span>(<span>self, frontier, start)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def traverse_reverse(self, start, frontier, condition=None):
+<pre><code class="python">def traverse_reverse(self, frontier, start):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
     pass</code></pre>
@@ -1681,6 +1772,7 @@ node arcs</p></section>
 <li><code><a title="standard.graph.graph.Graph.arcs" href="#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in" href="#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_number" href="#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out" href="#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epi" href="#standard.graph.graph.Graph.epi">epi</a></code></li>
@@ -1692,6 +1784,7 @@ node arcs</p></section>
 <li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.nodes" href="#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes_number" href="#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pro" href="#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pros" href="#standard.graph.graph.Graph.pros">pros</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.pros_number" href="#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>

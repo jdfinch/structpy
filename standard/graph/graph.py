@@ -17,8 +17,8 @@ class Graph(ABC):
     - `has(node, epi=None)`: membership of node or arc by pro & epi
     - `has_node(node)`: node membership
     - `has_arc(arc)`: arc membership by arc value
-    - `number_nodes()`: count of nodes
-    - `number_arcs()`: count of arcs
+    - `nodes_number()`: count of nodes
+    - `arcs_number()`: count of arcs
     
     ### Construction:
 
@@ -134,6 +134,28 @@ class Graph(ABC):
                 arc = self.arc(pro, epi)
                 if arc is not None:
                     yield arc
+
+    def nodes_number(self):
+        """
+        Returns the number of nodes in the graph
+
+        Default implementation: counts number of nodes O(N)
+        """
+        i = 0
+        for node in self.nodes():
+            i += 1
+        return i
+
+    def arcs_number(self):
+        """
+        Returns the number of arcs in the graph
+
+        Default implementation: counts the number of arcs O(A)
+        """
+        i = 0
+        for arc in self.arcs():
+            i += 1
+        return i
 
     def arcs_out(self, node):
         """
@@ -398,32 +420,36 @@ class Graph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi, arc)
 
-    def traverse(self, start, frontier, condition=None):
+    def traverse(self, frontier, start):
+        """
+        """
+        frontier.add(start)
+        while frontier:
+            new = frontier.pop()
+            for epi in self.epis(new):
+                frontier.add(epi)
+
+    def search(self, frontier, start):
         """
         """
         pass
 
-    def search(self, start, frontier, end_condition, condition=None):
+    def explore(self, frontier, start):
         """
         """
         pass
 
-    def explore(self, start, frontier, end_condition, condition=None):
+    def traverse_reverse(self, frontier, start):
         """
         """
         pass
 
-    def traverse_reverse(self, start, frontier, condition=None):
+    def search_reverse(self, frontier, start):
         """
         """
         pass
 
-    def search_reverse(self, start, frontier, end_condition, condition=None):
-        """
-        """
-        pass
-
-    def explore_reverse(self, start, frontier, end_condition, condition=None):
+    def explore_reverse(self, frontier, start):
         """
         """
         pass

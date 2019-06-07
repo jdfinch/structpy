@@ -98,3 +98,4 @@ def test_arc_node_adjacency():
         arcs.remove(arc)
     assert len(arcs) == 0
     assert len(list(g.arcs_out('b'))) == 0
+
