@@ -7,6 +7,10 @@ class Frontier(ABC):
     exploration
     """
 
+    def __init__(self, iterable):
+        for e in iterable:
+            self.add(e)
+
     @abstractmethod
     def add(self, element):
         """

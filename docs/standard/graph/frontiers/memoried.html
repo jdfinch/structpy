@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.frontiers.mem_queue API documentation</title>
+<title>standard.graph.frontiers.memoried API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,28 +17,71 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.frontiers.mem_queue</code></h1>
+<h1 class="title">Module <code>standard.graph.frontiers.memoried</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from standard.graph.frontiers.queue import Queue
-from standard.graph.frontiers.memoried import MemoriedFrontier
+<pre><code class="python">from abc import ABC, abstractmethod
+from standard.graph.frontiers.frontier import Frontier
+from standard.graph.frontiers.stack import Stack
+from standard.graph.frontiers.queue import Queue
 
-
-class MemQueue(MemoriedFrontier, Queue):
+class MemoriedFrontier(Frontier, ABC):
     &#34;&#34;&#34;
-    Frontier for breadth-first traversal
+    Frontier that keeps track of nodes that have been added and filters out
+    added nodes if they appear in this set of previously visited nodes
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
-        Queue.__init__(self, iterable)
-        MemoriedFrontier.__init__(self, iterable)
-    
-    def _add_memoried(self, node):
-        return Queue.add(self, node)
+        self.visited = set(iterable)
 
-    </code></pre>
+    @abstractmethod
+    def _add_memoried(self, element):
+        &#34;&#34;&#34;
+        Implement this function to add element to the collection,
+        assuming it should be added
+
+        Memoried will automatically ignore (not add) elements that have 
+        been added before at any point in the object&#39;s lifetime
+        &#34;&#34;&#34;
+        pass
+
+    def add(self, element):
+        &#34;&#34;&#34;
+        Add an element to the Memoried collection, but not if it has ever
+        been added before. Memoried maintains a set of visited nodes to 
+        filter out visited nodes from being added
+        &#34;&#34;&#34;
+        if element not in self.visited:
+            self._add_memoried(element)
+            self.visited.add(element)
+
+def Memoried(cls):
+    &#34;&#34;&#34;
+    Creates and returns a new class of type MemoriedFrontier that also
+    inherits from cls
+
+    `cls`: a Frontier class pointer
+    &#34;&#34;&#34;
+
+    class NewMemoriedFrontier(MemoriedFrontier, cls):
+        &#34;&#34;&#34;
+        Generated class for a Frontier that remembers and filters out
+        previously added nodes
+        &#34;&#34;&#34;
+
+        def __init__(self, iterable):
+            cls.__init__(self, iterable)
+            MemoriedFrontier.__init__(self, iterable)
+
+        def _add_memoried(self, element):
+            return cls.add(self, element)
+
+    return NewMemoriedFrontier
+
+MemStack = Memoried(Stack)
+MemQueue = Memoried(Queue)</code></pre>
 </details>
 </section>
 <section>
@@ -46,33 +89,71 @@ class MemQueue(MemoriedFrontier, Queue):
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="standard.graph.frontiers.memoried.Memoried"><code class="name flex">
+<span>def <span class="ident">Memoried</span></span>(<span>cls)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Creates and returns a new class of type MemoriedFrontier that also
+inherits from cls</p>
+<p><code>cls</code>: a Frontier class pointer</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def Memoried(cls):
+    &#34;&#34;&#34;
+    Creates and returns a new class of type MemoriedFrontier that also
+    inherits from cls
+
+    `cls`: a Frontier class pointer
+    &#34;&#34;&#34;
+
+    class NewMemoriedFrontier(MemoriedFrontier, cls):
+        &#34;&#34;&#34;
+        Generated class for a Frontier that remembers and filters out
+        previously added nodes
+        &#34;&#34;&#34;
+
+        def __init__(self, iterable):
+            cls.__init__(self, iterable)
+            MemoriedFrontier.__init__(self, iterable)
+
+        def _add_memoried(self, element):
+            return cls.add(self, element)
+
+    return NewMemoriedFrontier</code></pre>
+</details>
+</dd>
+</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.frontiers.mem_queue.MemQueue"><code class="flex name class">
+<dt id="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier"><code class="flex name class">
 <span>class <span class="ident">MemQueue</span></span>
 <span>(</span><span>iterable)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Frontier for breadth-first traversal</p></section>
+<section class="desc"><p>Generated class for a Frontier that remembers and filters out
+previously added nodes</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class MemQueue(MemoriedFrontier, Queue):
+<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, cls):
     &#34;&#34;&#34;
-    Frontier for breadth-first traversal
+    Generated class for a Frontier that remembers and filters out
+    previously added nodes
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
-        Queue.__init__(self, iterable)
+        cls.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
-    
-    def _add_memoried(self, node):
-        return Queue.add(self, node)</code></pre>
+
+    def _add_memoried(self, element):
+        return cls.add(self, element)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="memoried.html#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></li>
+<li><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></li>
 <li><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></li>
 <li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
@@ -84,9 +165,9 @@ class MemQueue(MemoriedFrontier, Queue):
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="memoried.html#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></b></code>:
+<li><code><b><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add" href="memoried.html#standard.graph.frontiers.memoried.MemoriedFrontier.add">add</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add" href="#standard.graph.frontiers.memoried.MemoriedFrontier.add">add</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
 </ul>
@@ -128,6 +209,123 @@ class MemQueue(MemoriedFrontier, Queue):
 </li>
 </ul>
 </dd>
+<dt id="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier"><code class="flex name class">
+<span>class <span class="ident">MemStack</span></span>
+<span>(</span><span>iterable)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Generated class for a Frontier that remembers and filters out
+previously added nodes</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, cls):
+    &#34;&#34;&#34;
+    Generated class for a Frontier that remembers and filters out
+    previously added nodes
+    &#34;&#34;&#34;
+
+    def __init__(self, iterable):
+        cls.__init__(self, iterable)
+        MemoriedFrontier.__init__(self, iterable)
+
+    def _add_memoried(self, element):
+        return cls.add(self, element)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></li>
+<li><a title="standard.graph.frontiers.stack.Stack" href="stack.html#standard.graph.frontiers.stack.Stack">Stack</a></li>
+<li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
+<li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
+<li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
+<li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li>abc.ABC</li>
+</ul>
+</dd>
+<dt id="standard.graph.frontiers.memoried.MemoriedFrontier"><code class="flex name class">
+<span>class <span class="ident">MemoriedFrontier</span></span>
+<span>(</span><span>iterable)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Frontier that keeps track of nodes that have been added and filters out
+added nodes if they appear in this set of previously visited nodes</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class MemoriedFrontier(Frontier, ABC):
+    &#34;&#34;&#34;
+    Frontier that keeps track of nodes that have been added and filters out
+    added nodes if they appear in this set of previously visited nodes
+    &#34;&#34;&#34;
+
+    def __init__(self, iterable):
+        self.visited = set(iterable)
+
+    @abstractmethod
+    def _add_memoried(self, element):
+        &#34;&#34;&#34;
+        Implement this function to add element to the collection,
+        assuming it should be added
+
+        Memoried will automatically ignore (not add) elements that have 
+        been added before at any point in the object&#39;s lifetime
+        &#34;&#34;&#34;
+        pass
+
+    def add(self, element):
+        &#34;&#34;&#34;
+        Add an element to the Memoried collection, but not if it has ever
+        been added before. Memoried maintains a set of visited nodes to 
+        filter out visited nodes from being added
+        &#34;&#34;&#34;
+        if element not in self.visited:
+            self._add_memoried(element)
+            self.visited.add(element)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier" href="#standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier">Memoried.<locals>.NewMemoriedFrontier</a></li>
+<li><a title="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier" href="#standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier">Memoried.<locals>.NewMemoriedFrontier</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="standard.graph.frontiers.memoried.MemoriedFrontier.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, element)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Add an element to the Memoried collection, but not if it has ever
+been added before. Memoried maintains a set of visited nodes to
+filter out visited nodes from being added</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add(self, element):
+    &#34;&#34;&#34;
+    Add an element to the Memoried collection, but not if it has ever
+    been added before. Memoried maintains a set of visited nodes to 
+    filter out visited nodes from being added
+    &#34;&#34;&#34;
+    if element not in self.visited:
+        self._add_memoried(element)
+        self.visited.add(element)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -142,10 +340,24 @@ class MemQueue(MemoriedFrontier, Queue):
 <li><code><a title="standard.graph.frontiers" href="index.html">standard.graph.frontiers</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="standard.graph.frontiers.memoried.Memoried" href="#standard.graph.frontiers.memoried.Memoried">Memoried</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.frontiers.mem_queue.MemQueue" href="#standard.graph.frontiers.mem_queue.MemQueue">MemQueue</a></code></h4>
+<h4><code><a title="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier" href="#standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier">Memoried.<locals>.NewMemoriedFrontier</a></code></h4>
+</li>
+<li>
+<h4><code><a title="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier" href="#standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier">Memoried.<locals>.NewMemoriedFrontier</a></code></h4>
+</li>
+<li>
+<h4><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></code></h4>
+<ul class="">
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add" href="#standard.graph.frontiers.memoried.MemoriedFrontier.add">add</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

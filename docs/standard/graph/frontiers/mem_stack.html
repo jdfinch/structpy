@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.frontiers.mem_queue API documentation</title>
+<title>standard.graph.frontiers.mem_stack API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,28 +17,26 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.frontiers.mem_queue</code></h1>
+<h1 class="title">Module <code>standard.graph.frontiers.mem_stack</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from standard.graph.frontiers.queue import Queue
+<pre><code class="python">from standard.graph.frontiers.stack import Stack
 from standard.graph.frontiers.memoried import MemoriedFrontier
 
 
-class MemQueue(MemoriedFrontier, Queue):
+class MemStack(MemoriedFrontier, Stack):
     &#34;&#34;&#34;
     Frontier for breadth-first traversal
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
-        Queue.__init__(self, iterable)
+        Stack.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
-    
-    def _add_memoried(self, node):
-        return Queue.add(self, node)
 
-    </code></pre>
+    def _add_memoried(self, node):
+        return Stack.add(self, node)</code></pre>
 </details>
 </section>
 <section>
@@ -50,30 +48,30 @@ class MemQueue(MemoriedFrontier, Queue):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.frontiers.mem_queue.MemQueue"><code class="flex name class">
-<span>class <span class="ident">MemQueue</span></span>
+<dt id="standard.graph.frontiers.mem_stack.MemStack"><code class="flex name class">
+<span>class <span class="ident">MemStack</span></span>
 <span>(</span><span>iterable)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Frontier for breadth-first traversal</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class MemQueue(MemoriedFrontier, Queue):
+<pre><code class="python">class MemStack(MemoriedFrontier, Stack):
     &#34;&#34;&#34;
     Frontier for breadth-first traversal
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
-        Queue.__init__(self, iterable)
+        Stack.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
-    
+
     def _add_memoried(self, node):
-        return Queue.add(self, node)</code></pre>
+        return Stack.add(self, node)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="memoried.html#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></li>
-<li><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></li>
+<li><a title="standard.graph.frontiers.stack.Stack" href="stack.html#standard.graph.frontiers.stack.Stack">Stack</a></li>
 <li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
@@ -91,39 +89,39 @@ class MemQueue(MemoriedFrontier, Queue):
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
 </ul>
 </li>
-<li><code><b><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></b></code>:
+<li><code><b><a title="standard.graph.frontiers.stack.Stack" href="stack.html#standard.graph.frontiers.stack.Stack">Stack</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.frontiers.queue.Queue.add_arc" href="queue.html#standard.graph.frontiers.queue.Queue.add_arc">add_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.add_node" href="queue.html#standard.graph.frontiers.queue.Queue.add_node">add_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arc" href="queue.html#standard.graph.frontiers.queue.Queue.arc">arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.child" href="../sequence.html#standard.graph.sequence.Sequence.child">child</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.end" href="queue.html#standard.graph.frontiers.queue.Queue.end">end</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.node_at" href="../sequence.html#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove_arc" href="queue.html#standard.graph.frontiers.queue.Queue.remove_arc">remove_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove_node" href="queue.html#standard.graph.frontiers.queue.Queue.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.add_arc" href="stack.html#standard.graph.frontiers.stack.Stack.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.add_node" href="stack.html#standard.graph.frontiers.stack.Stack.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arc" href="stack.html#standard.graph.frontiers.stack.Stack.arc">arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.child" href="../sequence.html#standard.graph.sequence.Sequence.child">child</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.end" href="../sequence.html#standard.graph.sequence.Sequence.end">end</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.node_at" href="../sequence.html#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.remove_arc" href="stack.html#standard.graph.frontiers.stack.Stack.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.remove_node" href="stack.html#standard.graph.frontiers.stack.Stack.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.stack.Stack.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 </ul>
 </li>
 </ul>
@@ -145,7 +143,7 @@ class MemQueue(MemoriedFrontier, Queue):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.frontiers.mem_queue.MemQueue" href="#standard.graph.frontiers.mem_queue.MemQueue">MemQueue</a></code></h4>
+<h4><code><a title="standard.graph.frontiers.mem_stack.MemStack" href="#standard.graph.frontiers.mem_stack.MemStack">MemStack</a></code></h4>
 </li>
 </ul>
 </li>

@@ -1,4 +1,5 @@
 {
+  "test/graph/frontiers/test_mem_queue.py": true,
   "test/graph/test_DictionaryGraph.py": true,
   "test/graph/test_dictionarygraph.py": true,
   "trash/test_dictionary_graph.py": true,

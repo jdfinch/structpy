@@ -1,0 +1,60 @@
+from abc import ABC, abstractmethod
+from standard.graph.frontiers.frontier import Frontier
+from standard.graph.frontiers.stack import Stack
+from standard.graph.frontiers.queue import Queue
+
+class MemoriedFrontier(Frontier, ABC):
+    """
+    Frontier that keeps track of nodes that have been added and filters out
+    added nodes if they appear in this set of previously visited nodes
+    """
+
+    def __init__(self, iterable):
+        self.visited = set(iterable)
+
+    @abstractmethod
+    def _add_memoried(self, element):
+        """
+        Implement this function to add element to the collection,
+        assuming it should be added
+
+        Memoried will automatically ignore (not add) elements that have 
+        been added before at any point in the object's lifetime
+        """
+        pass
+
+    def add(self, element):
+        """
+        Add an element to the Memoried collection, but not if it has ever
+        been added before. Memoried maintains a set of visited nodes to 
+        filter out visited nodes from being added
+        """
+        if element not in self.visited:
+            self._add_memoried(element)
+            self.visited.add(element)
+
+def Memoried(cls):
+    """
+    Creates and returns a new class of type MemoriedFrontier that also
+    inherits from cls
+
+    `cls`: a Frontier class pointer
+    """
+
+    class NewMemoriedFrontier(MemoriedFrontier, cls):
+        """
+        Generated class for a Frontier that remembers and filters out
+        previously added nodes
+        """
+
+        def __init__(self, iterable):
+            cls.__init__(self, iterable)
+            MemoriedFrontier.__init__(self, iterable)
+
+        def _add_memoried(self, element):
+            return cls.add(self, element)
+
+    return NewMemoriedFrontier
+
+MemStack = Memoried(Stack)
+MemQueue = Memoried(Queue)

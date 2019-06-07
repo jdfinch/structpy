@@ -25,7 +25,7 @@
 <pre><code class="python">from standard.graph.frontiers.frontier import Frontier
 from standard.graph.sequence import Sequence
 
-class FrontierSequence(Frontier, Sequence):
+class FrontierSequence(Sequence, Frontier):
     &#34;&#34;&#34;
     Frontier for traversals
     &#34;&#34;&#34;
@@ -62,7 +62,7 @@ class FrontierSequence(Frontier, Sequence):
 <section class="desc"><p>Frontier for traversals</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class FrontierSequence(Frontier, Sequence):
+<pre><code class="python">class FrontierSequence(Sequence, Frontier):
     &#34;&#34;&#34;
     Frontier for traversals
     &#34;&#34;&#34;
@@ -84,11 +84,11 @@ class FrontierSequence(Frontier, Sequence):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
