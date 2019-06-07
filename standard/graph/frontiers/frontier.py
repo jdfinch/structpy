@@ -8,6 +8,13 @@ class Frontier(ABC):
     """
 
     @abstractmethod
+    def add(self, element):
+        """
+        Add an element to the frontier
+        """
+        pass
+
+    @abstractmethod
     def pop(self, element):
         """
         Removes and returns the next element to be considered in the frontier
@@ -17,7 +24,8 @@ class Frontier(ABC):
     @abstractmethod
     def complete(self):
         """
-        Returns a bool representing whether the 
+        Returns a bool representing whether the frontier is done changing
+        state
         """
         pass
 

@@ -2,7 +2,7 @@
 from standard.graph.frontiers.frontier import Frontier
 from standard.graph.sequence import Sequence
 
-class FrontierSequence(Frontier, Sequence):
+class FrontierSequence(Sequence, Frontier):
     """
     Frontier for traversals
     """
