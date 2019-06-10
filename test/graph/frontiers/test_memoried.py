@@ -45,6 +45,28 @@ def test_add():
     assert ms == MemStack((1, 2, 3, 5, 4))
     ms.add(4)
     assert ms == MemStack((1, 2, 3, 5, 4))
+    
+    mq = MemQueue([1, 2, 3])
+    mq.add('error', 5)
+    assert mq == MemQueue((1, 2, 3, 5))
+    mq.add('error', 4)
+    assert mq == MemQueue((1, 2, 3, 5, 4))
+    # test the "memoried" part of MemQueue
+    mq.add('error', 4)
+    print('mq:', mq)
+    assert mq == MemQueue((1, 2, 3, 5, 4))
+    mq.add('error', 2)
+    assert mq == MemQueue((1, 2, 3, 5, 4))
+    ms = MemStack([1, 2, 3])
+    ms.add('error', 5)
+    assert ms == MemStack((1, 2, 3, 5))
+    ms.add('error', 4)
+    assert ms == MemStack((1, 2, 3, 5, 4))
+    # test the "memoried" part of MemStack
+    ms.add('error', 2)
+    assert ms == MemStack((1, 2, 3, 5, 4))
+    ms.add('error', 4)
+    assert ms == MemStack((1, 2, 3, 5, 4))
 
 def test_pop():
     mq = MemQueue([1, 2, 3])
