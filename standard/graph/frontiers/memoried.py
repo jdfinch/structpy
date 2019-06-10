@@ -9,8 +9,11 @@ class MemoriedFrontier(Frontier, ABC):
     added nodes if they appear in this set of previously visited nodes
     """
 
-    def __init__(self, iterable):
-        self.visited = set(iterable)
+    def __init__(self, iterable=None):
+        if iterable is not None:
+            self.visited = set(iterable)
+        else:
+            self.visited = set()
 
     @abstractmethod
     def _add_memoried(self, pro, epi=None, arc=None):
@@ -41,7 +44,7 @@ class MemoriedFrontier(Frontier, ABC):
             self._add_memoried(node)
             self.visited.add(node)
 
-def Memoried(cls):
+def Memoried(frontier):
     """
     Creates and returns a new class of type MemoriedFrontier that also
     inherits from cls
@@ -49,21 +52,21 @@ def Memoried(cls):
     `cls`: a Frontier class pointer
     """
 
-    class NewMemoriedFrontier(MemoriedFrontier, cls):
+    class NewMemoriedFrontier(MemoriedFrontier, frontier):
         """
         Generated class for a Frontier that remembers and filters out
         previously added nodes
         """
 
-        def __init__(self, iterable):
-            cls.__init__(self, iterable)
+        def __init__(self, iterable=None):
+            frontier.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
         def _add_memoried(self, pro, epi=None, arc=None):
-            return cls.add(self, pro, epi, arc)
+            return frontier.add(self, pro, epi, arc)
 
         def __str__(self):
-            return 'Mem' + cls.__str__(self)
+            return 'Mem' + frontier.__str__(self)
 
     return NewMemoriedFrontier
 

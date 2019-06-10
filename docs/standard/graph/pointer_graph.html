@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.dictionary_graph API documentation</title>
+<title>standard.graph.pointer_graph API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,21 +17,73 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.dictionary_graph</code></h1>
+<h1 class="title">Module <code>standard.graph.pointer_graph</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from standard.graph.graph import Graph
+from collections import defaultdict
 
-class DictionaryGraph(Graph):
+class PointerGraph(Graph):
 
     def __init__(self):
         self._nodes = {}
 
+    def arcs(self):
+        for node in self._nodes:
+            for epi in self._nodes[node]:
+                yield (node, epi)
+
+    def has_arc(self, pro, epi):
+        return epi in self._nodes[pro]
+
+    def nodes_number(self):
+        return len(self._nodes)
+
+    def arcs_number(self):
+        i = 0
+        for arc in self.arcs():
+            i += 1
+        return i
+
     def add_node(self, node):
-        if node not in self._nodes:
-            self._nodes[node] = {}</code></pre>
+        self._nodes[node] = set()
+
+    def add_arc(self, pro, epi, arc=None):
+        self._nodes[pro].add(epi)
+
+    def remove_node(self, node):
+        del self._nodes[node]
+        for other in self._nodes:
+            if node in self._nodes[other]:
+                self._nodes[other].remove(node)
+    
+    def remove_arc(self, pro, epi):
+        self._nodes[pro].remove(epi)
+
+    def epis(self, node):
+        if node in self._nodes:
+            for node in self._nodes[node]:
+                yield node
+    
+    def epis_number(self, node):
+        if node in self._nodes:
+            return len(self._nodes[node])
+        else:
+            return 0
+
+    def arc(self, pro, epi):
+        if pro in self._nodes and epi in self._nodes[pro]:
+            return (pro, epi)
+        else:
+            return None
+
+    def pro(self, arc):
+        return arc[0]
+    
+    def epi(self, arc):
+        return arc[1]</code></pre>
 </details>
 </section>
 <section>
@@ -43,8 +95,8 @@ class DictionaryGraph(Graph):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.dictionary_graph.DictionaryGraph"><code class="flex name class">
-<span>class <span class="ident">DictionaryGraph</span></span>
+<dt id="standard.graph.pointer_graph.PointerGraph"><code class="flex name class">
+<span>class <span class="ident">PointerGraph</span></span>
 </code></dt>
 <dd>
 <section class="desc"><p>General graph structure</p>
@@ -152,14 +204,65 @@ if the above 3 steps have been followed:</p>
 <h3 id="_1"></h3></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class DictionaryGraph(Graph):
+<pre><code class="python">class PointerGraph(Graph):
 
     def __init__(self):
         self._nodes = {}
 
+    def arcs(self):
+        for node in self._nodes:
+            for epi in self._nodes[node]:
+                yield (node, epi)
+
+    def has_arc(self, pro, epi):
+        return epi in self._nodes[pro]
+
+    def nodes_number(self):
+        return len(self._nodes)
+
+    def arcs_number(self):
+        i = 0
+        for arc in self.arcs():
+            i += 1
+        return i
+
     def add_node(self, node):
-        if node not in self._nodes:
-            self._nodes[node] = {}</code></pre>
+        self._nodes[node] = set()
+
+    def add_arc(self, pro, epi, arc=None):
+        self._nodes[pro].add(epi)
+
+    def remove_node(self, node):
+        del self._nodes[node]
+        for other in self._nodes:
+            if node in self._nodes[other]:
+                self._nodes[other].remove(node)
+    
+    def remove_arc(self, pro, epi):
+        self._nodes[pro].remove(epi)
+
+    def epis(self, node):
+        if node in self._nodes:
+            for node in self._nodes[node]:
+                yield node
+    
+    def epis_number(self, node):
+        if node in self._nodes:
+            return len(self._nodes[node])
+        else:
+            return 0
+
+    def arc(self, pro, epi):
+        if pro in self._nodes and epi in self._nodes[pro]:
+            return (pro, epi)
+        else:
+            return None
+
+    def pro(self, arc):
+        return arc[0]
+    
+    def epi(self, arc):
+        return arc[1]</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -221,7 +324,7 @@ if the above 3 steps have been followed:</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.dictionary_graph.DictionaryGraph" href="#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></code></h4>
+<h4><code><a title="standard.graph.pointer_graph.PointerGraph" href="#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></code></h4>
 </li>
 </ul>
 </li>

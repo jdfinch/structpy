@@ -18,6 +18,6 @@ class FrontierSequence(Sequence, Frontier):
         Default implementation to return the next node in the Frontier by
         removing and returning the `end` of the Sequence
         """
-        node = self.end()
+        node = self.top()
         self.remove_node(node)
         return node

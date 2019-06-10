@@ -40,7 +40,8 @@ class Graph(ABC):
     - `arcs()`: iterate over arcs
     - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
     - `has_node(node)`: node membership
-    - `has_arc(arc)`: arc membership by arc value
+    - `has_arc(pro, epi)`: arc membership by pro &amp; epi
+    - `has_arc_value(arc)`: arc membership by arc value
     - `nodes_number()`: count of nodes
     - `arcs_number()`: count of arcs
     
@@ -82,12 +83,12 @@ class Graph(ABC):
 
     ### Graph navigation:
 
-    - `traverse(start, frontier, condition=None)`: memoryless node traversal
-    - `search(start, frontier, end_condition, condition=None)`: path search
-    - `explore(start, frontier, end_condition, condition=None)`: yield search
-    - `traverse_reverse(start, frontier, condition=None)`
-    - `search_reverse(start, frontier, end_condition, condition=None)`
-    - `explore_reverse(start, frontier, end_condition, condition=None)`
+    - `traverse(frontier, start)`: traversal that yields visited nodes
+    - `search(frontier, start)`: search that returns a solution Sequence
+    - `explore(frontier, start)`: search that yields multiple solutions
+    - `traverse_reverse(frontier, start)`
+    - `search_reverse(frontier, start)`
+    - `explore_reverse(frontier, start)`
 
     ## Implementation patterns:
 
@@ -185,25 +186,21 @@ class Graph(ABC):
         &#34;&#34;&#34;
         Iterates over the arcs that the node is a pro of
 
-        Default implementation: iterates over `self.nodes()` and checks if 
-        `self.arc(node, other: Node)` exists. O(T(`self.nodes`) * T(`self.arcs`))
+        Default implementation: iterates over `self.epis()`.
+        O(T(`self.epis`))
         &#34;&#34;&#34;
-        for other in self.nodes():
-            arc = self.arc(node, other)
-            if arc is not None:
-                yield arc
+        for other in self.epis(node):
+            yield self.arc(node, other)
 
     def arcs_in(self, node):
         &#34;&#34;&#34;
         Iterates over the arcs that the node is an epi of
 
-        Default implementation: iterates over `self.nodes()` and checks if 
-        `self.arc(other: Node, node)` exists. O(T(`self.nodes`)) * T(`self.arc`)) 
+        Default implementation: iterates over `self.epis()`.
+        O(T(`self.epis`))
         &#34;&#34;&#34;
-        for other in self.nodes():
-            arc = self.arc(other, node)
-            if arc is not None:
-                yield arc
+        for other in self.pros(node):
+            yield self.arc(other, node)
 
     def arcs_in_number(self, node):
         &#34;&#34;&#34;
@@ -264,7 +261,16 @@ class Graph(ABC):
                 return True
         return False
 
-    def has_arc(self, arc):
+    def has_arc(self, pro, epi):
+        &#34;&#34;&#34;
+        Returns boolean indicating whether the graph contains arc
+
+        Default implementation: routes to `self.arc`
+        O(T(`self.arc`))
+        &#34;&#34;&#34;
+        return self.arc(pro, epi) is not None
+
+    def has_arc_value(self, arc):
         &#34;&#34;&#34;
         Returns boolean indicating whether the graph contains arc
 
@@ -311,13 +317,16 @@ class Graph(ABC):
         Default implementation: routes to `self.add_node` and `self.add_arc`
         &#34;&#34;&#34;
         if epi is not None:
-            self.add_node(node)
-            self.add_node(epi)
+            if not self.has_node(node):
+                self.add_node(node)
+            if not self.has_node(epi):
+                self.add_node(epi)
             if arc is None:
                 arc = True
             self.add_arc(node, epi, arc)
         else:
-            self.add_node(node)
+            if not self.has_node(node):
+                self.add_node(node)
 
     def add_node(self, node):
         &#34;&#34;&#34;
@@ -444,12 +453,22 @@ class Graph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi, arc)
 
-    def traverse(self, frontier, start):
+    def traverse(self, frontier, start=None):
         &#34;&#34;&#34;
+        Traverses the graph starting at `start` and yields each visited node,
+        including `start`
+
+        Node expansion is determined by the arcs in this graph, namely the 
+        `.epis` method
+
+        Expansion order and stop conditions are determined by `frontier`,
+        which should be a `Graph` inheriting from `Tree`
         &#34;&#34;&#34;
-        frontier.add(start)
-        while frontier:
+        if start is not None:
+            frontier.add(start)
+        while not frontier.complete():
             new = frontier.pop()
+            yield new
             for epi in self.epis(new):
                 frontier.add(epi)
 
@@ -514,7 +533,8 @@ class Graph(ABC):
 <li><code>arcs()</code>: iterate over arcs</li>
 <li><code>has(node, epi=None)</code>: membership of node or arc by pro &amp; epi</li>
 <li><code>has_node(node)</code>: node membership</li>
-<li><code>has_arc(arc)</code>: arc membership by arc value</li>
+<li><code>has_arc(pro, epi)</code>: arc membership by pro &amp; epi</li>
+<li><code>has_arc_value(arc)</code>: arc membership by arc value</li>
 <li><code>nodes_number()</code>: count of nodes</li>
 <li><code>arcs_number()</code>: count of arcs</li>
 </ul>
@@ -556,12 +576,12 @@ class Graph(ABC):
 </ul>
 <h3 id="graph-navigation">Graph navigation:</h3>
 <ul>
-<li><code>traverse(start, frontier, condition=None)</code>: memoryless node traversal</li>
-<li><code>search(start, frontier, end_condition, condition=None)</code>: path search</li>
-<li><code>explore(start, frontier, end_condition, condition=None)</code>: yield search</li>
-<li><code>traverse_reverse(start, frontier, condition=None)</code></li>
-<li><code>search_reverse(start, frontier, end_condition, condition=None)</code></li>
-<li><code>explore_reverse(start, frontier, end_condition, condition=None)</code></li>
+<li><code>traverse(frontier, start)</code>: traversal that yields visited nodes</li>
+<li><code>search(frontier, start)</code>: search that returns a solution Sequence</li>
+<li><code>explore(frontier, start)</code>: search that yields multiple solutions</li>
+<li><code>traverse_reverse(frontier, start)</code></li>
+<li><code>search_reverse(frontier, start)</code></li>
+<li><code>explore_reverse(frontier, start)</code></li>
 </ul>
 <h2 id="implementation-patterns">Implementation patterns:</h2>
 <h3 id="node-based">Node-based:</h3>
@@ -622,7 +642,8 @@ if the above 3 steps have been followed:</p>
     - `arcs()`: iterate over arcs
     - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
     - `has_node(node)`: node membership
-    - `has_arc(arc)`: arc membership by arc value
+    - `has_arc(pro, epi)`: arc membership by pro &amp; epi
+    - `has_arc_value(arc)`: arc membership by arc value
     - `nodes_number()`: count of nodes
     - `arcs_number()`: count of arcs
     
@@ -664,12 +685,12 @@ if the above 3 steps have been followed:</p>
 
     ### Graph navigation:
 
-    - `traverse(start, frontier, condition=None)`: memoryless node traversal
-    - `search(start, frontier, end_condition, condition=None)`: path search
-    - `explore(start, frontier, end_condition, condition=None)`: yield search
-    - `traverse_reverse(start, frontier, condition=None)`
-    - `search_reverse(start, frontier, end_condition, condition=None)`
-    - `explore_reverse(start, frontier, end_condition, condition=None)`
+    - `traverse(frontier, start)`: traversal that yields visited nodes
+    - `search(frontier, start)`: search that returns a solution Sequence
+    - `explore(frontier, start)`: search that yields multiple solutions
+    - `traverse_reverse(frontier, start)`
+    - `search_reverse(frontier, start)`
+    - `explore_reverse(frontier, start)`
 
     ## Implementation patterns:
 
@@ -767,25 +788,21 @@ if the above 3 steps have been followed:</p>
         &#34;&#34;&#34;
         Iterates over the arcs that the node is a pro of
 
-        Default implementation: iterates over `self.nodes()` and checks if 
-        `self.arc(node, other: Node)` exists. O(T(`self.nodes`) * T(`self.arcs`))
+        Default implementation: iterates over `self.epis()`.
+        O(T(`self.epis`))
         &#34;&#34;&#34;
-        for other in self.nodes():
-            arc = self.arc(node, other)
-            if arc is not None:
-                yield arc
+        for other in self.epis(node):
+            yield self.arc(node, other)
 
     def arcs_in(self, node):
         &#34;&#34;&#34;
         Iterates over the arcs that the node is an epi of
 
-        Default implementation: iterates over `self.nodes()` and checks if 
-        `self.arc(other: Node, node)` exists. O(T(`self.nodes`)) * T(`self.arc`)) 
+        Default implementation: iterates over `self.epis()`.
+        O(T(`self.epis`))
         &#34;&#34;&#34;
-        for other in self.nodes():
-            arc = self.arc(other, node)
-            if arc is not None:
-                yield arc
+        for other in self.pros(node):
+            yield self.arc(other, node)
 
     def arcs_in_number(self, node):
         &#34;&#34;&#34;
@@ -846,7 +863,16 @@ if the above 3 steps have been followed:</p>
                 return True
         return False
 
-    def has_arc(self, arc):
+    def has_arc(self, pro, epi):
+        &#34;&#34;&#34;
+        Returns boolean indicating whether the graph contains arc
+
+        Default implementation: routes to `self.arc`
+        O(T(`self.arc`))
+        &#34;&#34;&#34;
+        return self.arc(pro, epi) is not None
+
+    def has_arc_value(self, arc):
         &#34;&#34;&#34;
         Returns boolean indicating whether the graph contains arc
 
@@ -893,13 +919,16 @@ if the above 3 steps have been followed:</p>
         Default implementation: routes to `self.add_node` and `self.add_arc`
         &#34;&#34;&#34;
         if epi is not None:
-            self.add_node(node)
-            self.add_node(epi)
+            if not self.has_node(node):
+                self.add_node(node)
+            if not self.has_node(epi):
+                self.add_node(epi)
             if arc is None:
                 arc = True
             self.add_arc(node, epi, arc)
         else:
-            self.add_node(node)
+            if not self.has_node(node):
+                self.add_node(node)
 
     def add_node(self, node):
         &#34;&#34;&#34;
@@ -1026,12 +1055,22 @@ if the above 3 steps have been followed:</p>
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi, arc)
 
-    def traverse(self, frontier, start):
+    def traverse(self, frontier, start=None):
         &#34;&#34;&#34;
+        Traverses the graph starting at `start` and yields each visited node,
+        including `start`
+
+        Node expansion is determined by the arcs in this graph, namely the 
+        `.epis` method
+
+        Expansion order and stop conditions are determined by `frontier`,
+        which should be a `Graph` inheriting from `Tree`
         &#34;&#34;&#34;
-        frontier.add(start)
-        while frontier:
+        if start is not None:
+            frontier.add(start)
+        while not frontier.complete():
             new = frontier.pop()
+            yield new
             for epi in self.epis(new):
                 frontier.add(epi)
 
@@ -1077,7 +1116,8 @@ if the above 3 steps have been followed:</p>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontiers/frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.pointer_graph.PointerGraph" href="pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
+<li><a title="standard.graph.dictionary_graph.DictionaryGraph" href="dictionary_graph.html#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -1100,13 +1140,16 @@ an arc from node to epi will also be added with value arc</p>
     Default implementation: routes to `self.add_node` and `self.add_arc`
     &#34;&#34;&#34;
     if epi is not None:
-        self.add_node(node)
-        self.add_node(epi)
+        if not self.has_node(node):
+            self.add_node(node)
+        if not self.has_node(epi):
+            self.add_node(epi)
         if arc is None:
             arc = True
         self.add_arc(node, epi, arc)
     else:
-        self.add_node(node)</code></pre>
+        if not self.has_node(node):
+            self.add_node(node)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.add_arc"><code class="name flex">
@@ -1206,21 +1249,19 @@ O(N * N * T(<code>self.arc</code>))</p></section>
 </code></dt>
 <dd>
 <section class="desc"><p>Iterates over the arcs that the node is an epi of</p>
-<p>Default implementation: iterates over <code>self.nodes()</code> and checks if
-<code>self.arc(other: Node, node)</code> exists. O(T(<code>self.nodes</code>)) * T(<code>self.arc</code>))</p></section>
+<p>Default implementation: iterates over <code>self.epis()</code>.
+O(T(<code>self.epis</code>))</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def arcs_in(self, node):
     &#34;&#34;&#34;
     Iterates over the arcs that the node is an epi of
 
-    Default implementation: iterates over `self.nodes()` and checks if 
-    `self.arc(other: Node, node)` exists. O(T(`self.nodes`)) * T(`self.arc`)) 
+    Default implementation: iterates over `self.epis()`.
+    O(T(`self.epis`))
     &#34;&#34;&#34;
-    for other in self.nodes():
-        arc = self.arc(other, node)
-        if arc is not None:
-            yield arc</code></pre>
+    for other in self.pros(node):
+        yield self.arc(other, node)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.arcs_in_number"><code class="name flex">
@@ -1265,21 +1306,19 @@ O(N * N * T(<code>self.arc</code>))</p></section>
 </code></dt>
 <dd>
 <section class="desc"><p>Iterates over the arcs that the node is a pro of</p>
-<p>Default implementation: iterates over <code>self.nodes()</code> and checks if
-<code>self.arc(node, other: Node)</code> exists. O(T(<code>self.nodes</code>) * T(<code>self.arcs</code>))</p></section>
+<p>Default implementation: iterates over <code>self.epis()</code>.
+O(T(<code>self.epis</code>))</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def arcs_out(self, node):
     &#34;&#34;&#34;
     Iterates over the arcs that the node is a pro of
 
-    Default implementation: iterates over `self.nodes()` and checks if 
-    `self.arc(node, other: Node)` exists. O(T(`self.nodes`) * T(`self.arcs`))
+    Default implementation: iterates over `self.epis()`.
+    O(T(`self.epis`))
     &#34;&#34;&#34;
-    for other in self.nodes():
-        arc = self.arc(node, other)
-        if arc is not None:
-            yield arc</code></pre>
+    for other in self.epis(node):
+        yield self.arc(node, other)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.arcs_out_number"><code class="name flex">
@@ -1420,7 +1459,26 @@ epi</p>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.has_arc"><code class="name flex">
-<span>def <span class="ident">has_arc</span></span>(<span>self, arc)</span>
+<span>def <span class="ident">has_arc</span></span>(<span>self, pro, epi)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns boolean indicating whether the graph contains arc</p>
+<p>Default implementation: routes to <code>self.arc</code>
+O(T(<code>self.arc</code>))</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def has_arc(self, pro, epi):
+    &#34;&#34;&#34;
+    Returns boolean indicating whether the graph contains arc
+
+    Default implementation: routes to `self.arc`
+    O(T(`self.arc`))
+    &#34;&#34;&#34;
+    return self.arc(pro, epi) is not None</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.has_arc_value"><code class="name flex">
+<span>def <span class="ident">has_arc_value</span></span>(<span>self, arc)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Returns boolean indicating whether the graph contains arc</p>
@@ -1428,7 +1486,7 @@ epi</p>
 O(T(<code>self.arcs</code>))</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def has_arc(self, arc):
+<pre><code class="python">def has_arc_value(self, arc):
     &#34;&#34;&#34;
     Returns boolean indicating whether the graph contains arc
 
@@ -1716,18 +1774,33 @@ node arcs</p></section>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
-<span>def <span class="ident">traverse</span></span>(<span>self, frontier, start)</span>
+<span>def <span class="ident">traverse</span></span>(<span>self, frontier, start=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Traverses the graph starting at <code>start</code> and yields each visited node,
+including <code>start</code></p>
+<p>Node expansion is determined by the arcs in this graph, namely the
+<code>.epis</code> method</p>
+<p>Expansion order and stop conditions are determined by <code>frontier</code>,
+which should be a <a title="standard.graph.graph.Graph" href="#standard.graph.graph.Graph"><code>Graph</code></a> inheriting from <code>Tree</code></p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def traverse(self, frontier, start):
+<pre><code class="python">def traverse(self, frontier, start=None):
     &#34;&#34;&#34;
+    Traverses the graph starting at `start` and yields each visited node,
+    including `start`
+
+    Node expansion is determined by the arcs in this graph, namely the 
+    `.epis` method
+
+    Expansion order and stop conditions are determined by `frontier`,
+    which should be a `Graph` inheriting from `Tree`
     &#34;&#34;&#34;
-    frontier.add(start)
-    while frontier:
+    if start is not None:
+        frontier.add(start)
+    while not frontier.complete():
         new = frontier.pop()
+        yield new
         for epi in self.epis(new):
             frontier.add(epi)</code></pre>
 </details>
@@ -1783,6 +1856,7 @@ node arcs</p></section>
 <li><code><a title="standard.graph.graph.Graph.explore_reverse" href="#standard.graph.graph.Graph.explore_reverse">explore_reverse</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has" href="#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_arc_value" href="#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.nodes" href="#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.nodes_number" href="#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>

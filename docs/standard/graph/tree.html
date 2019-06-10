@@ -23,15 +23,22 @@
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">import standard.graph.dag as dag
+from abc import ABC
 
-class Tree(dag.Dag):
+class Tree(dag.Dag, ABC):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
+
+    def __init__(self, root=None):
+        self._root = root
     
     def root(self):
         &#34;&#34;&#34;
+        Returns the root of this Tree
+
+        Default implementation: returns `self._root`
         &#34;&#34;&#34;
-        pass</code></pre>
+        return self._root</code></pre>
 </details>
 </section>
 <section>
@@ -45,19 +52,26 @@ class Tree(dag.Dag):
 <dl>
 <dt id="standard.graph.tree.Tree"><code class="flex name class">
 <span>class <span class="ident">Tree</span></span>
+<span>(</span><span>root=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Tree(dag.Dag):
+<pre><code class="python">class Tree(dag.Dag, ABC):
     &#34;&#34;&#34;
     &#34;&#34;&#34;
+
+    def __init__(self, root=None):
+        self._root = root
     
     def root(self):
         &#34;&#34;&#34;
+        Returns the root of this Tree
+
+        Default implementation: returns `self._root`
         &#34;&#34;&#34;
-        pass</code></pre>
+        return self._root</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -68,6 +82,8 @@ class Tree(dag.Dag):
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.sequence.Sequence" href="sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontiers/frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.frontiers.queue_tree.QueueTree" href="frontiers/queue_tree.html#standard.graph.frontiers.queue_tree.QueueTree">QueueTree</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -75,13 +91,17 @@ class Tree(dag.Dag):
 <span>def <span class="ident">root</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Returns the root of this Tree</p>
+<p>Default implementation: returns <code>self._root</code></p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def root(self):
     &#34;&#34;&#34;
+    Returns the root of this Tree
+
+    Default implementation: returns `self._root`
     &#34;&#34;&#34;
-    pass</code></pre>
+    return self._root</code></pre>
 </details>
 </dd>
 </dl>
@@ -104,6 +124,7 @@ class Tree(dag.Dag):
 <li><code><a title="standard.graph.dag.Dag.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.has" href="graph.html#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.has_arc_value" href="graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.nodes_number" href="graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
@@ -118,6 +139,7 @@ class Tree(dag.Dag):
 <li><code><a title="standard.graph.dag.Dag.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.sequences" href="dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.traverse" href="graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
 </ul>

@@ -1,10 +1,12 @@
-from standard.graph.graph import Graph
+from standard.graph.tree import Tree
 from abc import ABC, abstractmethod
 
-class Frontier(Graph, ABC):
+class Frontier(Tree, ABC):
     """
     Abstract class representing the frontier of a traversal, search, or
     exploration
+
+    The frontier should be representable as a `Tree`
 
     When adding to the frontier, call `.add(pro, epi)` or 
     `.add(pro, epi, arc)`, where `pro` is the expanded node, `epi` is the node
@@ -31,7 +33,7 @@ class Frontier(Graph, ABC):
         pass
 
     def __bool__(self):
-        return self.complete()
+        return not self.complete()
 
     
 

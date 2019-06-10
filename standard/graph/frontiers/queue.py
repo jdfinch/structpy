@@ -11,10 +11,13 @@ class Queue(FrontierSequence):
     nodes, with the next node in the queue being the `.top` of the Queue
     """
 
-    def __init__(self, iterable):
-        self._nodes = deque(iterable)
+    def __init__(self, iterable=None):
+        if iterable is not None:
+           self._nodes = deque(iterable)
+        else:
+            self._nodes = deque()
 
-    def end(self):
+    def top(self):
         """
         Returns the next node in the Queue, or None if the Queue is empty
         """

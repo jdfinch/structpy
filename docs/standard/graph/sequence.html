@@ -30,7 +30,7 @@ class Sequence(tree.Tree):
     arc direction
     &#34;&#34;&#34;
 
-    def end(self):
+    def top(self):
         &#34;&#34;&#34;
         Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
@@ -66,6 +66,7 @@ class Sequence(tree.Tree):
 <dl>
 <dt id="standard.graph.sequence.Sequence"><code class="flex name class">
 <span>class <span class="ident">Sequence</span></span>
+<span>(</span><span>root=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>A linear, complete ordering of nodes, where ordering is represented by
@@ -78,7 +79,7 @@ arc direction</p></section>
     arc direction
     &#34;&#34;&#34;
 
-    def end(self):
+    def top(self):
         &#34;&#34;&#34;
         Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
@@ -130,20 +131,6 @@ arc direction</p></section>
         return epi</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.sequence.Sequence.end"><code class="name flex">
-<span>def <span class="ident">end</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the last node, or None if the sequence is empty</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def end(self):
-    &#34;&#34;&#34;
-    Returns the last node, or None if the sequence is empty
-    &#34;&#34;&#34;
-    raise NotImplementedError()</code></pre>
-</details>
-</dd>
 <dt id="standard.graph.sequence.Sequence.node_at"><code class="name flex">
 <span>def <span class="ident">node_at</span></span>(<span>self, index)</span>
 </code></dt>
@@ -161,6 +148,20 @@ arc direction</p></section>
         node = self.child(node)
         i += 1
     return node</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.sequence.Sequence.top"><code class="name flex">
+<span>def <span class="ident">top</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns the last node, or None if the sequence is empty</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def top(self):
+    &#34;&#34;&#34;
+    Returns the last node, or None if the sequence is empty
+    &#34;&#34;&#34;
+    raise NotImplementedError()</code></pre>
 </details>
 </dd>
 </dl>
@@ -183,6 +184,7 @@ arc direction</p></section>
 <li><code><a title="standard.graph.tree.Tree.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.has" href="graph.html#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.has_arc" href="graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.has_arc_value" href="graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.has_node" href="graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.nodes_number" href="graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
@@ -196,7 +198,9 @@ arc direction</p></section>
 <li><code><a title="standard.graph.tree.Tree.replace_arc_epi" href="graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.replace_arc_pro" href="graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.root" href="tree.html#standard.graph.tree.Tree.root">root</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.sequences" href="dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.traverse" href="graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
 </ul>
@@ -221,8 +225,8 @@ arc direction</p></section>
 <h4><code><a title="standard.graph.sequence.Sequence" href="#standard.graph.sequence.Sequence">Sequence</a></code></h4>
 <ul class="">
 <li><code><a title="standard.graph.sequence.Sequence.child" href="#standard.graph.sequence.Sequence.child">child</a></code></li>
-<li><code><a title="standard.graph.sequence.Sequence.end" href="#standard.graph.sequence.Sequence.end">end</a></code></li>
 <li><code><a title="standard.graph.sequence.Sequence.node_at" href="#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.top" href="#standard.graph.sequence.Sequence.top">top</a></code></li>
 </ul>
 </li>
 </ul>

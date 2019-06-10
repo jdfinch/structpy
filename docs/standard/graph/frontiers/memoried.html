@@ -33,8 +33,11 @@ class MemoriedFrontier(Frontier, ABC):
     added nodes if they appear in this set of previously visited nodes
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        self.visited = set(iterable)
+    def __init__(self, iterable=None):
+        if iterable is not None:
+            self.visited = set(iterable)
+        else:
+            self.visited = set()
 
     @abstractmethod
     def _add_memoried(self, pro, epi=None, arc=None):
@@ -65,7 +68,7 @@ class MemoriedFrontier(Frontier, ABC):
             self._add_memoried(node)
             self.visited.add(node)
 
-def Memoried(cls):
+def Memoried(frontier):
     &#34;&#34;&#34;
     Creates and returns a new class of type MemoriedFrontier that also
     inherits from cls
@@ -73,21 +76,21 @@ def Memoried(cls):
     `cls`: a Frontier class pointer
     &#34;&#34;&#34;
 
-    class NewMemoriedFrontier(MemoriedFrontier, cls):
+    class NewMemoriedFrontier(MemoriedFrontier, frontier):
         &#34;&#34;&#34;
         Generated class for a Frontier that remembers and filters out
         previously added nodes
         &#34;&#34;&#34;
 
-        def __init__(self, iterable):
-            cls.__init__(self, iterable)
+        def __init__(self, iterable=None):
+            frontier.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
         def _add_memoried(self, pro, epi=None, arc=None):
-            return cls.add(self, pro, epi, arc)
+            return frontier.add(self, pro, epi, arc)
 
         def __str__(self):
-            return &#39;Mem&#39; + cls.__str__(self)
+            return &#39;Mem&#39; + frontier.__str__(self)
 
     return NewMemoriedFrontier
 
@@ -103,7 +106,7 @@ MemQueue = Memoried(Queue)</code></pre>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="standard.graph.frontiers.memoried.Memoried"><code class="name flex">
-<span>def <span class="ident">Memoried</span></span>(<span>cls)</span>
+<span>def <span class="ident">Memoried</span></span>(<span>frontier)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Creates and returns a new class of type MemoriedFrontier that also
@@ -111,7 +114,7 @@ inherits from cls</p>
 <p><code>cls</code>: a Frontier class pointer</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def Memoried(cls):
+<pre><code class="python">def Memoried(frontier):
     &#34;&#34;&#34;
     Creates and returns a new class of type MemoriedFrontier that also
     inherits from cls
@@ -119,21 +122,21 @@ inherits from cls</p>
     `cls`: a Frontier class pointer
     &#34;&#34;&#34;
 
-    class NewMemoriedFrontier(MemoriedFrontier, cls):
+    class NewMemoriedFrontier(MemoriedFrontier, frontier):
         &#34;&#34;&#34;
         Generated class for a Frontier that remembers and filters out
         previously added nodes
         &#34;&#34;&#34;
 
-        def __init__(self, iterable):
-            cls.__init__(self, iterable)
+        def __init__(self, iterable=None):
+            frontier.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
         def _add_memoried(self, pro, epi=None, arc=None):
-            return cls.add(self, pro, epi, arc)
+            return frontier.add(self, pro, epi, arc)
 
         def __str__(self):
-            return &#39;Mem&#39; + cls.__str__(self)
+            return &#39;Mem&#39; + frontier.__str__(self)
 
     return NewMemoriedFrontier</code></pre>
 </details>
@@ -145,28 +148,28 @@ inherits from cls</p>
 <dl>
 <dt id="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier"><code class="flex name class">
 <span>class <span class="ident">MemQueue</span></span>
-<span>(</span><span>iterable)</span>
+<span>(</span><span>iterable=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Generated class for a Frontier that remembers and filters out
 previously added nodes</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, cls):
+<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, frontier):
     &#34;&#34;&#34;
     Generated class for a Frontier that remembers and filters out
     previously added nodes
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        cls.__init__(self, iterable)
+    def __init__(self, iterable=None):
+        frontier.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
 
     def _add_memoried(self, pro, epi=None, arc=None):
-        return cls.add(self, pro, epi, arc)
+        return frontier.add(self, pro, epi, arc)
 
     def __str__(self):
-        return &#39;Mem&#39; + cls.__str__(self)</code></pre>
+        return &#39;Mem&#39; + frontier.__str__(self)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -174,9 +177,9 @@ previously added nodes</p></section>
 <li><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></li>
 <li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
@@ -200,6 +203,7 @@ previously added nodes</p></section>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has_arc_value" href="../graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
@@ -214,42 +218,44 @@ previously added nodes</p></section>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></b></code>:
 <ul class="hlist">
 <li><code><a title="standard.graph.frontiers.queue.Queue.child" href="../sequence.html#standard.graph.sequence.Sequence.child">child</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.end" href="queue.html#standard.graph.frontiers.queue.Queue.end">end</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.node_at" href="../sequence.html#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue.Queue.top" href="queue.html#standard.graph.frontiers.queue.Queue.top">top</a></code></li>
 </ul>
 </li>
 </ul>
 </dd>
 <dt id="standard.graph.frontiers.memoried.Memoried.<locals>.NewMemoriedFrontier"><code class="flex name class">
 <span>class <span class="ident">MemStack</span></span>
-<span>(</span><span>iterable)</span>
+<span>(</span><span>iterable=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Generated class for a Frontier that remembers and filters out
 previously added nodes</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, cls):
+<pre><code class="python">class NewMemoriedFrontier(MemoriedFrontier, frontier):
     &#34;&#34;&#34;
     Generated class for a Frontier that remembers and filters out
     previously added nodes
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        cls.__init__(self, iterable)
+    def __init__(self, iterable=None):
+        frontier.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
 
     def _add_memoried(self, pro, epi=None, arc=None):
-        return cls.add(self, pro, epi, arc)
+        return frontier.add(self, pro, epi, arc)
 
     def __str__(self):
-        return &#39;Mem&#39; + cls.__str__(self)</code></pre>
+        return &#39;Mem&#39; + frontier.__str__(self)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -257,16 +263,16 @@ previously added nodes</p></section>
 <li><a title="standard.graph.frontiers.stack.Stack" href="stack.html#standard.graph.frontiers.stack.Stack">Stack</a></li>
 <li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 </dd>
 <dt id="standard.graph.frontiers.memoried.MemoriedFrontier"><code class="flex name class">
 <span>class <span class="ident">MemoriedFrontier</span></span>
-<span>(</span><span>iterable)</span>
+<span>(</span><span>iterable=None)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Frontier that keeps track of nodes that have been added and filters out
@@ -279,8 +285,11 @@ added nodes if they appear in this set of previously visited nodes</p></section>
     added nodes if they appear in this set of previously visited nodes
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        self.visited = set(iterable)
+    def __init__(self, iterable=None):
+        if iterable is not None:
+            self.visited = set(iterable)
+        else:
+            self.visited = set()
 
     @abstractmethod
     def _add_memoried(self, pro, epi=None, arc=None):
@@ -314,6 +323,8 @@ added nodes if they appear in this set of previously visited nodes</p></section>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
+<li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
@@ -367,6 +378,7 @@ filter out visited nodes from being added</p></section>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.has_arc_value" href="../graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
@@ -381,6 +393,9 @@ filter out visited nodes from being added</p></section>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
 </ul>

@@ -6,7 +6,7 @@ class Sequence(tree.Tree):
     arc direction
     """
 
-    def end(self):
+    def top(self):
         """
         Returns the last node, or None if the sequence is empty
         """

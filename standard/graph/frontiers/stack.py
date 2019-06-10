@@ -4,8 +4,11 @@ from standard.utilities.simple import rfind
 
 class Stack(FrontierSequence):
 
-    def __init__(self, iterable):
-        self._nodes = [e for e in iterable]
+    def __init__(self, iterable=None):
+        if iterable is not None:
+           self._nodes = list(iterable)
+        else:
+            self._nodes = list()
 
     def end(self):
         """

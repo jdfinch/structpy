@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.frontiers.frontier API documentation</title>
+<title>standard.graph.frontiers.queue_tree API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,47 +17,38 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.frontiers.frontier</code></h1>
+<h1 class="title">Module <code>standard.graph.frontiers.queue_tree</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from standard.graph.tree import Tree
-from abc import ABC, abstractmethod
+from standard.graph.frontiers.queue import Queue
 
-class Frontier(Tree, ABC):
+class QueueTree(Tree):
     &#34;&#34;&#34;
-    Abstract class representing the frontier of a traversal, search, or
-    exploration
-
-    The frontier should be representable as a `Tree`
-
-    When adding to the frontier, call `.add(pro, epi)` or 
-    `.add(pro, epi, arc)`, where `pro` is the expanded node, `epi` is the node
-    to add, and `arc` is an optional arc value from `pro` to `epi`
+    A `Tree` data structure that can return nodes like a queue with `.pop`
+    based on the order nodes are added
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        for e in iterable:
-            self.add(e)
+    def __init__(self, root, iterable=None):
+        Tree.__init__(self, root)
+        self._queue = Queue(iterable)
 
-    @abstractmethod
-    def pop(self, element):
-        &#34;&#34;&#34;
-        Removes and returns the next element to be considered in the frontier
-        &#34;&#34;&#34;
-        pass
+    def queue(self):
+        return self._queue
 
-    @abstractmethod
+    def top(self):
+        return self._queue.top()
+
+    def pop(self):
+        return self._queue.pop()
+
     def complete(self):
-        &#34;&#34;&#34;
-        Returns a bool representing whether the frontier is done changing
-        state
-        &#34;&#34;&#34;
-        pass
+        return self._queue.complete()
 
-    def __bool__(self):
-        return not self.complete()
+    def add_node(self, node):
+        pass
 
     </code></pre>
 </details>
@@ -71,52 +62,39 @@ class Frontier(Tree, ABC):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.frontiers.frontier.Frontier"><code class="flex name class">
-<span>class <span class="ident">Frontier</span></span>
-<span>(</span><span>iterable)</span>
+<dt id="standard.graph.frontiers.queue_tree.QueueTree"><code class="flex name class">
+<span>class <span class="ident">QueueTree</span></span>
+<span>(</span><span>root, iterable=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Abstract class representing the frontier of a traversal, search, or
-exploration</p>
-<p>The frontier should be representable as a <code>Tree</code></p>
-<p>When adding to the frontier, call <code>.add(pro, epi)</code> or
-<code>.add(pro, epi, arc)</code>, where <code>pro</code> is the expanded node, <code>epi</code> is the node
-to add, and <code>arc</code> is an optional arc value from <code>pro</code> to <code>epi</code></p></section>
+<section class="desc"><p>A <code>Tree</code> data structure that can return nodes like a queue with <code>.pop</code>
+based on the order nodes are added</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Frontier(Tree, ABC):
+<pre><code class="python">class QueueTree(Tree):
     &#34;&#34;&#34;
-    Abstract class representing the frontier of a traversal, search, or
-    exploration
-
-    The frontier should be representable as a `Tree`
-
-    When adding to the frontier, call `.add(pro, epi)` or 
-    `.add(pro, epi, arc)`, where `pro` is the expanded node, `epi` is the node
-    to add, and `arc` is an optional arc value from `pro` to `epi`
+    A `Tree` data structure that can return nodes like a queue with `.pop`
+    based on the order nodes are added
     &#34;&#34;&#34;
 
-    def __init__(self, iterable):
-        for e in iterable:
-            self.add(e)
+    def __init__(self, root, iterable=None):
+        Tree.__init__(self, root)
+        self._queue = Queue(iterable)
 
-    @abstractmethod
-    def pop(self, element):
-        &#34;&#34;&#34;
-        Removes and returns the next element to be considered in the frontier
-        &#34;&#34;&#34;
-        pass
+    def queue(self):
+        return self._queue
 
-    @abstractmethod
+    def top(self):
+        return self._queue.top()
+
+    def pop(self):
+        return self._queue.pop()
+
     def complete(self):
-        &#34;&#34;&#34;
-        Returns a bool representing whether the frontier is done changing
-        state
-        &#34;&#34;&#34;
-        pass
+        return self._queue.complete()
 
-    def __bool__(self):
-        return not self.complete()</code></pre>
+    def add_node(self, node):
+        pass</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -125,45 +103,50 @@ to add, and <code>arc</code> is an optional arc value from <code>pro</code> to <
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
-<li><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="memoried.html#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></li>
-<li><a title="standard.graph.frontiers.frontier_tree.FrontierTree" href="frontier_tree.html#standard.graph.frontiers.frontier_tree.FrontierTree">FrontierTree</a></li>
-<li><a title="standard.graph.frontiers.searcher.Searcher" href="searcher.html#standard.graph.frontiers.searcher.Searcher">Searcher</a></li>
-</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.frontiers.frontier.Frontier.complete"><code class="name flex">
+<dt id="standard.graph.frontiers.queue_tree.QueueTree.complete"><code class="name flex">
 <span>def <span class="ident">complete</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns a bool representing whether the frontier is done changing
-state</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">@abstractmethod
-def complete(self):
-    &#34;&#34;&#34;
-    Returns a bool representing whether the frontier is done changing
-    state
-    &#34;&#34;&#34;
-    pass</code></pre>
+<pre><code class="python">def complete(self):
+    return self._queue.complete()</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.frontiers.frontier.Frontier.pop"><code class="name flex">
-<span>def <span class="ident">pop</span></span>(<span>self, element)</span>
+<dt id="standard.graph.frontiers.queue_tree.QueueTree.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Removes and returns the next element to be considered in the frontier</p></section>
+<section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">@abstractmethod
-def pop(self, element):
-    &#34;&#34;&#34;
-    Removes and returns the next element to be considered in the frontier
-    &#34;&#34;&#34;
-    pass</code></pre>
+<pre><code class="python">def pop(self):
+    return self._queue.pop()</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.frontiers.queue_tree.QueueTree.queue"><code class="name flex">
+<span>def <span class="ident">queue</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def queue(self):
+    return self._queue</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.frontiers.queue_tree.QueueTree.top"><code class="name flex">
+<span>def <span class="ident">top</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def top(self):
+    return self._queue.top()</code></pre>
 </details>
 </dd>
 </dl>
@@ -224,10 +207,12 @@ def pop(self, element):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.frontiers.frontier.Frontier" href="#standard.graph.frontiers.frontier.Frontier">Frontier</a></code></h4>
+<h4><code><a title="standard.graph.frontiers.queue_tree.QueueTree" href="#standard.graph.frontiers.queue_tree.QueueTree">QueueTree</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
-<li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.complete" href="#standard.graph.frontiers.queue_tree.QueueTree.complete">complete</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.pop" href="#standard.graph.frontiers.queue_tree.QueueTree.pop">pop</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.queue" href="#standard.graph.frontiers.queue_tree.QueueTree.queue">queue</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.top" href="#standard.graph.frontiers.queue_tree.QueueTree.top">top</a></code></li>
 </ul>
 </li>
 </ul>

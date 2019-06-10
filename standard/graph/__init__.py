@@ -11,3 +11,4 @@ from standard.graph.tree import Tree
 from standard.graph.sequence import Sequence
 from standard.graph.frontiers.queue import Queue
 from standard.graph.frontiers.stack import Stack
+from standard.graph.pointer_graph import PointerGraph

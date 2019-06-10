@@ -22,7 +22,7 @@ def test_inheritence_nodebased():
     global g
     g = MyGraph()
 
-def test_add_methods():
+def test_add():
     """Test add methods (add, add_node, add_arc)"""
     g.add('a', 'b', 1)
     g.add('c')
@@ -41,10 +41,10 @@ def test_membership():
     assert g.has('e')
     assert not g.has('y')
     assert not g.has_node('x')
-    assert g.has_arc(4)
-    assert not g.has_arc(9)
+    assert g.has_arc_value(4)
+    assert not g.has_arc_value(9)
     assert g.has('a', 'b')
-    assert g.has('f', 'b')
+    assert g.has_arc('f', 'b')
     assert not g.has('a', 'd')
     assert not g.has('c', 'a')
 
@@ -98,4 +98,33 @@ def test_arc_node_adjacency():
         arcs.remove(arc)
     assert len(arcs) == 0
     assert len(list(g.arcs_out('b'))) == 0
+
+def test_traversal():
+    from standard.graph.frontiers import MemQueue as BreadthFirst, \
+        MemStack as DepthFirst
+    def before(ls, a, b):
+        i = ls.index(a)
+        j = ls.index(b)
+        return i < j
+    assert before([2, 4, 6], 2, 6)
+    assert not before([2, 4, 6], 4, 2)
+    
+    traversal = list(g.traverse(BreadthFirst(), 'f'))
+    assert len(traversal) == len(set(traversal))
+    assert len(traversal) == 5
+    assert before(traversal, 'f', 'b')
+    assert before(traversal, 'b', 'd')
+    assert before(traversal, 'c', 'e')
+    assert before(traversal, 'd', 'e')
+    assert before(traversal, 'b', 'e')
+    assert not before(traversal, 'd', 'c')
+
+    traversal = list(g.traverse(DepthFirst(), 'f'))
+    assert len(traversal) == len(set(traversal))
+    assert len(traversal) == 5
+    assert before(traversal, 'f', 'b')
+    assert before(traversal, 'c', 'e')
+    assert before(traversal, 'd', 'e')
+    assert not before(traversal, 'd', 'c')
+
 
