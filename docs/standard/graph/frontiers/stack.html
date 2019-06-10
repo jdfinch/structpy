@@ -44,6 +44,16 @@ class Stack(FrontierSequence):
         &#34;&#34;&#34;
         return self._nodes.pop()
 
+    def add(self, node, epi=None, arc=None):
+        &#34;&#34;&#34;
+        Adds node to the end of the queue, or adds epi if epi is specified
+        and node is the last item in the current queue
+        &#34;&#34;&#34;
+        if epi is None:
+            self._nodes.append(node)
+        elif node is self._nodes[-1]:
+            self._nodes.append(epi)
+
     def add_node(self, node):
         &#34;&#34;&#34;
         Adds a node, automatically the node will be placed at the end of the
@@ -134,6 +144,16 @@ class Stack(FrontierSequence):
         &#34;&#34;&#34;
         return self._nodes.pop()
 
+    def add(self, node, epi=None, arc=None):
+        &#34;&#34;&#34;
+        Adds node to the end of the queue, or adds epi if epi is specified
+        and node is the last item in the current queue
+        &#34;&#34;&#34;
+        if epi is None:
+            self._nodes.append(node)
+        elif node is self._nodes[-1]:
+            self._nodes.append(epi)
+
     def add_node(self, node):
         &#34;&#34;&#34;
         Adds a node, automatically the node will be placed at the end of the
@@ -194,8 +214,8 @@ class Stack(FrontierSequence):
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
@@ -204,6 +224,25 @@ class Stack(FrontierSequence):
 </ul>
 <h3>Methods</h3>
 <dl>
+<dt id="standard.graph.frontiers.stack.Stack.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, node, epi=None, arc=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Adds node to the end of the queue, or adds epi if epi is specified
+and node is the last item in the current queue</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add(self, node, epi=None, arc=None):
+    &#34;&#34;&#34;
+    Adds node to the end of the queue, or adds epi if epi is specified
+    and node is the last item in the current queue
+    &#34;&#34;&#34;
+    if epi is None:
+        self._nodes.append(node)
+    elif node is self._nodes[-1]:
+        self._nodes.append(epi)</code></pre>
+</details>
+</dd>
 <dt id="standard.graph.frontiers.stack.Stack.add_arc"><code class="name flex">
 <span>def <span class="ident">add_arc</span></span>(<span>self, pro, epi, arc=True)</span>
 </code></dt>
@@ -301,7 +340,6 @@ otherwise None</p></section>
 <ul class="hlist">
 <li><code><b><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
@@ -352,6 +390,7 @@ otherwise None</p></section>
 <li>
 <h4><code><a title="standard.graph.frontiers.stack.Stack" href="#standard.graph.frontiers.stack.Stack">Stack</a></code></h4>
 <ul class="two-column">
+<li><code><a title="standard.graph.frontiers.stack.Stack.add" href="#standard.graph.frontiers.stack.Stack.add">add</a></code></li>
 <li><code><a title="standard.graph.frontiers.stack.Stack.add_arc" href="#standard.graph.frontiers.stack.Stack.add_arc">add_arc</a></code></li>
 <li><code><a title="standard.graph.frontiers.stack.Stack.add_node" href="#standard.graph.frontiers.stack.Stack.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.stack.Stack.arc" href="#standard.graph.frontiers.stack.Stack.arc">arc</a></code></li>

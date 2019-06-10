@@ -13,7 +13,7 @@ class MemoriedFrontier(Frontier, ABC):
         self.visited = set(iterable)
 
     @abstractmethod
-    def _add_memoried(self, element):
+    def _add_memoried(self, pro, epi=None, arc=None):
         """
         Implement this function to add element to the collection,
         assuming it should be added
@@ -23,15 +23,23 @@ class MemoriedFrontier(Frontier, ABC):
         """
         pass
 
-    def add(self, element):
+    def add(self, pro, epi=None, arc=None):
         """
-        Add an element to the Memoried collection, but not if it has ever
+        Add an node `epi` to the Memoried collection, but not if it has ever
         been added before. Memoried maintains a set of visited nodes to 
         filter out visited nodes from being added
         """
-        if element not in self.visited:
-            self._add_memoried(element)
-            self.visited.add(element)
+        if epi is None and pro not in self.visited:
+            self._add_memoried(pro)
+            self.visited.add(pro)
+        elif epi is not None and epi not in self.visited:
+            self._add_memoried(epi)
+            self.visited.add(epi)
+
+    def add_node(self, node):
+        if node not in self.visited:
+            self._add_memoried(node)
+            self.visited.add(node)
 
 def Memoried(cls):
     """
@@ -51,8 +59,11 @@ def Memoried(cls):
             cls.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
-        def _add_memoried(self, element):
-            return cls.add(self, element)
+        def _add_memoried(self, pro, epi=None, arc=None):
+            return cls.add(self, pro, epi, arc)
+
+        def __str__(self):
+            return 'Mem' + cls.__str__(self)
 
     return NewMemoriedFrontier
 

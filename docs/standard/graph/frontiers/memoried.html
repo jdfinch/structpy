@@ -37,7 +37,7 @@ class MemoriedFrontier(Frontier, ABC):
         self.visited = set(iterable)
 
     @abstractmethod
-    def _add_memoried(self, element):
+    def _add_memoried(self, pro, epi=None, arc=None):
         &#34;&#34;&#34;
         Implement this function to add element to the collection,
         assuming it should be added
@@ -47,15 +47,23 @@ class MemoriedFrontier(Frontier, ABC):
         &#34;&#34;&#34;
         pass
 
-    def add(self, element):
+    def add(self, pro, epi=None, arc=None):
         &#34;&#34;&#34;
-        Add an element to the Memoried collection, but not if it has ever
+        Add an node `epi` to the Memoried collection, but not if it has ever
         been added before. Memoried maintains a set of visited nodes to 
         filter out visited nodes from being added
         &#34;&#34;&#34;
-        if element not in self.visited:
-            self._add_memoried(element)
-            self.visited.add(element)
+        if epi is None and pro not in self.visited:
+            self._add_memoried(pro)
+            self.visited.add(pro)
+        elif epi is not None and epi not in self.visited:
+            self._add_memoried(epi)
+            self.visited.add(epi)
+
+    def add_node(self, node):
+        if node not in self.visited:
+            self._add_memoried(node)
+            self.visited.add(node)
 
 def Memoried(cls):
     &#34;&#34;&#34;
@@ -75,8 +83,11 @@ def Memoried(cls):
             cls.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
-        def _add_memoried(self, element):
-            return cls.add(self, element)
+        def _add_memoried(self, pro, epi=None, arc=None):
+            return cls.add(self, pro, epi, arc)
+
+        def __str__(self):
+            return &#39;Mem&#39; + cls.__str__(self)
 
     return NewMemoriedFrontier
 
@@ -118,8 +129,11 @@ inherits from cls</p>
             cls.__init__(self, iterable)
             MemoriedFrontier.__init__(self, iterable)
 
-        def _add_memoried(self, element):
-            return cls.add(self, element)
+        def _add_memoried(self, pro, epi=None, arc=None):
+            return cls.add(self, pro, epi, arc)
+
+        def __str__(self):
+            return &#39;Mem&#39; + cls.__str__(self)
 
     return NewMemoriedFrontier</code></pre>
 </details>
@@ -148,8 +162,11 @@ previously added nodes</p></section>
         cls.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
 
-    def _add_memoried(self, element):
-        return cls.add(self, element)</code></pre>
+    def _add_memoried(self, pro, epi=None, arc=None):
+        return cls.add(self, pro, epi, arc)
+
+    def __str__(self):
+        return &#39;Mem&#39; + cls.__str__(self)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -159,8 +176,8 @@ previously added nodes</p></section>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Inherited members</h3>
@@ -168,42 +185,42 @@ previously added nodes</p></section>
 <li><code><b><a title="standard.graph.frontiers.memoried.MemoriedFrontier" href="#standard.graph.frontiers.memoried.MemoriedFrontier">MemoriedFrontier</a></b></code>:
 <ul class="hlist">
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add" href="#standard.graph.frontiers.memoried.MemoriedFrontier.add">add</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.remove_arc" href="../graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.remove_node" href="../graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.memoried.MemoriedFrontier.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="standard.graph.frontiers.queue.Queue" href="queue.html#standard.graph.frontiers.queue.Queue">Queue</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.frontiers.queue.Queue.add_arc" href="queue.html#standard.graph.frontiers.queue.Queue.add_arc">add_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.add_node" href="queue.html#standard.graph.frontiers.queue.Queue.add_node">add_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arc" href="queue.html#standard.graph.frontiers.queue.Queue.arc">arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.child" href="../sequence.html#standard.graph.sequence.Sequence.child">child</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.end" href="queue.html#standard.graph.frontiers.queue.Queue.end">end</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.node_at" href="../sequence.html#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove_arc" href="queue.html#standard.graph.frontiers.queue.Queue.remove_arc">remove_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.remove_node" href="queue.html#standard.graph.frontiers.queue.Queue.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 </ul>
 </li>
@@ -228,8 +245,11 @@ previously added nodes</p></section>
         cls.__init__(self, iterable)
         MemoriedFrontier.__init__(self, iterable)
 
-    def _add_memoried(self, element):
-        return cls.add(self, element)</code></pre>
+    def _add_memoried(self, pro, epi=None, arc=None):
+        return cls.add(self, pro, epi, arc)
+
+    def __str__(self):
+        return &#39;Mem&#39; + cls.__str__(self)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -239,8 +259,8 @@ previously added nodes</p></section>
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 </dd>
@@ -263,7 +283,7 @@ added nodes if they appear in this set of previously visited nodes</p></section>
         self.visited = set(iterable)
 
     @abstractmethod
-    def _add_memoried(self, element):
+    def _add_memoried(self, pro, epi=None, arc=None):
         &#34;&#34;&#34;
         Implement this function to add element to the collection,
         assuming it should be added
@@ -273,19 +293,28 @@ added nodes if they appear in this set of previously visited nodes</p></section>
         &#34;&#34;&#34;
         pass
 
-    def add(self, element):
+    def add(self, pro, epi=None, arc=None):
         &#34;&#34;&#34;
-        Add an element to the Memoried collection, but not if it has ever
+        Add an node `epi` to the Memoried collection, but not if it has ever
         been added before. Memoried maintains a set of visited nodes to 
         filter out visited nodes from being added
         &#34;&#34;&#34;
-        if element not in self.visited:
-            self._add_memoried(element)
-            self.visited.add(element)</code></pre>
+        if epi is None and pro not in self.visited:
+            self._add_memoried(pro)
+            self.visited.add(pro)
+        elif epi is not None and epi not in self.visited:
+            self._add_memoried(epi)
+            self.visited.add(epi)
+
+    def add_node(self, node):
+        if node not in self.visited:
+            self._add_memoried(node)
+            self.visited.add(node)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
@@ -296,23 +325,26 @@ added nodes if they appear in this set of previously visited nodes</p></section>
 <h3>Methods</h3>
 <dl>
 <dt id="standard.graph.frontiers.memoried.MemoriedFrontier.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>self, element)</span>
+<span>def <span class="ident">add</span></span>(<span>self, pro, epi=None, arc=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Add an element to the Memoried collection, but not if it has ever
+<section class="desc"><p>Add an node <code>epi</code> to the Memoried collection, but not if it has ever
 been added before. Memoried maintains a set of visited nodes to
 filter out visited nodes from being added</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add(self, element):
+<pre><code class="python">def add(self, pro, epi=None, arc=None):
     &#34;&#34;&#34;
-    Add an element to the Memoried collection, but not if it has ever
+    Add an node `epi` to the Memoried collection, but not if it has ever
     been added before. Memoried maintains a set of visited nodes to 
     filter out visited nodes from being added
     &#34;&#34;&#34;
-    if element not in self.visited:
-        self._add_memoried(element)
-        self.visited.add(element)</code></pre>
+    if epi is None and pro not in self.visited:
+        self._add_memoried(pro)
+        self.visited.add(pro)
+    elif epi is not None and epi not in self.visited:
+        self._add_memoried(epi)
+        self.visited.add(epi)</code></pre>
 </details>
 </dd>
 </dl>
@@ -320,8 +352,35 @@ filter out visited nodes from being added</p></section>
 <ul class="hlist">
 <li><code><b><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></b></code>:
 <ul class="hlist">
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.remove_arc" href="../graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.remove_node" href="../graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 </ul>
 </li>
 </ul>

@@ -35,7 +35,7 @@ class Queue(FrontierSequence):
         if epi is None:
             self._nodes.append(node)
         elif node is self._nodes[-1]:
-            self.add_node(epi)
+            self._nodes.append(epi)
 
     def add_node(self, node):
         """
@@ -89,4 +89,4 @@ class Queue(FrontierSequence):
         return self._nodes.__getitem__(index)
 
     def __str__(self):
-        return 'Queue(' + ','.join(self._nodes) + ')'
+        return 'Queue(' + ','.join([str(e) for e in self._nodes]) + ')'

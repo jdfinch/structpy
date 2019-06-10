@@ -59,7 +59,7 @@ class Queue(FrontierSequence):
         if epi is None:
             self._nodes.append(node)
         elif node is self._nodes[-1]:
-            self.add_node(epi)
+            self._nodes.append(epi)
 
     def add_node(self, node):
         &#34;&#34;&#34;
@@ -113,7 +113,7 @@ class Queue(FrontierSequence):
         return self._nodes.__getitem__(index)
 
     def __str__(self):
-        return &#39;Queue(&#39; + &#39;,&#39;.join(self._nodes) + &#39;)&#39;</code></pre>
+        return &#39;Queue(&#39; + &#39;,&#39;.join([str(e) for e in self._nodes]) + &#39;)&#39;</code></pre>
 </details>
 </section>
 <section>
@@ -167,7 +167,7 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         if epi is None:
             self._nodes.append(node)
         elif node is self._nodes[-1]:
-            self.add_node(epi)
+            self._nodes.append(epi)
 
     def add_node(self, node):
         &#34;&#34;&#34;
@@ -221,7 +221,7 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         return self._nodes.__getitem__(index)
 
     def __str__(self):
-        return &#39;Queue(&#39; + &#39;,&#39;.join(self._nodes) + &#39;)&#39;</code></pre>
+        return &#39;Queue(&#39; + &#39;,&#39;.join([str(e) for e in self._nodes]) + &#39;)&#39;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -229,8 +229,8 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
 <li><a title="standard.graph.sequence.Sequence" href="../sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
@@ -255,7 +255,7 @@ and node is the last item in the current queue</p></section>
     if epi is None:
         self._nodes.append(node)
     elif node is self._nodes[-1]:
-        self.add_node(epi)</code></pre>
+        self._nodes.append(epi)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.frontiers.queue.Queue.add_arc"><code class="name flex">

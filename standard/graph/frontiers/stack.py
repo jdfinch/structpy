@@ -20,6 +20,16 @@ class Stack(FrontierSequence):
         """
         return self._nodes.pop()
 
+    def add(self, node, epi=None, arc=None):
+        """
+        Adds node to the end of the queue, or adds epi if epi is specified
+        and node is the last item in the current queue
+        """
+        if epi is None:
+            self._nodes.append(node)
+        elif node is self._nodes[-1]:
+            self._nodes.append(epi)
+
     def add_node(self, node):
         """
         Adds a node, automatically the node will be placed at the end of the

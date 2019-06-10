@@ -25,22 +25,19 @@
 <pre><code class="python">from standard.graph.graph import Graph
 from abc import ABC, abstractmethod
 
-class Frontier(ABC):
+class Frontier(Graph, ABC):
     &#34;&#34;&#34;
     Abstract class representing the frontier of a traversal, search, or
     exploration
+
+    When adding to the frontier, call `.add(pro, epi)` or 
+    `.add(pro, epi, arc)`, where `pro` is the expanded node, `epi` is the node
+    to add, and `arc` is an optional arc value from `pro` to `epi`
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
         for e in iterable:
             self.add(e)
-
-    @abstractmethod
-    def add(self, element):
-        &#34;&#34;&#34;
-        Add an element to the frontier
-        &#34;&#34;&#34;
-        pass
 
     @abstractmethod
     def pop(self, element):
@@ -78,25 +75,25 @@ class Frontier(ABC):
 </code></dt>
 <dd>
 <section class="desc"><p>Abstract class representing the frontier of a traversal, search, or
-exploration</p></section>
+exploration</p>
+<p>When adding to the frontier, call <code>.add(pro, epi)</code> or
+<code>.add(pro, epi, arc)</code>, where <code>pro</code> is the expanded node, <code>epi</code> is the node
+to add, and <code>arc</code> is an optional arc value from <code>pro</code> to <code>epi</code></p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Frontier(ABC):
+<pre><code class="python">class Frontier(Graph, ABC):
     &#34;&#34;&#34;
     Abstract class representing the frontier of a traversal, search, or
     exploration
+
+    When adding to the frontier, call `.add(pro, epi)` or 
+    `.add(pro, epi, arc)`, where `pro` is the expanded node, `epi` is the node
+    to add, and `arc` is an optional arc value from `pro` to `epi`
     &#34;&#34;&#34;
 
     def __init__(self, iterable):
         for e in iterable:
             self.add(e)
-
-    @abstractmethod
-    def add(self, element):
-        &#34;&#34;&#34;
-        Add an element to the frontier
-        &#34;&#34;&#34;
-        pass
 
     @abstractmethod
     def pop(self, element):
@@ -118,6 +115,7 @@ exploration</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
+<li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
 <h3>Subclasses</h3>
@@ -128,21 +126,6 @@ exploration</p></section>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.frontiers.frontier.Frontier.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>self, element)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Add an element to the frontier</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">@abstractmethod
-def add(self, element):
-    &#34;&#34;&#34;
-    Add an element to the frontier
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
 <dt id="standard.graph.frontiers.frontier.Frontier.complete"><code class="name flex">
 <span>def <span class="ident">complete</span></span>(<span>self)</span>
 </code></dt>
@@ -176,6 +159,41 @@ def pop(self, element):
 </details>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.graph.graph.Graph.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="../graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="../graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_arc" href="../graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.remove_node" href="../graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -196,7 +214,6 @@ def pop(self, element):
 <li>
 <h4><code><a title="standard.graph.frontiers.frontier.Frontier" href="#standard.graph.frontiers.frontier.Frontier">Frontier</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.frontiers.frontier.Frontier.add" href="#standard.graph.frontiers.frontier.Frontier.add">add</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
 </ul>
