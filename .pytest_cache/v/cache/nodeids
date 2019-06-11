@@ -1,6 +1,8 @@
 [
   "test/graph/test_bidictionary_graph.py::test_constructor",
   "test/graph/test_bidictionary_graph.py::test_nodes",
+  "test/graph/test_bidictionary_tree.py::test_constructor",
+  "test/graph/test_bidictionary_tree.py::test_nodes",
   "test/graph/test_dictionary_graph.py::test_constructor",
   "test/graph/test_dictionary_graph.py::test_nodes",
   "test/graph/test_graph.py::test_inheritence_nodebased",

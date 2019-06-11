@@ -16,3 +16,10 @@ class Tree(dag.Dag, ABC):
         Default implementation: returns `self._root`
         """
         return self._root
+
+    def parent(self, node):
+        """
+        Return the parent (pro) of the `node`
+        """
+        for pro in self.pros(node):
+            return pro

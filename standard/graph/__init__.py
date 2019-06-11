@@ -11,6 +11,7 @@ from standard.graph.tree import Tree
 from standard.graph.sequence import Sequence
 from standard.graph.dictionary_graph import DictionaryGraph
 from standard.graph.bidictionary_graph import BidictionaryGraph
+from standard.graph.bidictionary_tree import BidictionaryTree
 from standard.graph.frontiers.queue import Queue
 from standard.graph.frontiers.stack import Stack
 from standard.graph.pointer_graph import PointerGraph
