@@ -25,9 +25,9 @@
 <pre><code class="python">from standard.graph.sequence import Sequence
 from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
-from collections import deque
+import standard.collections as stdcol
 
-class Queue(FrontierSequence):
+class Queue(FrontierSequence, stdcol.Queue):
     &#34;&#34;&#34;
     First-in-first-out sequence of nodes functioning as a .add/.pop collection
 
@@ -36,23 +36,15 @@ class Queue(FrontierSequence):
     &#34;&#34;&#34;
 
     def __init__(self, iterable=None):
-        if iterable is not None:
-           self._nodes = deque(iterable)
-        else:
-            self._nodes = deque()
+        stdcol.Queue.__init__(self, iterable)
 
-    def top(self):
-        &#34;&#34;&#34;
-        Returns the next node in the Queue, or None if the Queue is empty
-        &#34;&#34;&#34;
-        if self._nodes:
-            return self._nodes[0]
+    top = stdcol.Queue.top
 
-    def pop(self):
-        &#34;&#34;&#34;
-        Returns the latest-added node (on left)
-        &#34;&#34;&#34;
-        return self._nodes.popleft()
+    pop = stdcol.Queue.pop
+
+    def nodes(self):
+        for node in self:
+            yield node
 
     def add(self, node, epi=None, arc=None):
         &#34;&#34;&#34;
@@ -60,16 +52,16 @@ class Queue(FrontierSequence):
         and node is the last item in the current queue
         &#34;&#34;&#34;
         if epi is None:
-            self._nodes.append(node)
-        elif node is self._nodes[-1]:
-            self._nodes.append(epi)
+            stdcol.Queue.add(self, node)
+        elif node is self[-1]:
+            stdcol.Queue.add(self, epi)
 
     def add_node(self, node):
         &#34;&#34;&#34;
         Adds a node, automatically the node will be placed at the end of the
         list and an arc will be added connecting it to the previous node
         &#34;&#34;&#34;
-        self._nodes.append(node)
+        stdcol.Queue.add(self, node)
 
     def add_arc(self, pro, epi, arc=True):
         &#34;&#34;&#34;
@@ -81,7 +73,7 @@ class Queue(FrontierSequence):
         &#34;&#34;&#34;
         Uses list.remove to remove a node
         &#34;&#34;&#34;
-        self._nodes.remove(node)
+        stdcol.Queue.remove(self, node)
 
     def remove_arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -94,8 +86,8 @@ class Queue(FrontierSequence):
         Returns a tuple (pro, epi) if epi follows pro in the list,
         otherwise None
         &#34;&#34;&#34;
-        pro_index = rfind(self._nodes, pro)
-        epi_index = rfind(self._nodes, epi)
+        pro_index = rfind(self, pro)
+        epi_index = rfind(self, epi)
         if epi_index != 1 + pro_index:
             return (pro, epi)
         return None
@@ -104,16 +96,7 @@ class Queue(FrontierSequence):
         &#34;&#34;&#34;
         Returns the node at a certain index, where the root is index 0
         &#34;&#34;&#34;
-        return self._nodes.__getitem__(index)
-
-    def __iter__(self):
-        return self._nodes.__iter__()
-
-    def __next__(self):
-        return self._nodes.__next__()
-
-    def __getitem__(self, index):
-        return self._nodes.__getitem__(index)
+        return stdcol.Queue.__getitem__(self, index)
 
     def __str__(self):
         return &#39;Queue(&#39; + &#39;,&#39;.join([str(e) for e in self._nodes]) + &#39;)&#39;</code></pre>
@@ -138,7 +121,7 @@ class Queue(FrontierSequence):
 nodes, with the next node in the queue being the <code>.top</code> of the Queue</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Queue(FrontierSequence):
+<pre><code class="python">class Queue(FrontierSequence, stdcol.Queue):
     &#34;&#34;&#34;
     First-in-first-out sequence of nodes functioning as a .add/.pop collection
 
@@ -147,23 +130,15 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
     &#34;&#34;&#34;
 
     def __init__(self, iterable=None):
-        if iterable is not None:
-           self._nodes = deque(iterable)
-        else:
-            self._nodes = deque()
+        stdcol.Queue.__init__(self, iterable)
 
-    def top(self):
-        &#34;&#34;&#34;
-        Returns the next node in the Queue, or None if the Queue is empty
-        &#34;&#34;&#34;
-        if self._nodes:
-            return self._nodes[0]
+    top = stdcol.Queue.top
 
-    def pop(self):
-        &#34;&#34;&#34;
-        Returns the latest-added node (on left)
-        &#34;&#34;&#34;
-        return self._nodes.popleft()
+    pop = stdcol.Queue.pop
+
+    def nodes(self):
+        for node in self:
+            yield node
 
     def add(self, node, epi=None, arc=None):
         &#34;&#34;&#34;
@@ -171,16 +146,16 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         and node is the last item in the current queue
         &#34;&#34;&#34;
         if epi is None:
-            self._nodes.append(node)
-        elif node is self._nodes[-1]:
-            self._nodes.append(epi)
+            stdcol.Queue.add(self, node)
+        elif node is self[-1]:
+            stdcol.Queue.add(self, epi)
 
     def add_node(self, node):
         &#34;&#34;&#34;
         Adds a node, automatically the node will be placed at the end of the
         list and an arc will be added connecting it to the previous node
         &#34;&#34;&#34;
-        self._nodes.append(node)
+        stdcol.Queue.add(self, node)
 
     def add_arc(self, pro, epi, arc=True):
         &#34;&#34;&#34;
@@ -192,7 +167,7 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         &#34;&#34;&#34;
         Uses list.remove to remove a node
         &#34;&#34;&#34;
-        self._nodes.remove(node)
+        stdcol.Queue.remove(self, node)
 
     def remove_arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -205,8 +180,8 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         Returns a tuple (pro, epi) if epi follows pro in the list,
         otherwise None
         &#34;&#34;&#34;
-        pro_index = rfind(self._nodes, pro)
-        epi_index = rfind(self._nodes, epi)
+        pro_index = rfind(self, pro)
+        epi_index = rfind(self, epi)
         if epi_index != 1 + pro_index:
             return (pro, epi)
         return None
@@ -215,16 +190,7 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
         &#34;&#34;&#34;
         Returns the node at a certain index, where the root is index 0
         &#34;&#34;&#34;
-        return self._nodes.__getitem__(index)
-
-    def __iter__(self):
-        return self._nodes.__iter__()
-
-    def __next__(self):
-        return self._nodes.__next__()
-
-    def __getitem__(self, index):
-        return self._nodes.__getitem__(index)
+        return stdcol.Queue.__getitem__(self, index)
 
     def __str__(self):
         return &#39;Queue(&#39; + &#39;,&#39;.join([str(e) for e in self._nodes]) + &#39;)&#39;</code></pre>
@@ -238,6 +204,8 @@ nodes, with the next node in the queue being the <code>.top</code> of the Queue<
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
+<li><a title="standard.collections.queue.Queue" href="../../collections/queue.html#standard.collections.queue.Queue">Queue</a></li>
+<li>collections.deque</li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
@@ -259,9 +227,9 @@ and node is the last item in the current queue</p></section>
     and node is the last item in the current queue
     &#34;&#34;&#34;
     if epi is None:
-        self._nodes.append(node)
-    elif node is self._nodes[-1]:
-        self._nodes.append(epi)</code></pre>
+        stdcol.Queue.add(self, node)
+    elif node is self[-1]:
+        stdcol.Queue.add(self, epi)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.frontiers.queue.Queue.add_arc"><code class="name flex">
@@ -291,7 +259,7 @@ list and an arc will be added connecting it to the previous node</p></section>
     Adds a node, automatically the node will be placed at the end of the
     list and an arc will be added connecting it to the previous node
     &#34;&#34;&#34;
-    self._nodes.append(node)</code></pre>
+    stdcol.Queue.add(self, node)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.frontiers.queue.Queue.arc"><code class="name flex">
@@ -307,8 +275,8 @@ otherwise None</p></section>
     Returns a tuple (pro, epi) if epi follows pro in the list,
     otherwise None
     &#34;&#34;&#34;
-    pro_index = rfind(self._nodes, pro)
-    epi_index = rfind(self._nodes, epi)
+    pro_index = rfind(self, pro)
+    epi_index = rfind(self, epi)
     if epi_index != 1 + pro_index:
         return (pro, epi)
     return None</code></pre>
@@ -318,14 +286,11 @@ otherwise None</p></section>
 <span>def <span class="ident">pop</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns the latest-added node (on left)</p></section>
+<section class="desc"><p>Remove and return the rightmost element.</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def pop(self):
-    &#34;&#34;&#34;
-    Returns the latest-added node (on left)
-    &#34;&#34;&#34;
-    return self._nodes.popleft()</code></pre>
+    return deque.popleft(self)</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.frontiers.queue.Queue.remove_arc"><code class="name flex">
@@ -353,22 +318,7 @@ otherwise None</p></section>
     &#34;&#34;&#34;
     Uses list.remove to remove a node
     &#34;&#34;&#34;
-    self._nodes.remove(node)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.frontiers.queue.Queue.top"><code class="name flex">
-<span>def <span class="ident">top</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the next node in the Queue, or None if the Queue is empty</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def top(self):
-    &#34;&#34;&#34;
-    Returns the next node in the Queue, or None if the Queue is empty
-    &#34;&#34;&#34;
-    if self._nodes:
-        return self._nodes[0]</code></pre>
+    stdcol.Queue.remove(self, node)</code></pre>
 </details>
 </dd>
 </dl>
@@ -403,7 +353,14 @@ otherwise None</p></section>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.top" href="../sequence.html#standard.graph.sequence.Sequence.top">top</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="standard.collections.queue.Queue" href="../../collections/queue.html#standard.collections.queue.Queue">Queue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.collections.queue.Queue.appendleft" href="../../collections/queue.html#standard.collections.queue.Queue.appendleft">appendleft</a></code></li>
+<li><code><a title="standard.collections.queue.Queue.popleft" href="../../collections/queue.html#standard.collections.queue.Queue.popleft">popleft</a></code></li>
 </ul>
 </li>
 </ul>
@@ -434,7 +391,6 @@ otherwise None</p></section>
 <li><code><a title="standard.graph.frontiers.queue.Queue.pop" href="#standard.graph.frontiers.queue.Queue.pop">pop</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.remove_arc" href="#standard.graph.frontiers.queue.Queue.remove_arc">remove_arc</a></code></li>
 <li><code><a title="standard.graph.frontiers.queue.Queue.remove_node" href="#standard.graph.frontiers.queue.Queue.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue.Queue.top" href="#standard.graph.frontiers.queue.Queue.top">top</a></code></li>
 </ul>
 </li>
 </ul>

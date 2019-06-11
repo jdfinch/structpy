@@ -22,23 +22,25 @@
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from standard.graph.pointer_tree import PointerTree
-from standard.graph.pointer_graph import PointerGraph
-from standard.graph.frontiers.queue import Queue
+<pre><code class="python">from standard.graph.bidictionary_tree import BidictionaryTree
+from collections import deque
 
 def _one_and_many(one, many):
     yield one
     for e in many:
         yield e
 
-class QueueTree(PointerTree):
+class QueueTree(BidictionaryTree):
     &#34;&#34;&#34;
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
+
+    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
+    that way it is distinguishable for cases like this when both Graph and a non-
+    graph Queue are inherited
     &#34;&#34;&#34;
 
     def __init__(self, root, iterable=None):
-        PointerGraph.__init__(self)
         self._root = root
         self._nodes[root] = set()
         self._queue = None
@@ -98,17 +100,23 @@ class QueueTree(PointerTree):
 </code></dt>
 <dd>
 <section class="desc"><p>A <code>Tree</code> data structure that can return nodes like a queue with <code>.pop</code>
-based on the order nodes are added</p></section>
+based on the order nodes are added</p>
+<p>Todo: create a Queue struct that is NOT tied to Graph, and another that is,
+that way it is distinguishable for cases like this when both Graph and a non-
+graph Queue are inherited</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class QueueTree(PointerTree):
+<pre><code class="python">class QueueTree(BidictionaryTree):
     &#34;&#34;&#34;
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
+
+    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
+    that way it is distinguishable for cases like this when both Graph and a non-
+    graph Queue are inherited
     &#34;&#34;&#34;
 
     def __init__(self, root, iterable=None):
-        PointerGraph.__init__(self)
         self._root = root
         self._nodes[root] = set()
         self._queue = None
@@ -151,8 +159,9 @@ based on the order nodes are added</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="standard.graph.pointer_tree.PointerTree" href="../pointer_tree.html#standard.graph.pointer_tree.PointerTree">PointerTree</a></li>
-<li><a title="standard.graph.pointer_graph.PointerGraph" href="../pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
+<li><a title="standard.graph.bidictionary_tree.BidictionaryTree" href="../bidictionary_tree.html#standard.graph.bidictionary_tree.BidictionaryTree">BidictionaryTree</a></li>
+<li><a title="standard.graph.bidictionary_graph.BidictionaryGraph" href="../bidictionary_graph.html#standard.graph.bidictionary_graph.BidictionaryGraph">BidictionaryGraph</a></li>
+<li><a title="standard.graph.dictionary_graph.DictionaryGraph" href="../dictionary_graph.html#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
@@ -209,39 +218,39 @@ based on the order nodes are added</p></section>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="standard.graph.pointer_tree.PointerTree" href="../pointer_tree.html#standard.graph.pointer_tree.PointerTree">PointerTree</a></b></code>:
+<li><code><b><a title="standard.graph.bidictionary_tree.BidictionaryTree" href="../bidictionary_tree.html#standard.graph.bidictionary_tree.BidictionaryTree">BidictionaryTree</a></b></code>:
 <ul class="hlist">
-<li><code><a title="standard.graph.pointer_tree.PointerTree.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.has_arc_value" href="../graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.parent" href="../tree.html#standard.graph.tree.Tree.parent">parent</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.remove_arc" href="../graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.remove_node" href="../graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
-<li><code><a title="standard.graph.pointer_tree.PointerTree.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arcs_in" href="../graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arcs_number" href="../graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arcs_out" href="../graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.epi" href="../graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.epis" href="../graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.epis_number" href="../graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.has" href="../graph.html#standard.graph.graph.Graph.has">has</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.has_arc" href="../graph.html#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.has_arc_value" href="../graph.html#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.has_node" href="../graph.html#standard.graph.graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.parent" href="../tree.html#standard.graph.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.remove" href="../graph.html#standard.graph.graph.Graph.remove">remove</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.remove_arc" href="../graph.html#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.remove_node" href="../graph.html#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.replace_arc" href="../graph.html#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.replace_arc_epi" href="../graph.html#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.replace_arc_pro" href="../graph.html#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.replace_node" href="../graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
 </ul>

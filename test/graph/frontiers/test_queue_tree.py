@@ -6,7 +6,9 @@ def test_constructor():
     qt = QueueTree('a')
     qt2 = QueueTree('a', (1, 2, 3))
     assert qt.root() == 'a'
-    assert qt2.queue() == Queue(('a', 1, 2, 3))
+    assert len(qt2._nodes) == 4
+    assert len(qt2) == 4
+    assert qt2._active == 'a'
 
 def test_add():
     qt = QueueTree('a')
