@@ -31,6 +31,7 @@ class Tree(dag.Dag, ABC):
 
     def __init__(self, root=None):
         self._root = root
+        self.add_node(root)
     
     def root(self):
         &#34;&#34;&#34;
@@ -64,6 +65,7 @@ class Tree(dag.Dag, ABC):
 
     def __init__(self, root=None):
         self._root = root
+        self.add_node(root)
     
     def root(self):
         &#34;&#34;&#34;
@@ -83,7 +85,7 @@ class Tree(dag.Dag, ABC):
 <ul class="hlist">
 <li><a title="standard.graph.sequence.Sequence" href="sequence.html#standard.graph.sequence.Sequence">Sequence</a></li>
 <li><a title="standard.graph.frontiers.frontier.Frontier" href="frontiers/frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
-<li><a title="standard.graph.frontiers.queue_tree.QueueTree" href="frontiers/queue_tree.html#standard.graph.frontiers.queue_tree.QueueTree">QueueTree</a></li>
+<li><a title="standard.graph.pointer_tree.PointerTree" href="pointer_tree.html#standard.graph.pointer_tree.PointerTree">PointerTree</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>

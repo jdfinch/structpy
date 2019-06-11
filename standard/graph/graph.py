@@ -54,8 +54,6 @@ class Graph(ABC):
     - `arc(pro, epi)`: returns the arc from pro to epi
     - `arcs_out(node)`: iterate over the arcs the node is the pro of
     - `arcs_in(node)`: iterate over the arcs the node is an epi of
-    - `arcs_out_number(node)`: count of the arcs the node is the pro of
-    - `arcs_in_number(node)`: count of the arcs the node is an epi of
 
     ### Graph navigation:
 
@@ -177,24 +175,6 @@ class Graph(ABC):
         """
         for other in self.pros(node):
             yield self.arc(other, node)
-
-    def arcs_in_number(self, node):
-        """
-        Returns a count of the arcs with node as their epi
-        """
-        i = 0
-        for arc in self.arcs_in(node):
-            i += 1
-        return i
-
-    def arcs_out_number(self, node):
-        """
-        Returns a count of the arcs with node as their pro
-        """
-        i = 0
-        for arc in self.arcs_out(node):
-            i += 1
-        return i
 
     def arc(self, pro, epi):
         """
