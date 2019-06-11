@@ -1,9 +1,9 @@
 from standard.graph.sequence import Sequence
 from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
-from collections import deque
+import standard.collections as stdcol
 
-class Queue(FrontierSequence):
+class Queue(FrontierSequence, stdcol.Queue):
     """
     First-in-first-out sequence of nodes functioning as a .add/.pop collection
 
@@ -12,23 +12,15 @@ class Queue(FrontierSequence):
     """
 
     def __init__(self, iterable=None):
-        if iterable is not None:
-           self._nodes = deque(iterable)
-        else:
-            self._nodes = deque()
+        stdcol.Queue.__init__(self, iterable)
 
-    def top(self):
-        """
-        Returns the next node in the Queue, or None if the Queue is empty
-        """
-        if self._nodes:
-            return self._nodes[0]
+    top = stdcol.Queue.top
 
-    def pop(self):
-        """
-        Returns the latest-added node (on left)
-        """
-        return self._nodes.popleft()
+    pop = stdcol.Queue.pop
+
+    def nodes(self):
+        for node in self:
+            yield node
 
     def add(self, node, epi=None, arc=None):
         """
@@ -36,16 +28,16 @@ class Queue(FrontierSequence):
         and node is the last item in the current queue
         """
         if epi is None:
-            self._nodes.append(node)
-        elif node is self._nodes[-1]:
-            self._nodes.append(epi)
+            stdcol.Queue.add(self, node)
+        elif node is self[-1]:
+            stdcol.Queue.add(self, epi)
 
     def add_node(self, node):
         """
         Adds a node, automatically the node will be placed at the end of the
         list and an arc will be added connecting it to the previous node
         """
-        self._nodes.append(node)
+        stdcol.Queue.add(self, node)
 
     def add_arc(self, pro, epi, arc=True):
         """
@@ -57,7 +49,7 @@ class Queue(FrontierSequence):
         """
         Uses list.remove to remove a node
         """
-        self._nodes.remove(node)
+        stdcol.Queue.remove(self, node)
 
     def remove_arc(self, pro, epi):
         """
@@ -70,8 +62,8 @@ class Queue(FrontierSequence):
         Returns a tuple (pro, epi) if epi follows pro in the list,
         otherwise None
         """
-        pro_index = rfind(self._nodes, pro)
-        epi_index = rfind(self._nodes, epi)
+        pro_index = rfind(self, pro)
+        epi_index = rfind(self, epi)
         if epi_index != 1 + pro_index:
             return (pro, epi)
         return None
@@ -80,16 +72,7 @@ class Queue(FrontierSequence):
         """
         Returns the node at a certain index, where the root is index 0
         """
-        return self._nodes.__getitem__(index)
-
-    def __iter__(self):
-        return self._nodes.__iter__()
-
-    def __next__(self):
-        return self._nodes.__next__()
-
-    def __getitem__(self, index):
-        return self._nodes.__getitem__(index)
+        return stdcol.Queue.__getitem__(self, index)
 
     def __str__(self):
         return 'Queue(' + ','.join([str(e) for e in self._nodes]) + ')'
