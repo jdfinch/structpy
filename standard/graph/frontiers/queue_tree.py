@@ -1,20 +1,22 @@
-from standard.graph.pointer_tree import PointerTree
-from standard.graph.pointer_graph import PointerGraph
-from standard.graph.frontiers.queue import Queue
+from standard.graph.bidictionary_tree import BidictionaryTree
+from collections import deque
 
 def _one_and_many(one, many):
     yield one
     for e in many:
         yield e
 
-class QueueTree(PointerTree):
+class QueueTree(BidictionaryTree):
     """
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
+
+    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
+    that way it is distinguishable for cases like this when both Graph and a non-
+    graph Queue are inherited
     """
 
     def __init__(self, root, iterable=None):
-        PointerGraph.__init__(self)
         self._root = root
         self._nodes[root] = set()
         self._queue = None

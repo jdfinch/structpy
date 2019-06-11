@@ -1,4 +1,9 @@
 [
+  "test/collections/test_queue.py::test_constructor",
+  "test/collections/test_queue.py::test_add",
+  "test/collections/test_queue.py::test_pop",
+  "test/collections/test_queue.py::test_top",
+  "test/collections/test_queue.py::test_obj",
   "test/graph/test_bidictionary_graph.py::test_constructor",
   "test/graph/test_bidictionary_graph.py::test_nodes",
   "test/graph/test_bidictionary_tree.py::test_constructor",
