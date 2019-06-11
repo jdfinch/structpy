@@ -7,6 +7,7 @@ class Tree(dag.Dag, ABC):
 
     def __init__(self, root=None):
         self._root = root
+        self.add_node(root)
     
     def root(self):
         """
