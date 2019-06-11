@@ -1,5 +1,4 @@
 from standard.graph.graph import Graph
-from collections import defaultdict
 
 class PointerGraph(Graph):
 

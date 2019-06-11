@@ -1,8 +1,5 @@
 import pytest
 
-import os
-print(os.getcwd())
-
 from standard.graph.frontiers import MemQueue
 from standard.graph.frontiers import MemStack
 from standard.graph.frontiers import Queue, Stack
@@ -31,7 +28,6 @@ def test_add():
     assert mq == MemQueue((1, 2, 3, 5, 4))
     # test the "memoried" part of MemQueue
     mq.add(4)
-    print('mq:', mq)
     assert mq == MemQueue((1, 2, 3, 5, 4))
     mq.add(2)
     assert mq == MemQueue((1, 2, 3, 5, 4))
@@ -53,7 +49,6 @@ def test_add():
     assert mq == MemQueue((1, 2, 3, 5, 4))
     # test the "memoried" part of MemQueue
     mq.add('error', 4)
-    print('mq:', mq)
     assert mq == MemQueue((1, 2, 3, 5, 4))
     mq.add('error', 2)
     assert mq == MemQueue((1, 2, 3, 5, 4))
