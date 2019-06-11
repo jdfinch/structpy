@@ -148,8 +148,6 @@ class PointerGraph(Graph):
 <li><code>arc(pro, epi)</code>: returns the arc from pro to epi</li>
 <li><code>arcs_out(node)</code>: iterate over the arcs the node is the pro of</li>
 <li><code>arcs_in(node)</code>: iterate over the arcs the node is an epi of</li>
-<li><code>arcs_out_number(node)</code>: count of the arcs the node is the pro of</li>
-<li><code>arcs_in_number(node)</code>: count of the arcs the node is an epi of</li>
 </ul>
 <h3 id="graph-navigation">Graph navigation:</h3>
 <ul>
@@ -271,6 +269,7 @@ if the above 3 steps have been followed:</p>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.pointer_tree.PointerTree" href="pointer_tree.html#standard.graph.pointer_tree.PointerTree">PointerTree</a></li>
+<li><a title="standard.graph.bipointer_graph.BipointerGraph" href="bipointer_graph.html#standard.graph.bipointer_graph.BipointerGraph">BipointerGraph</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
@@ -282,10 +281,8 @@ if the above 3 steps have been followed:</p>
 <li><code><a title="standard.graph.graph.Graph.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in" href="graph.html#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="graph.html#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_number" href="graph.html#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out" href="graph.html#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="graph.html#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epi" href="graph.html#standard.graph.graph.Graph.epi">epi</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis" href="graph.html#standard.graph.graph.Graph.epis">epis</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis_number" href="graph.html#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>

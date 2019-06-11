@@ -78,8 +78,6 @@ class Graph(ABC):
     - `arc(pro, epi)`: returns the arc from pro to epi
     - `arcs_out(node)`: iterate over the arcs the node is the pro of
     - `arcs_in(node)`: iterate over the arcs the node is an epi of
-    - `arcs_out_number(node)`: count of the arcs the node is the pro of
-    - `arcs_in_number(node)`: count of the arcs the node is an epi of
 
     ### Graph navigation:
 
@@ -201,24 +199,6 @@ class Graph(ABC):
         &#34;&#34;&#34;
         for other in self.pros(node):
             yield self.arc(other, node)
-
-    def arcs_in_number(self, node):
-        &#34;&#34;&#34;
-        Returns a count of the arcs with node as their epi
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs_in(node):
-            i += 1
-        return i
-
-    def arcs_out_number(self, node):
-        &#34;&#34;&#34;
-        Returns a count of the arcs with node as their pro
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs_out(node):
-            i += 1
-        return i
 
     def arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -571,8 +551,6 @@ class Graph(ABC):
 <li><code>arc(pro, epi)</code>: returns the arc from pro to epi</li>
 <li><code>arcs_out(node)</code>: iterate over the arcs the node is the pro of</li>
 <li><code>arcs_in(node)</code>: iterate over the arcs the node is an epi of</li>
-<li><code>arcs_out_number(node)</code>: count of the arcs the node is the pro of</li>
-<li><code>arcs_in_number(node)</code>: count of the arcs the node is an epi of</li>
 </ul>
 <h3 id="graph-navigation">Graph navigation:</h3>
 <ul>
@@ -680,8 +658,6 @@ if the above 3 steps have been followed:</p>
     - `arc(pro, epi)`: returns the arc from pro to epi
     - `arcs_out(node)`: iterate over the arcs the node is the pro of
     - `arcs_in(node)`: iterate over the arcs the node is an epi of
-    - `arcs_out_number(node)`: count of the arcs the node is the pro of
-    - `arcs_in_number(node)`: count of the arcs the node is an epi of
 
     ### Graph navigation:
 
@@ -803,24 +779,6 @@ if the above 3 steps have been followed:</p>
         &#34;&#34;&#34;
         for other in self.pros(node):
             yield self.arc(other, node)
-
-    def arcs_in_number(self, node):
-        &#34;&#34;&#34;
-        Returns a count of the arcs with node as their epi
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs_in(node):
-            i += 1
-        return i
-
-    def arcs_out_number(self, node):
-        &#34;&#34;&#34;
-        Returns a count of the arcs with node as their pro
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs_out(node):
-            i += 1
-        return i
 
     def arc(self, pro, epi):
         &#34;&#34;&#34;
@@ -1116,8 +1074,8 @@ if the above 3 steps have been followed:</p>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.pointer_graph.PointerGraph" href="pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
 <li><a title="standard.graph.dictionary_graph.DictionaryGraph" href="dictionary_graph.html#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></li>
+<li><a title="standard.graph.pointer_graph.PointerGraph" href="pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -1264,23 +1222,6 @@ O(T(<code>self.epis</code>))</p></section>
         yield self.arc(other, node)</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.arcs_in_number"><code class="name flex">
-<span>def <span class="ident">arcs_in_number</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns a count of the arcs with node as their epi</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def arcs_in_number(self, node):
-    &#34;&#34;&#34;
-    Returns a count of the arcs with node as their epi
-    &#34;&#34;&#34;
-    i = 0
-    for arc in self.arcs_in(node):
-        i += 1
-    return i</code></pre>
-</details>
-</dd>
 <dt id="standard.graph.graph.Graph.arcs_number"><code class="name flex">
 <span>def <span class="ident">arcs_number</span></span>(<span>self)</span>
 </code></dt>
@@ -1319,23 +1260,6 @@ O(T(<code>self.epis</code>))</p></section>
     &#34;&#34;&#34;
     for other in self.epis(node):
         yield self.arc(node, other)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.arcs_out_number"><code class="name flex">
-<span>def <span class="ident">arcs_out_number</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns a count of the arcs with node as their pro</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def arcs_out_number(self, node):
-    &#34;&#34;&#34;
-    Returns a count of the arcs with node as their pro
-    &#34;&#34;&#34;
-    i = 0
-    for arc in self.arcs_out(node):
-        i += 1
-    return i</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.epi"><code class="name flex">
@@ -1845,10 +1769,8 @@ which should be a <a title="standard.graph.graph.Graph" href="#standard.graph.gr
 <li><code><a title="standard.graph.graph.Graph.arc" href="#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs" href="#standard.graph.graph.Graph.arcs">arcs</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_in" href="#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_in_number" href="#standard.graph.graph.Graph.arcs_in_number">arcs_in_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_number" href="#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs_out" href="#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_out_number" href="#standard.graph.graph.Graph.arcs_out_number">arcs_out_number</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epi" href="#standard.graph.graph.Graph.epi">epi</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis" href="#standard.graph.graph.Graph.epis">epis</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.epis_number" href="#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>

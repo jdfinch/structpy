@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.pointer_tree API documentation</title>
+<title>standard.graph.bipointer_graph API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,20 +17,20 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.pointer_tree</code></h1>
+<h1 class="title">Module <code>standard.graph.bipointer_graph</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from standard.graph.pointer_graph import PointerGraph
-from standard.graph.tree import Tree
 
+class BipointerGraph(PointerGraph):
+    &#34;&#34;&#34;
+    Pointer graph with reverse pointers
+    &#34;&#34;&#34;
 
-class PointerTree(PointerGraph, Tree):
-
-    def __init__(self, root=None):
-        PointerGraph.__init__(self)
-        Tree.__init__(self, root)</code></pre>
+    def __init__(self):
+        pass</code></pre>
 </details>
 </section>
 <section>
@@ -42,31 +42,26 @@ class PointerTree(PointerGraph, Tree):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.pointer_tree.PointerTree"><code class="flex name class">
-<span>class <span class="ident">PointerTree</span></span>
-<span>(</span><span>root=None)</span>
+<dt id="standard.graph.bipointer_graph.BipointerGraph"><code class="flex name class">
+<span>class <span class="ident">BipointerGraph</span></span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Pointer graph with reverse pointers</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class PointerTree(PointerGraph, Tree):
+<pre><code class="python">class BipointerGraph(PointerGraph):
+    &#34;&#34;&#34;
+    Pointer graph with reverse pointers
+    &#34;&#34;&#34;
 
-    def __init__(self, root=None):
-        PointerGraph.__init__(self)
-        Tree.__init__(self, root)</code></pre>
+    def __init__(self):
+        pass</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="standard.graph.pointer_graph.PointerGraph" href="pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
-<li><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></li>
-<li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="standard.graph.frontiers.queue_tree.QueueTree" href="frontiers/queue_tree.html#standard.graph.frontiers.queue_tree.QueueTree">QueueTree</a></li>
 </ul>
 <h3>Inherited members</h3>
 <ul class="hlist">
@@ -102,12 +97,6 @@ class PointerTree(PointerGraph, Tree):
 <li><code><a title="standard.graph.pointer_graph.PointerGraph.traverse" href="graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
 </ul>
 </li>
-<li><code><b><a title="standard.graph.tree.Tree" href="tree.html#standard.graph.tree.Tree">Tree</a></b></code>:
-<ul class="hlist">
-<li><code><a title="standard.graph.tree.Tree.root" href="tree.html#standard.graph.tree.Tree.root">root</a></code></li>
-<li><code><a title="standard.graph.tree.Tree.sequences" href="dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
-</ul>
-</li>
 </ul>
 </dd>
 </dl>
@@ -127,7 +116,7 @@ class PointerTree(PointerGraph, Tree):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.pointer_tree.PointerTree" href="#standard.graph.pointer_tree.PointerTree">PointerTree</a></code></h4>
+<h4><code><a title="standard.graph.bipointer_graph.BipointerGraph" href="#standard.graph.bipointer_graph.BipointerGraph">BipointerGraph</a></code></h4>
 </li>
 </ul>
 </li>

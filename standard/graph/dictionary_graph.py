@@ -40,6 +40,9 @@ class DictionaryGraph(Graph):
         self._nodes[new] = self._nodes[old]
         del self._nodes[old]
 
+    '''
+    Re-introduce later for efficiency
+    
     def replace_arc(self, pro, epi, new):
         self._nodes[pro][epi] = new
     
@@ -50,6 +53,7 @@ class DictionaryGraph(Graph):
     def replace_arc_pro(self, pro, epi, new_pro):
         self._nodes[new_pro][epi] = self._nodes[pro][epi]
         del self._nodes[pro][epi]
+    '''
 
     def epis(self, node):
         for epi in self._nodes[node]:
