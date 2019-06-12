@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.collections API documentation</title>
+<title>standard.collections.stack API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,32 +17,77 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.collections</code></h1>
+<h1 class="title">Module <code>standard.collections.stack</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from standard.collections.queue import Queue</code></pre>
+<pre><code class="python">class Stack(list, object):
+
+    add = list.append
+
+    def top(self):
+        return list.__getitem__(-1)
+
+    def __hash__(self):
+        return id(self)</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="standard.collections.queue" href="queue.html">standard.collections.queue</a></code></dt>
+<dt id="standard.collections.stack.Stack"><code class="flex name class">
+<span>class <span class="ident">Stack</span></span>
+<span>(</span><span>*args, **kwargs)</span>
+</code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">class Stack(list, object):
+
+    add = list.append
+
+    def top(self):
+        return list.__getitem__(-1)
+
+    def __hash__(self):
+        return id(self)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.list</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="standard.collections.stack.Stack.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, object)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Append object to the end of the list.</p></section>
 </dd>
-<dt><code class="name"><a title="standard.collections.stack" href="stack.html">standard.collections.stack</a></code></dt>
+<dt id="standard.collections.stack.Stack.top"><code class="name flex">
+<span>def <span class="ident">top</span></span>(<span>self)</span>
+</code></dt>
 <dd>
 <section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def top(self):
+    return list.__getitem__(-1)</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -53,13 +98,18 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="standard" href="../index.html">standard</a></code></li>
+<li><code><a title="standard.collections" href="index.html">standard.collections</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="standard.collections.queue" href="queue.html">standard.collections.queue</a></code></li>
-<li><code><a title="standard.collections.stack" href="stack.html">standard.collections.stack</a></code></li>
+<li>
+<h4><code><a title="standard.collections.stack.Stack" href="#standard.collections.stack.Stack">Stack</a></code></h4>
+<ul class="">
+<li><code><a title="standard.collections.stack.Stack.add" href="#standard.collections.stack.Stack.add">add</a></code></li>
+<li><code><a title="standard.collections.stack.Stack.top" href="#standard.collections.stack.Stack.top">top</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

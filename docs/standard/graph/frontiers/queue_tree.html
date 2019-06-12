@@ -23,63 +23,47 @@
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from standard.graph.bidictionary_tree import BidictionaryTree
-from collections import deque
+from standard.graph.bidictionary_graph import BidictionaryGraph
+from standard.collections import Queue
+from standard.graph.frontiers import Frontier
 
 def _one_and_many(one, many):
     yield one
-    for e in many:
-        yield e
+    if many is not None:
+        for e in many:
+            yield e
 
-class QueueTree(BidictionaryTree):
+class QueueTree(BidictionaryTree, Queue, Frontier):
     &#34;&#34;&#34;
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
-
-    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
-    that way it is distinguishable for cases like this when both Graph and a non-
-    graph Queue are inherited
     &#34;&#34;&#34;
 
     def __init__(self, root, iterable=None):
+        BidictionaryGraph.__init__(self)
         self._root = root
-        self._nodes[root] = set()
-        self._queue = None
-        if iterable is not None:
-            self._queue = Queue(_one_and_many(root, iterable))
-        else:
-            self._queue = Queue((root,))
+        Queue.__init__(self, _one_and_many(root, iterable))
+        for node in _one_and_many(root, iterable):
+            BidictionaryTree.add_node(self, node)
         self._active = root
 
-    def queue(self):
-        return self._queue
-
-    def top(self):
-        return self._queue.top()
+    def active(self):
+        return self._active
 
     def pop(self):
-        active = self._queue.pop()
-        self._active = active
-        return active
+        self._active = Queue.pop(self)
+        return self._active
 
     def complete(self):
-        return self._queue.complete()
+        return self.__len__() == 0
 
-    def add(self, node, epi=None, arc=None):
-        if node not in self._nodes:
-            self._nodes[node] = set()
+    def add(self, node, epi=None, arc=True):
         if epi is None:
-            self._nodes[self._active].add(node)
-            self._queue.add(node)
-        else:
-            self._nodes[node].add(epi)
-            self._queue.add_node(epi)
+            epi = node
+            node = self._active
+        BidictionaryTree.add(self, node, epi, arc)
+        Queue.add(self, epi)
 
-
-    def add_node(self, node):
-        self._queue.add_node(node)
-        if node not in self._nodes:
-            self._nodes[node] = set()
-        self._nodes[self._active].add(node)
 
 
     </code></pre>
@@ -100,119 +84,68 @@ class QueueTree(BidictionaryTree):
 </code></dt>
 <dd>
 <section class="desc"><p>A <code>Tree</code> data structure that can return nodes like a queue with <code>.pop</code>
-based on the order nodes are added</p>
-<p>Todo: create a Queue struct that is NOT tied to Graph, and another that is,
-that way it is distinguishable for cases like this when both Graph and a non-
-graph Queue are inherited</p></section>
+based on the order nodes are added</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class QueueTree(BidictionaryTree):
+<pre><code class="python">class QueueTree(BidictionaryTree, Queue, Frontier):
     &#34;&#34;&#34;
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
-
-    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
-    that way it is distinguishable for cases like this when both Graph and a non-
-    graph Queue are inherited
     &#34;&#34;&#34;
 
     def __init__(self, root, iterable=None):
+        BidictionaryGraph.__init__(self)
         self._root = root
-        self._nodes[root] = set()
-        self._queue = None
-        if iterable is not None:
-            self._queue = Queue(_one_and_many(root, iterable))
-        else:
-            self._queue = Queue((root,))
+        Queue.__init__(self, _one_and_many(root, iterable))
+        for node in _one_and_many(root, iterable):
+            BidictionaryTree.add_node(self, node)
         self._active = root
 
-    def queue(self):
-        return self._queue
-
-    def top(self):
-        return self._queue.top()
+    def active(self):
+        return self._active
 
     def pop(self):
-        active = self._queue.pop()
-        self._active = active
-        return active
+        self._active = Queue.pop(self)
+        return self._active
 
     def complete(self):
-        return self._queue.complete()
+        return self.__len__() == 0
 
-    def add(self, node, epi=None, arc=None):
-        if node not in self._nodes:
-            self._nodes[node] = set()
+    def add(self, node, epi=None, arc=True):
         if epi is None:
-            self._nodes[self._active].add(node)
-            self._queue.add(node)
-        else:
-            self._nodes[node].add(epi)
-            self._queue.add_node(epi)
-
-
-    def add_node(self, node):
-        self._queue.add_node(node)
-        if node not in self._nodes:
-            self._nodes[node] = set()
-        self._nodes[self._active].add(node)</code></pre>
+            epi = node
+            node = self._active
+        BidictionaryTree.add(self, node, epi, arc)
+        Queue.add(self, epi)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li><a title="standard.graph.bidictionary_tree.BidictionaryTree" href="../bidictionary_tree.html#standard.graph.bidictionary_tree.BidictionaryTree">BidictionaryTree</a></li>
 <li><a title="standard.graph.bidictionary_graph.BidictionaryGraph" href="../bidictionary_graph.html#standard.graph.bidictionary_graph.BidictionaryGraph">BidictionaryGraph</a></li>
 <li><a title="standard.graph.dictionary_graph.DictionaryGraph" href="../dictionary_graph.html#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></li>
+<li><a title="standard.collections.queue.Queue" href="../../collections/queue.html#standard.collections.queue.Queue">Queue</a></li>
+<li>collections.deque</li>
+<li><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></li>
 <li><a title="standard.graph.tree.Tree" href="../tree.html#standard.graph.tree.Tree">Tree</a></li>
 <li><a title="standard.graph.dag.Dag" href="../dag.html#standard.graph.dag.Dag">Dag</a></li>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.search_tree.SearchTree" href="search_tree.html#standard.graph.frontiers.search_tree.SearchTree">SearchTree</a></li>
+</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.frontiers.queue_tree.QueueTree.complete"><code class="name flex">
-<span>def <span class="ident">complete</span></span>(<span>self)</span>
+<dt id="standard.graph.frontiers.queue_tree.QueueTree.active"><code class="name flex">
+<span>def <span class="ident">active</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def complete(self):
-    return self._queue.complete()</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.frontiers.queue_tree.QueueTree.pop"><code class="name flex">
-<span>def <span class="ident">pop</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def pop(self):
-    active = self._queue.pop()
-    self._active = active
-    return active</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.frontiers.queue_tree.QueueTree.queue"><code class="name flex">
-<span>def <span class="ident">queue</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def queue(self):
-    return self._queue</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.frontiers.queue_tree.QueueTree.top"><code class="name flex">
-<span>def <span class="ident">top</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def top(self):
-    return self._queue.top()</code></pre>
+<pre><code class="python">def active(self):
+    return self._active</code></pre>
 </details>
 </dd>
 </dl>
@@ -222,6 +155,7 @@ graph Queue are inherited</p></section>
 <ul class="hlist">
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add_epis" href="../graph.html#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
@@ -238,6 +172,7 @@ graph Queue are inherited</p></section>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.parent" href="../tree.html#standard.graph.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.path" href="../tree.html#standard.graph.tree.Tree.path">path</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.pros_number" href="../graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
@@ -251,6 +186,23 @@ graph Queue are inherited</p></section>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 <li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.bidictionary_tree.BidictionaryTree.traverse_reverse" href="../tree.html#standard.graph.tree.Tree.traverse_reverse">traverse_reverse</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="standard.collections.queue.Queue" href="../../collections/queue.html#standard.collections.queue.Queue">Queue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.collections.queue.Queue.pop" href="../../collections/queue.html#standard.collections.queue.Queue.pop">pop</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="standard.collections.queue.Queue" href="../../collections/queue.html#standard.collections.queue.Queue">Queue</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.collections.queue.Queue.appendleft" href="../../collections/queue.html#standard.collections.queue.Queue.appendleft">appendleft</a></code></li>
+<li><code><a title="standard.collections.queue.Queue.popleft" href="../../collections/queue.html#standard.collections.queue.Queue.popleft">popleft</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="standard.graph.frontiers.frontier.Frontier" href="frontier.html#standard.graph.frontiers.frontier.Frontier">Frontier</a></b></code>:
+<ul class="hlist">
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.complete" href="frontier.html#standard.graph.frontiers.frontier.Frontier.complete">complete</a></code></li>
 </ul>
 </li>
 </ul>
@@ -274,10 +226,7 @@ graph Queue are inherited</p></section>
 <li>
 <h4><code><a title="standard.graph.frontiers.queue_tree.QueueTree" href="#standard.graph.frontiers.queue_tree.QueueTree">QueueTree</a></code></h4>
 <ul class="">
-<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.complete" href="#standard.graph.frontiers.queue_tree.QueueTree.complete">complete</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.pop" href="#standard.graph.frontiers.queue_tree.QueueTree.pop">pop</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.queue" href="#standard.graph.frontiers.queue_tree.QueueTree.queue">queue</a></code></li>
-<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.top" href="#standard.graph.frontiers.queue_tree.QueueTree.top">top</a></code></li>
+<li><code><a title="standard.graph.frontiers.queue_tree.QueueTree.active" href="#standard.graph.frontiers.queue_tree.QueueTree.active">active</a></code></li>
 </ul>
 </li>
 </ul>

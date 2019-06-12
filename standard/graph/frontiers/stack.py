@@ -3,6 +3,9 @@ from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
 
 class Stack(FrontierSequence):
+    """
+    Needs to be updated to inherit from collections.Stack
+    """
 
     def __init__(self, iterable=None):
         if iterable is not None:

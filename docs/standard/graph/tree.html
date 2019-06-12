@@ -46,7 +46,27 @@ class Tree(dag.Dag, ABC):
         Return the parent (pro) of the `node`
         &#34;&#34;&#34;
         for pro in self.pros(node):
-            return pro</code></pre>
+            return pro
+
+    def path(self, node, sequence_cls=None):
+        &#34;&#34;&#34;
+        Returns a Sequence starting at the root of the tree and ending
+        at `node`
+
+        `sequence_cls`: the type of `Sequence` to use
+        &#34;&#34;&#34;
+        p = [n for n in self.traverse_reverse(node)]
+        p.reverse()
+        return sequence_cls(p)
+
+    def traverse_reverse(self, start):
+        &#34;&#34;&#34;
+        Traverse the sequence in reverse, starting at node `start`
+        &#34;&#34;&#34;
+        yield start
+        while start is not self.root():
+            start = self.parent(start)
+            yield start</code></pre>
 </details>
 </section>
 <section>
@@ -87,7 +107,27 @@ class Tree(dag.Dag, ABC):
         Return the parent (pro) of the `node`
         &#34;&#34;&#34;
         for pro in self.pros(node):
-            return pro</code></pre>
+            return pro
+
+    def path(self, node, sequence_cls=None):
+        &#34;&#34;&#34;
+        Returns a Sequence starting at the root of the tree and ending
+        at `node`
+
+        `sequence_cls`: the type of `Sequence` to use
+        &#34;&#34;&#34;
+        p = [n for n in self.traverse_reverse(node)]
+        p.reverse()
+        return sequence_cls(p)
+
+    def traverse_reverse(self, start):
+        &#34;&#34;&#34;
+        Traverse the sequence in reverse, starting at node `start`
+        &#34;&#34;&#34;
+        yield start
+        while start is not self.root():
+            start = self.parent(start)
+            yield start</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -119,6 +159,27 @@ class Tree(dag.Dag, ABC):
         return pro</code></pre>
 </details>
 </dd>
+<dt id="standard.graph.tree.Tree.path"><code class="name flex">
+<span>def <span class="ident">path</span></span>(<span>self, node, sequence_cls=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Returns a Sequence starting at the root of the tree and ending
+at <code>node</code></p>
+<p><code>sequence_cls</code>: the type of <code>Sequence</code> to use</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def path(self, node, sequence_cls=None):
+    &#34;&#34;&#34;
+    Returns a Sequence starting at the root of the tree and ending
+    at `node`
+
+    `sequence_cls`: the type of `Sequence` to use
+    &#34;&#34;&#34;
+    p = [n for n in self.traverse_reverse(node)]
+    p.reverse()
+    return sequence_cls(p)</code></pre>
+</details>
+</dd>
 <dt id="standard.graph.tree.Tree.root"><code class="name flex">
 <span>def <span class="ident">root</span></span>(<span>self)</span>
 </code></dt>
@@ -136,6 +197,23 @@ class Tree(dag.Dag, ABC):
     return self._root</code></pre>
 </details>
 </dd>
+<dt id="standard.graph.tree.Tree.traverse_reverse"><code class="name flex">
+<span>def <span class="ident">traverse_reverse</span></span>(<span>self, start)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Traverse the sequence in reverse, starting at node <code>start</code></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def traverse_reverse(self, start):
+    &#34;&#34;&#34;
+    Traverse the sequence in reverse, starting at node `start`
+    &#34;&#34;&#34;
+    yield start
+    while start is not self.root():
+        start = self.parent(start)
+        yield start</code></pre>
+</details>
+</dd>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
@@ -143,6 +221,7 @@ class Tree(dag.Dag, ABC):
 <ul class="hlist">
 <li><code><a title="standard.graph.dag.Dag.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.dag.Dag.add_epis" href="graph.html#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.dag.Dag.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
@@ -194,7 +273,9 @@ class Tree(dag.Dag, ABC):
 <h4><code><a title="standard.graph.tree.Tree" href="#standard.graph.tree.Tree">Tree</a></code></h4>
 <ul class="">
 <li><code><a title="standard.graph.tree.Tree.parent" href="#standard.graph.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.path" href="#standard.graph.tree.Tree.path">path</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.root" href="#standard.graph.tree.Tree.root">root</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.traverse_reverse" href="#standard.graph.tree.Tree.traverse_reverse">traverse_reverse</a></code></li>
 </ul>
 </li>
 </ul>

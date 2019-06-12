@@ -35,7 +35,7 @@ class Searcher(Frontier, ABC):
     @abstractmethod
     def result(self):
         &#34;&#34;&#34;
-        Returns the result of a search
+        Returns the result of a search as a `Sequence`
         &#34;&#34;&#34;
         pass</code></pre>
 </details>
@@ -67,7 +67,7 @@ method, which represents the solution to the search</p></section>
     @abstractmethod
     def result(self):
         &#34;&#34;&#34;
-        Returns the result of a search
+        Returns the result of a search as a `Sequence`
         &#34;&#34;&#34;
         pass</code></pre>
 </details>
@@ -79,19 +79,23 @@ method, which represents the solution to the search</p></section>
 <li><a title="standard.graph.graph.Graph" href="../graph.html#standard.graph.graph.Graph">Graph</a></li>
 <li>abc.ABC</li>
 </ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="standard.graph.frontiers.search_tree.SearchTree" href="search_tree.html#standard.graph.frontiers.search_tree.SearchTree">SearchTree</a></li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="standard.graph.frontiers.searcher.Searcher.result"><code class="name flex">
 <span>def <span class="ident">result</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns the result of a search</p></section>
+<section class="desc"><p>Returns the result of a search as a <code>Sequence</code></p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">@abstractmethod
 def result(self):
     &#34;&#34;&#34;
-    Returns the result of a search
+    Returns the result of a search as a `Sequence`
     &#34;&#34;&#34;
     pass</code></pre>
 </details>
@@ -103,6 +107,7 @@ def result(self):
 <ul class="hlist">
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.add" href="../graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.add_arc" href="../graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.add_epis" href="../graph.html#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.add_node" href="../graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.arc" href="../graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.arcs" href="../graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
@@ -120,6 +125,7 @@ def result(self):
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes" href="../graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.nodes_number" href="../graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.parent" href="../tree.html#standard.graph.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.path" href="../tree.html#standard.graph.tree.Tree.path">path</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.pop" href="frontier.html#standard.graph.frontiers.frontier.Frontier.pop">pop</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.pro" href="../graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.pros" href="../graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
@@ -134,6 +140,7 @@ def result(self):
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.root" href="../tree.html#standard.graph.tree.Tree.root">root</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.sequences" href="../dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
 <li><code><a title="standard.graph.frontiers.frontier.Frontier.traverse" href="../graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.frontiers.frontier.Frontier.traverse_reverse" href="../tree.html#standard.graph.tree.Tree.traverse_reverse">traverse_reverse</a></code></li>
 </ul>
 </li>
 </ul>

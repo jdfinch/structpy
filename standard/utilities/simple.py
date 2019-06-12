@@ -7,4 +7,8 @@ def rfind(indexable, item):
     for i in range(length - 1, -1, -1):
         if indexable[i] == item:
             return i
-    return -1
+    return - 1
+    
+def empty_generator():
+        return
+        yield

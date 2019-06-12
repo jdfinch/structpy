@@ -13,10 +13,6 @@ class QueueTree(BidictionaryTree, Queue, Frontier):
     """
     A `Tree` data structure that can return nodes like a queue with `.pop`
     based on the order nodes are added
-
-    Todo: create a Queue struct that is NOT tied to Graph, and another that is,
-    that way it is distinguishable for cases like this when both Graph and a non-
-    graph Queue are inherited
     """
 
     def __init__(self, root, iterable=None):

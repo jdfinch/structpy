@@ -31,7 +31,11 @@
     for i in range(length - 1, -1, -1):
         if indexable[i] == item:
             return i
-    return -1</code></pre>
+    return - 1
+    
+def empty_generator():
+        return
+        yield</code></pre>
 </details>
 </section>
 <section>
@@ -41,6 +45,18 @@
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="standard.utilities.simple.empty_generator"><code class="name flex">
+<span>def <span class="ident">empty_generator</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def empty_generator():
+        return
+        yield</code></pre>
+</details>
+</dd>
 <dt id="standard.utilities.simple.rfind"><code class="name flex">
 <span>def <span class="ident">rfind</span></span>(<span>indexable, item)</span>
 </code></dt>
@@ -58,7 +74,7 @@ an item</p></section>
     for i in range(length - 1, -1, -1):
         if indexable[i] == item:
             return i
-    return -1</code></pre>
+    return - 1</code></pre>
 </details>
 </dd>
 </dl>
@@ -79,6 +95,7 @@ an item</p></section>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="standard.utilities.simple.empty_generator" href="#standard.utilities.simple.empty_generator">empty_generator</a></code></li>
 <li><code><a title="standard.utilities.simple.rfind" href="#standard.utilities.simple.rfind">rfind</a></code></li>
 </ul>
 </li>

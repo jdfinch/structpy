@@ -11,7 +11,7 @@ class Searcher(Frontier, ABC):
     @abstractmethod
     def result(self):
         """
-        Returns the result of a search
+        Returns the result of a search as a `Sequence`
         """
         pass
 

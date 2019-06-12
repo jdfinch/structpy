@@ -28,13 +28,31 @@ class Sequence(tree.Tree):
     &#34;&#34;&#34;
     A linear, complete ordering of nodes, where ordering is represented by
     arc direction
+
+    Constructor should expect an iterable as input where the first element
+    yielded is the root of the Sequence and the last is the top
+
+    Default members:
+
+    `self._root`: the root (start) of the `Sequence`
+
+    `self._top`: the top (end) of the `Sequence`
     &#34;&#34;&#34;
+
+    def __init__(self, iterable):
+        set_root = False
+        for e in iterable:
+            if not set_root:
+                self._root = e
+                set_root = True
+            self.add_node(e)
+            self._top = e
 
     def top(self):
         &#34;&#34;&#34;
         Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
-        raise NotImplementedError()
+        return self._top
 
     def child(self, node):
         &#34;&#34;&#34;
@@ -52,7 +70,26 @@ class Sequence(tree.Tree):
         while i &lt; index:
             node = self.child(node)
             i += 1
-        return node</code></pre>
+        return node
+
+    def traverse(self, start=None):
+        &#34;&#34;&#34;
+        Traverse the sequence in the forward direction, starting at node `start`
+        &#34;&#34;&#34;
+        if start is None:
+            start = self.root()
+        yield start
+        while start is not self.top():
+            start = self.child(start)
+            yield start
+
+    def traverse_reverse(self, start=None):
+        &#34;&#34;&#34;
+        Traverse the sequence in reverse, starting at node `start`
+        &#34;&#34;&#34;
+        if start is None:
+            start = self.top()
+        tree.Tree.traverse_reverse(self, start)</code></pre>
 </details>
 </section>
 <section>
@@ -66,24 +103,47 @@ class Sequence(tree.Tree):
 <dl>
 <dt id="standard.graph.sequence.Sequence"><code class="flex name class">
 <span>class <span class="ident">Sequence</span></span>
-<span>(</span><span>root=None)</span>
+<span>(</span><span>iterable)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>A linear, complete ordering of nodes, where ordering is represented by
-arc direction</p></section>
+arc direction</p>
+<p>Constructor should expect an iterable as input where the first element
+yielded is the root of the Sequence and the last is the top</p>
+<p>Default members:</p>
+<p><code>self._root</code>: the root (start) of the <a title="standard.graph.sequence.Sequence" href="#standard.graph.sequence.Sequence"><code>Sequence</code></a></p>
+<p><code>self._top</code>: the top (end) of the <a title="standard.graph.sequence.Sequence" href="#standard.graph.sequence.Sequence"><code>Sequence</code></a></p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">class Sequence(tree.Tree):
     &#34;&#34;&#34;
     A linear, complete ordering of nodes, where ordering is represented by
     arc direction
+
+    Constructor should expect an iterable as input where the first element
+    yielded is the root of the Sequence and the last is the top
+
+    Default members:
+
+    `self._root`: the root (start) of the `Sequence`
+
+    `self._top`: the top (end) of the `Sequence`
     &#34;&#34;&#34;
+
+    def __init__(self, iterable):
+        set_root = False
+        for e in iterable:
+            if not set_root:
+                self._root = e
+                set_root = True
+            self.add_node(e)
+            self._top = e
 
     def top(self):
         &#34;&#34;&#34;
         Returns the last node, or None if the sequence is empty
         &#34;&#34;&#34;
-        raise NotImplementedError()
+        return self._top
 
     def child(self, node):
         &#34;&#34;&#34;
@@ -101,7 +161,26 @@ arc direction</p></section>
         while i &lt; index:
             node = self.child(node)
             i += 1
-        return node</code></pre>
+        return node
+
+    def traverse(self, start=None):
+        &#34;&#34;&#34;
+        Traverse the sequence in the forward direction, starting at node `start`
+        &#34;&#34;&#34;
+        if start is None:
+            start = self.root()
+        yield start
+        while start is not self.top():
+            start = self.child(start)
+            yield start
+
+    def traverse_reverse(self, start=None):
+        &#34;&#34;&#34;
+        Traverse the sequence in reverse, starting at node `start`
+        &#34;&#34;&#34;
+        if start is None:
+            start = self.top()
+        tree.Tree.traverse_reverse(self, start)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -113,6 +192,7 @@ arc direction</p></section>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="standard.graph.frontiers.frontier_sequence.FrontierSequence" href="frontiers/frontier_sequence.html#standard.graph.frontiers.frontier_sequence.FrontierSequence">FrontierSequence</a></li>
+<li><a title="standard.graph.array_sequence.ArraySequence" href="array_sequence.html#standard.graph.array_sequence.ArraySequence">ArraySequence</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -161,7 +241,26 @@ arc direction</p></section>
     &#34;&#34;&#34;
     Returns the last node, or None if the sequence is empty
     &#34;&#34;&#34;
-    raise NotImplementedError()</code></pre>
+    return self._top</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.sequence.Sequence.traverse"><code class="name flex">
+<span>def <span class="ident">traverse</span></span>(<span>self, start=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Traverse the sequence in the forward direction, starting at node <code>start</code></p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def traverse(self, start=None):
+    &#34;&#34;&#34;
+    Traverse the sequence in the forward direction, starting at node `start`
+    &#34;&#34;&#34;
+    if start is None:
+        start = self.root()
+    yield start
+    while start is not self.top():
+        start = self.child(start)
+        yield start</code></pre>
 </details>
 </dd>
 </dl>
@@ -171,6 +270,7 @@ arc direction</p></section>
 <ul class="hlist">
 <li><code><a title="standard.graph.tree.Tree.add" href="graph.html#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.add_arc" href="graph.html#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.add_epis" href="graph.html#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.add_node" href="graph.html#standard.graph.graph.Graph.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arc" href="graph.html#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.arcs" href="graph.html#standard.graph.graph.Graph.arcs">arcs</a></code></li>
@@ -187,6 +287,7 @@ arc direction</p></section>
 <li><code><a title="standard.graph.tree.Tree.nodes" href="graph.html#standard.graph.graph.Graph.nodes">nodes</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.nodes_number" href="graph.html#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.parent" href="tree.html#standard.graph.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.path" href="tree.html#standard.graph.tree.Tree.path">path</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pro" href="graph.html#standard.graph.graph.Graph.pro">pro</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pros" href="graph.html#standard.graph.graph.Graph.pros">pros</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.pros_number" href="graph.html#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
@@ -199,7 +300,7 @@ arc direction</p></section>
 <li><code><a title="standard.graph.tree.Tree.replace_node" href="graph.html#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.root" href="tree.html#standard.graph.tree.Tree.root">root</a></code></li>
 <li><code><a title="standard.graph.tree.Tree.sequences" href="dag.html#standard.graph.dag.Dag.sequences">sequences</a></code></li>
-<li><code><a title="standard.graph.tree.Tree.traverse" href="graph.html#standard.graph.graph.Graph.traverse">traverse</a></code></li>
+<li><code><a title="standard.graph.tree.Tree.traverse_reverse" href="tree.html#standard.graph.tree.Tree.traverse_reverse">traverse_reverse</a></code></li>
 </ul>
 </li>
 </ul>
@@ -226,6 +327,7 @@ arc direction</p></section>
 <li><code><a title="standard.graph.sequence.Sequence.child" href="#standard.graph.sequence.Sequence.child">child</a></code></li>
 <li><code><a title="standard.graph.sequence.Sequence.node_at" href="#standard.graph.sequence.Sequence.node_at">node_at</a></code></li>
 <li><code><a title="standard.graph.sequence.Sequence.top" href="#standard.graph.sequence.Sequence.top">top</a></code></li>
+<li><code><a title="standard.graph.sequence.Sequence.traverse" href="#standard.graph.sequence.Sequence.traverse">traverse</a></code></li>
 </ul>
 </li>
 </ul>

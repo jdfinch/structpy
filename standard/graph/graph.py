@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from standard.utilities.simple import empty_generator
 
 class Graph(ABC):
     """
@@ -284,6 +285,24 @@ class Graph(ABC):
             if not self.has_node(node):
                 self.add_node(node)
 
+    def add_epis(self, pro, epis, arcs=None):
+        """
+        Function adding multiple epis to a single pro
+
+        `pro`: the pro, which will be added if it doesn't currently exist
+
+        `epis`: a generator yielding each epi to add to `pro`
+
+        `arcs`: a generator for each arc corresponding to each epi in `epis`
+
+        Default implementation: calls `self.add` for each pro, epi, arc`
+        """
+        if arcs is None:
+            arcs = empty_generator()
+        for epi in epis:
+            self.add(pro, epi, next(arcs))
+
+
     def add_node(self, node):
         """
         Add a node to the graph, initialized without any arcs
@@ -418,7 +437,7 @@ class Graph(ABC):
         `.epis` method
 
         Expansion order and stop conditions are determined by `frontier`,
-        which should be a `Graph` inheriting from `Tree`
+        which should be a `Frontier` Tree or Sequence
         """
         if start is not None:
             frontier.add(start)

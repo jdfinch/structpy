@@ -23,6 +23,7 @@
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">from abc import ABC, abstractmethod
+from standard.utilities.simple import empty_generator
 
 class Graph(ABC):
     &#34;&#34;&#34;
@@ -308,6 +309,24 @@ class Graph(ABC):
             if not self.has_node(node):
                 self.add_node(node)
 
+    def add_epis(self, pro, epis, arcs=None):
+        &#34;&#34;&#34;
+        Function adding multiple epis to a single pro
+
+        `pro`: the pro, which will be added if it doesn&#39;t currently exist
+
+        `epis`: a generator yielding each epi to add to `pro`
+
+        `arcs`: a generator for each arc corresponding to each epi in `epis`
+
+        Default implementation: calls `self.add` for each pro, epi, arc`
+        &#34;&#34;&#34;
+        if arcs is None:
+            arcs = empty_generator()
+        for epi in epis:
+            self.add(pro, epi, next(arcs))
+
+
     def add_node(self, node):
         &#34;&#34;&#34;
         Add a node to the graph, initialized without any arcs
@@ -442,7 +461,7 @@ class Graph(ABC):
         `.epis` method
 
         Expansion order and stop conditions are determined by `frontier`,
-        which should be a `Graph` inheriting from `Tree`
+        which should be a `Frontier` Tree or Sequence
         &#34;&#34;&#34;
         if start is not None:
             frontier.add(start)
@@ -888,6 +907,24 @@ if the above 3 steps have been followed:</p>
             if not self.has_node(node):
                 self.add_node(node)
 
+    def add_epis(self, pro, epis, arcs=None):
+        &#34;&#34;&#34;
+        Function adding multiple epis to a single pro
+
+        `pro`: the pro, which will be added if it doesn&#39;t currently exist
+
+        `epis`: a generator yielding each epi to add to `pro`
+
+        `arcs`: a generator for each arc corresponding to each epi in `epis`
+
+        Default implementation: calls `self.add` for each pro, epi, arc`
+        &#34;&#34;&#34;
+        if arcs is None:
+            arcs = empty_generator()
+        for epi in epis:
+            self.add(pro, epi, next(arcs))
+
+
     def add_node(self, node):
         &#34;&#34;&#34;
         Add a node to the graph, initialized without any arcs
@@ -1022,7 +1059,7 @@ if the above 3 steps have been followed:</p>
         `.epis` method
 
         Expansion order and stop conditions are determined by `frontier`,
-        which should be a `Graph` inheriting from `Tree`
+        which should be a `Frontier` Tree or Sequence
         &#34;&#34;&#34;
         if start is not None:
             frontier.add(start)
@@ -1127,6 +1164,35 @@ valued True. Does not add pro or epi to the graph explicitly</p>
     Default implementation: calls `self._arcs.add((pro, epi, arc))`
     &#34;&#34;&#34;
     self._arcs.add((pro, epi, arc))</code></pre>
+</details>
+</dd>
+<dt id="standard.graph.graph.Graph.add_epis"><code class="name flex">
+<span>def <span class="ident">add_epis</span></span>(<span>self, pro, epis, arcs=None)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Function adding multiple epis to a single pro</p>
+<p><code>pro</code>: the pro, which will be added if it doesn't currently exist</p>
+<p><code>epis</code>: a generator yielding each epi to add to <code>pro</code></p>
+<p><code>arcs</code>: a generator for each arc corresponding to each epi in <code>epis</code></p>
+<p>Default implementation: calls <code>self.add</code> for each pro, epi, arc`</p></section>
+<details class="source">
+<summary>Source code</summary>
+<pre><code class="python">def add_epis(self, pro, epis, arcs=None):
+    &#34;&#34;&#34;
+    Function adding multiple epis to a single pro
+
+    `pro`: the pro, which will be added if it doesn&#39;t currently exist
+
+    `epis`: a generator yielding each epi to add to `pro`
+
+    `arcs`: a generator for each arc corresponding to each epi in `epis`
+
+    Default implementation: calls `self.add` for each pro, epi, arc`
+    &#34;&#34;&#34;
+    if arcs is None:
+        arcs = empty_generator()
+    for epi in epis:
+        self.add(pro, epi, next(arcs))</code></pre>
 </details>
 </dd>
 <dt id="standard.graph.graph.Graph.add_node"><code class="name flex">
@@ -1706,7 +1772,7 @@ including <code>start</code></p>
 <p>Node expansion is determined by the arcs in this graph, namely the
 <code>.epis</code> method</p>
 <p>Expansion order and stop conditions are determined by <code>frontier</code>,
-which should be a <a title="standard.graph.graph.Graph" href="#standard.graph.graph.Graph"><code>Graph</code></a> inheriting from <code>Tree</code></p></section>
+which should be a <code>Frontier</code> Tree or Sequence</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def traverse(self, frontier, start=None):
@@ -1718,7 +1784,7 @@ which should be a <a title="standard.graph.graph.Graph" href="#standard.graph.gr
     `.epis` method
 
     Expansion order and stop conditions are determined by `frontier`,
-    which should be a `Graph` inheriting from `Tree`
+    which should be a `Frontier` Tree or Sequence
     &#34;&#34;&#34;
     if start is not None:
         frontier.add(start)
@@ -1765,6 +1831,7 @@ which should be a <a title="standard.graph.graph.Graph" href="#standard.graph.gr
 <ul class="two-column">
 <li><code><a title="standard.graph.graph.Graph.add" href="#standard.graph.graph.Graph.add">add</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.add_arc" href="#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
+<li><code><a title="standard.graph.graph.Graph.add_epis" href="#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.add_node" href="#standard.graph.graph.Graph.add_node">add_node</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arc" href="#standard.graph.graph.Graph.arc">arc</a></code></li>
 <li><code><a title="standard.graph.graph.Graph.arcs" href="#standard.graph.graph.Graph.arcs">arcs</a></code></li>
