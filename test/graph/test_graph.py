@@ -1,6 +1,7 @@
 import pytest
 
 from standard.graph import Graph
+from standard.graph.frontiers import SearchTree
 
 g = None
 
@@ -127,4 +128,6 @@ def test_traversal():
     assert before(traversal, 'd', 'e')
     assert not before(traversal, 'd', 'c')
 
-
+def test_search():
+    assert list(g.search(SearchTree('a', 'f'))) == ['a', 'c', 'd', 'f'] 
+    

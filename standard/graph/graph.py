@@ -161,6 +161,8 @@ class Graph(ABC):
         """
         Iterates over the arcs that the node is a pro of
 
+        Should yield arcs in the same order as epis are yielded by `self.epis`
+
         Default implementation: iterates over `self.epis()`.
         O(T(`self.epis`))
         """
@@ -447,10 +449,17 @@ class Graph(ABC):
             for epi in self.epis(new):
                 frontier.add(epi)
 
-    def search(self, frontier, start):
+    def search(self, frontier):
         """
+        Returns a `Sequence` representing a solution path in the graph
+        for the goal specified by `frontier`
+
+        `frontier`: a search tree frontier structure
         """
-        pass
+        while not frontier.complete():
+            new = frontier.pop()
+            frontier.add_epis(new, self.epis(new), self.arcs_out(new))
+        return frontier.result()
 
     def explore(self, frontier, start):
         """
