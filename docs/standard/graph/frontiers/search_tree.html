@@ -24,6 +24,7 @@
 <summary>Source code</summary>
 <pre><code class="python">from standard.graph.frontiers.queue_tree import QueueTree
 from standard.graph.frontiers.searcher import Searcher
+from standard.graph.array_sequence import ArraySequence
 
 class SearchTree(QueueTree, Searcher):
     &#34;&#34;&#34;
@@ -43,7 +44,7 @@ class SearchTree(QueueTree, Searcher):
         Returns the path of the tree that is the solution to the search, with
         the target node as the top of the returned `Sequence`
         &#34;&#34;&#34;
-        pass
+        return self.path(self._target, ArraySequence)
 
     def add(self, node, epi=None, arc=None):
         if epi is None:
@@ -90,7 +91,7 @@ class SearchTree(QueueTree, Searcher):
         Returns the path of the tree that is the solution to the search, with
         the target node as the top of the returned `Sequence`
         &#34;&#34;&#34;
-        pass
+        return self.path(self._target, ArraySequence)
 
     def add(self, node, epi=None, arc=None):
         if epi is None:
@@ -130,7 +131,7 @@ the target node as the top of the returned <code>Sequence</code></p></section>
     Returns the path of the tree that is the solution to the search, with
     the target node as the top of the returned `Sequence`
     &#34;&#34;&#34;
-    pass</code></pre>
+    return self.path(self._target, ArraySequence)</code></pre>
 </details>
 </dd>
 </dl>

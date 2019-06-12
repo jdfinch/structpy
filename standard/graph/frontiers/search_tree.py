@@ -1,5 +1,6 @@
 from standard.graph.frontiers.queue_tree import QueueTree
 from standard.graph.frontiers.searcher import Searcher
+from standard.graph.array_sequence import ArraySequence
 
 class SearchTree(QueueTree, Searcher):
     """
@@ -19,7 +20,7 @@ class SearchTree(QueueTree, Searcher):
         Returns the path of the tree that is the solution to the search, with
         the target node as the top of the returned `Sequence`
         """
-        pass
+        return self.path(self._target, ArraySequence)
 
     def add(self, node, epi=None, arc=None):
         if epi is None:
