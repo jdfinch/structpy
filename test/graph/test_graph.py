@@ -129,5 +129,6 @@ def test_traversal():
     assert not before(traversal, 'd', 'c')
 
 def test_search():
-    assert list(g.search(SearchTree('a', 'f'))) == ['a', 'c', 'd', 'f'] 
-    
+    st = SearchTree('a', 'f')
+    assert list(g.search(st)) == ['a', 'c', 'd', 'f'] 
+    assert list(g.search_reverse(SearchTree('f', 'a'))) == ['f', 'd', 'c', 'a']

@@ -12,7 +12,10 @@ class Queue(FrontierSequence, stdcol.Queue):
     """
 
     def __init__(self, iterable=None):
-        stdcol.Queue.__init__(self, iterable)
+        stdcol.Queue.__init__(self)
+        if iterable is not None:
+            for e in iterable:
+                self.add(e)
 
     top = stdcol.Queue.top
 

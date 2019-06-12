@@ -8,9 +8,10 @@ class SearchTree(QueueTree, Searcher):
     """
 
     def __init__(self, root, target):
-        QueueTree.__init__(self, root)
         self._target = target
         self._complete = False
+        self._visited = set()
+        QueueTree.__init__(self, root)
 
     def complete(self):
         return self._complete
@@ -26,7 +27,9 @@ class SearchTree(QueueTree, Searcher):
         if epi is None:
             epi = node
             node = self._active
-        if epi is self._target:
-            self._complete = True
-        QueueTree.add(self, node, epi, arc)
+        if epi not in self._visited:
+            self._visited.add(epi)
+            if epi is self._target:
+                self._complete = True
+            QueueTree.add(self, node, epi, arc)
         

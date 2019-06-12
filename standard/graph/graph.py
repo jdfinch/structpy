@@ -173,6 +173,8 @@ class Graph(ABC):
         """
         Iterates over the arcs that the node is an epi of
 
+        Should yield arcs in the same order corresponding to `self.pros`
+
         Default implementation: iterates over `self.epis()`.
         O(T(`self.epis`))
         """
@@ -304,6 +306,13 @@ class Graph(ABC):
         for epi in epis:
             self.add(pro, epi, next(arcs))
 
+    def add_pros(self, pros, epi, arcs=None):
+        """
+        """
+        if arcs is None:
+            arcs = empty_generator()
+        for pro in pros:
+            self.add(pro, epi, next(arcs))
 
     def add_node(self, node):
         """
@@ -471,10 +480,17 @@ class Graph(ABC):
         """
         pass
 
-    def search_reverse(self, frontier, start):
+    def search_reverse(self, frontier):
         """
+        Returns a `Sequence` representing a solution path in the graph
+        for the goal specified by `frontier`
+
+        `frontier`: a search tree frontier structure
         """
-        pass
+        while not frontier.complete():
+            new = frontier.pop()
+            frontier.add_epis(new, self.pros(new), self.arcs_in(new))
+        return frontier.result()
 
     def explore_reverse(self, frontier, start):
         """

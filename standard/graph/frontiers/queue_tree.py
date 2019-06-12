@@ -16,12 +16,12 @@ class QueueTree(BidictionaryTree, Queue, Frontier):
     """
 
     def __init__(self, root, iterable=None):
-        BidictionaryGraph.__init__(self)
-        self._root = root
-        Queue.__init__(self, _one_and_many(root, iterable))
-        for node in _one_and_many(root, iterable):
-            BidictionaryTree.add_node(self, node)
         self._active = root
+        self._root = root
+        BidictionaryGraph.__init__(self)
+        Queue.__init__(self)
+        for node in _one_and_many(root, iterable):
+            self.add(node)
 
     def active(self):
         return self._active

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from standard.graph.frontiers.frontier import Frontier
 from standard.graph.frontiers.stack import Stack
 from standard.graph.frontiers.queue import Queue
+from standard.graph.frontiers.search_tree import SearchTree
 
 class MemoriedFrontier(Frontier, ABC):
     """
@@ -9,11 +10,8 @@ class MemoriedFrontier(Frontier, ABC):
     added nodes if they appear in this set of previously visited nodes
     """
 
-    def __init__(self, iterable=None):
-        if iterable is not None:
-            self.visited = set(iterable)
-        else:
-            self.visited = set()
+    def __init__(self):
+        self.visited = set()
 
     @abstractmethod
     def _add_memoried(self, pro, epi=None, arc=None):
@@ -58,9 +56,10 @@ def Memoried(frontier):
         previously added nodes
         """
 
-        def __init__(self, iterable=None):
-            frontier.__init__(self, iterable)
-            MemoriedFrontier.__init__(self, iterable)
+        def __init__(self, *args, **kwargs):
+            MemoriedFrontier.__init__(self)
+            frontier.__init__(self, *args, **kwargs)
+        
 
         def _add_memoried(self, pro, epi=None, arc=None):
             return frontier.add(self, pro, epi, arc)

@@ -8,10 +8,10 @@ class Stack(FrontierSequence):
     """
 
     def __init__(self, iterable=None):
+        self._nodes = list()
         if iterable is not None:
-           self._nodes = list(iterable)
-        else:
-            self._nodes = list()
+           for e in iterable:
+               self.add(e)
 
     def end(self):
         """
