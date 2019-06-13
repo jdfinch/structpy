@@ -30,5 +30,3 @@ def test_from_string():
     assert sm.arc('NP1', 'DET') == 0
     assert sm.has_arc('NP1', 'N')
     assert sm.arc('NP1', 'N') == 1
-
-    assert sm.reverse_search
