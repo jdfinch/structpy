@@ -21,8 +21,7 @@ class DictionaryGraph(Graph):
         return len(self._nodes)
 
     def add_node(self, node):
-        if node not in self._nodes:
-            self._nodes[node] = {}
+        self._nodes[node] = {}
 
     def add_arc(self, pro, epi, arc=True):
         self._nodes[pro][epi] = arc
