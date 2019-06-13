@@ -47,5 +47,7 @@
   "test/graph/frontiers/test_stack.py::test_add",
   "test/graph/frontiers/test_stack.py::test_iteration",
   "test/graph/frontiers/test_stack.py::test_indexing",
-  "test/graph/frontiers/test_stack.py::test_pop"
+  "test/graph/frontiers/test_stack.py::test_pop",
+  "test/theoretical/test_pcfg.py::test_constructor",
+  "test/theoretical/test_pcfg.py::test_from_string"
 ]
