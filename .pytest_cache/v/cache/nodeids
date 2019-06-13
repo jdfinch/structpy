@@ -1,4 +1,5 @@
 [
+  "test/collections/test_priority_queue.py::test_priority_queue",
   "test/collections/test_queue.py::test_constructor",
   "test/collections/test_queue.py::test_add",
   "test/collections/test_queue.py::test_pop",
