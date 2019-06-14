@@ -62,7 +62,10 @@ class DictionaryGraph(Graph):
         return len(self._nodes[node])
 
     def arc(self, pro, epi):
-        return self._nodes[pro][epi]
+        try:
+            return self._nodes[pro][epi]
+        except KeyError:
+            return None
 
     def arcs_out(self, pro):
         for arc in self._nodes[pro].values():

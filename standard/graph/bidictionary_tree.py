@@ -3,6 +3,6 @@ from standard.graph.tree import Tree
 
 class BidictionaryTree(BidictionaryGraph, Tree):
 
-    def __init__(self, root):
+    def __init__(self, root=None):
         BidictionaryGraph.__init__(self)
         Tree.__init__(self, root)
