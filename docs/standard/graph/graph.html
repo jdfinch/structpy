@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.6.2" />
-<title>standard.graph.graph API documentation</title>
+<title>standard.graph.Graph API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,494 +17,79 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>standard.graph.graph</code></h1>
+<h1 class="title">Module <code>standard.graph.Graph</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">from abc import ABC, abstractmethod
-from standard.utilities.simple import empty_generator
-
-class Graph(ABC):
+<pre><code class="python">class Graph:
     &#34;&#34;&#34;
-    General graph structure
+    General directed graph representation
 
-    ## Guidelines:
-
-    - nodes and arcs are assumed to be sets without duplicates
-
-    ## Methods summary:
-
-    ### Graph-level properties:
-
-    - `nodes()`: iterate over nodes
-    - `arcs()`: iterate over arcs
-    - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
-    - `has_node(node)`: node membership
-    - `has_arc(pro, epi)`: arc membership by pro &amp; epi
-    - `has_arc_value(arc)`: arc membership by arc value
-    - `nodes_number()`: count of nodes
-    - `arcs_number()`: count of arcs
-    
-    ### Construction:
-
-    - `add(node, epi=None, arc=None)`: add node, or (pro, epi, arc)
-    - `add_node(node)`: add node
-    - `add_arc(pro, epi, arc=True)`: add arc
-
-    ### Destruction:
-
-    - `remove(node, epi=None)`: remove node, or arc by pro &amp; epi
-    - `remove_node(node)`: remove node
-    - `remove_arc(pro, epi)`: remove arc by pro and epi
-
-    ### Mutation:
-
-    - `replace_node(old, new)`: replace a node while preserving its arcs
-    - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
-    - `replace_arc_pro(pro, epi, new_pro)`: change the pro of an arc
-    - `replace_arc_epi(pro, epi, new_epi)`: change the epi of an arc
-
-    ### Properties for finding nodes:
-
-    - `epis(node)`: iterate over epis of a node
-    - `pros(node)`: iterate over pros of a node
-    - `pro(arc)`: returns the pro of an arc
-    - `epi(arc)`: returns the epi of an arc
-    - `epis_number(node)`: returns a count of a node&#39;s epis
-    - `pros_number(node)`: returns a count of a nodes&#39;s pros
-
-    ### Properties for finding arcs:
-
-    - `arc(pro, epi)`: returns the arc from pro to epi
-    - `arcs_out(node)`: iterate over the arcs the node is the pro of
-    - `arcs_in(node)`: iterate over the arcs the node is an epi of
-
-    ### Graph navigation:
-
-    - `traverse(frontier, start)`: traversal that yields visited nodes
-    - `search(frontier, start)`: search that returns a solution Sequence
-    - `explore(frontier, start)`: search that yields multiple solutions
-    - `traverse_reverse(frontier, start)`
-    - `search_reverse(frontier, start)`
-    - `explore_reverse(frontier, start)`
-
-    ## Implementation patterns:
-
-    ### Node-based:
-
-    1. Implement `nodes` to iterate (use an iterable or a generator
-    implementation) over nodes. Alternatively, assign `self._nodes` to a 
-    collection to hold nodes
-
-    2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
-    if you assign `self._nodes` to a collection that implements 
-    `.add(e)` and `.pop(e)` to add/remove element e, you may skip
-    this step)
-
-    3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
-    if none exists. Return True for label-less arcs.
-
-    4. If you want to be able to remove things from the graph, implement
-    `remove_node` and `remove_arc`
-
-    4. If you want to improve the efficiency of other methods, you
-    can re-implement them. Especially, the default implementations of
-    the following methods may be inefficient, although they will work
-    if the above 3 steps have been followed:
-
-        - `epis`
-        - `pros`
-        - `pro`
-        - `epi`
-        - `arcs`
-
-    ### Arc-based:
-
-    1. lorem ipsum
-
-    ### 
+    Standard edge notation order: pro, epi, edge
     &#34;&#34;&#34;
 
-    @abstractmethod
     def __init__(self):
-        self._nodes = set()
-        self._arcs = set()
-        raise NotImplementedError(
-            &#34;Graph is abstract and cannot be initialized; \
-            use one of its implementations (or make your own!)&#34;)
+        &#34;&#34;&#34;
+        ```data```: dict(pro: object, dict(epi: object, edge: object)) 
+        &#34;&#34;&#34;
+        self.data = {}
 
     def nodes(self):
         &#34;&#34;&#34;
-        Iterates over all nodes in the graph
-
-        Default implementation: iterates over `self._nodes`. O(N)
+        Returns an iterable over all nodes in the graph
         &#34;&#34;&#34;
-        for node in self._nodes:
-            yield node
+        raise NotImplementedError()
 
-    def arcs(self):
-        &#34;&#34;&#34;
-        Iterates over all arcs in the graph
-
-        Guideline implementation: return tuples in form (pro, epi, arc_value)
-
-        Default implementation: iterates over every pair of nodes and checks
-        if there is an arc between them using `self.arc(n1, n2)`. 
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for pro in self.nodes():
-            for epi in self.nodes():
-                arc = self.arc(pro, epi)
-                if arc is not None:
-                    yield arc
-
-    def nodes_number(self):
-        &#34;&#34;&#34;
-        Returns the number of nodes in the graph
-
-        Default implementation: counts number of nodes O(N)
-        &#34;&#34;&#34;
-        i = 0
-        for node in self.nodes():
-            i += 1
-        return i
-
-    def arcs_number(self):
-        &#34;&#34;&#34;
-        Returns the number of arcs in the graph
-
-        Default implementation: counts the number of arcs O(A)
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs():
-            i += 1
-        return i
-
-    def arcs_out(self, node):
-        &#34;&#34;&#34;
-        Iterates over the arcs that the node is a pro of
-
-        Default implementation: iterates over `self.epis()`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        for other in self.epis(node):
-            yield self.arc(node, other)
-
-    def arcs_in(self, node):
-        &#34;&#34;&#34;
-        Iterates over the arcs that the node is an epi of
-
-        Default implementation: iterates over `self.epis()`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        for other in self.pros(node):
-            yield self.arc(other, node)
-
-    def arc(self, pro, epi):
-        &#34;&#34;&#34;
-        Returns the arc from pro to epi, or None if none exists
-
-        Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
-        `(pro, epi)` if the arc is valueless
-
-        Default implementation: iterates over `self.arcs()` and returns an arc
-        where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
-        respectively. O(T(`self.pro`) * T(`self.epi`) * T(`self.arc`))
-        &#34;&#34;&#34;
-        for arc in self.arcs():
-            if self.pro(arc) is pro and self.epi(arc) is epi:
-                return arc
-
-    def has(self, node, epi=None):
-        &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains node
-
-        If epi is specified, instead returns whether an arc exists from pro to
-        epi
-
-        Default implementation: routes to either `self.has_node` or `self.arc`
-        &#34;&#34;&#34;
-        if epi is None:
-            return self.has_node(node)
-        else:
-            return self.arc(node, epi) is not None       
-    
     def has_node(self, node):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains node
-
-        Default implementation: iterates over nodes to check against node.
-        O(T(`self.nodes`))
+        Checks node membership in the graph
         &#34;&#34;&#34;
-        for n in self.nodes():
-            if n is node:
-                return True
-        return False
 
-    def has_arc(self, pro, epi):
+    def edges(self):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains arc
+        Returns an iterable over all edges (pairs of nodes) in the graph
 
-        Default implementation: routes to `self.arc`
-        O(T(`self.arc`))
+        For each edge, the pro is accessed by edge[0], the epi by edge[1], the value by edge[2]
         &#34;&#34;&#34;
-        return self.arc(pro, epi) is not None
+        raise NotImplementedError()
 
-    def has_arc_value(self, arc):
+    def has_edge(self, pro, epi):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains arc
-
-        Default implementation: iterates over arcs to check against arc.
-        O(T(`self.arcs`))
+        Checks edge membership in the graph
         &#34;&#34;&#34;
-        for e in self.arcs():
-            if e is arc:
-                return True
-        return False
-    
-    def pro(self, arc):
-        &#34;&#34;&#34;
-        Returns the pro of arc
-
-        Default implementation: iterates through pairs of nodes and checks if
-        arc matches the arc returned by `self.arc(n1, n2)`.
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n1 in self.nodes():
-            for n2 in self.nodes():
-                if self.arc(n1, n2) is arc:
-                    return n1
-
-    def epi(self, arc):
-        &#34;&#34;&#34;
-        Returns the epi of arc
-
-        Default implementation: iterates through pairs of nodes and checks if
-        arc matches the arc returned by `self.arc(n1, n2)`.
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n1 in self.nodes():
-            for n2 in self.nodes():
-                if self.arc(n1, n2) is arc:
-                    return n2
-    
-    def add(self, node, epi=None, arc=None):
-        &#34;&#34;&#34;
-        Add node and epi to the graph (caution, if already existing they will
-        be added as duplicates in certain implementations). If epi is specified,
-        an arc from node to epi will also be added with value arc
-
-        Default implementation: routes to `self.add_node` and `self.add_arc`
-        &#34;&#34;&#34;
-        if epi is not None:
-            if not self.has_node(node):
-                self.add_node(node)
-            if not self.has_node(epi):
-                self.add_node(epi)
-            if arc is None:
-                arc = True
-            self.add_arc(node, epi, arc)
-        else:
-            if not self.has_node(node):
-                self.add_node(node)
-
-    def add_epis(self, pro, epis, arcs=None):
-        &#34;&#34;&#34;
-        Function adding multiple epis to a single pro
-
-        `pro`: the pro, which will be added if it doesn&#39;t currently exist
-
-        `epis`: a generator yielding each epi to add to `pro`
-
-        `arcs`: a generator for each arc corresponding to each epi in `epis`
-
-        Default implementation: calls `self.add` for each pro, epi, arc`
-        &#34;&#34;&#34;
-        if arcs is None:
-            arcs = empty_generator()
-        for epi in epis:
-            self.add(pro, epi, next(arcs))
-
+        return pro in self.data and epi in self.data[pro]
 
     def add_node(self, node):
         &#34;&#34;&#34;
-        Add a node to the graph, initialized without any arcs
+        Add a node to this graph if it doesn&#39;t already exist
+        &#34;&#34;&#34;
+        if node not in self.data:
+            self.data[node] = {}
 
-        Default implementation: calls `self._nodes.add(node)`
+    def add_edge(self, pro, epi, edge=None):
         &#34;&#34;&#34;
-        self._nodes.add(node)
+        Add an edge between two existing nodes in the graph
 
-    def add_arc(self, pro, epi, arc=True):
-        &#34;&#34;&#34;
-        Add an arc from pro to epi to the graph. By default, unlabeled arcs are
-        valued True. Does not add pro or epi to the graph explicitly
+        If the edge already exists, overwrite it with a new edge value
 
-        Default implementation: calls `self._arcs.add((pro, epi, arc))`
+        Raises an exception if either node does not already exist in the graph
         &#34;&#34;&#34;
-        self._arcs.add((pro, epi, arc))
+        self.data[pro][epi] = edge
 
-    def epis(self, node):
+    def add(self, pro, epi=None, edge=None):
         &#34;&#34;&#34;
-        Return the epis that node has arcs to
+        add nodes pro and epi if they don&#39;t already exist, and set the edge between them
 
-        Default implementation: iterate through `self.nodes()` and check if
-        there is an arc from node to other_node using `self.arc(other_node, node)`
-        O(T(`self.nodes`) * T(`self.arc`))
+        if epi and edge are None, pro will be added to the collection of nodes
         &#34;&#34;&#34;
-        for n in self.nodes():
-            if self.arc(node, n) is not None:
-                yield n
+        self.add_node(pro)
+        if epi is not None:
+            if epi not in self.data:
+                self.add_node(epi)
+            self.add_edge(pro, epi, edge)
 
-    def pros(self, node):
-        &#34;&#34;&#34;
-        Return the pros that have arcs where node is the epi
-
-        Default implementation: iterate through `self.nodes()` and check if
-        there is an arc from node to other_node using `self.arc(node, other_node)`
-        O(T(`self.nodes`) * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n in self.nodes():
-            if self.arc(n, node) is not None:
-                yield n
-
-    def epis_number(self, node):
-        &#34;&#34;&#34;
-        Return the number of epis of node
-
-        Default implementations: iterate and count `self.epis(node)`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        i = 0
-        for epi in self.epis(node):
-            i += 1
-        return i
-
-    def pros_number(self, node):
-        &#34;&#34;&#34;
-        Return the number of pros of node
-
-        Default implementations: iterate and count `self.pros(node)`.
-        O(T(`self.pros`))
-        &#34;&#34;&#34;
-        i = 0
-        for pro in self.pros(node):
-            i += 1
-        return i
-
-    def remove(self, node, epi=None):
-        &#34;&#34;&#34;
-        With one argument, removes a node from the graph.
-
-        With two arguments, removes the arc from node to epi
-
-        Default implementation: routes to `self.remove_node` and `self.remove_arc`
-        &#34;&#34;&#34;
-        if epi is None:
-            return self.remove_node(node)
-        else:
-            return self.remove_arc(node, epi)
-    
-    def remove_node(self, node):
-        &#34;&#34;&#34;
-        Remove node from the graph
-        &#34;&#34;&#34;
-        self._nodes.pop(node)        
-
-    def remove_arc(self, pro, epi):
-        &#34;&#34;&#34;
-        Remove an arc from the graph by specifying its pro and epi
-        &#34;&#34;&#34;
-        self._arcs.remove(self.arc(pro, epi))
-
-    def replace_node(self, old, new):
-        &#34;&#34;&#34;
-        Replace the value of the node old with new, while preserving all
-        node arcs
-        &#34;&#34;&#34;
-        self.remove_node(old)
-        self.add_node(new)
-        for pro in self.pros(old):
-            self.replace_arc_epi(pro, old, new)
-        for epi in self.epis(old):
-            self.replace_arc_pro(old, epi, new)
-
-    def replace_arc(self, pro, epi, new):
-        &#34;&#34;&#34;
-        Replace the value of the arc specified by pro and epi with new
-        &#34;&#34;&#34;
-        self.remove_arc(pro, epi)
-        self.add_arc(pro, epi, new)
-
-    def replace_arc_pro(self, pro, epi, new_pro):
-        &#34;&#34;&#34;
-        Change the epi of the arc specified by pro and epi to new_epi
-        &#34;&#34;&#34;
-        arc = self.arc(pro, epi)
-        self.remove_arc(pro, epi)
-        self.add_arc(new_pro, epi, arc)
-
-    def replace_arc_epi(self, pro, epi, new_epi):
-        &#34;&#34;&#34;
-        Change the pro of the arc specified by pro and epi to new_epi
-        &#34;&#34;&#34;
-        arc = self.arc(pro, epi)
-        self.remove_arc(pro, epi)
-        self.add_arc(pro, new_epi, arc)
-
-    def traverse(self, frontier, start=None):
-        &#34;&#34;&#34;
-        Traverses the graph starting at `start` and yields each visited node,
-        including `start`
-
-        Node expansion is determined by the arcs in this graph, namely the 
-        `.epis` method
-
-        Expansion order and stop conditions are determined by `frontier`,
-        which should be a `Frontier` Tree or Sequence
-        &#34;&#34;&#34;
-        if start is not None:
-            frontier.add(start)
-        while not frontier.complete():
-            new = frontier.pop()
-            yield new
-            for epi in self.epis(new):
-                frontier.add(epi)
-
-    def search(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def traverse_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def search_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-    
-    def __eq__(self, other):
-        &#34;&#34;&#34;
-        Checks set equality between this graph and graph other
-        &#34;&#34;&#34;
-        arcs = set(self.arcs())
-        nodes = set(self.nodes())
-        other_arcs = set(other.arcs())
-        other_nodes = set(other.nodes())
-        return arcs == other_arcs and nodes == other_nodes</code></pre>
+    </code></pre>
 </details>
 </section>
 <section>
@@ -516,1296 +101,196 @@ class Graph(ABC):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="standard.graph.graph.Graph"><code class="flex name class">
+<dt id="standard.graph.Graph.Graph"><code class="flex name class">
 <span>class <span class="ident">Graph</span></span>
 </code></dt>
 <dd>
-<section class="desc"><p>General graph structure</p>
-<h2 id="guidelines">Guidelines:</h2>
-<ul>
-<li>nodes and arcs are assumed to be sets without duplicates</li>
-</ul>
-<h2 id="methods-summary">Methods summary:</h2>
-<h3 id="graph-level-properties">Graph-level properties:</h3>
-<ul>
-<li><code>nodes()</code>: iterate over nodes</li>
-<li><code>arcs()</code>: iterate over arcs</li>
-<li><code>has(node, epi=None)</code>: membership of node or arc by pro &amp; epi</li>
-<li><code>has_node(node)</code>: node membership</li>
-<li><code>has_arc(pro, epi)</code>: arc membership by pro &amp; epi</li>
-<li><code>has_arc_value(arc)</code>: arc membership by arc value</li>
-<li><code>nodes_number()</code>: count of nodes</li>
-<li><code>arcs_number()</code>: count of arcs</li>
-</ul>
-<h3 id="construction">Construction:</h3>
-<ul>
-<li><code>add(node, epi=None, arc=None)</code>: add node, or (pro, epi, arc)</li>
-<li><code>add_node(node)</code>: add node</li>
-<li><code>add_arc(pro, epi, arc=True)</code>: add arc</li>
-</ul>
-<h3 id="destruction">Destruction:</h3>
-<ul>
-<li><code>remove(node, epi=None)</code>: remove node, or arc by pro &amp; epi</li>
-<li><code>remove_node(node)</code>: remove node</li>
-<li><code>remove_arc(pro, epi)</code>: remove arc by pro and epi</li>
-</ul>
-<h3 id="mutation">Mutation:</h3>
-<ul>
-<li><code>replace_node(old, new)</code>: replace a node while preserving its arcs</li>
-<li><code>replace_arc(pro, epi, new)</code>: replace an arc by its node endpoints</li>
-<li><code>replace_arc_pro(pro, epi, new_pro)</code>: change the pro of an arc</li>
-<li><code>replace_arc_epi(pro, epi, new_epi)</code>: change the epi of an arc</li>
-</ul>
-<h3 id="properties-for-finding-nodes">Properties for finding nodes:</h3>
-<ul>
-<li><code>epis(node)</code>: iterate over epis of a node</li>
-<li><code>pros(node)</code>: iterate over pros of a node</li>
-<li><code>pro(arc)</code>: returns the pro of an arc</li>
-<li><code>epi(arc)</code>: returns the epi of an arc</li>
-<li><code>epis_number(node)</code>: returns a count of a node's epis</li>
-<li><code>pros_number(node)</code>: returns a count of a nodes's pros</li>
-</ul>
-<h3 id="properties-for-finding-arcs">Properties for finding arcs:</h3>
-<ul>
-<li><code>arc(pro, epi)</code>: returns the arc from pro to epi</li>
-<li><code>arcs_out(node)</code>: iterate over the arcs the node is the pro of</li>
-<li><code>arcs_in(node)</code>: iterate over the arcs the node is an epi of</li>
-</ul>
-<h3 id="graph-navigation">Graph navigation:</h3>
-<ul>
-<li><code>traverse(frontier, start)</code>: traversal that yields visited nodes</li>
-<li><code>search(frontier, start)</code>: search that returns a solution Sequence</li>
-<li><code>explore(frontier, start)</code>: search that yields multiple solutions</li>
-<li><code>traverse_reverse(frontier, start)</code></li>
-<li><code>search_reverse(frontier, start)</code></li>
-<li><code>explore_reverse(frontier, start)</code></li>
-</ul>
-<h2 id="implementation-patterns">Implementation patterns:</h2>
-<h3 id="node-based">Node-based:</h3>
-<ol>
-<li>
-<p>Implement <code>nodes</code> to iterate (use an iterable or a generator
-implementation) over nodes. Alternatively, assign <code>self._nodes</code> to a
-collection to hold nodes</p>
-</li>
-<li>
-<p>Implement <code>add_node(node)</code> and <code>add_arc(arc)</code> (alternatively,
-if you assign <code>self._nodes</code> to a collection that implements
-<code>.add(e)</code> and <code>.pop(e)</code> to add/remove element e, you may skip
-this step)</p>
-</li>
-<li>
-<p>Implement <code>arc(pro, epi)</code> to return the arc from pro to epi, or None
-if none exists. Return True for label-less arcs.</p>
-</li>
-<li>
-<p>If you want to be able to remove things from the graph, implement
-<code>remove_node</code> and <code>remove_arc</code></p>
-</li>
-<li>
-<p>If you want to improve the efficiency of other methods, you
-can re-implement them. Especially, the default implementations of
-the following methods may be inefficient, although they will work
-if the above 3 steps have been followed:</p>
-<ul>
-<li><code>epis</code></li>
-<li><code>pros</code></li>
-<li><code>pro</code></li>
-<li><code>epi</code></li>
-<li><code>arcs</code></li>
-</ul>
-</li>
-</ol>
-<h3 id="arc-based">Arc-based:</h3>
-<ol>
-<li>lorem ipsum</li>
-</ol>
-<h3 id="_1"></h3></section>
+<section class="desc"><p>General directed graph representation</p>
+<p>Standard edge notation order: pro, epi, edge</p>
+<p><code>data</code>: dict(pro: object, dict(epi: object, edge: object))</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">class Graph(ABC):
+<pre><code class="python">class Graph:
     &#34;&#34;&#34;
-    General graph structure
+    General directed graph representation
 
-    ## Guidelines:
-
-    - nodes and arcs are assumed to be sets without duplicates
-
-    ## Methods summary:
-
-    ### Graph-level properties:
-
-    - `nodes()`: iterate over nodes
-    - `arcs()`: iterate over arcs
-    - `has(node, epi=None)`: membership of node or arc by pro &amp; epi
-    - `has_node(node)`: node membership
-    - `has_arc(pro, epi)`: arc membership by pro &amp; epi
-    - `has_arc_value(arc)`: arc membership by arc value
-    - `nodes_number()`: count of nodes
-    - `arcs_number()`: count of arcs
-    
-    ### Construction:
-
-    - `add(node, epi=None, arc=None)`: add node, or (pro, epi, arc)
-    - `add_node(node)`: add node
-    - `add_arc(pro, epi, arc=True)`: add arc
-
-    ### Destruction:
-
-    - `remove(node, epi=None)`: remove node, or arc by pro &amp; epi
-    - `remove_node(node)`: remove node
-    - `remove_arc(pro, epi)`: remove arc by pro and epi
-
-    ### Mutation:
-
-    - `replace_node(old, new)`: replace a node while preserving its arcs
-    - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
-    - `replace_arc_pro(pro, epi, new_pro)`: change the pro of an arc
-    - `replace_arc_epi(pro, epi, new_epi)`: change the epi of an arc
-
-    ### Properties for finding nodes:
-
-    - `epis(node)`: iterate over epis of a node
-    - `pros(node)`: iterate over pros of a node
-    - `pro(arc)`: returns the pro of an arc
-    - `epi(arc)`: returns the epi of an arc
-    - `epis_number(node)`: returns a count of a node&#39;s epis
-    - `pros_number(node)`: returns a count of a nodes&#39;s pros
-
-    ### Properties for finding arcs:
-
-    - `arc(pro, epi)`: returns the arc from pro to epi
-    - `arcs_out(node)`: iterate over the arcs the node is the pro of
-    - `arcs_in(node)`: iterate over the arcs the node is an epi of
-
-    ### Graph navigation:
-
-    - `traverse(frontier, start)`: traversal that yields visited nodes
-    - `search(frontier, start)`: search that returns a solution Sequence
-    - `explore(frontier, start)`: search that yields multiple solutions
-    - `traverse_reverse(frontier, start)`
-    - `search_reverse(frontier, start)`
-    - `explore_reverse(frontier, start)`
-
-    ## Implementation patterns:
-
-    ### Node-based:
-
-    1. Implement `nodes` to iterate (use an iterable or a generator
-    implementation) over nodes. Alternatively, assign `self._nodes` to a 
-    collection to hold nodes
-
-    2. Implement `add_node(node)` and `add_arc(arc)` (alternatively, 
-    if you assign `self._nodes` to a collection that implements 
-    `.add(e)` and `.pop(e)` to add/remove element e, you may skip
-    this step)
-
-    3. Implement `arc(pro, epi)` to return the arc from pro to epi, or None
-    if none exists. Return True for label-less arcs.
-
-    4. If you want to be able to remove things from the graph, implement
-    `remove_node` and `remove_arc`
-
-    4. If you want to improve the efficiency of other methods, you
-    can re-implement them. Especially, the default implementations of
-    the following methods may be inefficient, although they will work
-    if the above 3 steps have been followed:
-
-        - `epis`
-        - `pros`
-        - `pro`
-        - `epi`
-        - `arcs`
-
-    ### Arc-based:
-
-    1. lorem ipsum
-
-    ### 
+    Standard edge notation order: pro, epi, edge
     &#34;&#34;&#34;
 
-    @abstractmethod
     def __init__(self):
-        self._nodes = set()
-        self._arcs = set()
-        raise NotImplementedError(
-            &#34;Graph is abstract and cannot be initialized; \
-            use one of its implementations (or make your own!)&#34;)
+        &#34;&#34;&#34;
+        ```data```: dict(pro: object, dict(epi: object, edge: object)) 
+        &#34;&#34;&#34;
+        self.data = {}
 
     def nodes(self):
         &#34;&#34;&#34;
-        Iterates over all nodes in the graph
-
-        Default implementation: iterates over `self._nodes`. O(N)
+        Returns an iterable over all nodes in the graph
         &#34;&#34;&#34;
-        for node in self._nodes:
-            yield node
+        raise NotImplementedError()
 
-    def arcs(self):
-        &#34;&#34;&#34;
-        Iterates over all arcs in the graph
-
-        Guideline implementation: return tuples in form (pro, epi, arc_value)
-
-        Default implementation: iterates over every pair of nodes and checks
-        if there is an arc between them using `self.arc(n1, n2)`. 
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for pro in self.nodes():
-            for epi in self.nodes():
-                arc = self.arc(pro, epi)
-                if arc is not None:
-                    yield arc
-
-    def nodes_number(self):
-        &#34;&#34;&#34;
-        Returns the number of nodes in the graph
-
-        Default implementation: counts number of nodes O(N)
-        &#34;&#34;&#34;
-        i = 0
-        for node in self.nodes():
-            i += 1
-        return i
-
-    def arcs_number(self):
-        &#34;&#34;&#34;
-        Returns the number of arcs in the graph
-
-        Default implementation: counts the number of arcs O(A)
-        &#34;&#34;&#34;
-        i = 0
-        for arc in self.arcs():
-            i += 1
-        return i
-
-    def arcs_out(self, node):
-        &#34;&#34;&#34;
-        Iterates over the arcs that the node is a pro of
-
-        Default implementation: iterates over `self.epis()`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        for other in self.epis(node):
-            yield self.arc(node, other)
-
-    def arcs_in(self, node):
-        &#34;&#34;&#34;
-        Iterates over the arcs that the node is an epi of
-
-        Default implementation: iterates over `self.epis()`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        for other in self.pros(node):
-            yield self.arc(other, node)
-
-    def arc(self, pro, epi):
-        &#34;&#34;&#34;
-        Returns the arc from pro to epi, or None if none exists
-
-        Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
-        `(pro, epi)` if the arc is valueless
-
-        Default implementation: iterates over `self.arcs()` and returns an arc
-        where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
-        respectively. O(T(`self.pro`) * T(`self.epi`) * T(`self.arc`))
-        &#34;&#34;&#34;
-        for arc in self.arcs():
-            if self.pro(arc) is pro and self.epi(arc) is epi:
-                return arc
-
-    def has(self, node, epi=None):
-        &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains node
-
-        If epi is specified, instead returns whether an arc exists from pro to
-        epi
-
-        Default implementation: routes to either `self.has_node` or `self.arc`
-        &#34;&#34;&#34;
-        if epi is None:
-            return self.has_node(node)
-        else:
-            return self.arc(node, epi) is not None       
-    
     def has_node(self, node):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains node
-
-        Default implementation: iterates over nodes to check against node.
-        O(T(`self.nodes`))
+        Checks node membership in the graph
         &#34;&#34;&#34;
-        for n in self.nodes():
-            if n is node:
-                return True
-        return False
 
-    def has_arc(self, pro, epi):
+    def edges(self):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains arc
+        Returns an iterable over all edges (pairs of nodes) in the graph
 
-        Default implementation: routes to `self.arc`
-        O(T(`self.arc`))
+        For each edge, the pro is accessed by edge[0], the epi by edge[1], the value by edge[2]
         &#34;&#34;&#34;
-        return self.arc(pro, epi) is not None
+        raise NotImplementedError()
 
-    def has_arc_value(self, arc):
+    def has_edge(self, pro, epi):
         &#34;&#34;&#34;
-        Returns boolean indicating whether the graph contains arc
-
-        Default implementation: iterates over arcs to check against arc.
-        O(T(`self.arcs`))
+        Checks edge membership in the graph
         &#34;&#34;&#34;
-        for e in self.arcs():
-            if e is arc:
-                return True
-        return False
-    
-    def pro(self, arc):
-        &#34;&#34;&#34;
-        Returns the pro of arc
-
-        Default implementation: iterates through pairs of nodes and checks if
-        arc matches the arc returned by `self.arc(n1, n2)`.
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n1 in self.nodes():
-            for n2 in self.nodes():
-                if self.arc(n1, n2) is arc:
-                    return n1
-
-    def epi(self, arc):
-        &#34;&#34;&#34;
-        Returns the epi of arc
-
-        Default implementation: iterates through pairs of nodes and checks if
-        arc matches the arc returned by `self.arc(n1, n2)`.
-        O(N * N * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n1 in self.nodes():
-            for n2 in self.nodes():
-                if self.arc(n1, n2) is arc:
-                    return n2
-    
-    def add(self, node, epi=None, arc=None):
-        &#34;&#34;&#34;
-        Add node and epi to the graph (caution, if already existing they will
-        be added as duplicates in certain implementations). If epi is specified,
-        an arc from node to epi will also be added with value arc
-
-        Default implementation: routes to `self.add_node` and `self.add_arc`
-        &#34;&#34;&#34;
-        if epi is not None:
-            if not self.has_node(node):
-                self.add_node(node)
-            if not self.has_node(epi):
-                self.add_node(epi)
-            if arc is None:
-                arc = True
-            self.add_arc(node, epi, arc)
-        else:
-            if not self.has_node(node):
-                self.add_node(node)
-
-    def add_epis(self, pro, epis, arcs=None):
-        &#34;&#34;&#34;
-        Function adding multiple epis to a single pro
-
-        `pro`: the pro, which will be added if it doesn&#39;t currently exist
-
-        `epis`: a generator yielding each epi to add to `pro`
-
-        `arcs`: a generator for each arc corresponding to each epi in `epis`
-
-        Default implementation: calls `self.add` for each pro, epi, arc`
-        &#34;&#34;&#34;
-        if arcs is None:
-            arcs = empty_generator()
-        for epi in epis:
-            self.add(pro, epi, next(arcs))
-
+        return pro in self.data and epi in self.data[pro]
 
     def add_node(self, node):
         &#34;&#34;&#34;
-        Add a node to the graph, initialized without any arcs
+        Add a node to this graph if it doesn&#39;t already exist
+        &#34;&#34;&#34;
+        if node not in self.data:
+            self.data[node] = {}
 
-        Default implementation: calls `self._nodes.add(node)`
+    def add_edge(self, pro, epi, edge=None):
         &#34;&#34;&#34;
-        self._nodes.add(node)
+        Add an edge between two existing nodes in the graph
 
-    def add_arc(self, pro, epi, arc=True):
-        &#34;&#34;&#34;
-        Add an arc from pro to epi to the graph. By default, unlabeled arcs are
-        valued True. Does not add pro or epi to the graph explicitly
+        If the edge already exists, overwrite it with a new edge value
 
-        Default implementation: calls `self._arcs.add((pro, epi, arc))`
+        Raises an exception if either node does not already exist in the graph
         &#34;&#34;&#34;
-        self._arcs.add((pro, epi, arc))
+        self.data[pro][epi] = edge
 
-    def epis(self, node):
+    def add(self, pro, epi=None, edge=None):
         &#34;&#34;&#34;
-        Return the epis that node has arcs to
+        add nodes pro and epi if they don&#39;t already exist, and set the edge between them
 
-        Default implementation: iterate through `self.nodes()` and check if
-        there is an arc from node to other_node using `self.arc(other_node, node)`
-        O(T(`self.nodes`) * T(`self.arc`))
+        if epi and edge are None, pro will be added to the collection of nodes
         &#34;&#34;&#34;
-        for n in self.nodes():
-            if self.arc(node, n) is not None:
-                yield n
-
-    def pros(self, node):
-        &#34;&#34;&#34;
-        Return the pros that have arcs where node is the epi
-
-        Default implementation: iterate through `self.nodes()` and check if
-        there is an arc from node to other_node using `self.arc(node, other_node)`
-        O(T(`self.nodes`) * T(`self.arc`))
-        &#34;&#34;&#34;
-        for n in self.nodes():
-            if self.arc(n, node) is not None:
-                yield n
-
-    def epis_number(self, node):
-        &#34;&#34;&#34;
-        Return the number of epis of node
-
-        Default implementations: iterate and count `self.epis(node)`.
-        O(T(`self.epis`))
-        &#34;&#34;&#34;
-        i = 0
-        for epi in self.epis(node):
-            i += 1
-        return i
-
-    def pros_number(self, node):
-        &#34;&#34;&#34;
-        Return the number of pros of node
-
-        Default implementations: iterate and count `self.pros(node)`.
-        O(T(`self.pros`))
-        &#34;&#34;&#34;
-        i = 0
-        for pro in self.pros(node):
-            i += 1
-        return i
-
-    def remove(self, node, epi=None):
-        &#34;&#34;&#34;
-        With one argument, removes a node from the graph.
-
-        With two arguments, removes the arc from node to epi
-
-        Default implementation: routes to `self.remove_node` and `self.remove_arc`
-        &#34;&#34;&#34;
-        if epi is None:
-            return self.remove_node(node)
-        else:
-            return self.remove_arc(node, epi)
-    
-    def remove_node(self, node):
-        &#34;&#34;&#34;
-        Remove node from the graph
-        &#34;&#34;&#34;
-        self._nodes.pop(node)        
-
-    def remove_arc(self, pro, epi):
-        &#34;&#34;&#34;
-        Remove an arc from the graph by specifying its pro and epi
-        &#34;&#34;&#34;
-        self._arcs.remove(self.arc(pro, epi))
-
-    def replace_node(self, old, new):
-        &#34;&#34;&#34;
-        Replace the value of the node old with new, while preserving all
-        node arcs
-        &#34;&#34;&#34;
-        self.remove_node(old)
-        self.add_node(new)
-        for pro in self.pros(old):
-            self.replace_arc_epi(pro, old, new)
-        for epi in self.epis(old):
-            self.replace_arc_pro(old, epi, new)
-
-    def replace_arc(self, pro, epi, new):
-        &#34;&#34;&#34;
-        Replace the value of the arc specified by pro and epi with new
-        &#34;&#34;&#34;
-        self.remove_arc(pro, epi)
-        self.add_arc(pro, epi, new)
-
-    def replace_arc_pro(self, pro, epi, new_pro):
-        &#34;&#34;&#34;
-        Change the epi of the arc specified by pro and epi to new_epi
-        &#34;&#34;&#34;
-        arc = self.arc(pro, epi)
-        self.remove_arc(pro, epi)
-        self.add_arc(new_pro, epi, arc)
-
-    def replace_arc_epi(self, pro, epi, new_epi):
-        &#34;&#34;&#34;
-        Change the pro of the arc specified by pro and epi to new_epi
-        &#34;&#34;&#34;
-        arc = self.arc(pro, epi)
-        self.remove_arc(pro, epi)
-        self.add_arc(pro, new_epi, arc)
-
-    def traverse(self, frontier, start=None):
-        &#34;&#34;&#34;
-        Traverses the graph starting at `start` and yields each visited node,
-        including `start`
-
-        Node expansion is determined by the arcs in this graph, namely the 
-        `.epis` method
-
-        Expansion order and stop conditions are determined by `frontier`,
-        which should be a `Frontier` Tree or Sequence
-        &#34;&#34;&#34;
-        if start is not None:
-            frontier.add(start)
-        while not frontier.complete():
-            new = frontier.pop()
-            yield new
-            for epi in self.epis(new):
-                frontier.add(epi)
-
-    def search(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def traverse_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def search_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-
-    def explore_reverse(self, frontier, start):
-        &#34;&#34;&#34;
-        &#34;&#34;&#34;
-        pass
-    
-    def __eq__(self, other):
-        &#34;&#34;&#34;
-        Checks set equality between this graph and graph other
-        &#34;&#34;&#34;
-        arcs = set(self.arcs())
-        nodes = set(self.nodes())
-        other_arcs = set(other.arcs())
-        other_nodes = set(other.nodes())
-        return arcs == other_arcs and nodes == other_nodes</code></pre>
+        self.add_node(pro)
+        if epi is not None:
+            if epi not in self.data:
+                self.add_node(epi)
+            self.add_edge(pro, epi, edge)</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>abc.ABC</li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="standard.graph.dag.Dag" href="dag.html#standard.graph.dag.Dag">Dag</a></li>
-<li><a title="standard.graph.dictionary_graph.DictionaryGraph" href="dictionary_graph.html#standard.graph.dictionary_graph.DictionaryGraph">DictionaryGraph</a></li>
-<li><a title="standard.graph.pointer_graph.PointerGraph" href="pointer_graph.html#standard.graph.pointer_graph.PointerGraph">PointerGraph</a></li>
-</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="standard.graph.graph.Graph.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>self, node, epi=None, arc=None)</span>
+<dt id="standard.graph.Graph.Graph.add"><code class="name flex">
+<span>def <span class="ident">add</span></span>(<span>self, pro, epi=None, edge=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Add node and epi to the graph (caution, if already existing they will
-be added as duplicates in certain implementations). If epi is specified,
-an arc from node to epi will also be added with value arc</p>
-<p>Default implementation: routes to <code>self.add_node</code> and <code>self.add_arc</code></p></section>
+<section class="desc"><p>add nodes pro and epi if they don't already exist, and set the edge between them</p>
+<p>if epi and edge are None, pro will be added to the collection of nodes</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add(self, node, epi=None, arc=None):
+<pre><code class="python">def add(self, pro, epi=None, edge=None):
     &#34;&#34;&#34;
-    Add node and epi to the graph (caution, if already existing they will
-    be added as duplicates in certain implementations). If epi is specified,
-    an arc from node to epi will also be added with value arc
+    add nodes pro and epi if they don&#39;t already exist, and set the edge between them
 
-    Default implementation: routes to `self.add_node` and `self.add_arc`
+    if epi and edge are None, pro will be added to the collection of nodes
     &#34;&#34;&#34;
+    self.add_node(pro)
     if epi is not None:
-        if not self.has_node(node):
-            self.add_node(node)
-        if not self.has_node(epi):
+        if epi not in self.data:
             self.add_node(epi)
-        if arc is None:
-            arc = True
-        self.add_arc(node, epi, arc)
-    else:
-        if not self.has_node(node):
-            self.add_node(node)</code></pre>
+        self.add_edge(pro, epi, edge)</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.add_arc"><code class="name flex">
-<span>def <span class="ident">add_arc</span></span>(<span>self, pro, epi, arc=True)</span>
+<dt id="standard.graph.Graph.Graph.add_edge"><code class="name flex">
+<span>def <span class="ident">add_edge</span></span>(<span>self, pro, epi, edge=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Add an arc from pro to epi to the graph. By default, unlabeled arcs are
-valued True. Does not add pro or epi to the graph explicitly</p>
-<p>Default implementation: calls <code>self._arcs.add((pro, epi, arc))</code></p></section>
+<section class="desc"><p>Add an edge between two existing nodes in the graph</p>
+<p>If the edge already exists, overwrite it with a new edge value</p>
+<p>Raises an exception if either node does not already exist in the graph</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def add_arc(self, pro, epi, arc=True):
+<pre><code class="python">def add_edge(self, pro, epi, edge=None):
     &#34;&#34;&#34;
-    Add an arc from pro to epi to the graph. By default, unlabeled arcs are
-    valued True. Does not add pro or epi to the graph explicitly
+    Add an edge between two existing nodes in the graph
 
-    Default implementation: calls `self._arcs.add((pro, epi, arc))`
+    If the edge already exists, overwrite it with a new edge value
+
+    Raises an exception if either node does not already exist in the graph
     &#34;&#34;&#34;
-    self._arcs.add((pro, epi, arc))</code></pre>
+    self.data[pro][epi] = edge</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.add_epis"><code class="name flex">
-<span>def <span class="ident">add_epis</span></span>(<span>self, pro, epis, arcs=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Function adding multiple epis to a single pro</p>
-<p><code>pro</code>: the pro, which will be added if it doesn't currently exist</p>
-<p><code>epis</code>: a generator yielding each epi to add to <code>pro</code></p>
-<p><code>arcs</code>: a generator for each arc corresponding to each epi in <code>epis</code></p>
-<p>Default implementation: calls <code>self.add</code> for each pro, epi, arc`</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def add_epis(self, pro, epis, arcs=None):
-    &#34;&#34;&#34;
-    Function adding multiple epis to a single pro
-
-    `pro`: the pro, which will be added if it doesn&#39;t currently exist
-
-    `epis`: a generator yielding each epi to add to `pro`
-
-    `arcs`: a generator for each arc corresponding to each epi in `epis`
-
-    Default implementation: calls `self.add` for each pro, epi, arc`
-    &#34;&#34;&#34;
-    if arcs is None:
-        arcs = empty_generator()
-    for epi in epis:
-        self.add(pro, epi, next(arcs))</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.add_node"><code class="name flex">
+<dt id="standard.graph.Graph.Graph.add_node"><code class="name flex">
 <span>def <span class="ident">add_node</span></span>(<span>self, node)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Add a node to the graph, initialized without any arcs</p>
-<p>Default implementation: calls <code>self._nodes.add(node)</code></p></section>
+<section class="desc"><p>Add a node to this graph if it doesn't already exist</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def add_node(self, node):
     &#34;&#34;&#34;
-    Add a node to the graph, initialized without any arcs
-
-    Default implementation: calls `self._nodes.add(node)`
+    Add a node to this graph if it doesn&#39;t already exist
     &#34;&#34;&#34;
-    self._nodes.add(node)</code></pre>
+    if node not in self.data:
+        self.data[node] = {}</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.arc"><code class="name flex">
-<span>def <span class="ident">arc</span></span>(<span>self, pro, epi)</span>
+<dt id="standard.graph.Graph.Graph.edges"><code class="name flex">
+<span>def <span class="ident">edges</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns the arc from pro to epi, or None if none exists</p>
-<p>Guideline implementation: return a tuple <code>(pro, epi, arc_value)</code>, or
-<code>(pro, epi)</code> if the arc is valueless</p>
-<p>Default implementation: iterates over <code>self.arcs()</code> and returns an arc
-where <code>self.pro(arc)</code> and <code>self.epi(arc)</code> match pro and epi
-respectively. O(T(<code>self.pro</code>) * T(<code>self.epi</code>) * T(<code>self.arc</code>))</p></section>
+<section class="desc"><p>Returns an iterable over all edges (pairs of nodes) in the graph</p>
+<p>For each edge, the pro is accessed by edge[0], the epi by edge[1], the value by edge[2]</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def arc(self, pro, epi):
+<pre><code class="python">def edges(self):
     &#34;&#34;&#34;
-    Returns the arc from pro to epi, or None if none exists
+    Returns an iterable over all edges (pairs of nodes) in the graph
 
-    Guideline implementation: return a tuple `(pro, epi, arc_value)`, or
-    `(pro, epi)` if the arc is valueless
-
-    Default implementation: iterates over `self.arcs()` and returns an arc
-    where `self.pro(arc)` and `self.epi(arc)` match pro and epi 
-    respectively. O(T(`self.pro`) * T(`self.epi`) * T(`self.arc`))
+    For each edge, the pro is accessed by edge[0], the epi by edge[1], the value by edge[2]
     &#34;&#34;&#34;
-    for arc in self.arcs():
-        if self.pro(arc) is pro and self.epi(arc) is epi:
-            return arc</code></pre>
+    raise NotImplementedError()</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.arcs"><code class="name flex">
-<span>def <span class="ident">arcs</span></span>(<span>self)</span>
+<dt id="standard.graph.Graph.Graph.has_edge"><code class="name flex">
+<span>def <span class="ident">has_edge</span></span>(<span>self, pro, epi)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Iterates over all arcs in the graph</p>
-<p>Guideline implementation: return tuples in form (pro, epi, arc_value)</p>
-<p>Default implementation: iterates over every pair of nodes and checks
-if there is an arc between them using <code>self.arc(n1, n2)</code>.
-O(N * N * T(<code>self.arc</code>))</p></section>
+<section class="desc"><p>Checks edge membership in the graph</p></section>
 <details class="source">
 <summary>Source code</summary>
-<pre><code class="python">def arcs(self):
+<pre><code class="python">def has_edge(self, pro, epi):
     &#34;&#34;&#34;
-    Iterates over all arcs in the graph
-
-    Guideline implementation: return tuples in form (pro, epi, arc_value)
-
-    Default implementation: iterates over every pair of nodes and checks
-    if there is an arc between them using `self.arc(n1, n2)`. 
-    O(N * N * T(`self.arc`))
+    Checks edge membership in the graph
     &#34;&#34;&#34;
-    for pro in self.nodes():
-        for epi in self.nodes():
-            arc = self.arc(pro, epi)
-            if arc is not None:
-                yield arc</code></pre>
+    return pro in self.data and epi in self.data[pro]</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.arcs_in"><code class="name flex">
-<span>def <span class="ident">arcs_in</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Iterates over the arcs that the node is an epi of</p>
-<p>Default implementation: iterates over <code>self.epis()</code>.
-O(T(<code>self.epis</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def arcs_in(self, node):
-    &#34;&#34;&#34;
-    Iterates over the arcs that the node is an epi of
-
-    Default implementation: iterates over `self.epis()`.
-    O(T(`self.epis`))
-    &#34;&#34;&#34;
-    for other in self.pros(node):
-        yield self.arc(other, node)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.arcs_number"><code class="name flex">
-<span>def <span class="ident">arcs_number</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the number of arcs in the graph</p>
-<p>Default implementation: counts the number of arcs O(A)</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def arcs_number(self):
-    &#34;&#34;&#34;
-    Returns the number of arcs in the graph
-
-    Default implementation: counts the number of arcs O(A)
-    &#34;&#34;&#34;
-    i = 0
-    for arc in self.arcs():
-        i += 1
-    return i</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.arcs_out"><code class="name flex">
-<span>def <span class="ident">arcs_out</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Iterates over the arcs that the node is a pro of</p>
-<p>Default implementation: iterates over <code>self.epis()</code>.
-O(T(<code>self.epis</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def arcs_out(self, node):
-    &#34;&#34;&#34;
-    Iterates over the arcs that the node is a pro of
-
-    Default implementation: iterates over `self.epis()`.
-    O(T(`self.epis`))
-    &#34;&#34;&#34;
-    for other in self.epis(node):
-        yield self.arc(node, other)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.epi"><code class="name flex">
-<span>def <span class="ident">epi</span></span>(<span>self, arc)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the epi of arc</p>
-<p>Default implementation: iterates through pairs of nodes and checks if
-arc matches the arc returned by <code>self.arc(n1, n2)</code>.
-O(N * N * T(<code>self.arc</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def epi(self, arc):
-    &#34;&#34;&#34;
-    Returns the epi of arc
-
-    Default implementation: iterates through pairs of nodes and checks if
-    arc matches the arc returned by `self.arc(n1, n2)`.
-    O(N * N * T(`self.arc`))
-    &#34;&#34;&#34;
-    for n1 in self.nodes():
-        for n2 in self.nodes():
-            if self.arc(n1, n2) is arc:
-                return n2</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.epis"><code class="name flex">
-<span>def <span class="ident">epis</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Return the epis that node has arcs to</p>
-<p>Default implementation: iterate through <code>self.nodes()</code> and check if
-there is an arc from node to other_node using <code>self.arc(other_node, node)</code>
-O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def epis(self, node):
-    &#34;&#34;&#34;
-    Return the epis that node has arcs to
-
-    Default implementation: iterate through `self.nodes()` and check if
-    there is an arc from node to other_node using `self.arc(other_node, node)`
-    O(T(`self.nodes`) * T(`self.arc`))
-    &#34;&#34;&#34;
-    for n in self.nodes():
-        if self.arc(node, n) is not None:
-            yield n</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.epis_number"><code class="name flex">
-<span>def <span class="ident">epis_number</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Return the number of epis of node</p>
-<p>Default implementations: iterate and count <code>self.epis(node)</code>.
-O(T(<code>self.epis</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def epis_number(self, node):
-    &#34;&#34;&#34;
-    Return the number of epis of node
-
-    Default implementations: iterate and count `self.epis(node)`.
-    O(T(`self.epis`))
-    &#34;&#34;&#34;
-    i = 0
-    for epi in self.epis(node):
-        i += 1
-    return i</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.explore"><code class="name flex">
-<span>def <span class="ident">explore</span></span>(<span>self, frontier, start)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def explore(self, frontier, start):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.explore_reverse"><code class="name flex">
-<span>def <span class="ident">explore_reverse</span></span>(<span>self, frontier, start)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def explore_reverse(self, frontier, start):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.has"><code class="name flex">
-<span>def <span class="ident">has</span></span>(<span>self, node, epi=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns boolean indicating whether the graph contains node</p>
-<p>If epi is specified, instead returns whether an arc exists from pro to
-epi</p>
-<p>Default implementation: routes to either <code>self.has_node</code> or <code>self.arc</code></p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def has(self, node, epi=None):
-    &#34;&#34;&#34;
-    Returns boolean indicating whether the graph contains node
-
-    If epi is specified, instead returns whether an arc exists from pro to
-    epi
-
-    Default implementation: routes to either `self.has_node` or `self.arc`
-    &#34;&#34;&#34;
-    if epi is None:
-        return self.has_node(node)
-    else:
-        return self.arc(node, epi) is not None       </code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.has_arc"><code class="name flex">
-<span>def <span class="ident">has_arc</span></span>(<span>self, pro, epi)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns boolean indicating whether the graph contains arc</p>
-<p>Default implementation: routes to <code>self.arc</code>
-O(T(<code>self.arc</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def has_arc(self, pro, epi):
-    &#34;&#34;&#34;
-    Returns boolean indicating whether the graph contains arc
-
-    Default implementation: routes to `self.arc`
-    O(T(`self.arc`))
-    &#34;&#34;&#34;
-    return self.arc(pro, epi) is not None</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.has_arc_value"><code class="name flex">
-<span>def <span class="ident">has_arc_value</span></span>(<span>self, arc)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns boolean indicating whether the graph contains arc</p>
-<p>Default implementation: iterates over arcs to check against arc.
-O(T(<code>self.arcs</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def has_arc_value(self, arc):
-    &#34;&#34;&#34;
-    Returns boolean indicating whether the graph contains arc
-
-    Default implementation: iterates over arcs to check against arc.
-    O(T(`self.arcs`))
-    &#34;&#34;&#34;
-    for e in self.arcs():
-        if e is arc:
-            return True
-    return False</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.has_node"><code class="name flex">
+<dt id="standard.graph.Graph.Graph.has_node"><code class="name flex">
 <span>def <span class="ident">has_node</span></span>(<span>self, node)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Returns boolean indicating whether the graph contains node</p>
-<p>Default implementation: iterates over nodes to check against node.
-O(T(<code>self.nodes</code>))</p></section>
+<section class="desc"><p>Checks node membership in the graph</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def has_node(self, node):
     &#34;&#34;&#34;
-    Returns boolean indicating whether the graph contains node
-
-    Default implementation: iterates over nodes to check against node.
-    O(T(`self.nodes`))
-    &#34;&#34;&#34;
-    for n in self.nodes():
-        if n is node:
-            return True
-    return False</code></pre>
+    Checks node membership in the graph
+    &#34;&#34;&#34;</code></pre>
 </details>
 </dd>
-<dt id="standard.graph.graph.Graph.nodes"><code class="name flex">
+<dt id="standard.graph.Graph.Graph.nodes"><code class="name flex">
 <span>def <span class="ident">nodes</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Iterates over all nodes in the graph</p>
-<p>Default implementation: iterates over <code>self._nodes</code>. O(N)</p></section>
+<section class="desc"><p>Returns an iterable over all nodes in the graph</p></section>
 <details class="source">
 <summary>Source code</summary>
 <pre><code class="python">def nodes(self):
     &#34;&#34;&#34;
-    Iterates over all nodes in the graph
-
-    Default implementation: iterates over `self._nodes`. O(N)
+    Returns an iterable over all nodes in the graph
     &#34;&#34;&#34;
-    for node in self._nodes:
-        yield node</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.nodes_number"><code class="name flex">
-<span>def <span class="ident">nodes_number</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the number of nodes in the graph</p>
-<p>Default implementation: counts number of nodes O(N)</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def nodes_number(self):
-    &#34;&#34;&#34;
-    Returns the number of nodes in the graph
-
-    Default implementation: counts number of nodes O(N)
-    &#34;&#34;&#34;
-    i = 0
-    for node in self.nodes():
-        i += 1
-    return i</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.pro"><code class="name flex">
-<span>def <span class="ident">pro</span></span>(<span>self, arc)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Returns the pro of arc</p>
-<p>Default implementation: iterates through pairs of nodes and checks if
-arc matches the arc returned by <code>self.arc(n1, n2)</code>.
-O(N * N * T(<code>self.arc</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def pro(self, arc):
-    &#34;&#34;&#34;
-    Returns the pro of arc
-
-    Default implementation: iterates through pairs of nodes and checks if
-    arc matches the arc returned by `self.arc(n1, n2)`.
-    O(N * N * T(`self.arc`))
-    &#34;&#34;&#34;
-    for n1 in self.nodes():
-        for n2 in self.nodes():
-            if self.arc(n1, n2) is arc:
-                return n1</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.pros"><code class="name flex">
-<span>def <span class="ident">pros</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Return the pros that have arcs where node is the epi</p>
-<p>Default implementation: iterate through <code>self.nodes()</code> and check if
-there is an arc from node to other_node using <code>self.arc(node, other_node)</code>
-O(T(<code>self.nodes</code>) * T(<code>self.arc</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def pros(self, node):
-    &#34;&#34;&#34;
-    Return the pros that have arcs where node is the epi
-
-    Default implementation: iterate through `self.nodes()` and check if
-    there is an arc from node to other_node using `self.arc(node, other_node)`
-    O(T(`self.nodes`) * T(`self.arc`))
-    &#34;&#34;&#34;
-    for n in self.nodes():
-        if self.arc(n, node) is not None:
-            yield n</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.pros_number"><code class="name flex">
-<span>def <span class="ident">pros_number</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Return the number of pros of node</p>
-<p>Default implementations: iterate and count <code>self.pros(node)</code>.
-O(T(<code>self.pros</code>))</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def pros_number(self, node):
-    &#34;&#34;&#34;
-    Return the number of pros of node
-
-    Default implementations: iterate and count `self.pros(node)`.
-    O(T(`self.pros`))
-    &#34;&#34;&#34;
-    i = 0
-    for pro in self.pros(node):
-        i += 1
-    return i</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.remove"><code class="name flex">
-<span>def <span class="ident">remove</span></span>(<span>self, node, epi=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>With one argument, removes a node from the graph.</p>
-<p>With two arguments, removes the arc from node to epi</p>
-<p>Default implementation: routes to <code>self.remove_node</code> and <code>self.remove_arc</code></p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def remove(self, node, epi=None):
-    &#34;&#34;&#34;
-    With one argument, removes a node from the graph.
-
-    With two arguments, removes the arc from node to epi
-
-    Default implementation: routes to `self.remove_node` and `self.remove_arc`
-    &#34;&#34;&#34;
-    if epi is None:
-        return self.remove_node(node)
-    else:
-        return self.remove_arc(node, epi)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.remove_arc"><code class="name flex">
-<span>def <span class="ident">remove_arc</span></span>(<span>self, pro, epi)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Remove an arc from the graph by specifying its pro and epi</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def remove_arc(self, pro, epi):
-    &#34;&#34;&#34;
-    Remove an arc from the graph by specifying its pro and epi
-    &#34;&#34;&#34;
-    self._arcs.remove(self.arc(pro, epi))</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.remove_node"><code class="name flex">
-<span>def <span class="ident">remove_node</span></span>(<span>self, node)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Remove node from the graph</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def remove_node(self, node):
-    &#34;&#34;&#34;
-    Remove node from the graph
-    &#34;&#34;&#34;
-    self._nodes.pop(node)        </code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.replace_arc"><code class="name flex">
-<span>def <span class="ident">replace_arc</span></span>(<span>self, pro, epi, new)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Replace the value of the arc specified by pro and epi with new</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def replace_arc(self, pro, epi, new):
-    &#34;&#34;&#34;
-    Replace the value of the arc specified by pro and epi with new
-    &#34;&#34;&#34;
-    self.remove_arc(pro, epi)
-    self.add_arc(pro, epi, new)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.replace_arc_epi"><code class="name flex">
-<span>def <span class="ident">replace_arc_epi</span></span>(<span>self, pro, epi, new_epi)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Change the pro of the arc specified by pro and epi to new_epi</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def replace_arc_epi(self, pro, epi, new_epi):
-    &#34;&#34;&#34;
-    Change the pro of the arc specified by pro and epi to new_epi
-    &#34;&#34;&#34;
-    arc = self.arc(pro, epi)
-    self.remove_arc(pro, epi)
-    self.add_arc(pro, new_epi, arc)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.replace_arc_pro"><code class="name flex">
-<span>def <span class="ident">replace_arc_pro</span></span>(<span>self, pro, epi, new_pro)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Change the epi of the arc specified by pro and epi to new_epi</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def replace_arc_pro(self, pro, epi, new_pro):
-    &#34;&#34;&#34;
-    Change the epi of the arc specified by pro and epi to new_epi
-    &#34;&#34;&#34;
-    arc = self.arc(pro, epi)
-    self.remove_arc(pro, epi)
-    self.add_arc(new_pro, epi, arc)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.replace_node"><code class="name flex">
-<span>def <span class="ident">replace_node</span></span>(<span>self, old, new)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Replace the value of the node old with new, while preserving all
-node arcs</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def replace_node(self, old, new):
-    &#34;&#34;&#34;
-    Replace the value of the node old with new, while preserving all
-    node arcs
-    &#34;&#34;&#34;
-    self.remove_node(old)
-    self.add_node(new)
-    for pro in self.pros(old):
-        self.replace_arc_epi(pro, old, new)
-    for epi in self.epis(old):
-        self.replace_arc_pro(old, epi, new)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.search"><code class="name flex">
-<span>def <span class="ident">search</span></span>(<span>self, frontier, start)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def search(self, frontier, start):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.search_reverse"><code class="name flex">
-<span>def <span class="ident">search_reverse</span></span>(<span>self, frontier, start)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def search_reverse(self, frontier, start):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.traverse"><code class="name flex">
-<span>def <span class="ident">traverse</span></span>(<span>self, frontier, start=None)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Traverses the graph starting at <code>start</code> and yields each visited node,
-including <code>start</code></p>
-<p>Node expansion is determined by the arcs in this graph, namely the
-<code>.epis</code> method</p>
-<p>Expansion order and stop conditions are determined by <code>frontier</code>,
-which should be a <code>Frontier</code> Tree or Sequence</p></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def traverse(self, frontier, start=None):
-    &#34;&#34;&#34;
-    Traverses the graph starting at `start` and yields each visited node,
-    including `start`
-
-    Node expansion is determined by the arcs in this graph, namely the 
-    `.epis` method
-
-    Expansion order and stop conditions are determined by `frontier`,
-    which should be a `Frontier` Tree or Sequence
-    &#34;&#34;&#34;
-    if start is not None:
-        frontier.add(start)
-    while not frontier.complete():
-        new = frontier.pop()
-        yield new
-        for epi in self.epis(new):
-            frontier.add(epi)</code></pre>
-</details>
-</dd>
-<dt id="standard.graph.graph.Graph.traverse_reverse"><code class="name flex">
-<span>def <span class="ident">traverse_reverse</span></span>(<span>self, frontier, start)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>Source code</summary>
-<pre><code class="python">def traverse_reverse(self, frontier, start):
-    &#34;&#34;&#34;
-    &#34;&#34;&#34;
-    pass</code></pre>
+    raise NotImplementedError()</code></pre>
 </details>
 </dd>
 </dl>
@@ -1827,42 +312,15 @@ which should be a <code>Frontier</code> Tree or Sequence</p></section>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="standard.graph.graph.Graph" href="#standard.graph.graph.Graph">Graph</a></code></h4>
+<h4><code><a title="standard.graph.Graph.Graph" href="#standard.graph.Graph.Graph">Graph</a></code></h4>
 <ul class="two-column">
-<li><code><a title="standard.graph.graph.Graph.add" href="#standard.graph.graph.Graph.add">add</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.add_arc" href="#standard.graph.graph.Graph.add_arc">add_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.add_epis" href="#standard.graph.graph.Graph.add_epis">add_epis</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.add_node" href="#standard.graph.graph.Graph.add_node">add_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arc" href="#standard.graph.graph.Graph.arc">arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs" href="#standard.graph.graph.Graph.arcs">arcs</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_in" href="#standard.graph.graph.Graph.arcs_in">arcs_in</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_number" href="#standard.graph.graph.Graph.arcs_number">arcs_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.arcs_out" href="#standard.graph.graph.Graph.arcs_out">arcs_out</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epi" href="#standard.graph.graph.Graph.epi">epi</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epis" href="#standard.graph.graph.Graph.epis">epis</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.epis_number" href="#standard.graph.graph.Graph.epis_number">epis_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.explore" href="#standard.graph.graph.Graph.explore">explore</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.explore_reverse" href="#standard.graph.graph.Graph.explore_reverse">explore_reverse</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has" href="#standard.graph.graph.Graph.has">has</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has_arc" href="#standard.graph.graph.Graph.has_arc">has_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has_arc_value" href="#standard.graph.graph.Graph.has_arc_value">has_arc_value</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.has_node" href="#standard.graph.graph.Graph.has_node">has_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.nodes" href="#standard.graph.graph.Graph.nodes">nodes</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.nodes_number" href="#standard.graph.graph.Graph.nodes_number">nodes_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pro" href="#standard.graph.graph.Graph.pro">pro</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pros" href="#standard.graph.graph.Graph.pros">pros</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.pros_number" href="#standard.graph.graph.Graph.pros_number">pros_number</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove" href="#standard.graph.graph.Graph.remove">remove</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove_arc" href="#standard.graph.graph.Graph.remove_arc">remove_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.remove_node" href="#standard.graph.graph.Graph.remove_node">remove_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc" href="#standard.graph.graph.Graph.replace_arc">replace_arc</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc_epi" href="#standard.graph.graph.Graph.replace_arc_epi">replace_arc_epi</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_arc_pro" href="#standard.graph.graph.Graph.replace_arc_pro">replace_arc_pro</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.replace_node" href="#standard.graph.graph.Graph.replace_node">replace_node</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.search" href="#standard.graph.graph.Graph.search">search</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.search_reverse" href="#standard.graph.graph.Graph.search_reverse">search_reverse</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.traverse" href="#standard.graph.graph.Graph.traverse">traverse</a></code></li>
-<li><code><a title="standard.graph.graph.Graph.traverse_reverse" href="#standard.graph.graph.Graph.traverse_reverse">traverse_reverse</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.add" href="#standard.graph.Graph.Graph.add">add</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.add_edge" href="#standard.graph.Graph.Graph.add_edge">add_edge</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.add_node" href="#standard.graph.Graph.Graph.add_node">add_node</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.edges" href="#standard.graph.Graph.Graph.edges">edges</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.has_edge" href="#standard.graph.Graph.Graph.has_edge">has_edge</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.has_node" href="#standard.graph.Graph.Graph.has_node">has_node</a></code></li>
+<li><code><a title="standard.graph.Graph.Graph.nodes" href="#standard.graph.Graph.Graph.nodes">nodes</a></code></li>
 </ul>
 </li>
 </ul>
