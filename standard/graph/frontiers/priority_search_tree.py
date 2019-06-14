@@ -23,7 +23,7 @@ class PrioritySearchTree(BidictionaryTree, PriorityQueue, Searcher):
 
     def priority(self, node):
         parent = self.parent(node)
-        return self._priority_function(node, parent, self.arc(node, parent))
+        return self._priority_function(parent, node, self.arc(parent, node))
 
     def add(self, node, epi=None, arc=None):
         if epi is None:

@@ -1,6 +1,5 @@
 {
   "test/graph/frontiers/test_mem_queue.py": true,
-  "test/graph/frontiers/test_priority_search_tree.py::test_priority_queue": true,
   "test/graph/test_DictionaryGraph.py": true,
   "test/graph/test_dictionarygraph.py": true,
   "test/theoretical/test_pcfg.py::test_magic": true,

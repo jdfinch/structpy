@@ -23,10 +23,12 @@ def test_priority_queue():
     st.add('a', 'c', 0.4)
     assert st.pop() == 'b'
     st.add('b', 'd', 0.3)
-    assert st.pop() == 'd'
-    st.add('d', 'e', 0.1)
-    st.add('d', 'x', 0.4)
     assert st.pop() == 'c'
     st.add('c', 'd', 0.9)
     st.add('c', 'b', 0.2)
+    assert st.pop() == 'd'
+    st.add('d', 'e', 0.1)
+    st.add('d', 'x', 0.4)
+
+
     assert st.pop() == 'x'

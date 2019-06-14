@@ -28,6 +28,8 @@
   "test/graph/test_list_graph.py::test_constructor",
   "test/graph/test_list_graph.py::test_nodes",
   "test/graph/test_list_graph.py::test_nodes_bi",
+  "test/graph/test_list_tree.py::test_constructor",
+  "test/graph/test_list_tree.py::test_nodes",
   "test/graph/test_pointer_graph.py::test_constructor",
   "test/graph/test_pointer_graph.py::test_membership",
   "test/graph/test_pointer_graph.py::test_node_finding",
