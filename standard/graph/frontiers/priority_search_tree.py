@@ -31,16 +31,16 @@ class PrioritySearchTree(BidictionaryTree, PriorityQueue, Searcher):
             node = self._active
         priority = self._priority_function(node, epi, arc)
         priority = self._aggregation_function(self.priority(node), priority)
-        PriorityQueue.add(self, (priority, epi))
+        PriorityQueue.add(self, (priority, epi, node))
 
     def pop(self):
         try:
-            priority, node = PriorityQueue.pop(self)
+            priority, node, parent = PriorityQueue.pop(self)
             while node in self._nodes:
-                priority, node = PriorityQueue.pop(self)
+                priority, node, parent = PriorityQueue.pop(self)
         except IndexError:
             return
-        BidictionaryTree.add(self, self._active, node, priority)
+        BidictionaryTree.add(self, parent, node, priority)
         self._active = node
         if node is self._target:
             self._complete = True

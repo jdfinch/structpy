@@ -465,9 +465,10 @@ class Graph(ABC):
 
         `frontier`: a search tree frontier structure
         """
+        new = frontier.root() # assume root is already popped off
         while not frontier.complete():
-            new = frontier.pop()
             frontier.add_epis(new, self.epis(new), self.arcs_out(new))
+            new = frontier.pop()
         return frontier.result()
 
     def explore(self, frontier, start):
@@ -487,9 +488,10 @@ class Graph(ABC):
 
         `frontier`: a search tree frontier structure
         """
+        new = frontier.root
         while not frontier.complete():
-            new = frontier.pop()
             frontier.add_epis(new, self.pros(new), self.arcs_in(new))
+            new = frontier.pop()
         return frontier.result()
 
     def explore_reverse(self, frontier, start):
