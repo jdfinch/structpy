@@ -74,7 +74,7 @@ def test_completion_check():
     the = Node('the')
 
 
-    pt = LinkedTree()
+    pt = LinkedTree(s0)
     pt.add(s0,np1)
     pt.add(np1,det0)
     pt.add(det0,the)
@@ -91,7 +91,7 @@ def test_building_parse_tree_using_linked_tree():
     det0 = Node('DET0')
     the = Node('the')
 
-    pt = LinkedTree()
+    pt = LinkedTree(s0)
     pt.add(s0, np1)
     pt.add(np1, det0)
     pt.add(det0, the)
@@ -139,3 +139,87 @@ def test_building_parse_tree_using_linked_tree():
     assert [x.get_value() for x in pt.epis(parent)] == ['DET0','N2']
     assert pt.is_complete(parent,sm)
 
+def test_get_next():
+    sm = Pcfg.from_string(gramstring)
+
+    s0 = Node('S0')
+    np0 = Node('NP0')
+    np1 = Node('NP1')
+    det0 = Node('DET0')
+    the = Node('the')
+
+    pt = LinkedTree(s0)
+    pt.add(s0, np1)
+    pt.add(np1, det0)
+    pt.add(det0, the)
+
+    assert pt.next_child(np1, sm) == 'N'
+
+    n0 = Node('N0')
+    dog = Node('dog')
+
+    pt.add(np1, n0)
+    pt.add(n0, dog)
+
+    assert pt.next_child(s0, sm) == 'VP'
+
+    vp2 = Node('VP2')
+    v2 = Node('V2')
+    likes = Node('likes')
+
+    pt.add(s0,vp2)
+    pt.add(vp2,v2)
+    pt.add(v2,likes)
+
+    assert pt.next_child(vp2, sm) == 'NP'
+
+def test_get_next_from_parse_tree():
+    sm = Pcfg.from_string(gramstring)
+
+    s0 = Node('S0')
+    np0 = Node('NP0')
+    np1 = Node('NP1')
+    det0 = Node('DET0')
+    the = Node('the')
+
+    pt = LinkedTree(s0)
+    pt.add(s0, np1)
+    pt.add(np1, det0)
+    pt.add(det0, the)
+
+    assert pt.get_next(sm) == 'N'
+
+    n0 = Node('N0')
+    dog = Node('dog')
+
+    pt.add(np1, n0)
+    pt.add(n0, dog)
+
+    assert pt.get_next(sm) == 'VP'
+
+    vp2 = Node('VP2')
+    v2 = Node('V2')
+    likes = Node('likes')
+
+    pt.add(s0, vp2)
+    pt.add(vp2, v2)
+    pt.add(v2, likes)
+
+    assert pt.get_next(sm) == 'NP'
+
+    np1_2 = Node('NP1')
+    det0_2 = Node('DET0')
+    the_2 = Node('the')
+    n2 = Node('N2')
+    bone = Node('bone')
+
+    pt.add(vp2,np1_2)
+    pt.add(np1_2, det0_2)
+    pt.add(det0_2, the_2)
+
+    assert pt.get_next(sm) == 'N'
+
+    pt.add(np1_2, n2)
+    pt.add(n2, bone)
+
+    assert pt.get_next(sm) is None

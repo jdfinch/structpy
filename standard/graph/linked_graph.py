@@ -15,6 +15,9 @@ class Node:
     def __str__(self):
         return '(NODE) ' + str(self.get_value())
 
+    def __repr__(self):
+        return str(self)
+
 class LinkedGraph(DictionaryGraph):
     """
     Graph structure similar to DictionaryGraph that uses Node objects, not just strings
@@ -91,11 +94,16 @@ class LinkedGraph(DictionaryGraph):
             obtained = self.epis_number(node)
             required = pcfg.epis_number(node.get_value())
             if obtained == required:
+                for epi in self.epis(node):
+                    if not self.is_complete(epi, pcfg):
+                        return False
                 return True
             else:
                 return False
+        elif pcfg.node_type(node.get_value()) is NodeType.TERMINAL:
+            return True
 
-    def get_next(self, node, pcfg):
+    def next_child(self, node, pcfg):
         """
         Identifies what children are missing from the node according to the PCFG
 
@@ -103,12 +111,5 @@ class LinkedGraph(DictionaryGraph):
         :param pcfg: a PCFG object where the nodes are strings
         :return: the next child of the node; None if no children left
         """
-        if not self.has(node):
-            return
-        if pcfg.node_type(node.get_value()) is NodeType.AND:
-            obtained = self.epis_number(node)
-            required = pcfg.epis_number(node.get_value())
-            if obtained == required:
-                return None
-            else:
-                return list(pcfg.epis(node.get_value()))[obtained]
+        return list(pcfg.epis(node.get_value()))[self.epis_number(node)]
+
