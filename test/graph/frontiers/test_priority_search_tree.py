@@ -2,7 +2,6 @@ import pytest
 
 from standard.graph.frontiers import PrioritySearchTree
 from standard.graph import Graph
-from standard.graph.frontiers import SearchTree
 
 def priority_function(pro, epi, arc):
     if pro is None or arc is None:
@@ -77,5 +76,11 @@ def test_search():
     assert list(g.search(pst)) == ['a','c','d','x']
     pst = PrioritySearchTree('c', 'e', priority_function, aggregation_function)
     assert list(g.search(pst)) == ['c','d','e']
+
+def test_reverse_search():
+    pst = PrioritySearchTree('x', 'a', priority_function, aggregation_function)
+    assert list(g.search_reverse(pst)) == ['x','d','c','a']
+    pst = PrioritySearchTree('e', 'c', priority_function, aggregation_function)
+    assert list(g.search_reverse(pst)) == ['e','d','c']
 
 

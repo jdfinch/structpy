@@ -304,6 +304,7 @@ class Graph(ABC):
         if arcs is None:
             arcs = empty_generator()
         for epi in epis:
+            print('ADDING EPI', epi)
             self.add(pro, epi, next(arcs))
 
     def add_pros(self, pros, epi, arcs=None):
@@ -467,8 +468,19 @@ class Graph(ABC):
         """
         new = frontier.root() # assume root is already popped off
         while not frontier.complete():
+            print()
+            print('frontier')
+            print(new)
             frontier.add_epis(new, self.epis(new), self.arcs_out(new))
+            print(frontier)
+            print(frontier._nodes)
+            print('frontier')
             new = frontier.pop()
+
+        print(new)
+        print(frontier)
+        print(frontier._nodes)
+        print('frontier')
         return frontier.result()
 
     def explore(self, frontier, start):
@@ -488,10 +500,20 @@ class Graph(ABC):
 
         `frontier`: a search tree frontier structure
         """
-        new = frontier.root
+        new = frontier.root()
         while not frontier.complete():
+            print()
+            print('frontier')
+            print(new)
             frontier.add_epis(new, self.pros(new), self.arcs_in(new))
+            print(frontier)
+            print(frontier._nodes)
+            print('frontier')
             new = frontier.pop()
+        print(new)
+        print(frontier)
+        print(frontier._nodes)
+        print('frontier')
         return frontier.result()
 
     def explore_reverse(self, frontier, start):

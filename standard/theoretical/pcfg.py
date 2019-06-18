@@ -1,6 +1,7 @@
 
 from standard.graph.typed_node_graph import TypedNodeGraph
 from standard.graph.bidictionary_graph import BidictionaryGraph
+from standard.utilities.simple import empty_generator
 
 from enum import Enum
 
@@ -112,6 +113,9 @@ class Pcfg(TypedNodeGraph):
         self._reverse[epi].add(pro)
 
     def epis(self, node):
+        if self._nodes[node] is None:
+            return
+            yield
         for epi in self._nodes[node]:
             yield epi
 
@@ -136,6 +140,37 @@ class Pcfg(TypedNodeGraph):
             return self._nodes[pro].index(epi)
         elif self.node_type(pro) is NodeType.OR:
             return self._nodes[pro][epi]
+
+    def search_reverse(self, frontier):
+        new = frontier.root()
+        while not frontier.complete():
+            print()
+            print('frontier')
+            print(new)
+
+            pros = self.pros(new)
+            arcs_in = self.arcs_in(new)
+            if arcs_in is None:
+                arcs_in = empty_generator()
+            for pro in pros:
+                if self.node_type(pro) is NodeType.OR:
+                    frontier.add(new, pro, next(arcs_in))
+                elif self.node_type(pro) is NodeType.AND:
+                    if self._nodes[pro].index(new) == 0:
+                        frontier.add(new, pro, 1.0)
+                        next(arcs_in)
+
+            print(frontier)
+            print(frontier._nodes)
+            print('frontier')
+            new = frontier.pop()
+        print(new)
+        print(frontier)
+        print(frontier._nodes)
+        print('frontier')
+        return frontier.result()
+
+
 
     
     
