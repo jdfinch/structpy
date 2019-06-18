@@ -61,6 +61,7 @@ class NodeGraph(DictionaryGraph):
         if type(node) is not Node:
             node = Node(node)
         self._nodes[node] = {}
+        return node
 
     def add_arc(self, pro, epi, arc=True):
         if type(epi) is not Node:

@@ -24,3 +24,12 @@ class PcfgParseTree(NodeTree):
         if self.is_complete(parent,pcfg):
             return None, None
         return parent, self.next_child(parent, pcfg)
+
+    def add_branch(self, parent, branch):
+        epi = None
+        for node in branch:
+            pro = self.add_node(node)
+            if epi:
+                self.add(pro, epi)
+            epi = pro
+        self.add(parent, epi)

@@ -212,14 +212,7 @@ def test_parsing():
     pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
     assert list(sm.search_reverse(pst)) == ['dog','N0','N']
 
-    epi = None
-    for node in sm.search_reverse(pst):
-        if sm.node_type(node) is not NodeType.OR:
-            pro = Node(node)
-            if epi:
-                pt.add(pro,epi)
-            epi = pro
-    pt.add(parent,epi)
+    pt.add_branch(parent,sm.to_reverse_parse_path(sm.search_reverse(pst)))
 
     assert [x.get_value() for x in pt.epis(parent)] == ['DET0','N0']
     assert [x.get_value() for x in pt.epis(pt.get_node(parent,'N0'))] == ['dog']

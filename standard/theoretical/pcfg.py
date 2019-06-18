@@ -136,6 +136,10 @@ class Pcfg(TypedNodeGraph):
             new = frontier.pop()
         return frontier.result()
 
+    def to_reverse_parse_path(self, result):
+        return [node for node in result if self.node_type(node) is not NodeType.OR]
+
+
 
 
     
