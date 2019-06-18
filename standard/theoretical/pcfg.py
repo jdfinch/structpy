@@ -1,6 +1,5 @@
 
 from standard.graph.typed_node_graph import TypedNodeGraph
-from standard.graph.bidictionary_graph import BidictionaryGraph
 from standard.utilities.simple import empty_generator
 
 from enum import Enum
@@ -9,27 +8,6 @@ class NodeType(Enum):
     TERMINAL = 0
     AND = 1
     OR = 2
-
-class _Node:
-
-    def __init__(self, value=None):
-        if value is None:
-            self.node_type = NodeType.AND
-        if value.islower():
-            self.node_type = NodeType.TERMINAL
-        elif value.isupper():
-            self.node_type = NodeType.OR
-        self.value = value
-
-    def __eq__(self, other):
-        return self.__hash__() == other.__hash__()
-
-    def __hash__(self):
-        return self.value.__hash__()
-
-    def __str__(self):
-        return str(self.value) + ': ' + str(self.node_type)
-    
 
 class Pcfg(TypedNodeGraph):
 
@@ -144,10 +122,6 @@ class Pcfg(TypedNodeGraph):
     def search_reverse(self, frontier):
         new = frontier.root()
         while not frontier.complete():
-            print()
-            print('frontier')
-            print(new)
-
             pros = self.pros(new)
             arcs_in = self.arcs_in(new)
             if arcs_in is None:
@@ -159,15 +133,7 @@ class Pcfg(TypedNodeGraph):
                     if self._nodes[pro].index(new) == 0:
                         frontier.add(new, pro, 1.0)
                         next(arcs_in)
-
-            print(frontier)
-            print(frontier._nodes)
-            print('frontier')
             new = frontier.pop()
-        print(new)
-        print(frontier)
-        print(frontier._nodes)
-        print('frontier')
         return frontier.result()
 
 

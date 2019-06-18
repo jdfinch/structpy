@@ -42,10 +42,8 @@ class PrioritySearchTree(BidictionaryTree, PriorityQueue, Searcher):
             return
         BidictionaryTree.add(self, parent, node, priority)
         self._active = node
-        print('POPPING', node, self._target)
         if hash(node) == hash(self._target):
             self._complete = True
-            print(self._complete)
         return node
 
     def result(self):
