@@ -1,6 +1,7 @@
 from standard.theoretical.pcfg_parse_tree import PcfgParseTree
 from standard.graph.node_graph import Node
-from standard.theoretical import Pcfg
+from standard.theoretical.pcfg import Pcfg, NodeType
+from standard.graph.frontiers import PrioritySearchTree
 
 gramstring = '''\
 S -> NP VP 1.0
@@ -135,7 +136,9 @@ def test_get_next_from_parse_tree():
     pt.add(np1, det0)
     pt.add(det0, the)
 
-    assert pt.get_next(sm) == 'N'
+    parent,child = pt.get_next(sm)
+    assert parent.get_value() == 'NP1'
+    assert child == 'N'
 
     n0 = Node('N0')
     dog = Node('dog')
@@ -143,7 +146,9 @@ def test_get_next_from_parse_tree():
     pt.add(np1, n0)
     pt.add(n0, dog)
 
-    assert pt.get_next(sm) == 'VP'
+    parent, child = pt.get_next(sm)
+    assert parent.get_value() == 'S0'
+    assert child == 'VP'
 
     vp2 = Node('VP2')
     v2 = Node('V2')
@@ -153,7 +158,9 @@ def test_get_next_from_parse_tree():
     pt.add(vp2, v2)
     pt.add(v2, likes)
 
-    assert pt.get_next(sm) == 'NP'
+    parent, child = pt.get_next(sm)
+    assert parent.get_value() == 'VP2'
+    assert child == 'NP'
 
     np1_2 = Node('NP1')
     det0_2 = Node('DET0')
@@ -165,9 +172,55 @@ def test_get_next_from_parse_tree():
     pt.add(np1_2, det0_2)
     pt.add(det0_2, the_2)
 
-    assert pt.get_next(sm) == 'N'
+    parent, child = pt.get_next(sm)
+    assert parent.get_value() == 'NP1'
+    assert child == 'N'
 
     pt.add(np1_2, n2)
     pt.add(n2, bone)
 
-    assert pt.get_next(sm) is None
+    parent, child = pt.get_next(sm)
+    assert parent is None
+    assert child is None
+
+def priority_function(pro, epi, arc):
+    if pro is None or arc is None:
+        return 1
+    else:
+        return arc
+
+def aggregation_function(p1, p2):
+    return p1 * p2
+
+def test_parsing():
+    sm = Pcfg.from_string(gramstring)
+
+    s0 = Node('S0')
+    np0 = Node('NP0')
+    np1 = Node('NP1')
+    det0 = Node('DET0')
+    the = Node('the')
+
+    pt = PcfgParseTree(s0)
+    pt.add(s0, np1)
+    pt.add(np1, det0)
+    pt.add(det0, the)
+
+    parent,target = pt.get_next(sm)
+    source = 'dog'
+
+    pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
+    assert list(sm.search_reverse(pst)) == ['dog','N0','N']
+
+    epi = None
+    for node in sm.search_reverse(pst):
+        if sm.node_type(node) is not NodeType.OR:
+            pro = Node(node)
+            if epi:
+                pt.add(pro,epi)
+            epi = pro
+    pt.add(parent,epi)
+
+    assert [x.get_value() for x in pt.epis(parent)] == ['DET0','N0']
+    assert [x.get_value() for x in pt.epis(pt.get_node(parent,'N0'))] == ['dog']
+
