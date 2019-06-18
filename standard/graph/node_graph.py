@@ -18,7 +18,7 @@ class Node:
     def __repr__(self):
         return str(self)
 
-class LinkedGraph(DictionaryGraph):
+class NodeGraph(DictionaryGraph):
     """
     Graph structure similar to DictionaryGraph that uses Node objects, not just strings
     Allows for the same node string to appear multiple times in the graph

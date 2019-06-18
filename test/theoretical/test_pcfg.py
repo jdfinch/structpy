@@ -2,8 +2,8 @@ import pytest
 
 from standard.theoretical import Pcfg
 from standard.graph.frontiers import PrioritySearchTree
-from standard.graph.linked_tree import LinkedTree
-from standard.graph.linked_graph import Node
+from standard.graph.node_tree import NodeTree
+from standard.graph.node_graph import Node
 
 gramstring = '''\
 S -> NP VP 1.0
@@ -73,8 +73,7 @@ def test_completion_check():
     det0 = Node('DET0')
     the = Node('the')
 
-
-    pt = LinkedTree(s0)
+    pt = NodeTree(s0)
     pt.add(s0,np1)
     pt.add(np1,det0)
     pt.add(det0,the)
@@ -91,7 +90,7 @@ def test_building_parse_tree_using_linked_tree():
     det0 = Node('DET0')
     the = Node('the')
 
-    pt = LinkedTree(s0)
+    pt = NodeTree(s0)
     pt.add(s0, np1)
     pt.add(np1, det0)
     pt.add(det0, the)
@@ -148,7 +147,7 @@ def test_get_next():
     det0 = Node('DET0')
     the = Node('the')
 
-    pt = LinkedTree(s0)
+    pt = NodeTree(s0)
     pt.add(s0, np1)
     pt.add(np1, det0)
     pt.add(det0, the)
@@ -182,7 +181,7 @@ def test_get_next_from_parse_tree():
     det0 = Node('DET0')
     the = Node('the')
 
-    pt = LinkedTree(s0)
+    pt = NodeTree(s0)
     pt.add(s0, np1)
     pt.add(np1, det0)
     pt.add(det0, the)
