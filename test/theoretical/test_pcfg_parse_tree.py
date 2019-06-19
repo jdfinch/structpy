@@ -217,3 +217,60 @@ def test_parsing():
     assert [x.get_value() for x in pt.epis(parent)] == ['DET0','N0']
     assert [x.get_value() for x in pt.epis(pt.get_node(parent,'N0'))] == ['dog']
 
+    parent,target = pt.get_next(sm)
+    source = 'likes'
+
+    pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
+    assert list(sm.search_reverse(pst)) == ['likes','V2','V','VP2','VP']
+
+    pt.add_branch(parent,sm.to_reverse_parse_path(sm.search_reverse(pst)))
+
+    assert [x.get_value() for x in pt.epis(parent)] == ['NP1','VP2']
+    assert [x.get_value() for x in pt.epis(pt.get_node(parent,'VP2'))] == ['V2']
+
+    parent, target = pt.get_next(sm)
+    source = 'the'
+
+    pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
+    assert list(sm.search_reverse(pst)) == ['the','DET0','DET','NP1','NP']
+
+    pt.add_branch(parent, sm.to_reverse_parse_path(sm.search_reverse(pst)))
+
+    assert [x.get_value() for x in pt.epis(parent)] == ['V2', 'NP1']
+    assert [x.get_value() for x in pt.epis(pt.get_node(parent, 'NP1'))] == ['DET0']
+
+    parent, target = pt.get_next(sm)
+    source = 'bone'
+
+    pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
+    assert list(sm.search_reverse(pst)) == ['bone', 'N2', 'N']
+
+    pt.add_branch(parent, sm.to_reverse_parse_path(sm.search_reverse(pst)))
+
+    assert [x.get_value() for x in pt.epis(parent)] == ['DET0', 'N2']
+    assert [x.get_value() for x in pt.epis(pt.get_node(parent, 'N2'))] == ['bone']
+
+    parent, target = pt.get_next(sm)
+    assert parent is None
+    assert target is None
+
+def test_no_path_from_terminal():
+    sm = Pcfg.from_string(gramstring)
+
+    s0 = Node('S0')
+    np0 = Node('NP0')
+    np1 = Node('NP1')
+    det0 = Node('DET0')
+    the = Node('the')
+
+    pt = PcfgParseTree(s0)
+    pt.add(s0, np1)
+    pt.add(np1, det0)
+    pt.add(det0, the)
+
+    parent, target = pt.get_next(sm)
+    source = 'the'
+
+    pst = PrioritySearchTree(source, target, priority_function, aggregation_function)
+
+    assert list(sm.search_reverse(pst)) == []

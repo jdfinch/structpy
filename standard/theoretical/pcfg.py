@@ -121,7 +121,7 @@ class Pcfg(TypedNodeGraph):
 
     def search_reverse(self, frontier):
         new = frontier.root()
-        while not frontier.complete():
+        while not frontier.complete() and new is not None:
             pros = self.pros(new)
             arcs_in = self.arcs_in(new)
             if arcs_in is None:
@@ -134,6 +134,8 @@ class Pcfg(TypedNodeGraph):
                         frontier.add(new, pro, 1.0)
                         next(arcs_in)
             new = frontier.pop()
+        if new is None:
+            return []
         return frontier.result()
 
     def to_reverse_parse_path(self, result):
