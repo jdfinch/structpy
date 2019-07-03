@@ -11,3 +11,4 @@ class Tree(dag.Dag, PointTree):
 
     def traverse_reverse(self, start):
         return PointTree.traverse_reverse(self, start)
+
