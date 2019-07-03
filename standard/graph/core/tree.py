@@ -1,4 +1,4 @@
-import standard.graph.dag as dag
+import standard.graph.core.dag as dag
 from abc import ABC
 
 class Tree(dag.Dag, ABC):

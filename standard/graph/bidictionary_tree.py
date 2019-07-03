@@ -1,5 +1,5 @@
 from standard.graph.bidictionary_graph import BidictionaryGraph
-from standard.graph.tree import Tree
+from standard.graph.core.tree import Tree
 
 class BidictionaryTree(BidictionaryGraph, Tree):
 

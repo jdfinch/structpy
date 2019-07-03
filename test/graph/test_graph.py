@@ -52,7 +52,16 @@ def test_membership():
 def test_iteration_methods():
     """Test iteration (nodes, arcs)"""
     nodes = set('abcdef')
-    arcs = list(range(1, 7)) + [1, 2]
+    arcs = [
+        ('a', 'b', 1),
+        ('a', 'c', 2),
+        ('c', 'd', 3),
+        ('d', 'e', 4),
+        ('d', 'f', 2),
+        ('f', 'c', 1),
+        ('f', 'b', 6),
+        ('e', 'b', 5)
+    ]
     for node in g.nodes():
         nodes.remove(node)
     for arc in g.arcs():
@@ -73,15 +82,6 @@ def test_node_adjacency_iterators():
     assert len(nodes) == 0
     for node in g.pros('d'):
         assert node == 'c'
-
-def test_node_arc_adjacency():
-    """Test nodes adjacent to an arc (pro, epi)"""
-    assert g.pro(3) == 'c'
-    assert g.epi(3) == 'd'
-    assert g.pro(1) == 'a' or g.pro(1) == 'f'
-    assert g.epi(1) == 'b' or g.epi(1) == 'c'
-    assert g.pro(2) != 'e'
-    assert g.epi(2) != 'e'
 
 def test_arc_node_adjacency():
     """Test arcs adjacent to certain node(s) (arcs_in, arcs_out, arc)"""

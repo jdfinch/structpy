@@ -1,4 +1,4 @@
-from standard.graph.sequence import Sequence
+from standard.graph.core.sequence import Sequence
 
 class ArraySequence(Sequence, list):
     """

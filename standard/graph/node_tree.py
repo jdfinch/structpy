@@ -1,5 +1,5 @@
 from standard.graph.node_graph import NodeGraph
-from standard.graph.tree import Tree
+from standard.graph.core.tree import Tree
 
 class NodeTree(NodeGraph, Tree):
 

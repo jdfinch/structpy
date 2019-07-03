@@ -1,5 +1,5 @@
 from standard.graph.list_graph import ListGraph
-from standard.graph.tree import Tree
+from standard.graph.core.tree import Tree
 
 class ListTree(ListGraph, Tree):
 

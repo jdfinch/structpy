@@ -5,10 +5,10 @@ General Purpose Graph Framework
 """
 
 import standard.graph
-from standard.graph.graph import Graph
-from standard.graph.dag import Dag
-from standard.graph.tree import Tree
-from standard.graph.sequence import Sequence
+from standard.graph.core.graph import Graph
+from standard.graph.core.dag import Dag
+from standard.graph.core.tree import Tree
+from standard.graph.core.sequence import Sequence
 from standard.graph.dictionary_graph import DictionaryGraph
 from standard.graph.list_graph import ListGraph
 from standard.graph.list_tree import ListTree

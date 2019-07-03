@@ -1,4 +1,4 @@
-import standard.graph.tree as tree
+import standard.graph.core.tree as tree
 
 class Sequence(tree.Tree):
     """

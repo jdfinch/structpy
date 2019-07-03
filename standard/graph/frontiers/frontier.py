@@ -1,4 +1,4 @@
-from standard.graph.tree import Tree
+from standard.graph.core.tree import Tree
 from abc import ABC, abstractmethod
 
 class Frontier(Tree, ABC):

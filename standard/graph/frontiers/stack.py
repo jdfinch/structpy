@@ -1,4 +1,3 @@
-from standard.graph.sequence import Sequence
 from standard.graph.frontiers.frontier_sequence import FrontierSequence
 from standard.utilities.simple import rfind
 

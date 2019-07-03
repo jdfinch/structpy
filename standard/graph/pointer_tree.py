@@ -1,5 +1,5 @@
 from standard.graph.pointer_graph import PointerGraph
-from standard.graph.tree import Tree
+from standard.graph.core.tree import Tree
 
 
 class PointerTree(PointerGraph, Tree):

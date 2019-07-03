@@ -1,4 +1,4 @@
-from standard.graph.graph import Graph
+from standard.graph.core.graph import Graph
 
 class PointerGraph(Graph):
 
