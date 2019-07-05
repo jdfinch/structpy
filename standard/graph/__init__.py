@@ -19,3 +19,5 @@ from standard.graph.frontiers.stack import Stack
 from standard.graph.pointer_graph import PointerGraph
 from standard.graph.pointer_tree import PointerTree
 from standard.graph.array_sequence import ArraySequence
+
+from standard.graph.flex.flex_graph import FlexGraph
