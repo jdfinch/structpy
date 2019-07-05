@@ -2,8 +2,10 @@ import pytest
 
 from standard.graph import FlexGraph
 
+
 types = [FlexGraph]
 
+@pytest.mark.parametrize('cls', types)
 def test_constructor(cls):
     mpg = cls()
 
@@ -66,6 +68,8 @@ def test_arcs(mpg):
         (3, 6)
     }
     for arc in mpg.arcs():
+        if len(arc) == 3:
+            arc = (arc[0], arc[1])
         arcs.remove(arc)
     assert len(arcs) == 0
 

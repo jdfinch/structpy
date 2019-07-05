@@ -223,7 +223,7 @@ class PointGraph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, epi, new)
 
-    def replace_arc_pro(self, pro, epi, new_pro):
+    def replace_pro(self, pro, epi, new_pro):
         """
         Change the epi of the arc specified by pro and epi to new_epi
         """
@@ -231,7 +231,7 @@ class PointGraph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(new_pro, epi, arc)
 
-    def replace_arc_epi(self, pro, epi, new_epi):
+    def replace_epi(self, pro, epi, new_epi):
         """
         Change the pro of the arc specified by pro and epi to new_epi
         """

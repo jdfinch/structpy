@@ -31,8 +31,10 @@ def membership(s, n):
                 x += 1
 
 h('Membership tests:')
+p('set length 3:', membership(set_n(3), 1000000))
 p('set length 10:', membership(set_n(10), 1000000))
 p('set length 100:', membership(set_n(100), 100000))
+p('list length 3:', membership(list_n(3), 1000000))
 p('list length 10:', membership(list_n(10), 1000000))
 p('list length 100:', membership(list_n(100), 100000))
 
