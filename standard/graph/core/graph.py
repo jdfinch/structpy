@@ -19,7 +19,6 @@ class Graph(PointGraph, ABC):
     - `has(node, epi=None)`: membership of node or arc by pro & epi
     - `has_node(node)`: node membership
     - `has_arc(pro, epi)`: arc membership by pro & epi
-    - `has_arc_value(arc)`: arc membership by arc value
     - `nodes_number()`: count of nodes
     - `arcs_number()`: count of arcs
     
@@ -39,8 +38,8 @@ class Graph(PointGraph, ABC):
 
     - `replace_node(old, new)`: replace a node while preserving its arcs
     - `replace_arc(pro, epi, new)`: replace an arc by its node endpoints
-    - `replace_arc_pro(pro, epi, new_pro)`: change the pro of an arc
-    - `replace_arc_epi(pro, epi, new_epi)`: change the epi of an arc
+    - `replace_pro(pro, epi, new_pro)`: change the pro of an arc
+    - `replace_epi(pro, epi, new_epi)`: change the epi of an arc
 
     ### Properties for finding nodes:
 
@@ -245,12 +244,12 @@ class Graph(PointGraph, ABC):
         Replace the value of the node old with new, while preserving all
         node arcs
         """
-        self.remove_node(old)
         self.add_node(new)
-        for pro in self.pros(old):
-            self.replace_arc_epi(pro, old, new)
-        for epi in self.epis(old):
-            self.replace_arc_pro(old, epi, new)
+        for pro in list(self.pros(old)):
+            self.replace_epi(pro, old, new)
+        for epi in list(self.epis(old)):
+            self.replace_pro(old, epi, new)
+        self.remove_node(old)
 
     def traverse(self, frontier, start=None):
         """
