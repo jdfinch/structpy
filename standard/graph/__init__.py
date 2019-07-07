@@ -21,3 +21,5 @@ from standard.graph.pointer_tree import PointerTree
 from standard.graph.array_sequence import ArraySequence
 
 from standard.graph.flex.flex_graph import FlexGraph
+
+from standard.graph.lower import ListSequence
