@@ -4,7 +4,7 @@ import math
 
 f = open('speed.txt', 'w')
 
-def t(func):
+def run_time_tests(func):
     def inner(*args, **kwargs):
         times = []
         for n in range(5):
@@ -23,14 +23,14 @@ def t(func):
             + ', '.join(kwarg_strs) + '): ' + str(avg)
     return inner
 
-def h(text):
+def print_text_after_newline(text):
     print()
     print(text)
 
-def r(text):
+def print_text_before_newline(text):
     print(text)
     print()
 
-def p(*args, sep=' ', end='\n'):
+def write_args_to_file(*args, sep=' ', end='\n'):
     print(*args, sep=sep, end=end)
     f.write(' '.join([str(a) for a in args]) + '\n')
