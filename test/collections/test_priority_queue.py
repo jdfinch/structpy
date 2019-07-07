@@ -1,6 +1,6 @@
 import pytest
 
-from standard.collections import PriorityQueue
+from structpy.collections import PriorityQueue
 
 def test_priority_queue():
     pq = PriorityQueue((3, 1, 2))

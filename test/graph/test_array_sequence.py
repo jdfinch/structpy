@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import ArraySequence
+from structpy.graph import ArraySequence
 
 def test_constructor():
     s = ArraySequence((0,))

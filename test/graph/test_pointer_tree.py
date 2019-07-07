@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import PointerTree
+from structpy.graph import PointerTree
 
 """
      0

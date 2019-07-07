@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import BidictionaryGraph
+from structpy.graph import BidictionaryGraph
 
 def test_constructor():
     bg = BidictionaryGraph()

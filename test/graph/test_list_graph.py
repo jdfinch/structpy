@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import ListGraph
+from structpy.graph import ListGraph
 
 def test_constructor():
     lg = ListGraph()

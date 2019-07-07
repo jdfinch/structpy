@@ -1,7 +1,7 @@
-from standard.theoretical.pcfg_parse_tree import PcfgParseTree
-from standard.graph.node_graph import Node
-from standard.theoretical.pcfg import Pcfg, NodeType
-from standard.graph.frontiers import PrioritySearchTree
+from structpy.theoretical.pcfg_parse_tree import PcfgParseTree
+from structpy.graph.node_graph import Node
+from structpy.theoretical.pcfg import Pcfg, NodeType
+from structpy.graph.frontiers import PrioritySearchTree
 
 gramstring = '''\
 S -> NP VP 1.0

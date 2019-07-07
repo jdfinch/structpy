@@ -1,8 +1,8 @@
 import pytest
 
-from standard.graph.frontiers import MemQueue
-from standard.graph.frontiers import MemStack
-from standard.graph.frontiers import Queue, Stack
+from structpy.graph.frontiers import MemQueue
+from structpy.graph.frontiers import MemStack
+from structpy.graph.frontiers import Queue, Stack
 
 def test_constructor():
     mq = MemQueue([1, 2, 3])

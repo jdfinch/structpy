@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import ListTree
+from structpy.graph import ListTree
 
 def test_constructor():
     lt = ListTree('a')

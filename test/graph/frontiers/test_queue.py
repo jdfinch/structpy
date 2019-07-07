@@ -1,4 +1,4 @@
-from standard.graph.frontiers import Queue
+from structpy.graph.frontiers import Queue
 
 def test_constructor():
     l = Queue((4, 7, 1, 5))

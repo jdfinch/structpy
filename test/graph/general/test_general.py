@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import FlexGraph
+from structpy.graph import FlexGraph
 
 
 types = [FlexGraph]

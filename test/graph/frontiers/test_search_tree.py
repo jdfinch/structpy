@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph.frontiers import SearchTree
+from structpy.graph.frontiers import SearchTree
 
 def test_constructor():
     st = SearchTree('a', 'f')

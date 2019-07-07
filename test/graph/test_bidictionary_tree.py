@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import BidictionaryTree
+from structpy.graph import BidictionaryTree
 
 def test_constructor():
     bt = BidictionaryTree('a')

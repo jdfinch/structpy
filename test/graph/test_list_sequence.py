@@ -1,5 +1,5 @@
 import pytest
-from standard.graph import ListSequence
+from structpy.graph import ListSequence
 
 def test_basic():
     ls = ListSequence([0, 1])

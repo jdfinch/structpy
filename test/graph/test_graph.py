@@ -1,7 +1,7 @@
 import pytest
 
-from standard.graph import Graph
-from standard.graph.frontiers import SearchTree
+from structpy.graph import Graph
+from structpy.graph.frontiers import SearchTree
 
 g = None
 
@@ -101,7 +101,7 @@ def test_arc_node_adjacency():
     assert len(list(g.arcs_out('b'))) == 0
 
 def test_traversal():
-    from standard.graph.frontiers import MemQueue as BreadthFirst, \
+    from structpy.graph.frontiers import MemQueue as BreadthFirst, \
         MemStack as DepthFirst
     def before(ls, a, b):
         i = ls.index(a)

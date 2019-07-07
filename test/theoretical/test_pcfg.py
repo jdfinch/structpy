@@ -1,7 +1,7 @@
 import pytest
 
-from standard.theoretical import Pcfg
-from standard.graph.frontiers import PrioritySearchTree
+from structpy.theoretical import Pcfg
+from structpy.graph.frontiers import PrioritySearchTree
 
 gramstring = '''\
 S -> NP VP 1.0

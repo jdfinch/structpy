@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import DictionaryGraph
+from structpy.graph import DictionaryGraph
 
 def test_constructor():
     dg = DictionaryGraph()

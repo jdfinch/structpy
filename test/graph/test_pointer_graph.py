@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph import PointerGraph
+from structpy.graph import PointerGraph
 
 def test_constructor():
     pg = PointerGraph()

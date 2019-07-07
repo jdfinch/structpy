@@ -1,3 +1,3 @@
-from standard.graph import Tree
+from structpy.graph import Tree
 import pytest
 

@@ -1,6 +1,6 @@
 import pytest
 
-from standard.graph.frontiers import QueueTree, Queue
+from structpy.graph.frontiers import QueueTree, Queue
 
 def test_constructor():
     qt = QueueTree('a')

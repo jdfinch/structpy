@@ -1,2 +1,2 @@
-from standard.graph import Sequence
+from structpy.graph import Sequence
 import pytest

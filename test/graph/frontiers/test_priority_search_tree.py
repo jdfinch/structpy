@@ -1,7 +1,7 @@
 import pytest
 
-from standard.graph.frontiers import PrioritySearchTree
-from standard.graph import Graph
+from structpy.graph.frontiers import PrioritySearchTree
+from structpy.graph import Graph
 
 def priority_function(pro, epi, arc):
     if pro is None or arc is None:

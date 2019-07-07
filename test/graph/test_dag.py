@@ -1,3 +1,3 @@
-from standard.graph import Dag
+from structpy.graph import Dag
 import pytest
 

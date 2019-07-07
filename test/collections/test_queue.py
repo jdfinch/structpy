@@ -1,4 +1,4 @@
-from standard.collections import Queue
+from structpy.collections import Queue
 from collections import deque
 
 def test_constructor():

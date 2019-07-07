@@ -1,4 +1,4 @@
-from standard.graph.frontiers import Stack
+from structpy.graph.frontiers import Stack
 
 def test_constructor():
     l = Stack((4, 7, 1, 5))
