@@ -17,7 +17,7 @@ harry potter (character)
 	is a
 		character
 	friends
-		harry potter
+		ron weasley
 		
 ron weasley
 	is a
