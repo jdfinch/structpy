@@ -3,7 +3,7 @@ import pytest
 from structpy.graph import FlexGraph, MapPointGraph
 
 
-types = [FlexGraph, MapPointGraph]
+types = [MapPointGraph, FlexGraph]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):

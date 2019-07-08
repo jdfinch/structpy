@@ -216,26 +216,31 @@ class PointGraph(ABC):
         """
         self._arcs.remove((pro, epi))
 
-    def replace_arc(self, pro, epi, new):
+    def replace_node(self, old, new):
         """
-        Replace the value of the arc specified by pro and epi with new
+        Replace the value of the node old with new, while preserving all
+        node arcs
         """
-        self.remove_arc(pro, epi)
-        self.add_arc(pro, epi, new)
+        self.add_node(new)
+        for pro in list(self.pros(old)):
+            self.replace_epi(pro, old, new)
+        for epi in list(self.epis(old)):
+            self.replace_pro(old, epi, new)
+        self.remove_node(old)
 
     def replace_pro(self, pro, epi, new_pro):
         """
         Change the epi of the arc specified by pro and epi to new_epi
         """
         self.remove_arc(pro, epi)
-        self.add_arc(new_pro, epi, arc)
+        self.add_arc(new_pro, epi)
 
     def replace_epi(self, pro, epi, new_epi):
         """
         Change the pro of the arc specified by pro and epi to new_epi
         """
         self.remove_arc(pro, epi)
-        self.add_arc(pro, new_epi, arc)
+        self.add_arc(pro, new_epi)
 
     def __eq__(self, other):
         """

@@ -239,17 +239,12 @@ class Graph(PointGraph, ABC):
         """
         self._arcs.add((pro, epi, arc))
 
-    def replace_node(self, old, new):
+    def replace_arc(self, pro, epi, new):
         """
-        Replace the value of the node old with new, while preserving all
-        node arcs
+        Replace the value of the arc specified by pro and epi with new
         """
-        self.add_node(new)
-        for pro in list(self.pros(old)):
-            self.replace_epi(pro, old, new)
-        for epi in list(self.epis(old)):
-            self.replace_pro(old, epi, new)
-        self.remove_node(old)
+        self.remove_arc(pro, epi)
+        self.add_arc(pro, epi, new)
 
     def traverse(self, frontier, start=None):
         """

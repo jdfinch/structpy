@@ -17,7 +17,7 @@ class MapPointGraph(PointGraph):
                 yield (node, epi)
 
     def has_arc(self, pro, epi):
-        return epi in self._nodes[pro]
+        return pro in self._nodes and epi in self._nodes[pro]
 
     def nodes_number(self):
         return len(self._nodes)
@@ -42,7 +42,7 @@ class MapPointGraph(PointGraph):
         del self._nodes[node]
         for pro in self._reverse[node]:
             self._nodes[pro].remove(node)
-        del self._nodes[node]
+        del self._reverse[node]
 
     def remove_arc(self, pro, epi):
         self._nodes[pro].remove(epi)
