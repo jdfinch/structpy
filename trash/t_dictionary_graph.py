@@ -1,4 +1,4 @@
-from standard.graph import DictionaryGraph
+from structpy.graph import DictionaryGraph
 
 def test_init():
     g = DictionaryGraph()

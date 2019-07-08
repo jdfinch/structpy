@@ -56,4 +56,4 @@ class PointSequence(PointTree):
         """
         if start is None:
             start = self.top()
-        return tree.Tree.traverse_reverse(self, start)
+        tree.Tree.traverse_reverse(self, start)

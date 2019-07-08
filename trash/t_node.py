@@ -1,4 +1,4 @@
-from standard.graph import Node
+from structpy.graph import Node
 
 def test_init():
     n = Node(10)

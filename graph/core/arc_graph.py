@@ -1,4 +1,4 @@
-from standard.graph.core.graph import Graph
+from structpy.graph.core.graph import Graph
 
 class ArcGraph(Graph):
 

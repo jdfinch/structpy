@@ -1,5 +1,5 @@
 
-from standard.graph.frontiers.frontier import Frontier
+from structpy.graph.frontiers.frontier import Frontier
 
 class FrontierTree(Frontier):
     """
