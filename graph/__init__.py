@@ -21,5 +21,4 @@ from structpy.graph.pointer_tree import PointerTree
 from structpy.graph.array_sequence import ArraySequence
 
 from structpy.graph.flex.flex_graph import FlexGraph
-from structpy.graph.flex.flex_graph_root import FlexGraphRoot
 from structpy.graph.point_map.map_point_graph import MapPointGraph
