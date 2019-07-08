@@ -1,9 +1,10 @@
-import pytest
+import pytest, os
 
 from structpy.graph import FlexGraph, MapPointGraph
 
 
-types = [MapPointGraph, FlexGraph]
+#types = [MapPointGraph, FlexGraph]
+types = [FlexGraph]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):
@@ -140,7 +141,40 @@ def test_replace_pro_epi(mpg):
     assert mpg.has_arc(2, 6)
 
 @pytest.fixture(params=types)
-def test_load_save(request):
+def g(request):
     cls = request.param
-    g = cls().load('example')
+    g = cls().load(os.path.join(os.getcwd(),'test','graph','general','example'))
+    return g
+
+def test_load(g):
     assert g.has_node('sport')
+    assert g.has_node('soccer')
+    assert g.has_node('harry potter (character)')
+    assert g.has_node('ron weasley')
+    assert g.has_node('character')
+
+    assert g.has_arc('soccer','sport')
+    assert g.has_arc('soccer','activity')
+    assert g.has_arc('ron weasley', 'harry potter (character)')
+    assert g.has_arc('character', 'ron weasley')
+
+    assert list(g.epis('harry potter (character)')) == ['character','ron weasley']
+    assert list(g.epis('sport')) == ['soccer','basketball']
+    assert list(g.arcs_out('harry potter (character)')) == ['is a','friends']
+
+def test_save(g):
+    file = os.path.join(os.getcwd(),
+                        'test',
+                        'graph',
+                        'general',
+                        'saved_example')
+    g.save(file)
+    nodes = list(g.nodes())
+    for node in nodes:
+        g.remove(node)
+    assert len(list(g.nodes())) == 0
+    assert len(list(g.arcs())) == 0
+    g.load(file)
+    assert len(list(g.nodes())) > 0
+    assert len(list(g.arcs())) > 0
+    test_load(g)

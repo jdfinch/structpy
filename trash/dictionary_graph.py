@@ -1,4 +1,4 @@
-from collections import deque
+from collection import deque
 
 class DictionaryGraph:
     """

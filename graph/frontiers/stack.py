@@ -3,7 +3,7 @@ from structpy.utilities.simple import rfind
 
 class Stack(FrontierSequence):
     """
-    Needs to be updated to inherit from collections.Stack
+    Needs to be updated to inherit from collection.Stack
     """
 
     def __init__(self, iterable=None):

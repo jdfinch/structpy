@@ -1,5 +1,5 @@
 from Standard.Graph.Node import Node
-from collections import deque
+from collection import deque
 
 class acyclic:
 

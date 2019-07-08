@@ -1,6 +1,6 @@
 from structpy.graph.bidictionary_tree import BidictionaryTree
 from structpy.graph.bidictionary_graph import BidictionaryGraph
-from structpy.collections import Queue
+from structpy.collection import Queue
 from structpy.graph.frontiers import Frontier
 
 def _one_and_many(one, many):
