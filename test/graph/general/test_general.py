@@ -138,3 +138,9 @@ def test_replace_pro_epi(mpg):
     mpg.replace_epi(2, 3, 6)
     assert not mpg.has_arc(2, 3)
     assert mpg.has_arc(2, 6)
+
+@pytest.fixture(params=types)
+def test_load_save(request):
+    cls = request.param
+    g = cls().load('example')
+    assert g.has_node('sport')

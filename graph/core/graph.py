@@ -306,3 +306,37 @@ class Graph(PointGraph, ABC):
         """
         pass
 
+    def save(self, filename):
+        pass
+
+    def load(self, filename, node_fun=None, arc_fun=None):
+        if filename[-4:] != '.lgt':
+            filename += '.lgt'
+        with open(filename) as file:
+            pro = None
+            arc = None
+            for line in file:
+                tabs = 0
+                while line[tabs] != '\t':
+                    tabs += 1
+                if len(line) == 0 or line[tabs] == '#':
+                    continue
+                if line[tabs] == '\\' and len(line) > 1 \
+                        and line[tabs + 1] == '#':
+                    line = line[:tabs] + line[tabs + 1:]
+                if tabs == 0:
+                    pro = line.strip()
+                elif tabs == 1:
+                    arc = line.strip()
+                elif tabs == 2:
+                    epi = line.strip()
+                    if node_fun is not None:
+                        pro = node_fun(pro)
+                        epi = node_fun(epi)
+                    if arc_fun is not None:
+                        arc = arc_fun(arc)
+                    self.add(pro, epi, arc)
+        return self
+
+
+
