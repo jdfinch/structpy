@@ -8,6 +8,7 @@ class PointSequence(PointTree):
 
     def __init__(self, iterable=None):
         set_root = False
+        self._nodes = set()
         for e in iterable:
             if not set_root:
                 self._root = e
