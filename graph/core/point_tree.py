@@ -57,9 +57,17 @@ class PointTree(PointForest):
         p.reverse()
         return sequence_cls(p)
 
+    def traverse(self, start):
+        """
+        Traverse the tree, starting at node `start`
+        """
+        yield start
+        for epi in self.epis(start):
+            yield from self.traverse(epi)
+
     def traverse_reverse(self, start):
         """
-        Traverse the sequence in reverse, starting at node `start`
+        Traverse the tree in reverse, starting at node `start`
         """
         yield start
         while start is not self.root():
