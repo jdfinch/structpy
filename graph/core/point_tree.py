@@ -25,6 +25,27 @@ class PointTree(PointForest):
         for pro in self.pros(node):
             return pro
 
+    def remove_node(self, node):
+        """
+        Remove a node without deleting all of its descendents
+        :param node: node to remove
+        :return: None
+        """
+        parent = self.parent(node)
+        for epi in list(self.epis(node)):
+            self.replace_pro(node, epi, parent)
+            self.remove_node(node)
+
+    def delete(self, node):
+        """
+        Remove a node and all its descendents
+        :param node: node to remove
+        :return: None
+        """
+        #problems: need to implement traverse
+        for node in list(self.traverse(node)):
+            self.remove_node(node)
+
     def path(self, node, sequence_cls=None):
         """
         Returns a Sequence starting at the root of the tree and ending
