@@ -6,8 +6,4 @@ class FlexTree(FlexForest, Tree):
 
     def __init__(self, root):
         FlexForest.__init__(self)
-        self._root = root
-        self.add_node(self._root)
-
-    def root(self):
-        return self._root
+        Tree.__init__(self,root)

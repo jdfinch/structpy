@@ -7,22 +7,22 @@ types = [FlexTree]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):
-    mpg = cls(0)
-    assert mpg.root() == 0
+    ft = cls(0)
+    assert ft.root() == 0
 
 @pytest.mark.parametrize('cls', types)
 def test_add_membership(cls):
-    mpg = cls(0)
-    assert mpg.root() == 0
-    mpg.add(0, 1)
-    assert mpg.has_node(0)
-    assert mpg.has_arc(0, 1)
-    mpg.add(0, 2)
-    assert mpg.has_node(2)
-    assert mpg.has_arc(0, 2)
-    mpg.add(1, 3)
-    assert mpg.has_node(3)
-    assert mpg.has_arc(1, 3)
+    ft = cls(0)
+    assert ft.root() == 0
+    ft.add(0, 1)
+    assert ft.has_node(0)
+    assert ft.has_arc(0, 1)
+    ft.add(0, 2)
+    assert ft.has_node(2)
+    assert ft.has_arc(0, 2)
+    ft.add(1, 3)
+    assert ft.has_node(3)
+    assert ft.has_arc(1, 3)
 
 @pytest.fixture(params=types)
 def mpg(request):
@@ -102,9 +102,3 @@ def test_replace_node(mpg):
     assert not mpg.has_node(2)
     assert mpg.has_arc(0, 9)
     assert mpg.has_arc(9, 6)
-
-@pytest.fixture(params=types)
-def test_load_save(request):
-    cls = request.param
-    g = cls().load('example')
-    assert g.has_node('sport')
