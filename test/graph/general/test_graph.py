@@ -141,7 +141,7 @@ def test_replace_pro_epi(mpg):
 @pytest.fixture(params=[FlexGraph])
 def g(request):
     cls = request.param
-    g = cls().load(os.path.join(os.getcwd(),'test','graph','general','example'))
+    g = cls().load(os.path.join(os.getcwd(),'structpy','test','graph','general','example'))
     return g
 
 def test_load(g):
@@ -162,6 +162,7 @@ def test_load(g):
 
 def test_save(g):
     file = os.path.join(os.getcwd(),
+                        'structpy',
                         'test',
                         'graph',
                         'general',
@@ -180,7 +181,7 @@ def test_save(g):
 @pytest.fixture(params=[MapPointGraph])
 def mpg_example(request):
     cls = request.param
-    mpg_example = cls().load(os.path.join(os.getcwd(),'test','graph','general','example_mpg'))
+    mpg_example = cls().load(os.path.join(os.getcwd(),'structpy','test','graph','general','example_mpg'))
     return mpg_example
 
 def test_load_mpg(mpg_example):
@@ -200,6 +201,7 @@ def test_load_mpg(mpg_example):
 
 def test_save(mpg_example):
     file = os.path.join(os.getcwd(),
+                        'structpy',
                         'test',
                         'graph',
                         'general',
