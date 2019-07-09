@@ -1,6 +1,6 @@
 from structpy.graph.frontiers.frontier_sequence import FrontierSequence
 from structpy.utilities.simple import rfind
-import structpy.collections as stdcol
+import structpy.collection as stdcol
 
 class Queue(FrontierSequence, stdcol.Queue):
     """

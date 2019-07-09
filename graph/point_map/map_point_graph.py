@@ -69,3 +69,40 @@ class MapPointGraph(PointGraph):
             return len(self._reverse[node])
         else:
             return 0
+
+    def load(self, filename, node_fun=None):
+        if filename[-4:] != '.lgt':
+            filename += '.lgt'
+
+        with open(filename) as file:
+            pro = None
+            for line in file:
+                if line.strip() != "":
+                    tabs = 0
+                    while line[tabs] == '\t':
+                        tabs += 1
+                    if len(line) == 0 or line[tabs] == '#':
+                        continue
+                    if line[tabs] == '\\' and len(line) > 1 \
+                            and line[tabs + 1] == '#':
+                        line = line[:tabs] + line[tabs + 1:]
+                    if tabs == 0:
+                        pro = line.strip()
+                    elif tabs == 1:
+                        epi = line.strip()
+                        if node_fun is not None:
+                            pro = node_fun(pro)
+                            epi = node_fun(epi)
+                        self.add(pro, epi)
+        return self
+
+    def save(self, filename, node_fun=None):
+        if filename[-4:] != '.lgt':
+            filename += '.lgt'
+        with open(filename, 'w') as file:
+            for pro in self.nodes():
+                if self.epis_number(pro) > 0:
+                    file.write(pro + '\n')
+                    for epi in self.epis(pro):
+                        file.write('\t' + epi + '\n')
+                    file.write('\n')

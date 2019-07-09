@@ -1,6 +1,6 @@
 from structpy.graph.frontiers.searcher import Searcher
 from structpy.graph.bidictionary_tree import BidictionaryTree
-from structpy.collections.priority_queue import PriorityQueue
+from structpy.collection.priority_queue import PriorityQueue
 from structpy.graph.array_sequence import ArraySequence
 
 class PrioritySearchTree(BidictionaryTree, PriorityQueue, Searcher):
