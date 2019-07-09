@@ -2,9 +2,7 @@ import pytest, os
 
 from structpy.graph import FlexGraph, MapPointGraph
 
-
-#types = [MapPointGraph, FlexGraph]
-types = [FlexGraph]
+types=[MapPointGraph,FlexGraph]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):
@@ -140,7 +138,7 @@ def test_replace_pro_epi(mpg):
     assert not mpg.has_arc(2, 3)
     assert mpg.has_arc(2, 6)
 
-@pytest.fixture(params=types)
+@pytest.fixture(params=[FlexGraph])
 def g(request):
     cls = request.param
     g = cls().load(os.path.join(os.getcwd(),'test','graph','general','example'))
@@ -178,3 +176,41 @@ def test_save(g):
     assert len(list(g.nodes())) > 0
     assert len(list(g.arcs())) > 0
     test_load(g)
+
+@pytest.fixture(params=[MapPointGraph])
+def mpg_example(request):
+    cls = request.param
+    mpg_example = cls().load(os.path.join(os.getcwd(),'test','graph','general','example_mpg'))
+    return mpg_example
+
+def test_load_mpg(mpg_example):
+    assert sorted(list(mpg_example.nodes())) == \
+           sorted(['colors','blue','green','red','names','jane','bob','professions','programmer'])
+
+    for node in mpg_example.nodes():
+        if node == 'colors':
+            assert sorted(list(mpg_example.epis(node))) == sorted(['blue','red','green'])
+        elif node == 'professions':
+            assert list(mpg_example.epis(node)) == ['programmer']
+        elif node == 'names':
+            assert sorted(list(mpg_example.epis(node))) == sorted(['jane','bob'])
+
+    assert mpg_example.has_arc('colors','red')
+    assert mpg_example.has_arc('names', 'bob')
+
+def test_save(mpg_example):
+    file = os.path.join(os.getcwd(),
+                        'test',
+                        'graph',
+                        'general',
+                        'saved_example_mpg')
+    mpg_example.save(file)
+    nodes = list(mpg_example.nodes())
+    for node in nodes:
+        mpg_example.remove(node)
+    assert len(list(mpg_example.nodes())) == 0
+    assert len(list(mpg_example.arcs())) == 0
+    mpg_example.load(file)
+    assert len(list(mpg_example.nodes())) > 0
+    assert len(list(mpg_example.arcs())) > 0
+    test_load_mpg(mpg_example)
