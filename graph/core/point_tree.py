@@ -57,9 +57,14 @@ class PointTree(PointForest):
         p.reverse()
         return sequence_cls(p)
 
+    def postorder_traverse(self, start):
+        for epi in self.epis(start):
+            yield from self.postorder_traverse(epi)
+        yield start
+
     def traverse(self, start):
         """
-        Traverse the tree, starting at node `start`
+        (Preorder) Traverse the tree, starting at node `start`
         """
         yield start
         for epi in self.epis(start):

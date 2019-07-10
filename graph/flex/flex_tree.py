@@ -8,8 +8,18 @@ class FlexTree(FlexForest, Tree):
         FlexForest.__init__(self)
         Tree.__init__(self,root)
 
-    def postorder_traversal(self, start):
-        pass
+    def postorder_traverse(self, start):
+        """
+        Postorder traversal
+        :param start: node to start at
+        :return: generator of nodes in traversal
+        """
+        return Tree.postorder_traverse(self, start)
 
     def traverse(self, start):
+        """
+        Preorder traversal
+        :param start: node to start at
+        :return: generator of nodes in traversal
+        """
         return Tree.traverse(self, start)
