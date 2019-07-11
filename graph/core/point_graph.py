@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from structpy.utilities.simple import empty_generator
+from structpy.collection.stack import Stack
 
 class PointGraph(ABC):
 
@@ -242,6 +243,38 @@ class PointGraph(ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, new_epi)
 
+    def traversal_preorder(self, node):
+        """
+        Traverse the graph in pre-order without re-visiting nodes
+        :param node: starting node
+        :return: generator over traversal
+        """
+        visited = {node}
+        s = Stack([node])
+        while s:
+            node = s.pop()
+            yield node
+            for epi in self.epis(node):
+                if epi not in visited:
+                    s.add(epi)
+                    visited.add(epi)
+
+    def copy(self):
+        """
+        Create a shallow copy of this graph: nodes are preserved,
+        but the structure of the graph to maintain arcs, etc. is
+        duplicated
+        :return: a copy, same type as self
+        """
+        cls = self.__class__
+        copy = cls()
+        for node in self.nodes():
+            copy.add_node(node)
+        for arc in self.arcs():
+            copy.add_arc(*arc)
+        return copy
+
+
     def __eq__(self, other):
         """
         Checks set equality between this graph and graph other
@@ -251,3 +284,24 @@ class PointGraph(ABC):
         other_arcs = set(other.arcs())
         other_nodes = set(other.nodes())
         return arcs == other_arcs and nodes == other_nodes
+
+    def display(self, node=None):
+        visited = set()
+        while len(set(x[0] for x in visited)) != len(list(self.nodes())):
+            if node is None:
+                node_itr = self.nodes()
+                node = next(node_itr)
+                while node in set(x[0] for x in visited):
+                    node = next(node_itr)
+            tab = 0
+            visited.add((node, tab))
+            s = Stack([(node, tab)])
+            while s:
+                node = s.pop()
+                print('\t'*node[1]+str(node[0]))
+                tab += 1
+                for epi in self.epis(node):
+                    if epi not in visited:
+                        s.add((epi,tab))
+                        visited.add((epi,tab))
+            node = None

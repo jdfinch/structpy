@@ -43,7 +43,7 @@ class PointTree(PointForest):
         :return: None
         """
         #problems: need to implement traverse
-        for node in list(self.traverse(node)):
+        for node in list(self.traverse_preorder(node)):
             self.remove_node(node)
 
     def path(self, node, sequence_cls=None):
@@ -57,18 +57,18 @@ class PointTree(PointForest):
         p.reverse()
         return sequence_cls(p)
 
-    def postorder_traverse(self, start):
+    def traverse_postorder(self, start):
         for epi in self.epis(start):
-            yield from self.postorder_traverse(epi)
+            yield from self.traverse_postorder(epi)
         yield start
 
-    def traverse(self, start):
+    def traverse_preorder(self, start):
         """
         (Preorder) Traverse the tree, starting at node `start`
         """
         yield start
         for epi in self.epis(start):
-            yield from self.traverse(epi)
+            yield from self.traverse_preorder(epi)
 
     def traverse_reverse(self, start):
         """
@@ -78,3 +78,6 @@ class PointTree(PointForest):
         while start is not self.root():
             start = self.parent(start)
             yield start
+
+    def display(self):
+        spaces = 0
