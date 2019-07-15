@@ -16,7 +16,7 @@ class FlexGraph(Graph):
         self._arcs_number = 0
 
     def nodes(self):
-        return self._arcs.keys()
+        return iter(self._arcs.keys())
 
     def arcs(self):
         for pro, arc_epi in self._arcs.items():
