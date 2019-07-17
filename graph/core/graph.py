@@ -163,7 +163,6 @@ class Graph(PointGraph, ABC):
         """
         for arc in self.arcs():
             if self.pro(arc) is pro and self.epi(arc) is epi:
-                print('here')
                 return arc
 
     def has_arc(self, pro, epi):
@@ -214,6 +213,30 @@ class Graph(PointGraph, ABC):
         for epi in PointGraph.epis(self, node):
             if self.arc(node, epi) == arc_value:
                 yield epi
+
+    def epis_number(self, node, arc_value=None):
+        """
+        Return the number of epis of node
+
+        Default implementations: iterate and count `self.epis(node)`.
+        O(T(`self.epis`))
+        """
+        i = 0
+        for epi in self.epis(node, arc_value):
+            i += 1
+        return i
+
+    def pros_number(self, node, arc_value=None):
+        """
+        Return the number of pros of node
+
+        Default implementations: iterate and count `self.pros(node)`.
+        O(T(`self.pros`))
+        """
+        i = 0
+        for pro in self.pros(node, arc_value):
+            i += 1
+        return i
     
     def add(self, node, epi=None, arc=None):
         """
