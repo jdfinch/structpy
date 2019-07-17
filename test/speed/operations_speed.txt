@@ -1,0 +1,81 @@
+
+Iteration tests:
+Timed test of expression:
+iteration(set_n(10), 1000000)
+... 0.00003s
+name 'iteration' is not defined
+
+Timed test of expression:
+iteration(set_n(1000), 10000)
+... 0.00002s
+name 'iteration' is not defined
+
+Timed test of expression:
+iteration(list_n(10), 1000000)
+... 0.00001s
+name 'iteration' is not defined
+
+Timed test of expression:
+iteration(list_n(1000), 10000)
+... 0.00001s
+name 'iteration' is not defined
+
+
+Membership tests:
+Timed test of expression:
+membership(set_n(3), 1000000)
+... 0.00001s
+name 'membership' is not defined
+
+Timed test of expression:
+membership(set_n(10), 1000000)
+... 0.00001s
+name 'membership' is not defined
+
+Timed test of expression:
+membership(set_n(100), 100000)
+... 0.00001s
+name 'membership' is not defined
+
+Timed test of expression:
+membership(list_n(3), 1000000)
+... 0.00001s
+name 'membership' is not defined
+
+Timed test of expression:
+membership(list_n(10), 1000000)
+... 0.00001s
+name 'membership' is not defined
+
+Timed test of expression:
+membership(list_n(100), 100000)
+... 0.00001s
+name 'membership' is not defined
+
+
+Dict access tests:
+Timed test of expression:
+lookup(dict_n(10), 10*6)
+... 0.00002s
+name 'lookup' is not defined
+
+Timed test of expression:
+lookup_with_conditional(dict_n(10), 10*6)
+... 0.00001s
+name 'lookup_with_conditional' is not defined
+
+Timed test of expression:
+lookup_with_member_var(obj(dict_n(10)), 10*6)
+... 0.00002s
+name 'lookup_with_member_var' is not defined
+
+Timed test of expression:
+lookup_with_getter(obj(dict_n(10)), 10*6)
+... 0.00001s
+name 'lookup_with_getter' is not defined
+
+Timed test of expression:
+lookup_with_getter_with_conditional(obj(dict_n(10)), 10*6)
+... 0.00001s
+name 'lookup_with_getter_with_conditional' is not defined
+
