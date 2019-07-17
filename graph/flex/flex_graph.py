@@ -79,7 +79,7 @@ class FlexGraph(Graph):
         path = self._paths[node]
         if arc_value not in path:
             return
-        return path[arc_value]
+        yield from path[arc_value]
 
     def pros(self, node, arc_value=None):
         if arc_value is None:
@@ -87,7 +87,7 @@ class FlexGraph(Graph):
         path = self._reverse_paths[node]
         if arc_value not in path:
             return
-        return path[arc_value]
+        yield from path[arc_value]
 
     def epis_number(self, node):
         return len(self._arcs[node])
