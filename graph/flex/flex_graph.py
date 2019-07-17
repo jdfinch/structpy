@@ -73,11 +73,21 @@ class FlexGraph(Graph):
         self._reverse_paths[epi][arc].remove(pro)
         self._arcs_number -= 1
 
-    def epis(self, node):
-        return self._arcs[node]
+    def epis(self, node, arc_value=None):
+        if arc_value is None:
+            yield from self._arcs[node]
+        path = self._paths[node]
+        if arc_value not in path:
+            return
+        return path[arc_value]
 
-    def pros(self, node):
-        return self._reverse[node]
+    def pros(self, node, arc_value=None):
+        if arc_value is None:
+            yield from self._reverse[node]
+        path = self._reverse_paths[node]
+        if arc_value not in path:
+            return
+        return path[arc_value]
 
     def epis_number(self, node):
         return len(self._arcs[node])

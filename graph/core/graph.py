@@ -186,6 +186,34 @@ class Graph(PointGraph, ABC):
             if e[2] is arc:
                 return True
         return False
+
+    def pros(self, node, arc_value=None):
+        """
+        Get the pros of the node, optionally filtering by an arc value
+        :param node: node in the graph
+        :param arc_value: value that arcs have to be equal to between this
+                          node and the pro for the pro to be yielded
+        :return: generator over pros
+        """
+        if arc_value is None:
+            yield from PointGraph.pros(self, node)
+        for pro in PointGraph.pros(self, node):
+            if self.arc(pro, node) == arc_value:
+                yield pro
+
+    def epis(self, node, arc_value=None):
+        """
+        Get the epis of the node, optionally filtering by an arc value
+        :param node: node in the graph
+        :param arc_value: value that arcs have to be equal to between this
+                          node and the epi for the epi to be yielded
+        :return: generator over epis
+        """
+        if arc_value is None:
+            yield from PointGraph.epis(self, node)
+        for epi in PointGraph.epis(self, node):
+            if self.arc(node, epi) == arc_value:
+                yield epi
     
     def add(self, node, epi=None, arc=None):
         """
