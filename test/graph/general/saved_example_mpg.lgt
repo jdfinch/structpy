@@ -1,11 +1,11 @@
 colors
+	red
 	green
 	blue
-	red
 
 names
-	jane
 	bob
+	jane
 
 professions
 	programmer

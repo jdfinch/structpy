@@ -12,3 +12,7 @@ def rfind(indexable, item):
 def empty_generator():
         return
         yield
+
+def both(generator_one, generator_two):
+    yield from generator_one
+    yield from generator_two
