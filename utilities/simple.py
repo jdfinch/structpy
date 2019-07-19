@@ -16,3 +16,10 @@ def empty_generator():
 def both(generator_one, generator_two):
     yield from generator_one
     yield from generator_two
+
+def element_at(iterable, index):
+    i = 0
+    for e in iterable:
+        if i == index:
+            return e
+        i += 1
