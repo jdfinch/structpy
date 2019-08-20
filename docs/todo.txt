@@ -1,0 +1,25 @@
+TASKS
+------------------------------------------------------------------------------
+
+FILE PARSING
+    Approach:
+        1. Write grammar (mimics form of actual sequence to parse)
+        2. Convert grammar to DFA (detect parsing ambiguities)
+        3. DFA is extended to save certain sequences to variables
+        4. Store variables in abstract syntax tree (parent is production rule)
+    Dependencies:
+        1. Deterministic Finite Automata (DFA)
+
+DETERMINISTIC FINITE AUTOMATA
+    Approach:
+        1. Directed graph extended to include a state node
+        2. Implement with a Node-based graph structure for efficiency
+    Dependencies:
+        1. Node-based graph
+
+DEFAULT AND IMPLEMENTATION STRUCTURE SETTINGS
+    Motivation:
+        Most use cases of a data structure are either "typical" use cases
+        where a single implementation is best, or are not performance
+        sensitive at all.
+    Approach:
