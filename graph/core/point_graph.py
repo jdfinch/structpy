@@ -222,7 +222,8 @@ class PointGraph(ABC):
         Replace the value of the node old with new, while preserving all
         node arcs
         """
-        self.add_node(new)
+        if not self.has_node(new):
+            self.add_node(new)
         for pro in list(self.pros(old)):
             self.replace_epi(pro, old, new)
         for epi in list(self.epis(old)):

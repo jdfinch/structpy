@@ -284,6 +284,16 @@ class Graph(PointGraph, ABC):
         for epi in epis:
             self.add(node, epi, next(arcs))
 
+    def replace_pro(self, pro, epi, new_pro):
+        arc = self.arc(pro, epi)
+        self.remove_arc(pro, epi)
+        self.add_arc(new_pro, epi, arc)
+
+    def replace_epi(self, pro, epi, new_epi):
+        arc = self.arc(pro, epi)
+        self.remove_arc(pro, epi)
+        self.add_arc(pro, new_epi, arc)
+
     def add_arc(self, pro, epi, arc=True):
         """
         Add an arc from pro to epi to the graph. By default, unlabeled arcs are
