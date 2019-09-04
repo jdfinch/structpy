@@ -320,10 +320,10 @@ class Graph(PointGraph, ABC):
         if not self.has_node(new):
             self.add_node(new)
         for pro in self.pros(old):
-            pro, epi, arc = self.arc(pro, old)
+            arc = self.arc(pro, old)
             self.add_arc(pro, new, arc)
         for epi in self.epis(old):
-            pro, epi, arc = self.arc(old, epi)
+            arc = self.arc(old, epi)
             self.add_arc(new, epi, arc)
         self.remove_node(old)
 
