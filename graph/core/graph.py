@@ -310,6 +310,24 @@ class Graph(PointGraph, ABC):
         self.remove_arc(pro, epi)
         self.add_arc(pro, epi, new)
 
+    def replace_node(self, old, new):
+        """
+        replace old node with new while preserving arcs and their types
+        :param new:
+        :param old:
+        :return:
+        """
+        if not self.has_node(new):
+            self.add_node(new)
+        for pro in self.pros(old):
+            pro, epi, arc = self.arc(pro, old)
+            self.add_arc(pro, new, arc)
+        for epi in self.epis(old):
+            pro, epi, arc = self.arc(old, epi)
+            self.add_arc(new, epi, arc)
+        self.remove_node(old)
+
+
     def traverse(self, frontier, start=None):
         """
         Traverses the graph starting at `start` and yields each visited node,
