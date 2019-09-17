@@ -6,6 +6,7 @@ class FlexGraph(Graph):
     `self._arcs dict<pro:dict<epi:arc>>`
     `self._reverse: dict<epi:set<pro>>`
     `self._paths: dict<pro:dict<arc:set<epi>>>`
+    `self._reverse_paths: dict<epi:dict<arc:set<pro>>>`
     """
 
     def __init__(self):

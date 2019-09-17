@@ -24,3 +24,4 @@ from structpy.graph.flex.flex_graph import FlexGraph
 from structpy.graph.flex.flex_dag import FlexDag
 from structpy.graph.flex.flex_tree import FlexTree
 from structpy.graph.point_map.map_point_graph import MapPointGraph
+from structpy.graph.multi_flex.multi_flex_graph import MultiFlexGraph

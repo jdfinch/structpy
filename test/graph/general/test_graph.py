@@ -1,8 +1,8 @@
 import pytest, os
 
-from structpy.graph import FlexGraph, MapPointGraph
+from structpy.graph import FlexGraph, MapPointGraph, MultiFlexGraph
 
-types=[MapPointGraph,FlexGraph]
+types=[MapPointGraph,FlexGraph, MultiFlexGraph]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):
