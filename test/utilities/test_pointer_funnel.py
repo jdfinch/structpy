@@ -69,8 +69,11 @@ def test_pointer_funnel_leveling():
     f = Foo()
     b = Bar()
     pf1 = PointerFunnelItem(f)
+    assert pf1.pf_level() == 1
     pf2 = PointerFunnelItem(pf1)
+    assert pf2.pf_level() == 2
     pf3 = PointerFunnelItem(pf2)
+    assert pf3.pf_level() == 3
     pf1.pf_point(b)
     pf4 = PointerFunnel(pf3, 0)
     assert pf4.pf_target is None

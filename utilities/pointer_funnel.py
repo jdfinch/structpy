@@ -42,6 +42,12 @@ class PointerFunnel:
         for source in self.pf_sources:
             source.pf_update()
 
+    def pf_level(self):
+        if self.pf_target is None:
+            return 1
+        else:
+            return 1 + self.pf_target.pf_level()
+
     def __str__(self):
         return '<PointerFunnel to ' + str(self.pf_item) + '>'
 
