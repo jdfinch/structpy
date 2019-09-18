@@ -61,8 +61,23 @@ def test_pointer_funnel_item():
     assert pf3.pf_item is b
     assert pf2.pf_target is None
     assert pf1.pf_sources == set()
-
     assert pf1.a == 5
     assert pf1.bat(3) == 8
-
     assert pf2.baz(1, 2) == 3
+
+def test_pointer_funnel_leveling():
+    f = Foo()
+    b = Bar()
+    pf1 = PointerFunnelItem(f)
+    pf2 = PointerFunnelItem(pf1)
+    pf3 = PointerFunnelItem(pf2)
+    pf1.pf_point(b)
+    pf4 = PointerFunnel(pf3, 0)
+    assert pf4.pf_target is None
+    assert pf4.pf_item is b
+    pf4.pf_point(pf2, 1)
+    assert pf4.pf_target is pf1
+    assert pf4.pf_item is b
+    pf4 = PointerFunnel(pf3, 3)
+    assert pf4.pf_target is pf3
+    assert pf4.pf_item is b

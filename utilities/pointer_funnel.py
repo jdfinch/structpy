@@ -1,15 +1,23 @@
 
 class PointerFunnel:
 
-    def __init__(self, item=None):
+    def __init__(self, item=None, level=None):
         self.pf_item = None
         self.pf_target = None
         self.pf_sources = set()
         if item is not None:
-            self.pf_point(item)
+            self.pf_point(item, level)
 
-    def pf_point(self, item):
+    def pf_point(self, item, level=None):
         if isinstance(item, PointerFunnel):
+            if level is not None:
+                actual_item = item.pf_item
+                ptrs = []
+                while item is not None:
+                    ptrs.append(item)
+                    item = item.pf_target
+                ptrs.append(actual_item)
+                return self.pf_point(ptrs[-1-level])
             item.pf_sources.add(self)
             self.pf_target = item
             self.pf_update()
