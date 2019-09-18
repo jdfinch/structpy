@@ -19,7 +19,7 @@ class PointerFunnel:
                 self.pf_target.pf_sources.remove(self)
             self.pf_target = None
 
-    def _delete_(self):
+    def pf_delete(self):
         for source in self.pf_sources:
             source.pf_target = self.pf_target
         self.pf_item = None
