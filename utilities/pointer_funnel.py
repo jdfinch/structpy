@@ -6,7 +6,9 @@ class PointerFunnel:
         self.pf_target = None
         self.pf_sources = set()
         if item is not None:
-            self.pf_point(item, level)
+            self.pf_point(item)
+            if level is not None:
+                self.pf_point(item, level - 1)
 
     def pf_point(self, item, level=None):
         if isinstance(item, PointerFunnel):
@@ -28,12 +30,14 @@ class PointerFunnel:
             self.pf_target = None
 
     def pf_delete(self):
+        item = self.pf_item
         for source in self.pf_sources:
             source.pf_target = self.pf_target
         self.pf_item = None
         if self.pf_target is not None:
             self.pf_target.pf_sources.remove(self)
             self.pf_target = None
+        return item
 
     def pf_update(self, item=None):
         if item is None:
@@ -49,11 +53,20 @@ class PointerFunnel:
             return 1 + self.pf_target.pf_level()
 
     def __str__(self):
-        return '<PointerFunnel to ' + str(self.pf_item) + '>'
+        return '<PointerFunnel(' + str(self.pf_level()) + '): ' + str(self.pf_item) + '>'
+
+    def __repr__(self):
+        return str(self)
 
 
 class PointerFunnelItem(PointerFunnel):
 
-    def __getattr__(self, e):
-        return self.pf_item.__getattribute__(e)
+    def __getattribute__(self, e):
+        try:
+            if e in {'__str__', '__class__', '__repr__'}:
+                return PointerFunnel.__getattribute__(self, e)
+            return PointerFunnel.__getattribute__(self, 'pf_item').__getattribute__(e)
+        except AttributeError:
+            return PointerFunnel.__getattribute__(self, e)
+
 

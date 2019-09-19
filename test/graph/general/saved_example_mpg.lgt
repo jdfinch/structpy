@@ -1,7 +1,7 @@
 colors
-	red
 	green
 	blue
+	red
 
 names
 	jane

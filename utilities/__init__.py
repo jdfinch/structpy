@@ -4,5 +4,5 @@ collection and have things like rfind where appropriate as class methods
 """
 
 from structpy.utilities.simple import rfind, empty_generator
-from structpy.utilities.pointer import Pointer
+from structpy.utilities.pointer import Pointer, PointerItem
 from structpy.utilities.pointer_funnel import PointerFunnel, PointerFunnelItem

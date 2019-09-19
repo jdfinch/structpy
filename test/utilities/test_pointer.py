@@ -1,6 +1,6 @@
 import pytest
 
-from structpy import Pointer
+from structpy import Pointer, PointerItem
 
 class Simple:
 
@@ -10,11 +10,11 @@ class Simple:
 
 def test_pointer():
     s = Simple()
-    p = Pointer(s)
+    p = PointerItem(s)
     s2 = Simple(5, 6)
     p *= s2
     assert p.one == 5
     assert p.two == 6
-    assert type(p) is Pointer
-    assert p() is s2
     assert +p is s2
+    assert isinstance(p, Pointer)
+    assert isinstance(p, Simple)

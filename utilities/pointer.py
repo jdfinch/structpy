@@ -1,22 +1,38 @@
 
-class PointerBase:
-    def __init__(self, v):
-        self.v = v
+class Pointer:
 
-class Pointer(PointerBase):
+    def __init__(self, value=None):
+        self.ptr_value = value
 
-    def __init__(self, v=None):
-        PointerBase.__init__(self, v)
-
-    def __imul__(self, v):
-        PointerBase.__setattr__(self, 'v', v)
+    def __imul__(self, other):
+        self.ptr_value = other
         return self
 
-    def __getattribute__(self, item):
-        return PointerBase.__getattribute__(self, 'v').__getattribute__(item)
-
-    def __call__(self):
-        return PointerBase.__getattribute__(self, 'v')
-
     def __pos__(self):
-        return PointerBase.__getattribute__(self, 'v')
+        return self.ptr_value
+
+    def __str__(self):
+        return '<Pointer: ' + str(self.ptr_value) + '>'
+
+    def __repr__(self):
+        return str(self)
+
+
+_metaClasses = {}
+
+def PointerItem(item):
+
+    if item.__class__ in _metaClasses:
+        return _metaClasses[item.__class__](item)
+    else:
+
+        class _PointerItem(Pointer, item.__class__):
+            def __getattribute__(self, e):
+                if e in {'__str__', '__class__', '__repr__', '__imul__', '__pos__', 'ptr_value'}:
+                    return Pointer.__getattribute__(self, e)
+                return Pointer.__getattribute__(self, 'ptr_value').__getattribute__(e)
+
+        _metaClasses[item.__class__] = _PointerItem
+        return _PointerItem(item)
+
+

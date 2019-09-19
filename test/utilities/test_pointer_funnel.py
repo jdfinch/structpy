@@ -10,6 +10,8 @@ class Foo:
     def bat(self, x):
         return self.a + x
 
+    def __str__(self):
+        return 'foo'
 
 class Bar:
 
@@ -65,6 +67,12 @@ def test_pointer_funnel_item():
     assert pf1.bat(3) == 8
     assert pf2.baz(1, 2) == 3
 
+def test_pointer_funnel_item_string():
+    f = Foo()
+    b = Bar()
+    pf1 = PointerFunnelItem(f)
+    assert 'PointerFunnel' in str(pf1)
+
 def test_pointer_funnel_leveling():
     f = Foo()
     b = Bar()
@@ -75,12 +83,12 @@ def test_pointer_funnel_leveling():
     pf3 = PointerFunnelItem(pf2)
     assert pf3.pf_level() == 3
     pf1.pf_point(b)
-    pf4 = PointerFunnel(pf3, 0)
+    pf4 = PointerFunnel(pf3, 1)
     assert pf4.pf_target is None
     assert pf4.pf_item is b
     pf4.pf_point(pf2, 1)
     assert pf4.pf_target is pf1
     assert pf4.pf_item is b
-    pf4 = PointerFunnel(pf3, 3)
+    pf4 = PointerFunnel(pf3, 4)
     assert pf4.pf_target is pf3
     assert pf4.pf_item is b
