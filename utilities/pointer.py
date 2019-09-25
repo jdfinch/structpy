@@ -15,7 +15,7 @@ class Pointer:
         return '<Pointer: ' + str(self.ptr_value) + '>'
 
     def __repr__(self):
-        return str(self)
+        return '<Pointer: ' + repr(self.ptr_value) + '>'
 
 
 _metaClasses = {}

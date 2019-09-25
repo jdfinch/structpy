@@ -23,3 +23,9 @@ def element_at(iterable, index):
         if i == index:
             return e
         i += 1
+
+def every_pair(iterable):
+    ls = list(iterable)
+    for i in range(len(ls) - 1):
+        for j in range(i + 1, len(ls)):
+            yield ls[i], ls[j]
