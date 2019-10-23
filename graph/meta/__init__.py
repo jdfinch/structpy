@@ -1,1 +1,0 @@
-from structpy.graph.meta.compound_graph import CompoundGraph
