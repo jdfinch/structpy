@@ -14,3 +14,4 @@ something about modelling
 import structpy
 import structpy.graph
 from structpy.utilities.pointer import Pointer, PointerItem
+from structpy.language.interface import I
