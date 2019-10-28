@@ -11,5 +11,5 @@ code for graph representations
 something about modelling
 """
 
-from structpy.language.pointer import Pointer, PointerItem
-from structpy.language.interface import I
+from language.pointer import Pointer, PointerItem
+from language.interface import I
