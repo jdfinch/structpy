@@ -41,6 +41,6 @@ def every_pair(iterable):
             yield ls[i], ls[j]
 
 
-def get(iterable_with_single_item):
+def single(iterable_with_single_item):
     (item,) = iterable_with_single_item
     return item

@@ -1,5 +1,9 @@
 
 from types import MethodType
+from functools import partial
+
+def interface(**interface_functions):
+    return partial(I, **interface_functions)
 
 class I:
     """

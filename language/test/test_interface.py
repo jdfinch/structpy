@@ -1,4 +1,4 @@
-from structpy import I
+from structpy import I, interface
 import pytest
 
 class Cls:
@@ -59,3 +59,12 @@ def test_switch_method():
     assert i.bar() == -1
     with pytest.raises(AttributeError):
         i2.bar()
+
+def test_interface_function():
+    tc = Cls(5)
+    i_func = interface(
+        bar=(lambda self, y: self._x + y)
+    )
+    i = i_func(tc)
+    assert i.bar(3) == 8
+    assert i.x() == 5

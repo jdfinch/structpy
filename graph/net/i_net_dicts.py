@@ -86,3 +86,9 @@ class INetDicts(Net):
                 arcs.add((source, target, label))
         return arcs
 
+    def has_arc(self, source, target, label=None):
+        if label is None:
+            return target in self._sources_target_label[source]
+        else:
+            tl = self._sources_target_label[source]
+            return target in tl and tl[target] == label
