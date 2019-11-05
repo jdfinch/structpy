@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
-<title>structpy.language.simple API documentation</title>
+<title>structpy.graph.tree.tree API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,59 +17,49 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.language.simple</code></h1>
+<h1 class="title">Module <code>structpy.graph.tree.tree</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def each(*generators, key=None):
-    if key is None:
-        for generator in generators:
-            for item in generator:
-                yield item
-    else:
-        for generator in generators:
-            for item in key(generator):
-                yield item
+<pre><code class="python">from abc import ABC, abstractmethod
 
-def rfind(indexable, item):
+class Tree(ABC):
     &#34;&#34;&#34;
-    Iterates through the collection in reverse order and returns the index of
-    an item
+    A tree with unordered children and a fixed root
     &#34;&#34;&#34;
-    length = len(indexable)
-    for i in range(length - 1, -1, -1):
-        if indexable[i] == item:
-            return i
-    return - 1
 
-def empty_generator():
-        return
-        yield
+    @abstractmethod
+    def root(self):
+        &#34;&#34;&#34;
+        the root of the tree
+        &#34;&#34;&#34;
+        pass
 
-def both(generator_one, generator_two):
-    yield from generator_one
-    yield from generator_two
+    @abstractmethod
+    def children(self, node):
+        &#34;&#34;&#34;
+        Get the children
 
-def element_at(iterable, index):
-    i = 0
-    for e in iterable:
-        if i == index:
-            return e
-        i += 1
+        **node**: focal node
 
-def every_pair(iterable):
-    ls = list(iterable)
-    for i in range(len(ls) - 1):
-        for j in range(i + 1, len(ls)):
-            yield ls[i], ls[j]
+        **return**: iterable&lt;node&gt;
+        &#34;&#34;&#34;
+        pass
 
+    @abstractmethod
+    def parent(self, node):
+        pass
 
-def get(iterable_with_single_item):
-    (item,) = iterable_with_single_item
-    return item</code></pre>
+    @abstractmethod
+    def add_child(self, node, child):
+        pass
+
+    @abstractmethod
+    def remove_child(self, node, child):
+        pass</code></pre>
 </details>
 </section>
 <section>
@@ -77,128 +67,150 @@ def get(iterable_with_single_item):
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.language.simple.both"><code class="name flex">
-<span>def <span class="ident">both</span></span>(<span>generator_one, generator_two)</span>
+<dt id="structpy.graph.tree.tree.Tree"><code class="flex name class">
+<span>class <span class="ident">Tree</span></span>
+<span>(</span><span>*args, **kwargs)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A tree with unordered children and a fixed root</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def both(generator_one, generator_two):
-    yield from generator_one
-    yield from generator_two</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.each"><code class="name flex">
-<span>def <span class="ident">each</span></span>(<span>*generators, key=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def each(*generators, key=None):
-    if key is None:
-        for generator in generators:
-            for item in generator:
-                yield item
-    else:
-        for generator in generators:
-            for item in key(generator):
-                yield item</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.element_at"><code class="name flex">
-<span>def <span class="ident">element_at</span></span>(<span>iterable, index)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def element_at(iterable, index):
-    i = 0
-    for e in iterable:
-        if i == index:
-            return e
-        i += 1</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.empty_generator"><code class="name flex">
-<span>def <span class="ident">empty_generator</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def empty_generator():
-        return
-        yield</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.every_pair"><code class="name flex">
-<span>def <span class="ident">every_pair</span></span>(<span>iterable)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def every_pair(iterable):
-    ls = list(iterable)
-    for i in range(len(ls) - 1):
-        for j in range(i + 1, len(ls)):
-            yield ls[i], ls[j]</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.get"><code class="name flex">
-<span>def <span class="ident">get</span></span>(<span>iterable_with_single_item)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get(iterable_with_single_item):
-    (item,) = iterable_with_single_item
-    return item</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.simple.rfind"><code class="name flex">
-<span>def <span class="ident">rfind</span></span>(<span>indexable, item)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Iterates through the collection in reverse order and returns the index of
-an item</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rfind(indexable, item):
+<pre><code class="python">class Tree(ABC):
     &#34;&#34;&#34;
-    Iterates through the collection in reverse order and returns the index of
-    an item
+    A tree with unordered children and a fixed root
     &#34;&#34;&#34;
-    length = len(indexable)
-    for i in range(length - 1, -1, -1):
-        if indexable[i] == item:
-            return i
-    return - 1</code></pre>
+
+    @abstractmethod
+    def root(self):
+        &#34;&#34;&#34;
+        the root of the tree
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def children(self, node):
+        &#34;&#34;&#34;
+        Get the children
+
+        **node**: focal node
+
+        **return**: iterable&lt;node&gt;
+        &#34;&#34;&#34;
+        pass
+
+    @abstractmethod
+    def parent(self, node):
+        pass
+
+    @abstractmethod
+    def add_child(self, node, child):
+        pass
+
+    @abstractmethod
+    def remove_child(self, node, child):
+        pass</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>abc.ABC</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="structpy.graph.tree.i_tree_set.Tree_Set" href="i_tree_set.html#structpy.graph.tree.i_tree_set.Tree_Set">Tree_Set</a></li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.graph.tree.tree.Tree.add_child"><code class="name flex">
+<span>def <span class="ident">add_child</span></span>(<span>self, node, child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def add_child(self, node, child):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.tree.tree.Tree.children"><code class="name flex">
+<span>def <span class="ident">children</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Get the children</p>
+<p><strong>node</strong>: focal node</p>
+<p><strong>return</strong>: iterable<node></p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def children(self, node):
+    &#34;&#34;&#34;
+    Get the children
+
+    **node**: focal node
+
+    **return**: iterable&lt;node&gt;
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.tree.tree.Tree.parent"><code class="name flex">
+<span>def <span class="ident">parent</span></span>(<span>self, node)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def parent(self, node):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.tree.tree.Tree.remove_child"><code class="name flex">
+<span>def <span class="ident">remove_child</span></span>(<span>self, node, child)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def remove_child(self, node, child):
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.tree.tree.Tree.root"><code class="name flex">
+<span>def <span class="ident">root</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>the root of the tree</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@abstractmethod
+def root(self):
+    &#34;&#34;&#34;
+    the root of the tree
+    &#34;&#34;&#34;
+    pass</code></pre>
 </details>
 </dd>
 </dl>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -209,18 +221,21 @@ an item</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.language" href="index.html">structpy.language</a></code></li>
+<li><code><a title="structpy.graph.tree" href="index.html">structpy.graph.tree</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="two-column">
-<li><code><a title="structpy.language.simple.both" href="#structpy.language.simple.both">both</a></code></li>
-<li><code><a title="structpy.language.simple.each" href="#structpy.language.simple.each">each</a></code></li>
-<li><code><a title="structpy.language.simple.element_at" href="#structpy.language.simple.element_at">element_at</a></code></li>
-<li><code><a title="structpy.language.simple.empty_generator" href="#structpy.language.simple.empty_generator">empty_generator</a></code></li>
-<li><code><a title="structpy.language.simple.every_pair" href="#structpy.language.simple.every_pair">every_pair</a></code></li>
-<li><code><a title="structpy.language.simple.get" href="#structpy.language.simple.get">get</a></code></li>
-<li><code><a title="structpy.language.simple.rfind" href="#structpy.language.simple.rfind">rfind</a></code></li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="structpy.graph.tree.tree.Tree" href="#structpy.graph.tree.tree.Tree">Tree</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.graph.tree.tree.Tree.add_child" href="#structpy.graph.tree.tree.Tree.add_child">add_child</a></code></li>
+<li><code><a title="structpy.graph.tree.tree.Tree.children" href="#structpy.graph.tree.tree.Tree.children">children</a></code></li>
+<li><code><a title="structpy.graph.tree.tree.Tree.parent" href="#structpy.graph.tree.tree.Tree.parent">parent</a></code></li>
+<li><code><a title="structpy.graph.tree.tree.Tree.remove_child" href="#structpy.graph.tree.tree.Tree.remove_child">remove_child</a></code></li>
+<li><code><a title="structpy.graph.tree.tree.Tree.root" href="#structpy.graph.tree.tree.Tree.root">root</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

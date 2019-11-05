@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.1" />
-<title>structpy.graph API documentation</title>
+<title>structpy.graph.tree.i_tree_set API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,36 +17,155 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.graph</code></h1>
+<h1 class="title">Module <code>structpy.graph.tree.i_tree_set</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from structpy.graph.tree.tree import Tree
+
+class Tree_Set(Tree):
+
+    def __init__(self, root):
+        self._root = root
+        self._parents = {root: set()}
+        self._children = {root: None}
+
+    def root(self):
+        return self._root
+
+    def children(self, node):
+        return self._parents[node]
+
+    def parent(self, node):
+        return self._children[node]
+
+    def add_child(self, node, child):
+        self._parents[node].add(child)
+        if child not in self._parents:
+            self._parents[child] = set()
+            self._children[child] = node
+
+    def remove_child(self, node, child):
+        self._parents[node].remove(child)
+        if self._parents[child]:
+            pass
+        self._children[child] = None</code></pre>
+</details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="structpy.graph.labeled_digraph" href="labeled_digraph/index.html">structpy.graph.labeled_digraph</a></code></dt>
+<dt id="structpy.graph.tree.i_tree_set.Tree_Set"><code class="flex name class">
+<span>class <span class="ident">Tree_Set</span></span>
+<span>(</span><span>root)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>A tree with unordered children and a fixed root</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Tree_Set(Tree):
+
+    def __init__(self, root):
+        self._root = root
+        self._parents = {root: set()}
+        self._children = {root: None}
+
+    def root(self):
+        return self._root
+
+    def children(self, node):
+        return self._parents[node]
+
+    def parent(self, node):
+        return self._children[node]
+
+    def add_child(self, node, child):
+        self._parents[node].add(child)
+        if child not in self._parents:
+            self._parents[child] = set()
+            self._children[child] = node
+
+    def remove_child(self, node, child):
+        self._parents[node].remove(child)
+        if self._parents[child]:
+            pass
+        self._children[child] = None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="structpy.graph.tree.tree.Tree" href="tree.html#structpy.graph.tree.tree.Tree">Tree</a></li>
+<li>abc.ABC</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.graph.tree.i_tree_set.Tree_Set.add_child"><code class="name flex">
+<span>def <span class="ident">add_child</span></span>(<span>self, node, child)</span>
+</code></dt>
 <dd>
 <section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_child(self, node, child):
+    self._parents[node].add(child)
+    if child not in self._parents:
+        self._parents[child] = set()
+        self._children[child] = node</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="structpy.graph.net" href="net/index.html">structpy.graph.net</a></code></dt>
+<dt id="structpy.graph.tree.i_tree_set.Tree_Set.parent"><code class="name flex">
+<span>def <span class="ident">parent</span></span>(<span>self, node)</span>
+</code></dt>
 <dd>
 <section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def parent(self, node):
+    return self._children[node]</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="structpy.graph.node" href="node.html">structpy.graph.node</a></code></dt>
+<dt id="structpy.graph.tree.i_tree_set.Tree_Set.remove_child"><code class="name flex">
+<span>def <span class="ident">remove_child</span></span>(<span>self, node, child)</span>
+</code></dt>
 <dd>
 <section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.graph.tree" href="tree/index.html">structpy.graph.tree</a></code></dt>
-<dd>
-<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove_child(self, node, child):
+    self._parents[node].remove(child)
+    if self._parents[child]:
+        pass
+    self._children[child] = None</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="structpy.graph.tree.tree.Tree" href="tree.html#structpy.graph.tree.tree.Tree">Tree</a></b></code>:
+<ul class="hlist">
+<li><code><a title="structpy.graph.tree.tree.Tree.children" href="tree.html#structpy.graph.tree.tree.Tree.children">children</a></code></li>
+<li><code><a title="structpy.graph.tree.tree.Tree.root" href="tree.html#structpy.graph.tree.tree.Tree.root">root</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -57,15 +176,19 @@
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy" href="../index.html">structpy</a></code></li>
+<li><code><a title="structpy.graph.tree" href="index.html">structpy.graph.tree</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="structpy.graph.labeled_digraph" href="labeled_digraph/index.html">structpy.graph.labeled_digraph</a></code></li>
-<li><code><a title="structpy.graph.net" href="net/index.html">structpy.graph.net</a></code></li>
-<li><code><a title="structpy.graph.node" href="node.html">structpy.graph.node</a></code></li>
-<li><code><a title="structpy.graph.tree" href="tree/index.html">structpy.graph.tree</a></code></li>
+<li>
+<h4><code><a title="structpy.graph.tree.i_tree_set.Tree_Set" href="#structpy.graph.tree.i_tree_set.Tree_Set">Tree_Set</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.graph.tree.i_tree_set.Tree_Set.add_child" href="#structpy.graph.tree.i_tree_set.Tree_Set.add_child">add_child</a></code></li>
+<li><code><a title="structpy.graph.tree.i_tree_set.Tree_Set.parent" href="#structpy.graph.tree.i_tree_set.Tree_Set.parent">parent</a></code></li>
+<li><code><a title="structpy.graph.tree.i_tree_set.Tree_Set.remove_child" href="#structpy.graph.tree.i_tree_set.Tree_Set.remove_child">remove_child</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

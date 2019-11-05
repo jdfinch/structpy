@@ -1,3 +1,13 @@
+def each(*generators, key=None):
+    if key is None:
+        for generator in generators:
+            for item in generator:
+                yield item
+    else:
+        for generator in generators:
+            for item in key(generator):
+                yield item
+
 def rfind(indexable, item):
     """
     Iterates through the collection in reverse order and returns the index of
@@ -8,7 +18,7 @@ def rfind(indexable, item):
         if indexable[i] == item:
             return i
     return - 1
-    
+
 def empty_generator():
         return
         yield
@@ -29,3 +39,8 @@ def every_pair(iterable):
     for i in range(len(ls) - 1):
         for j in range(i + 1, len(ls)):
             yield ls[i], ls[j]
+
+
+def get(iterable_with_single_item):
+    (item,) = iterable_with_single_item
+    return item

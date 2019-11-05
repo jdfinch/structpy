@@ -26,6 +26,6 @@ class Tree_Set(Tree):
     def remove_child(self, node, child):
         self._parents[node].remove(child)
         if self._parents[child]:
-
+            pass
         self._children[child] = None
 
