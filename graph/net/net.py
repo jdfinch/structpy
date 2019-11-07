@@ -86,8 +86,12 @@ class Net(LabeledDigraph):
         return Node(node_value, self)
 
     def add(self, node, target=None, label=None):
-        if target is None and not self.has_node(node):
+        if not self.has_node(node):
             self.add_node(node)
+        if target is not None:
+            if not self.has_node(target):
+                self.add_node(target)
+            self.add_arc(node, target, label)
 
     def has_node(self, node):
         return node in self.nodes()

@@ -17,7 +17,7 @@ class INetDicts(Net):
         self._sources_target_label = {}
         if other_labeled_graph is not None:
             for arc in other_labeled_graph.arcs():
-                self.add_arc(*arc)
+                self.add(*arc)
 
     def nodes(self):
         return self._sources_labels_targets.keys()

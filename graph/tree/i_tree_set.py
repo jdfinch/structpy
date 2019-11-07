@@ -1,7 +1,7 @@
 
 from structpy.graph.tree.tree import Tree
 
-class Tree_Set(Tree):
+class ITreeSet(Tree):
 
     def __init__(self, root):
         self._root = root

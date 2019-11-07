@@ -3,10 +3,7 @@ import json
 
 class LabeledDigraph:
 
-    def serialize(self, node_transform_function=None, label_transform_function=None):
-        """
-
-        """
+    def _serialize(self, node_transform_function=None, label_transform_function=None, indent=0):
         arcs = []
         for s, t, l in self.arcs():
             if node_transform_function is not None:
@@ -21,7 +18,20 @@ class LabeledDigraph:
             if hasattr(l, 'serialize'):
                 l = l.serialize()
             arcs.append((s, t, l))
-        return json.dumps(arcs)
+        return json.dumps(arcs, indent=indent)
+
+    def serialize(self, node_transform_function=None, label_transform_function=None):
+        """
+
+        """
+        return self._serialize(node_transform_function, label_transform_function)
+
+
+    def display(self, node_transform_function=None, label_transform_function=None):
+        """
+
+        """
+        self._serialize(node_transform_function, label_transform_function, indent=4)
 
     def deserialize(self, json_string, node_transform_function=None, label_transform_function=None):
         """
