@@ -1,106 +1,88 @@
 
-from abc import ABC, abstractmethod
-from structpy.graph.node import Node
-from structpy.graph.labeled_digraph.labeled_digraph import LabeledDigraph
+from structpy.graph.labeled_digraph import LabeledDigraph
+
 
 class Net(LabeledDigraph):
 
-    @abstractmethod
+    class Node:
+
+        def __init__(self, value=None, **targets):
+            self._node_value = value
+            self._targets_label = {}
+            self._labels_targets = {}
+            self._labels_sources = {}
+            for target, label in targets:
+                self.add(target, label)
+
+        def targets(self, label=None):
+            if label is None:
+                return self._targets_label.keys()
+            else:
+                return self._labels_targets[label]
+
+        def label(self, target):
+            return self._targets_label[target]
+
+        def sources(self, label=None):
+            if label is None:
+                sources = set()
+                for sset in self._labels_sources.values():
+                    sources.update(sset)
+                return sources
+            else:
+                return self._labels_sources[label]
+
+        def add(self, target, label):
+            self._targets_label[target] = label
+            if label not in self._labels_targets:
+                self._labels_targets[label] = set()
+            self._labels_targets[label].add(target)
+            if label not in target._labels_sources:
+                target._labels_sources[label] = set()
+            target._labels_sources[label].add(self)
+
+        def remove(self, target):
+            label = self._targets_label[target]
+            target._labels_sources[label].remove(self)
+            if not target._labels_sources[label]:
+                del target._labels_sources[label]
+            del self._targets_label[target]
+            self._labels_targets[label].remove(target)
+            if not self._labels_targets[label]:
+                del self._labels_targets[label]
+
+        def delete(self):
+            for source in self.sources():
+                source.remove(self)
+            for target in self.targets():
+                self.remove(target)
+
+    def __init__(self):
+        self._nodes = set()
+
     def nodes(self):
-        """
+        return self._nodes
 
-        """
-        pass
-
-    @abstractmethod
     def add_node(self, node):
-        """
+        self._nodes.add(node)
 
-        """
-        pass
-
-    @abstractmethod
     def add_arc(self, source, target, label):
-        """
+        source.add(target, label)
 
-        """
-        pass
-
-    @abstractmethod
     def remove_node(self, node):
-        """
+        node.delete()
+        self._nodes.remove(node)
 
-        """
-        pass
-
-    @abstractmethod
     def remove_arc(self, source, target):
-        """
+        source.remove(target)
 
-        """
-        pass
-
-    @abstractmethod
     def targets(self, source, label=None):
-        """
+        return source.targets(label)
 
-        """
-        pass
-
-    @abstractmethod
     def label(self, source, target):
-        """
+        return source.label(target)
 
-        """
-        pass
-
-    @abstractmethod
     def sources(self, target, label=None):
-        """
+        return target.sources(label)
 
-        """
-        pass
 
-    def arcs(self):
-        """
-
-        """
-        return NotImplementedError()
-
-    def len_nodes(self):
-        """
-
-        """
-        return len(self.nodes())
-
-    def len_arcs(self):
-        """
-
-        """
-        return len(self.arcs())
-
-    def node(self, node_value):
-        """
-
-        """
-        return Node(node_value, self)
-
-    def add(self, node, target=None, label=None):
-        if not self.has_node(node):
-            self.add_node(node)
-        if target is not None:
-            if not self.has_node(target):
-                self.add_node(target)
-            self.add_arc(node, target, label)
-
-    def has_node(self, node):
-        return node in self.nodes()
-
-    def has_arc(self, source, target, label=None):
-        if label is None:
-            for s, t, l in self.arcs():
-                if s == source and t == target:
-                    return True
-            return False
-        else:
-            return (source, target, label) in self.arcs()

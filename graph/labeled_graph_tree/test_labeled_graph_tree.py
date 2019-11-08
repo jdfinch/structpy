@@ -1,12 +1,12 @@
 
 import pytest
 from structpy.graph.labeled_graph_tree import LabeledGraphTree as Tree
-from structpy.graph.net import INetDicts as Net
+from structpy.graph.labeled_digraph import MapDigraph
 from structpy.language import I
 
 @pytest.fixture
 def t():
-    net = Net(I(
+    net = MapDigraph(I(
         [
             (0, 1, 'a'),
             (0, 2, 'b'),

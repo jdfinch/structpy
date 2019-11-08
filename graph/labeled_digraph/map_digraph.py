@@ -1,8 +1,8 @@
 
-from structpy.graph.net.net import Net
-from structpy.language.simple import each
+from structpy.graph.labeled_digraph.labeled_digraph import LabeledDigraph
 
-class INetDicts(Net):
+
+class MapDigraph(LabeledDigraph):
 
     def __init__(self, other_labeled_graph=None):
         """
@@ -10,7 +10,7 @@ class INetDicts(Net):
 
         *_targets_labels_sources* : `dict<target: dict<label: set<source>>>`
 
-        *_sources_target_label* : `dict<source: dict<target: label>>`
+        *_sources_targets_label* : `dict<source: dict<target: label>>`
         """
         self._sources_labels_targets = {}
         self._targets_labels_sources = {}
@@ -78,12 +78,29 @@ class INetDicts(Net):
     def label(self, source, target):
         return self._sources_target_label[source][target]
 
-    def arcs(self):
+    def arcs(self, node=None):
+        if node is None:
+            arcs = set()
+            for source in self._sources_target_label:
+                for target in self._sources_target_label[source]:
+                    label = self._sources_target_label[source][target]
+                    arcs.add((source, target, label))
+            return arcs
+        else:
+            return self.arcs_out(node).update(self.arcs_in(node))
+
+    def arcs_out(self, node):
         arcs = set()
-        for source in self._sources_target_label:
-            for target in self._sources_target_label[source]:
-                label = self._sources_target_label[source][target]
-                arcs.add((source, target, label))
+        for target in self._sources_target_label[node]:
+            label = self._sources_target_label[node][target]
+            arcs.add((node, target, label))
+        return arcs
+
+    def arcs_in(self, node):
+        arcs = set()
+        for source in self._targets_labels_sources[node]:
+            label = self._sources_target_label[source, node]
+            arcs.add(source, node, label)
         return arcs
 
     def has_arc(self, source, target, label=None):

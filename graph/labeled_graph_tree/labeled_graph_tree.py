@@ -1,6 +1,6 @@
 
 from structpy.language.simple import single
-from structpy.graph.net.i_net_dicts import INetDicts as Net
+from structpy.graph.labeled_digraph.map_digraph import MapDigraph as Net
 
 class LabeledGraphTree:
 

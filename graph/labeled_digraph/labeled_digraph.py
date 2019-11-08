@@ -1,57 +1,125 @@
 
-import json
+from abc import ABC, abstractmethod
+from structpy.graph.node import Node
+from structpy.graph.labeled_graph.labeled_graph_base import LabeledGraphBase
 
-class LabeledDigraph:
 
-    def _serialize(self, node_transform_function=None, label_transform_function=None, indent=0):
-        arcs = []
-        for s, t, l in self.arcs():
-            if node_transform_function is not None:
-                s = node_transform_function(s)
-                t = node_transform_function(t)
-            if label_transform_function is not None:
-                l = label_transform_function(l)
-            if hasattr(s, 'serialize'):
-                s = s.serialize()
-            if hasattr(t, 'serialize'):
-                t = t.serialize()
-            if hasattr(l, 'serialize'):
-                l = l.serialize()
-            arcs.append((s, t, l))
-        return json.dumps(arcs, indent=indent)
+class LabeledDigraph(LabeledGraphBase, ABC):
 
-    def serialize(self, node_transform_function=None, label_transform_function=None):
+    @abstractmethod
+    def nodes(self):
         """
 
         """
-        return self._serialize(node_transform_function, label_transform_function)
+        pass
 
-
-    def display(self, node_transform_function=None, label_transform_function=None):
+    @abstractmethod
+    def add_node(self, node):
         """
 
         """
-        self._serialize(node_transform_function, label_transform_function, indent=4)
+        pass
 
-    def deserialize(self, json_string, node_transform_function=None, label_transform_function=None):
+    @abstractmethod
+    def add_arc(self, source, target, label):
         """
 
         """
-        arcs = json.loads(json_string)
-        if node_transform_function or label_transform_function:
-            for i in range(len(arcs)):
-                s, t, l = arcs[i]
-                if node_transform_function is not None:
-                    s = node_transform_function(s)
-                    t = node_transform_function(t)
-                if label_transform_function is not None:
-                    l = label_transform_function(l)
-                arcs[i] = (s, t, l)
-        for arc in arcs:
-            self.add(*arc)
+        pass
 
+    @abstractmethod
+    def remove_node(self, node):
+        """
 
+        """
+        pass
 
+    @abstractmethod
+    def remove_arc(self, source, target):
+        """
 
+        """
+        pass
 
+    @abstractmethod
+    def targets(self, source, label=None):
+        """
 
+        """
+        pass
+
+    @abstractmethod
+    def label(self, source, target):
+        """
+
+        """
+        pass
+
+    @abstractmethod
+    def sources(self, target, label=None):
+        """
+
+        """
+        pass
+
+    def arcs(self, node=None):
+        """
+
+        """
+        if node is None:
+            arcs = set()
+            for node in self.nodes():
+                arcs.update(self.arcs_out(node))
+            return arcs
+        else:
+            return self.arcs_out(node).update(self.arcs_in(node))
+
+    def arcs_out(self, node):
+        arcs = set()
+        for target in self.targets(node):
+            arcs.add((node, target, self.label(node, target)))
+        return arcs
+
+    def arcs_in(self, node):
+        arcs = set()
+        for source in self.sources(node):
+            arcs.add((source, node, self.label(source, node)))
+        return arcs
+
+    def len_nodes(self):
+        """
+
+        """
+        return len(self.nodes())
+
+    def len_arcs(self):
+        """
+
+        """
+        return len(self.arcs())
+
+    def node(self, node_value):
+        """
+
+        """
+        return Node(node_value, self)
+
+    def add(self, node, target=None, label=None):
+        if not self.has_node(node):
+            self.add_node(node)
+        if target is not None:
+            if not self.has_node(target):
+                self.add_node(target)
+            self.add_arc(node, target, label)
+
+    def has_node(self, node):
+        return node in self.nodes()
+
+    def has_arc(self, source, target, label=None):
+        if label is None:
+            for s, t, l in self.arcs():
+                if s == source and t == target:
+                    return True
+            return False
+        else:
+            return (source, target, label) in self.arcs()

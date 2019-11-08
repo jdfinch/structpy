@@ -35,3 +35,9 @@ def test_ptr_item():
     s = Simple()
     p = PointerItem(s)
     assert hash(s) == hash(p)
+
+def test_pointer_for_primitive():
+    p = Pointer(5)
+    assert +p == 5
+    p *= +p + 2
+    assert +p == 7
