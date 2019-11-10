@@ -1,25 +1,25 @@
 
 import pytest
+
 from structpy.collection import Bidictionary
 
-def test_constructor():
-    bd = Bidictionary()
-    bd2 = Bidictionary({'k': 'v', 'k2': 'v2'})
-    assert bd2 == {'k': 'v', 'k2': 'v2'}
+@pytest.fixture
+def bidict():
+    d = Bidictionary({'a': 1, 'b': 2, 'c': 3})
+    return d
 
-def test_bidirection_add():
-    bd = Bidictionary()
-    bd['a'] = 1
-    bd['b'] = 2
-    assert bd['a'] == 1
-    assert bd['b'] == 2
-    assert bd.reverse()[1] == 'a'
-    assert bd.reverse()[2] == 'b'
+def test_constructor(bidict):
+    assert bidict.forward() == {'a': 1, 'b': 2, 'c': 3}
 
-def test_bidirection_del():
-    bd = Bidictionary()
-    bd['a'] = 1
-    bd['b'] = 2
-    del bd['a']
-    assert len(bd.reverse()) == 1
-    assert bd.reverse()[2] == 'b'
+def test_add(bidict):
+    assert bidict['a'] == 1
+    bidict['d'] = 4
+    assert bidict['d'] == 4
+    assert bidict.backward()[4] == 'd'
+    assert bidict.backward()[1] == 'a'
+    assert len(bidict) == 4
+
+def test_reverse(bidict):
+    rev = bidict.reverse()
+    assert rev[1] == 'a'
+    assert rev.backward()['a'] == 1

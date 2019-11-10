@@ -1,9 +1,9 @@
 
-from structpy.graph.net import Net
+from structpy.graph.net import Network
 import structpy.model.logic_net.logic_node as logic
 
 
-class LogicNet(Net):
+class LogicNet(Network):
 
     def update(self, node, value):
         node *= value

@@ -5,6 +5,26 @@ from functools import partial
 def interface(**interface_functions):
     return partial(I, **interface_functions)
 
+def CreateInterface(obj, **interface_functions):
+    """
+    in progress...
+    """
+
+    class Interface(obj.__class__):
+
+        def __init__(self, obj):
+            self._data_object = obj
+
+        def __getattr__(self, item):
+            return self._data_object.__getattribute__(item)
+
+    i = Interface(obj)
+    for function_name, function_value in interface_functions.items():
+        if not hasattr(function_value, '__self__'):
+            interface_functions[function_name] = MethodType(function_value, i)
+    i.__dict__.update(interface_functions)
+    return i
+
 class I:
     """
     wrapper class to add interface functions to an object

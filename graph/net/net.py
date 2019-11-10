@@ -1,88 +1,72 @@
 
+from structpy.graph.net.network_node import NetworkNode
+from structpy.collection import Bidictionary
 from structpy.graph.labeled_digraph import LabeledDigraph
-
 
 class Net(LabeledDigraph):
 
-    class Node:
-
-        def __init__(self, value=None, **targets):
-            self._node_value = value
-            self._targets_label = {}
-            self._labels_targets = {}
-            self._labels_sources = {}
-            for target, label in targets:
-                self.add(target, label)
-
-        def targets(self, label=None):
-            if label is None:
-                return self._targets_label.keys()
-            else:
-                return self._labels_targets[label]
-
-        def label(self, target):
-            return self._targets_label[target]
-
-        def sources(self, label=None):
-            if label is None:
-                sources = set()
-                for sset in self._labels_sources.values():
-                    sources.update(sset)
-                return sources
-            else:
-                return self._labels_sources[label]
-
-        def add(self, target, label):
-            self._targets_label[target] = label
-            if label not in self._labels_targets:
-                self._labels_targets[label] = set()
-            self._labels_targets[label].add(target)
-            if label not in target._labels_sources:
-                target._labels_sources[label] = set()
-            target._labels_sources[label].add(self)
-
-        def remove(self, target):
-            label = self._targets_label[target]
-            target._labels_sources[label].remove(self)
-            if not target._labels_sources[label]:
-                del target._labels_sources[label]
-            del self._targets_label[target]
-            self._labels_targets[label].remove(target)
-            if not self._labels_targets[label]:
-                del self._labels_targets[label]
-
-        def delete(self):
-            for source in self.sources():
-                source.remove(self)
-            for target in self.targets():
-                self.remove(target)
+    Node = NetworkNode
 
     def __init__(self):
-        self._nodes = set()
+
+        # node object : node value
+        self._nodes = Bidictionary()
 
     def nodes(self):
-        return self._nodes
+        return self._nodes.backward().keys()
+
+    def node(self, value):
+        return self._nodes.backward()[value]
+
+    def add(self, node, target=None, label=None):
+        if node not in self._nodes.backward():
+            node = NetworkNode(node)
+        else:
+            node = self.node(node)
+        if target is None:
+            return self.add_node(node)
+        else:
+            if target not in self._nodes.backward():
+                target = NetworkNode(target)
+            else:
+                target = self.node(target)
+            self.add_arc(node, target, label)
 
     def add_node(self, node):
-        self._nodes.add(node)
+        self._nodes[node] = node.value()
+        return node
 
     def add_arc(self, source, target, label):
+        source = self.node(source)
+        target = self.node(target)
         source.add(target, label)
 
     def remove_node(self, node):
         node.delete()
-        self._nodes.remove(node)
+        del self._nodes[node]
 
     def remove_arc(self, source, target):
+        source = self.node(source)
+        target = self.node(target)
         source.remove(target)
 
     def targets(self, source, label=None):
-        return source.targets(label)
+        source = self.node(source)
+        return {self._nodes[x] for x in source.targets(label)}
 
     def label(self, source, target):
+        source = self.node(source)
+        target = self.node(target)
         return source.label(target)
 
     def sources(self, target, label=None):
-        return target.sources(label)
+        target = self.node(target)
+        return {self._nodes[x] for x in target.sources(label)}
 
-
+    def arcs(self):
+        arcs = set()
+        for node in self.nodes():
+            for target in self.targets(node):
+                label = self.label(node, target)
+                arcs.add((node, target, label))
+        return arcs

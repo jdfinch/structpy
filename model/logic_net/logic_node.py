@@ -2,7 +2,7 @@
 from structpy import Pointer
 from abc import ABC, abstractmethod
 from enum import Enum
-from structpy.graph.net import Net
+from structpy.graph.net import Network
 
 class Arc(Enum):
     FIRST = 0

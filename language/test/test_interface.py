@@ -1,4 +1,5 @@
-from structpy import I, interface
+from structpy import interface
+from structpy import I
 import pytest
 
 class Cls:
@@ -8,6 +9,9 @@ class Cls:
 
     def x(self):
         return self._x
+
+    def get_value(self):
+        return self.x()
 
     def __str__(self):
         return 'TestClass(' + str(self._x) + ')'
@@ -68,3 +72,19 @@ def test_interface_function():
     i = i_func(tc)
     assert i.bar(3) == 8
     assert i.x() == 5
+
+'''
+does not work yet (see CreateInterface)
+def test_interface_inheritance():
+    tc = Cls(5)
+    i = I(
+        tc,
+        x=lambda self: 10,
+        y=lambda self: 6
+    )
+    assert i.x() == 10
+    assert i.get_value() == 10
+    with pytest.raises(AttributeError):
+        tc.y()
+    assert tc.get_value() == 5
+'''

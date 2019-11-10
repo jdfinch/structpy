@@ -1,15 +1,13 @@
 
 import pytest
 
-from structpy.graph.net import Net
+from structpy.graph.net import Network, NetworkNode
 
-from structpy.graph.node import Node
-
-n = [Net.Node(x) for x in range(6)]
+n = [NetworkNode(x) for x in range(6)]
 
 @pytest.fixture
 def net():
-    net = Net()
+    net = Network()
     for node in n:
         net.add_node(node)
     net.add_arc(n[1], n[2], 'a')
@@ -60,5 +58,5 @@ def test_len_arcs(net):
     assert net.len_arcs() == 6
 
 def test_node(net):
-    node = net.node(n[1])
+    node = net.node(1)
     assert set(node.targets()) == {n[2], n[3]}
