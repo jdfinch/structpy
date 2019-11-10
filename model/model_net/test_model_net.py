@@ -9,37 +9,11 @@ def test_constructor():
 
 def test_update():
     net = ModelNet()
-    x = 0.5
-    y = 0.1
+    x = Pointer(0.5)
+    y = Pointer(0.1)
     xn = net.add_node(ModelNet.Node(x))
     yn = net.add_node(ModelNet.Node(y))
     zn = ModelNet.Node(
-        0.0,
-        (lambda self: sum((t.value()) for t in self.targets())),
-        (lambda self, target:
-            target.value() + (
-                (self.value() - sum([t.value() for t in set(self.targets())]))
-                / (len(self.targets())))
-        )
-    )
-    zn.add(xn)
-    zn.add(yn)
-    net.add_node(zn)
-    zn.pull()
-    assert zn.value() == 0.6
-    net.push_node(zn, 0.4)
-    assert xn.value() == 0.4
-    assert yn.value() == pytest.approx(0.0)
-    net.push_node(yn, 0.1)
-    assert zn.value() == 0.4
-
-def test_update_ptrnodes():
-    net = ModelNet()
-    x = Pointer(0.5)
-    y = Pointer(0.1)
-    xn = net.add_node(ModelNet.PointerNode(x))
-    yn = net.add_node(ModelNet.PointerNode(y))
-    zn = ModelNet.PointerNode(
         Pointer(0.0),
         (lambda self: sum(+(t.value()) for t in self.targets())),
         (lambda self, target:

@@ -18,20 +18,6 @@ class ModelNet(Net):
                 self.push_val = None
 
         def pull(self):
-            self.set_value(self.pull_val())
-
-        def push(self, value=None):
-            if value is not None:
-                self.set_value(value)
-            update = {target: None for target in self.targets()}
-            for target in self.targets():
-                update[target] = self.push_val(target)
-            for target, val in update.items():
-                target.set_value(val)
-
-    class PointerNode(Node):
-
-        def pull(self):
             self.value().set_ptr(self.pull_val())
 
         def push(self, value=None):
@@ -45,16 +31,10 @@ class ModelNet(Net):
 
     def push(self, node, value):
         node = self.node(node)
-        self.push_node(node, value)
-
-    def push_node(self, node, value):
         node.push(value)
 
     def pull(self, node):
-        self.pull_node(self.node(node))
-
-    def pull_node(self, node):
-        node.pull()
+        self.node(node).pull()
 
     def add(self, node, target=None, label=None):
         if target is None:
