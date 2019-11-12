@@ -4,9 +4,9 @@ from collections import deque
 
 class Queue(Frontier, deque):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *initials, step=None):
         deque.__init__(self)
-        Frontier.__init__(self, *args, **kwargs)
+        Frontier.__init__(self, *initials, step=step)
 
     add = deque.appendleft
 
@@ -15,5 +15,8 @@ class Queue(Frontier, deque):
     def __len__(self):
         return deque.__len__(self)
 
-    def peek(self):
-        return self[-1]
+    def __str__(self):
+        return 'FrontierQueue(' + ', '.join([str(x) for x in self]) + ')'
+
+    def __repr__(self):
+        return str(self)

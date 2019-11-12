@@ -1,18 +1,17 @@
 
-from structpy.graph.traversal.frontier.frontier import Frontier
+from structpy.graph.traversal.frontier.frontier_composition import FrontierComposition
 
 
-class MemFrontier(Frontier):
+class Memoried(FrontierComposition):
 
     def __init__(self, frontier, visited=None):
-        self._frontier = frontier
+        FrontierComposition.__init__(self, frontier)
         if visited is None:
             self._visited = {x.node() for x in self._frontier}
         else:
             self._visited = visited
             for item in self._frontier:
                 self._visited.add(item.node())
-        self._step = frontier.step()
 
     def add(self, item):
         node = item.node()
@@ -20,8 +19,5 @@ class MemFrontier(Frontier):
             self._visited.add(node)
             self._frontier.add(item)
 
-    def get(self):
-        return self._frontier.get()
 
-    def __len__(self):
-        return len(self._frontier)
+
