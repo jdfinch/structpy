@@ -39,8 +39,8 @@ rings = [
 ]
 
 def test_breadth_first_traversal(graph):
-    frontier = Memoried(Queue)(1)
-    traversal = list(Traversal(graph, frontier))
+    frontier = Queue(graph).memoried().start(1)
+    traversal = list(frontier)
     assert len(traversal) == graph.len_nodes()
     for a, b in ordering:
         assert traversal.index(a) < traversal.index(b)
