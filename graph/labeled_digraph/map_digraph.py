@@ -4,7 +4,7 @@ from structpy.graph.labeled_digraph.labeled_digraph import LabeledDigraph
 
 class MapDigraph(LabeledDigraph):
 
-    def __init__(self, other_labeled_graph=None):
+    def __init__(self, arcs=None):
         """
         *_sources_labels_targets* : `dict<source: dict<label: set<target>>>`
 
@@ -15,8 +15,8 @@ class MapDigraph(LabeledDigraph):
         self._sources_labels_targets = {}
         self._targets_labels_sources = {}
         self._sources_target_label = {}
-        if other_labeled_graph is not None:
-            for arc in other_labeled_graph.arcs():
+        if arcs is not None:
+            for arc in arcs:
                 self.add(*arc)
 
     def nodes(self):
