@@ -2,32 +2,49 @@
 from abc import ABC, abstractmethod
 from structpy.graph.traversal.traversal_step import TraversalStep
 
+from structpy.graph.traversal.traversal_step import Step
+
 
 class Frontier(ABC):
 
-    def __init__(self, *initials, step=None):
-        if step is not None:
-            self._step = step
-        else:
-            self._step = TraversalStep.Nodes
+    def __init__(self, graph):
+        self.graph = graph
+        self.transforms = []
+        self.successors = lambda g, step: g.targets(step.node)
+        self.output = lambda step: step.node
+
+    def start(self, *initials):
         for initial in initials:
-            self.add(self._step(initial))
+            step = Step(initial)
+            for transform in self.transforms:
+                for t_step in transform(self.graph, step):
+                    self.add(t_step)
+        return self
 
     @abstractmethod
     def get(self):
         pass
 
     @abstractmethod
-    def add(self, item):
+    def add(self, step):
         pass
 
-    def step(self):
-        return self._step
+    def expand(self, step):
+        for successor in self.successors(self.graph, step):
+            for transform in self.transforms:
+                for t_step in transform(self.graph, successor):
+                    self.add(t_step)
 
-    @abstractmethod
-    def __len__(self):
-        pass
-
-    def __bool__(self):
+    def done(self):
         return len(self) > 0
+
+    #############################################################
+
+    def arcs(self):
+        return self
+
+    def memoried(self):
+
+        return self
+
 
