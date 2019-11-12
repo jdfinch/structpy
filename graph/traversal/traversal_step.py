@@ -1,4 +1,16 @@
 
+class Step:
+
+    def __init__(self, node, source=None, label=None, **kwargs):
+        self.node = node
+        self.source = source
+        self.label = label
+        self.__dict__.update(kwargs)
+
+    def __str__(self):
+        return 'Step(' + str(self.__dict__) + ')'
+
+
 class _TraversalStep:
 
     @staticmethod
@@ -16,8 +28,9 @@ class TraversalStep:
 
     class Nodes(_TraversalStep):
 
-        def __init__(self, node):
+        def __init__(self, node, **kwargs):
             self._node = node
+            self.__dict__.update(**kwargs)
 
         def node(self):
             return self._node
@@ -39,9 +52,10 @@ class TraversalStep:
 
     class Arcs(_ArcTraversalStep):
 
-        def __init__(self, node, source=None):
+        def __init__(self, node, source=None, **kwargs):
             self._node = node
             self._source = source
+            self.__dict__.update(**kwargs)
 
         def node(self):
             return self._node
@@ -66,10 +80,11 @@ class TraversalStep:
 
     class LabeledArcs(_ArcTraversalStep):
 
-        def __init__(self, node, source=None, source_label=None):
+        def __init__(self, node, source=None, source_label=None, **kwargs):
             self._node = node
             self._source = source
             self._source_label = source_label
+            self.__dict__.update(**kwargs)
 
         def node(self):
             return self._node
@@ -95,3 +110,5 @@ class TraversalStep:
 
         def __repr__(self):
             return str(self)
+
+

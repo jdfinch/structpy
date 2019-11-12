@@ -1,6 +1,5 @@
 
-from structpy.graph.traversal.frontier.frontier_composition import FrontierComposition
-from sys import maxsize
+from structpy import I
 
 def DepthBounded(frontier_cls, depth):
 
@@ -13,10 +12,15 @@ def DepthBounded(frontier_cls, depth):
 
         def add(self, item):
             if self._depth <= self._max_depth:
-                frontier_cls.add(self, (item, self._depth))
+                item = I(
+                    item,
+                    depth=(lambda this: depth)
+                )
+                frontier_cls.add(self, item)
 
         def get(self):
-            item, d = frontier_cls.get(self)
+            item = frontier_cls.get(self)
+            d = item.depth()
             self._depth = d + 1
             return item
 

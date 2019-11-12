@@ -1,7 +1,7 @@
 
 class Traversal:
 
-    def __init__(self, graph, frontier):
+    def __init__(self, graph, frontier, step_function):
         self._graph = graph
         self._frontier = frontier
         self._step = self._frontier.step()
