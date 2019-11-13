@@ -1,8 +1,7 @@
 
 import pytest
 
-from structpy.graph.traversal.traversal import Traversal
-from structpy.graph.traversal.traversal_step import TraversalStep
+from structpy.graph.traversal import Traversal, rings
 from structpy.graph.traversal.frontier import Stack, Queue, Memoried, DepthBounded
 from structpy.graph.labeled_digraph import MapDigraph
 
@@ -31,7 +30,7 @@ ordering = [
     (4, 5)
 ]
 
-rings = [
+ring_sets = [
     {(None, 1, None)},
     {(1, 2, 'a'), (1, 3, 'a')},
     {(2, 4, 'd')},
@@ -58,30 +57,35 @@ def test_breadth_first_labeled_arc_traversal(graph):
         assert arc in arcs
 
 def test_breadth_first_bounded_traversal(graph):
-    traversal = list(Traversal(graph, Queue()).memoried().depth(2).start(1))
+    traversal = list(Traversal(graph, Queue()).memoried().to_depth(2).start(1))
     assert len(traversal) == graph.len_nodes() - 1
     for a, b in ordering[:-1]:
         assert traversal.index(a) < traversal.index(b)
 
 def test_ring_traversal(graph):
     i = 0
-    for ring in Traversal(graph, 1):
-        assert set(ring) == {x[1] for x in rings[i]}
+    traversal = Traversal(graph, Queue()).memoried().with_depth().start(1)
+    for ring in rings(traversal):
+        r = set(ring)
+        t = {x[1] for x in ring_sets[i]}
+        assert r == t
         i += 1
-    assert i == len(rings)
+    assert i == len(ring_sets)
 
 def test_ring_arc_traversal(graph):
     i = 1
-    for ring in Traversal.arcs(graph, 1):
+    traversal = Traversal(graph, Queue()).arcs().memoried().with_depth().start(1)
+    for ring in rings(traversal):
         ring = set(ring)
-        assert ring == {(source, target) for source, target, _ in rings[i]}
+        assert ring == {(source, target) for source, target, _ in ring_sets[i]}
         i += 1
 
 def test_ring_labeled_arc_traversal(graph):
     i = 1
-    for ring in Traversal.labeled_arcs(graph, 1):
+    traversal = Traversal(graph, Queue()).labeled_arcs().memoried().with_depth().start(1)
+    for ring in rings(traversal):
         ring = set(ring)
-        assert ring == rings[i]
+        assert ring == ring_sets[i]
         i += 1
 
 

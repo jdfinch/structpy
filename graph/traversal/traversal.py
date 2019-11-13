@@ -1,9 +1,7 @@
 
-from abc import ABC, abstractmethod
-from structpy.graph.traversal.traversal_step import TraversalStep
 
 from structpy.graph.traversal.traversal_step import Step
-from structpy.language import Mechanic
+from structpy.language import Mechanic, WrapperFunction
 
 
 class Traversal:
@@ -99,7 +97,7 @@ class Traversal:
         self.transforms.append(remember)
         return self
 
-    def depth(self, max_depth):
+    def to_depth(self, max_depth):
         def add_depth(graph, step, prev=None):
             if prev is None:
                 step.depth = 0
@@ -109,3 +107,19 @@ class Traversal:
                 yield step
         self.transforms.append(add_depth)
         return self
+
+    def with_depth(self, max_depth=None):
+        def add_depth(graph, step, prev=None):
+            if prev is None:
+                step.depth = 0
+            else:
+                step.depth = prev.depth + 1
+            if max_depth is None or step.depth <= max_depth:
+                yield step
+        self.transforms.append(add_depth)
+        @WrapperFunction(self.output)
+        def output(result, step):
+            return result, step.depth
+        self.output = output
+        return self
+
