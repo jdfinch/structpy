@@ -5,9 +5,8 @@ from collections import deque
 
 class Queue(Frontier, deque):
 
-    def __init__(self, graph):
+    def __init__(self):
         deque.__init__(self)
-        Frontier.__init__(self, graph)
 
     add = deque.appendleft
 

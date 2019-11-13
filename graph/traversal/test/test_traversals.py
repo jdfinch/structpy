@@ -39,28 +39,26 @@ rings = [
 ]
 
 def test_breadth_first_traversal(graph):
-    frontier = Queue(graph).memoried().start(1)
-    traversal = list(frontier)
+    traversal = list(Traversal(graph, Queue()).memoried().start(1))
     assert len(traversal) == graph.len_nodes()
     for a, b in ordering:
         assert traversal.index(a) < traversal.index(b)
 
 def test_breadth_first_arc_traversal(graph):
-    traversal = list(Traversal(graph, Memoried(Queue)(1, step=TraversalStep.Arcs)))
+    traversal = list(Traversal(graph, Queue()).arcs().memoried().start(1))
     assert len(traversal) == len(ordering)
     for arc in ordering:
         assert arc in traversal
 
 def test_breadth_first_labeled_arc_traversal(graph):
-    traversal = list(Traversal(graph, Memoried(Queue)(1, step=TraversalStep.LabeledArcs)))
+    traversal = list(Traversal(graph, Queue()).labeled_arcs().memoried().start(1))
     assert len(traversal) == len(ordering)
     arcs = [(source, target) for source, target, label in traversal]
     for arc in ordering:
         assert arc in arcs
 
 def test_breadth_first_bounded_traversal(graph):
-    frontier = DepthBounded(Memoried(Queue), 2)(1)
-    traversal = list(Traversal(graph, frontier))
+    traversal = list(Traversal(graph, Queue()).memoried().depth(2).start(1))
     assert len(traversal) == graph.len_nodes() - 1
     for a, b in ordering[:-1]:
         assert traversal.index(a) < traversal.index(b)
