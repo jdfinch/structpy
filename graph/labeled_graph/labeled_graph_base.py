@@ -31,7 +31,7 @@ class LabeledGraphBase:
         """
 
         """
-        self._serialize(node_transform_function, label_transform_function, indent=4)
+        return self._serialize(node_transform_function, label_transform_function, indent=4)
 
     def deserialize(self, json_string, node_transform_function=None, label_transform_function=None):
         """
