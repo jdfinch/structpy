@@ -32,3 +32,6 @@ def test_update():
     assert +y == pytest.approx(0.0)
     net.push(y, 0.1)
     assert +zn.value() == 0.4
+
+def test_ring_update():
+    raise NotImplementedError()

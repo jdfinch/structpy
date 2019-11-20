@@ -1,6 +1,7 @@
 
 from structpy.graph.net import Net
 from types import MethodType
+from structpy.graph.traversal import Traversal, rings
 
 class ModelNet(Net):
 
@@ -41,3 +42,5 @@ class ModelNet(Net):
             return self.add_node(node)
         else:
             self.add_arc(node, target, label)
+
+

@@ -2,8 +2,9 @@
 import pytest
 
 from structpy.graph.traversal import Traversal, rings
-from structpy.graph.traversal.frontier import Stack, Queue, Memoried, DepthBounded
+from structpy.graph.traversal.frontier import Stack, Queue
 from structpy.graph.labeled_digraph import MapDigraph
+import structpy.graph.traversal.preset as trv
 
 @pytest.fixture()
 def graph():
@@ -38,34 +39,34 @@ ring_sets = [
 ]
 
 def test_breadth_first_traversal(graph):
-    traversal = list(Traversal(graph, Queue()).memoried().start(1))
+    traversal = list(trv.BreadthFirst(graph, 1))
     assert len(traversal) == graph.len_nodes()
     for a, b in ordering:
         assert traversal.index(a) < traversal.index(b)
 
 def test_breadth_first_arc_traversal(graph):
-    traversal = list(Traversal(graph, Queue()).arcs().memoried().start(1))
+    traversal = list(trv.BreadthFirstArcs(graph, 1))
     assert len(traversal) == len(ordering)
     for arc in ordering:
         assert arc in traversal
 
 def test_breadth_first_labeled_arc_traversal(graph):
-    traversal = list(Traversal(graph, Queue()).labeled_arcs().memoried().start(1))
+    traversal = list(trv.BreadthFirstLabeledArcs(graph, 1))
     assert len(traversal) == len(ordering)
     arcs = [(source, target) for source, target, label in traversal]
     for arc in ordering:
         assert arc in arcs
 
 def test_breadth_first_bounded_traversal(graph):
-    traversal = list(Traversal(graph, Queue()).memoried().to_depth(2).start(1))
+    traversal = list(trv.BreadthFirstBounded(graph, 1, 2))
     assert len(traversal) == graph.len_nodes() - 1
     for a, b in ordering[:-1]:
         assert traversal.index(a) < traversal.index(b)
 
 def test_ring_traversal(graph):
     i = 0
-    traversal = Traversal(graph, Queue()).memoried().with_depth().start(1)
-    for ring in rings(traversal):
+    traversal = trv.Ring(graph, 1)
+    for ring in traversal:
         r = set(ring)
         t = {x[1] for x in ring_sets[i]}
         assert r == t
@@ -74,16 +75,16 @@ def test_ring_traversal(graph):
 
 def test_ring_arc_traversal(graph):
     i = 1
-    traversal = Traversal(graph, Queue()).arcs().memoried().with_depth().start(1)
-    for ring in rings(traversal):
+    traversal = trv.RingArcs(graph, 1)
+    for ring in traversal:
         ring = set(ring)
         assert ring == {(source, target) for source, target, _ in ring_sets[i]}
         i += 1
 
 def test_ring_labeled_arc_traversal(graph):
     i = 1
-    traversal = Traversal(graph, Queue()).labeled_arcs().memoried().with_depth().start(1)
-    for ring in rings(traversal):
+    traversal = trv.RingLabeledArcs(graph, 1)
+    for ring in traversal:
         ring = set(ring)
         assert ring == ring_sets[i]
         i += 1
