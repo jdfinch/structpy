@@ -100,7 +100,7 @@ class MapDigraph(LabeledDigraph):
         arcs = set()
         for source in self._targets_labels_sources[node]:
             label = self._sources_target_label[source, node]
-            arcs.add(source, node, label)
+            arcs.add((source, node, label))
         return arcs
 
     def has_arc(self, source, target, label=None):
