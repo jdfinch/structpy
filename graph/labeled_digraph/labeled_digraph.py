@@ -74,17 +74,31 @@ class LabeledDigraph(LabeledGraphBase, ABC):
         else:
             return self.arcs_out(node).update(self.arcs_in(node))
 
-    def arcs_out(self, node):
-        arcs = set()
-        for target in self.targets(node):
-            arcs.add((node, target, self.label(node, target)))
-        return arcs
+    def arcs_out(self, node, label=None):
+        if label is None:
+            arcs = set()
+            for target in self.targets(node):
+                label = self.label(node, target)
+                arcs.add((node, target, label))
+            return arcs
+        else:
+            arcs = set()
+            for target in self.targets(node, label):
+                arcs.add((node, target, label))
+            return arcs
 
-    def arcs_in(self, node):
-        arcs = set()
-        for source in self.sources(node):
-            arcs.add((source, node, self.label(source, node)))
-        return arcs
+    def arcs_in(self, node, label=None):
+        if label is None:
+            arcs = set()
+            for source in self.sources(node):
+                label = self.label(source, node)
+                arcs.add((source, node, label))
+            return arcs
+        else:
+            arcs = set()
+            for source in self.sources(node, label):
+                arcs.add((source, node, label))
+            return arcs
 
     def len_nodes(self):
         """

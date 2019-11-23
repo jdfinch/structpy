@@ -2,13 +2,16 @@
 from structpy.graph.labeled_digraph.labeled_digraph import LabeledDigraph
 
 
-class MapDigraph(LabeledDigraph):
+class SourceMapDigraph(LabeledDigraph):
+    """
+    Similar to MapDigraph but with unique labels on out arcs
+    """
 
     def __init__(self, arcs=None):
         """
         *_sources_labels_targets* : `dict<source: dict<label: set<target>>>`
 
-        *_targets_labels_sources* : `dict<target: dict<label: set<source>>>`
+        *_targets_labels_sources* : `dict<target: dict<label: source>>`
 
         *_sources_targets_label* : `dict<source: dict<target: label>>`
         """
@@ -31,9 +34,7 @@ class MapDigraph(LabeledDigraph):
         if label not in self._sources_labels_targets[source]:
             self._sources_labels_targets[source][label] = set()
         self._sources_labels_targets[source][label].add(target)
-        if label not in self._targets_labels_sources[target]:
-            self._targets_labels_sources[target][label] = set()
-        self._targets_labels_sources[target][label].add(source)
+        self._targets_labels_sources[target][label] = source
         self._sources_target_label[source][target] = label
 
     def remove_node(self, node):
@@ -52,9 +53,7 @@ class MapDigraph(LabeledDigraph):
         self._sources_labels_targets[source][label].remove(target)
         if not self._sources_labels_targets[source][label]:
             del self._sources_labels_targets[source][label]
-        self._targets_labels_sources[target][label].remove(source)
-        if not self._targets_labels_sources[target][label]:
-            del self._targets_labels_sources[target][label]
+        del self._targets_labels_sources[target][label]
         del self._sources_target_label[source][target]
 
     def targets(self, source, label=None):
@@ -66,19 +65,16 @@ class MapDigraph(LabeledDigraph):
         else:
             return set(self._sources_labels_targets[source][label])
 
-    def sources(self, target, label=None):
-        if label is None:
-            sources = set()
-            for label in self._targets_labels_sources[target]:
-                sources.update(self._targets_labels_sources[target][label])
-            return sources
-        else:
-            return set(self._targets_labels_sources[target][label])
+    def sources(self, target):
+        return set(self._targets_labels_sources[target].values())
+
+    def source(self, target, label):
+        return self._targets_labels_sources[target][label]
 
     def label(self, source, target):
         return self._sources_target_label[source][target]
 
-    def arcs(self, node=None, label=None):
+    def arcs(self, node=None):
         if node is None:
             arcs = set()
             for source in self._sources_target_label:
@@ -87,7 +83,7 @@ class MapDigraph(LabeledDigraph):
                     arcs.add((source, target, label))
             return arcs
         else:
-            return self.arcs_out(node, label).update(self.arcs_in(node, label))
+            return self.arcs_out(node).update(self.arcs_in(node))
 
     def has_arc(self, source, target, label=None):
         if label is None:

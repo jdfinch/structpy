@@ -1,12 +1,12 @@
 
 import pytest
 
-from structpy.graph.labeled_digraph import MapDigraph
+from structpy.graph.labeled_digraph import MapDigraph, SourceMapDigraph
 
 from structpy.graph.node import Node
 
 
-types = [MapDigraph]
+types = [MapDigraph, SourceMapDigraph]
 
 @pytest.mark.parametrize('cls', types)
 def test_constructor(cls):

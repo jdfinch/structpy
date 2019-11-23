@@ -30,6 +30,12 @@ class ModelNet(Net):
             for target, val in update.items():
                 target.value().set_ptr(val)
 
+    def __init__(self):
+        Net.__init__(self)
+
+        # dict<Pointer, float> representing new values
+        self._next_values = {}
+
     def push(self, node, value):
         node = self.node(node)
         node.push(value)

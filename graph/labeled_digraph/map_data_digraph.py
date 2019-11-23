@@ -18,3 +18,4 @@ class MapDataDigraph(MapDigraph):
 
     def data(self, node):
         return self._node_data[node]
+

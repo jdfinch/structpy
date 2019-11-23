@@ -15,9 +15,9 @@ def test_update():
     yn = net.add_node(ModelNet.Node(y))
     zn = ModelNet.Node(
         Pointer(0.0),
-        (lambda self: sum(+(t.value()) for t in self.targets())),
-        (lambda self, target:
-            +target.value() + (
+        pull_val_fptr=(lambda self: sum(+(t.value()) for t in self.targets())),
+        push_val_fptr=(lambda self, target:
+                + target.value() + (
                 (+self.value() - sum([+t.value() for t in set(self.targets())]))
                 / (len(self.targets())))
         )
