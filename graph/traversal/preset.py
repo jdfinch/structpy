@@ -15,6 +15,9 @@ def BreadthFirstLabeledArcs(graph, start):
 def BreadthFirstBounded(graph, start, depth):
     return Traversal(graph, Queue()).memoried().to_depth(depth).start(start)
 
+def BreadthFirstBoundedArcs(graph, start, depth):
+    return Traversal(graph, Queue()).arcs().memoried().to_depth(depth).start(start)
+
 def Ring(graph, start, depth=None):
     if depth is None:
         return rings(Traversal(graph, Queue()).memoried().with_depth().start(start))
