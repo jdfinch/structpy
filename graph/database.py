@@ -4,9 +4,12 @@ def Database(graph_cls):
     class _GraphDatabase(graph_cls):
 
         def __init__(self, arcs=None):
-            graph_cls.__init(self, arcs)
+            graph_cls.__init__(self)
             self._node_data = {n: {} for n in self.nodes()}
             self._arc_data = {(s, t): {} for s, t, _ in self.arcs()}
+            if arcs is not None:
+                for arc in arcs:
+                    self.add(*arc)
 
         def add_node(self, node):
             graph_cls.add_node(self, node)
