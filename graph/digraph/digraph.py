@@ -96,3 +96,6 @@ class Digraph(ABC):
 
     def has_arc(self, source, target):
         return (source, target) in self.arcs()
+
+    def copy(self, other):
+        raise NotImplementedError()

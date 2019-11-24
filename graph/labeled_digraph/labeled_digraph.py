@@ -137,3 +137,12 @@ class LabeledDigraph(LabeledGraphBase, ABC):
             return False
         else:
             return (source, target, label) in self.arcs()
+
+    def copy(self):
+        new = self.__class__()
+        new.update(self)
+        return new
+
+    def update(self, other):
+        for arc in other.arcs():
+            self.add(*arc)
