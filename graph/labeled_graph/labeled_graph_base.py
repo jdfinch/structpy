@@ -1,7 +1,14 @@
 import json
+from structpy.graph.node import Node
 
 
 class LabeledGraphBase:
+
+    def node(self, node_value):
+        """
+
+        """
+        return Node(node_value, self)
 
     def _serialize(self, node_transform_function=None, label_transform_function=None, indent=0):
         arcs = []
