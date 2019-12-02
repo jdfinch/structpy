@@ -70,10 +70,18 @@ class MapGraph(LabeledGraphBase):
     def sources(self, target):
         for s, t, l in self.arcs():
             if target == t:
-                yield s, t, l
+                yield s
 
     def source(self, target, label):
         for s, t, l in self.arcs():
             if target == t and label == l:
+                return s
+
+    def arcs_out(self, source):
+        return [(source, target, label) for label, target in self._arcs[source].items()]
+
+    def arcs_in(self, target):
+        for s, t, l in self.arcs():
+            if t == target:
                 yield s, t, l
 
