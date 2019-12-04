@@ -112,12 +112,6 @@ class LabeledDigraph(LabeledGraphBase, ABC):
         """
         return len(self.arcs())
 
-    def node(self, node_value):
-        """
-
-        """
-        return Node(node_value, self)
-
     def add(self, node, target=None, label=None):
         if not self.has_node(node):
             self.add_node(node)
