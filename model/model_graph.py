@@ -9,6 +9,7 @@ from enum import Enum
 class _Model(Enum):
     PULL = 0
     PUSH = 1
+    COUNT = 2
 
 
 class ModelGraph(Graph):
@@ -17,6 +18,16 @@ class ModelGraph(Graph):
         Graph.__init__(self, arcs)
         self._update = DefaultDictionary(lambda ptr: [+ptr])  # dict<node: list<float>>
         self._pooling = lambda ls: sum(ls) / len(ls)
+
+    def add_arc(self, source, target, label=None):
+        if label is None:
+            if _Model.COUNT not in self.data(target):
+                label = 0
+                self.data(target)[_Model.COUNT] = 1
+            else:
+                label = self.data(target)[_Model.COUNT]
+                self.data(target)[_Model.COUNT] += 1
+        Graph.add_arc(self, source, target, label)
 
     def set_pooling(self, pooling_function):
         self._pooling = pooling_function

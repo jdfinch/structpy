@@ -8,7 +8,7 @@ class Pointer:
         self.ptr_value = value
         return self
 
-    def __lt__(self, other):
+    def __imul__(self, other):
         self.ptr_value = other
         return self
 
@@ -32,7 +32,7 @@ def PointerItem(item):
 
         class _PointerItem(Pointer, item.__class__):
             def __getattribute__(self, e):
-                if e in {'__str__', '__class__', '__repr__', '__lt__', '__pos__', 'set_ptr', 'ptr_value'}:
+                if e in {'__str__', '__class__', '__repr__', '__imul__', '__pos__', 'set_ptr', 'ptr_value'}:
                     return Pointer.__getattribute__(self, e)
                 return Pointer.__getattribute__(self, 'ptr_value').__getattribute__(e)
 

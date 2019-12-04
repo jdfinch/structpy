@@ -1,18 +1,18 @@
+from collections import defaultdict
 
-from structpy.language import I
 
-class Bidictionary:
+class Multibidict:
 
     @staticmethod
     def _create_reverse(bidict):
-        reverse = Bidictionary()
+        reverse = Multibidict()
         reverse._forward = bidict._backward
         reverse._backward = bidict._forward
         return reverse
 
     def __init__(self, other=None):
-        self._forward = {}
-        self._backward = {}
+        self._forward = defaultdict(set)
+        self._backward = defaultdict(set)
         if other is not None:
             for k, v in other.items():
                 self[k] = v
@@ -24,7 +24,7 @@ class Bidictionary:
         return self._backward
 
     def reverse(self):
-        return Bidictionary._create_reverse(self)
+        return Multibidict._create_reverse(self)
 
     def keys(self):
         return self._forward.keys()
@@ -35,6 +35,14 @@ class Bidictionary:
     def items(self):
         return self._forward.items()
 
+    def remove(self, key, value):
+        self._forward[key].remove(value)
+        if len(self._forward[key]) == 0:
+            del self._forward[key]
+        self._backward[value].remove(key)
+        if len(self._backward[value]) == 0:
+            del self._backward[value]
+
     def __iter__(self):
         return self._forward.__iter__()
 
@@ -42,12 +50,16 @@ class Bidictionary:
         return self._forward[item]
 
     def __setitem__(self, key, value):
-        self._forward.__setitem__(key, value)
-        self._backward.__setitem__(value, key)
+        self._forward[key].add(value)
+        self._backward[value].add(key)
 
     def __delitem__(self, key):
-        self._backward.__delitem__(self[key])
-        self._forward.__delitem__(key)
+        vals = self._forward[key]
+        del self._forward[key]
+        for val in vals:
+            self._backward[val].remove(key)
+            if len(self._backward[val]) == 0:
+                del self._backward[val]
 
     def __len__(self):
         return len(self._forward)
