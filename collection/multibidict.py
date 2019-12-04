@@ -14,8 +14,9 @@ class Multibidict:
         self._forward = defaultdict(set)
         self._backward = defaultdict(set)
         if other is not None:
-            for k, v in other.items():
-                self[k] = v
+            for k, vs in other.items():
+                for v in vs:
+                    self[k] = v
 
     def forward(self):
         return self._forward
