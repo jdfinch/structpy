@@ -95,3 +95,7 @@ class MapDigraph(LabeledDigraph):
         else:
             tl = self._sources_target_label[source]
             return target in tl and tl[target] == label
+
+    def has_arc_label(self, source, label):
+        return label in self._sources_labels_targets[source]
+
