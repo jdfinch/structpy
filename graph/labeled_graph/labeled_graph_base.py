@@ -1,5 +1,5 @@
 import json
-from structpy.graph.node import Node
+from structpy.graph.element import Node, Arc
 
 
 class LabeledGraphBase:
@@ -8,7 +8,14 @@ class LabeledGraphBase:
         """
 
         """
-        return Node(node_value, self)
+        return Node(self, node_value)
+
+    def arc(self, source, target, label=None):
+        """
+
+        """
+        return Arc(self, source, target, label)
+
 
     def _serialize(self, node_transform_function=None, label_transform_function=None, indent=0):
         arcs = []

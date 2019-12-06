@@ -1,6 +1,6 @@
 
 from abc import ABC, abstractmethod
-from structpy.graph.node import Node
+from structpy.graph.element import Node
 from structpy.graph.labeled_graph.labeled_graph_base import LabeledGraphBase
 
 

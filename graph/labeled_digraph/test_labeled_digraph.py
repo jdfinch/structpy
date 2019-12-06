@@ -4,7 +4,7 @@ import pytest
 from structpy.graph.labeled_digraph import MapDigraph, SourceMapDigraph, \
         MapMultidigraph
 
-from structpy.graph.node import Node
+from structpy.graph.element import Node
 
 
 types = [MapDigraph, SourceMapDigraph, MapMultidigraph]

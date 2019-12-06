@@ -72,8 +72,9 @@ class DeterministicMapDigraph(LabeledDigraph):
         return self.arcs_out(node).update(self.arcs_in(node))
 
     def has_arc(self, source, target, label=None):
-        return target in self._sources_target_label[source] \
-            and self._sources_target_label[source][target] == label
+        return source in self._sources_target_label \
+                and target in self._sources_target_label[source] \
+                and self._sources_target_label[source][target] == label
 
     def has_arc_label(self, source, label):
         return label in self._sources_labels_targets[source]

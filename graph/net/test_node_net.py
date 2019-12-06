@@ -3,7 +3,7 @@ import pytest
 
 from structpy.graph.net import Net
 
-from structpy.graph.node import Node
+from structpy.graph.element import Node
 
 
 types = [Net]

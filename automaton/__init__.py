@@ -1,2 +1,2 @@
 from structpy.automaton.dfa import DFA
-from structpy.automaton.state_machine import State, Transition, StateMachine
+from structpy.automaton.state_machine import StateMachine
