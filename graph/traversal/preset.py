@@ -2,6 +2,7 @@
 from structpy.graph.traversal.traversal import Traversal
 from structpy.graph.traversal.frontier import Queue, Stack
 from structpy.graph.traversal.rings import rings
+from structpy.language.simple import each
 
 def BreadthFirst(graph, start):
     return Traversal(graph, Queue()).memoried().start(start)
@@ -17,6 +18,19 @@ def BreadthFirstBounded(graph, start, depth):
 
 def BreadthFirstBoundedArcs(graph, start, depth):
     return Traversal(graph, Queue()).arcs().memoried().to_depth(depth).start(start)
+
+def BreadthFirstReverse(graph, start):
+    return Traversal(graph, Queue()).memoried().with_sfn(lambda g, n: g.sources(n)).start(start)
+
+def BreadthFirstOnArcs(graph, start, *arc_labels):
+    def successors(g, n):
+        return set(each([g.targets(n, l) for l in arc_labels]))
+    return Traversal(graph, Queue()).memoried().with_sfn(successors).start(start)
+
+def BreadthFirstOnArcsReverse(graph, start, *arc_labels):
+    def successors(g, n):
+        return set(each([g.sources(n, l) for l in arc_labels]))
+    return Traversal(graph, Queue()).memoried().with_sfn(successors).start(start)
 
 def Ring(graph, start, depth=None):
     if depth is None:
