@@ -40,7 +40,7 @@ class MapMultidigraph(MapDigraph):
             self.remove_arc(source, target, label)
 
     def label(self, source, target):
-        return single(self._sources_target_label[source][target])
+        return self._sources_target_label[source][target]
 
     def labels(self, source, target):
         return self._sources_target_label[source][target]
@@ -87,7 +87,9 @@ class MapMultidigraph(MapDigraph):
 
     def has_arc(self, source, target, label=None):
         if label is None:
-            return target in self._sources_target_label[source]
+            return source in self._sources_target_label and target in self._sources_target_label[source]
         else:
+            if source not in self._sources_target_label:
+                return False
             tl = self._sources_target_label[source]
             return target in tl and label in tl[target]

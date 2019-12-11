@@ -99,6 +99,7 @@ class Traversal:
 
     def with_sfn(self, successor_function):
         self.successors = successor_function
+        return self
 
     def to_depth(self, max_depth):
         def add_depth(graph, step, prev=None):

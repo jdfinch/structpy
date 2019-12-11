@@ -99,3 +99,6 @@ class MapDigraph(LabeledDigraph):
     def has_arc_label(self, source, label):
         return label in self._sources_labels_targets[source]
 
+    def has_in_arc_label(self, target, label):
+        return label in self._targets_labels_sources[target]
+

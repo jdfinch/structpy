@@ -44,10 +44,11 @@ class DeterministicMapDigraph(LabeledDigraph):
         del self._sources_labels_targets[node]
 
     def remove_arc(self, source, target):
-        label = self.label(source, target)
-        del self._sources_labels_targets[source][label]
-        del self._targets_labels_sources[target][label]
-        del self._sources_target_label[source][target]
+        if self.has_arc(source, target):
+            label = self.label(source, target)
+            del self._sources_labels_targets[source][label]
+            del self._targets_labels_sources[target][label]
+            del self._sources_target_label[source][target]
 
     def targets(self, source):
         return set(self._sources_labels_targets[source].values())

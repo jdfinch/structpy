@@ -24,12 +24,12 @@ def BreadthFirstReverse(graph, start):
 
 def BreadthFirstOnArcs(graph, start, *arc_labels):
     def successors(g, n):
-        return set(each([g.targets(n, l) for l in arc_labels]))
+        return set(each(*[g.targets(n, l) for l in arc_labels if g.has_arc_label(n, l)]))
     return Traversal(graph, Queue()).memoried().with_sfn(successors).start(start)
 
 def BreadthFirstOnArcsReverse(graph, start, *arc_labels):
     def successors(g, n):
-        return set(each([g.sources(n, l) for l in arc_labels]))
+        return set(each(*[g.sources(n, l) for l in arc_labels if g.has_in_arc_label(n, l)]))
     return Traversal(graph, Queue()).memoried().with_sfn(successors).start(start)
 
 def Ring(graph, start, depth=None):
