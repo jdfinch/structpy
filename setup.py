@@ -1,9 +1,10 @@
 import setuptools
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
      name='structpy',
-     version='0.1',
+     version='0.2',
      scripts=[],
      author="James Finch",
      author_email="jdfinch@emory.edu",
