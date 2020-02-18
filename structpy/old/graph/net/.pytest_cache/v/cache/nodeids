@@ -1,0 +1,11 @@
+[
+  "test_net.py::test_constructor",
+  "test_net.py::test_get_label",
+  "test_net.py::test_get_targets",
+  "test_net.py::test_get_sources",
+  "test_net.py::test_nodes",
+  "test_net.py::test_arcs",
+  "test_net.py::test_len_nodes",
+  "test_net.py::test_len_arcs",
+  "test_net.py::test_node"
+]
