@@ -17,48 +17,49 @@ class implements:
         self.__specification__.add_implementation(Implementation)
         return Implementation
 
-def Specification(specification):
-    def _add_implementation(Implementation):
-        if not hasattr(specification, 'implementations'):
-            specification.implementations = []
-        specification.implementations.append(Implementation)
-    specification.add_implementation = _add_implementation
-    def _verify(implementation='all'):
-        if implementation == 'all':
-            for imp in specification.implementations:
-                specification.__verifier__.verify(imp)
-        else:
-            specification.__verifier__.verify(implementation)
-    specification.verify = _verify
-    specification.__verifier__ = Verifier()
-    for parent in getmro(specification):
-        if hasattr(parent, '__verifier__'):
-            specification.__verifier__.add_from(parent.__verifier__)
-    specs = sorted([spec for _, spec in getmembers(specification,
-            predicate=lambda x: hasattr(x, '__test_type__'))], key=lambda x: x._order)
-    for spec in specs:
-        spec = Spec(spec, spec.__test_type__)
-        specification.__verifier__.add_spec(spec)
-    return specification
+class _Specification:
 
-_order = 0
+    def __init__(self):
+        self._order = 0
 
-def _construction(test):
-    global _order
-    test.__test_type__ = 'construction'
-    test._order = _order
-    _order += 1
-    return test
+    def __call__(self, specification):
+        def _add_implementation(Implementation):
+            if not hasattr(specification, 'implementations'):
+                specification.implementations = []
+            specification.implementations.append(Implementation)
+        specification.add_implementation = _add_implementation
+        def _verify(implementation='all'):
+            if implementation == 'all':
+                for imp in specification.implementations:
+                    specification.__verifier__.verify(imp)
+            else:
+                specification.__verifier__.verify(implementation)
+        specification.verify = _verify
+        specification.__verifier__ = Verifier()
+        for parent in getmro(specification):
+            if hasattr(parent, '__verifier__'):
+                specification.__verifier__.add_from(parent.__verifier__)
+        specs = sorted([spec for _, spec in getmembers(specification,
+                predicate=lambda x: hasattr(x, '__test_type__'))],
+                key=lambda x: x._order)
+        for spec in specs:
+            spec = Spec(spec, spec.__test_type__)
+            specification.__verifier__.add_spec(spec)
+        return specification
 
-def _definition(test):
-    global _order
-    test.__test_type__ = 'definition'
-    test._order = _order
-    _order += 1
-    return test
+    def construction(self, test):
+        test.__test_type__ = 'construction'
+        test._order = self._order
+        self._order += 1
+        return test
 
-Specification.construction = _construction
-Specification.definition = _definition
+    def definition(self, test):
+        test.__test_type__ = 'definition'
+        test._order = self._order
+        self._order += 1
+        return test
+
+Specification = _Specification()
 
 
 if __name__ == '__main__':
