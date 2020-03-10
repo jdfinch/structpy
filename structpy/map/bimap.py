@@ -9,19 +9,38 @@ class Bimap(Specification):
     one-to-one mapping between keys and values
     """
 
-    @Specification.example
-    def mapping_with_bimap(self, Struct):
-        bimap = Struct({'one': 1, 'two': 2, 'three': 3})
-        bimap['four'] = 4
+    @Specification.construction
+    def number_bimap(self, Struct):
+        return Struct({'one': 1, 'two': 2, 'three': 3})
+
+    @Specification.definition
+    def __getitem__(bimap, item):
+        """
+
+        """
         assert bimap['one'] == 1
         assert bimap['two'] == 2
-        assert bimap['four'] == 4
-        bimap['one'] = 2
-        assert bimap['one'] == 2
-        assert 'two' not in bimap
+        assert bimap['three'] == 3
 
-    @Specification.example
-    def reverse_mapping_of_bimap(self, Struct):
-        bimap = Struct({'one': 1, 'two': 2, 'three': 3})
-        assert bimap.reverse[1] == 'one'
-        assert bimap.reverse[3] == 'three'
+    @Specification.definition
+    def __setitem__(bimap, key, value):
+        """
+
+        """
+        bimap['four'] = 4
+        bimap['five'] = 5
+        assert bimap['four'] == 4
+        assert bimap['five'] == 5
+
+        # overwrite key-value pair
+        bimap['one'] = 0
+        assert bimap['one'] == 0
+
+
+if __name__ == '__main__':
+    Bimap.verify_implementations()
+
+
+
+
+

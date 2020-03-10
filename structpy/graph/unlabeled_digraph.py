@@ -44,7 +44,7 @@ class UnlabeledDigraph(Specification):
     @Specification.definition
     def this_is_my_method(self, Struct):
         """
-
+        
         """
         struct = Struct()
 
