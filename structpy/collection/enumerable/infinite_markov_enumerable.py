@@ -1,0 +1,89 @@
+
+from structpy.language import Specification, Implementation
+
+
+@Specification
+class InfiniteMarkovEnumerable:
+    """
+    Define a sequence iterator that generates each
+    value based on the previous value.
+    """
+
+    @Specification.construction
+    def init(Struct):
+        """
+        Example of MarkovEnumerable for positive odd integers
+        """
+        class EveryOtherInt(Struct):
+            def update(self, x):
+                return x + 2
+        return EveryOtherInt(1)
+
+    @Specification.definition
+    def __iter__(struct):
+        """
+        MarkovEnumerable can be used by looping over it.
+        """
+        for value in struct:
+            assert value % 2 == 1
+            if value == 7:
+                return
+
+    @Specification.definition
+    def next(struct):
+        """
+        Use .next() or built-in next function to get the next
+        value from the MarkovEnumerable
+        """
+        assert struct.next() == 9
+        assert next(struct) == 11
+
+    @Specification.definition
+    def reset(struct):
+        """
+        Reset the value to the MarkovEnumerable's initial value.
+        """
+        struct.reset()
+        for value in struct:
+            assert value == 1
+            break
+        for value in struct:
+            assert value == 3
+            break
+        struct.reset()
+        for value in struct:
+            assert value == 1
+            break
+        assert struct.reset() == struct
+
+
+from abc import ABC, abstractmethod
+
+@Implementation(InfiniteMarkovEnumerable)
+class Implementation1(ABC):
+
+    def __init__(self, initial):
+        self.initial = initial
+        self.value = self.initial
+
+    @abstractmethod
+    def update(self, value):
+        pass
+
+    def next(self):
+        return self.__next__()
+
+    def reset(self):
+        self.value = self.initial
+        return self
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        value = self.value
+        self.value = self.update(self.value)
+        return value
+
+if __name__ == '__main__':
+    InfiniteMarkovEnumerable.__verify__()

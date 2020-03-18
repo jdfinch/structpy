@@ -2,6 +2,6 @@
 from structpy.language import Specification
 
 
-class Digraph(Specification):
+class Digraph:
 
     pass

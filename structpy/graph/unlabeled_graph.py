@@ -2,6 +2,6 @@
 from structpy.language import Specification
 
 
-class UnlabeledGraph(Specification):
+class UnlabeledGraph:
 
     pass

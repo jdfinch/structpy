@@ -8,7 +8,7 @@ from structpy.graph.element import Node
 
 types = [Net]
 
-@pytest.mark.parametrize('cls', types)
+@pytest.mark.parametrize('kind', types)
 def test_constructor(cls):
     net = cls()
 

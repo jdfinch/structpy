@@ -1,5 +1,7 @@
 
 from unittest import TestSuite, TextTestRunner
+from traceback import print_exc
+from sys import stderr
 
 class Verifier:
     """
@@ -24,8 +26,12 @@ class Verifier:
                 try:
                     instance = spec.run_test()
                 except Exception as e:
-                    print('Error: {}'.format(spec))
-                    print(e)
+                    err_msg = """
+======================================================================
+CONSTRUCTION ERROR: {}
+----------------------------------------------------------------------""".format(str(spec))
+                    print(err_msg, file=stderr)
+                    print_exc()
                     instance = None
             elif spec.type() == 'definition':
                 spec.set_object(instance)
@@ -34,6 +40,8 @@ class Verifier:
                 spec.set_object(Implementation)
                 specs.append(spec)
         suite.addTests(specs)
+        print('----------------------------------------------------------------------', file=stderr)
+        print('\n', file=stderr)
         TextTestRunner().run(suite)
 
     def add_from(self, other):

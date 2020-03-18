@@ -2,10 +2,10 @@
 
 from structpy.language import Specification
 
+@Specification
+class UnlabeledDigraph:
 
-class UnlabeledDigraph(Specification):
-
-    @Specification.example
+    @Specification.definition
     def digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -44,7 +44,7 @@ class UnlabeledDigraph(Specification):
     @Specification.definition
     def this_is_my_method(self, Struct):
         """
-        
+
         """
         struct = Struct()
 

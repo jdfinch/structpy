@@ -1,8 +1,0 @@
-[
-  "test_interface.py::test_constructor",
-  "test_interface.py::test_add_function",
-  "test_interface.py::test_add_method",
-  "test_interface.py::test_switch_method",
-  "test_pointer.py::test_pointer",
-  "test_pointer.py::test_ptr_item"
-]

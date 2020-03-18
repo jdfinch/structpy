@@ -2,6 +2,6 @@
 from structpy.language import Specification
 
 
-class Graph(Specification):
+class Graph:
 
     pass
