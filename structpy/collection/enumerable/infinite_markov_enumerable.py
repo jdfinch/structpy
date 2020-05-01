@@ -3,11 +3,16 @@ from structpy.language import Specification, Implementation
 
 
 @Specification
-class InfiniteMarkovEnumerable:
+class InfiniteMarkovEnumerableSpec:
     """
     Define a sequence iterator that generates each
     value based on the previous value.
     """
+
+    __kwargs__ = {
+        'type': 'markov',
+        'finite': False
+    }
 
     @Specification.construction
     def init(Struct):
@@ -59,8 +64,12 @@ class InfiniteMarkovEnumerable:
 
 from abc import ABC, abstractmethod
 
-@Implementation(InfiniteMarkovEnumerable)
-class Implementation1(ABC):
+@Implementation(InfiniteMarkovEnumerableSpec)
+class InfiniteMarkovEnumerable(ABC):
+
+    __kwargs__ = {
+        'implementation': 'standard'
+    }
 
     def __init__(self, initial):
         self.initial = initial
@@ -86,4 +95,4 @@ class Implementation1(ABC):
         return value
 
 if __name__ == '__main__':
-    InfiniteMarkovEnumerable.__verify__()
+    InfiniteMarkovEnumerableSpec.__verify__()

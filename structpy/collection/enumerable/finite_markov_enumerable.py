@@ -3,11 +3,19 @@ from structpy.language import Specification, Implementation
 
 
 @Specification
-class FiniteMarkovEnumerableSpecification:
+class FiniteMarkovEnumerableSpec:
     """
     Define a sequence iterator that generates each
     value based on the previous value.
+
+    A boolean end function is specified to define
+    the end of the sequence.
     """
+
+    __kwargs__ = {
+        'type': 'markov',
+        'finite': True
+    }
 
     @Specification.construction
     def FINITE_MARKOV_ENUMERABLE(Struct):
@@ -59,8 +67,12 @@ class FiniteMarkovEnumerableSpecification:
 
 from abc import ABC, abstractmethod
 
-@Implementation(FiniteMarkovEnumerableSpecification)
-class FiniteMarkovEnumerableImplementation(ABC):
+@Implementation(FiniteMarkovEnumerableSpec)
+class FiniteMarkovEnumerable(ABC):
+
+    __kwargs__ = {
+        'implementation': 'standard'
+    }
 
     def __init__(self, initial):
         self.initial = initial
@@ -93,4 +105,4 @@ class FiniteMarkovEnumerableImplementation(ABC):
 
 
 if __name__ == '__main__':
-    FiniteMarkovEnumerableSpecification.__verify__()
+    FiniteMarkovEnumerableSpec.__verify__()

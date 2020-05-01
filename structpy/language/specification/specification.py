@@ -1,21 +1,28 @@
-from collections import defaultdict
+
 from structpy.language.specification.verifier import Verifier
 from structpy.language.specification.spec import Spec
-from inspect import getmro, getmembers, isfunction
+from inspect import getmembers
 
+def __verify__(cls):
+    cls.__specification__.__verify__(cls)
 
 class Implementation:
     def __init__(self, specification):
         self.__specification__ = specification
     def __call__(self, implementation):
-        class _Implementation(implementation):
-            __specification__ = self.__specification__
-            __implementation__ = implementation
-            @classmethod
-            def __verify__(cls):
-                _Implementation.__specification__.__verify__(cls)
-        self.__specification__.__add_implementation__(_Implementation)
-        return _Implementation
+        implementation.__specification__ = self.__specification__
+        implementation.__verify__ = classmethod(__verify__)
+        self.__specification__.__add_implementation__(implementation)
+        if hasattr(implementation, '__kwargs__'):
+            tmp = implementation.__kwargs__
+        else:
+            tmp = {}
+        if hasattr(implementation.__specification__, '__kwargs__'):
+            implementation.__kwargs__ = implementation.__specification__.__kwargs__
+        else:
+            implementation.__kwargs__ = {}
+        implementation.__kwargs__.update(tmp)
+        return implementation
 
 class _Specification:
 

@@ -223,6 +223,31 @@ def symmetric_difference(set, other):
 </dd>
 </dl>
 </dd>
+<dt id="structpy.collection.finite_set.Set1"><code class="flex name class">
+<span>class <span class="ident">Set1</span></span>
+<span>(</span><span>...)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>set() -&gt; new empty set object
+set(iterable) -&gt; new set object</p>
+<p>Build an unordered collection of unique elements.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Set1(set):
+
+    def __eq__(self, other):
+        return set.__eq__(self, other)
+
+    def __hash__(self):
+        return hash(frozenset(self))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.set</li>
+</ul>
+</dd>
 </dl>
 </section>
 </article>
@@ -248,6 +273,9 @@ def symmetric_difference(set, other):
 <li><code><a title="structpy.collection.finite_set.FiniteSet.difference" href="#structpy.collection.finite_set.FiniteSet.difference">difference</a></code></li>
 <li><code><a title="structpy.collection.finite_set.FiniteSet.symmetric_difference" href="#structpy.collection.finite_set.FiniteSet.symmetric_difference">symmetric_difference</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="structpy.collection.finite_set.Set1" href="#structpy.collection.finite_set.Set1">Set1</a></code></h4>
 </li>
 </ul>
 </li>

@@ -1,26 +1,19 @@
 
-from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpecification
-from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerable
+"""
+Defines a potentially infinite sequence of values that can be iterated
+over, where each value is derived from an update of the previous one.
+"""
 
+from structpy.language.specification.factory import Factory
 
-def Enumerable(type='markov', finite=True):
-    if type == 'markov':
-        if finite:
-            return FiniteMarkovEnumerableSpecification.__implementation__()
-        else:
-            return InfiniteMarkovEnumerable.__implementation__()
+from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpec
+from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec
 
+@Factory
+def Enumerable(type='markov', finite=True, implementation='standard'):
+    return FiniteMarkovEnumerableSpec, InfiniteMarkovEnumerableSpec
 
 if __name__ == '__main__':
-
-    class MyEnumerable(Enumerable()):
-
-        def update(self, value):
-            return value + 1
-
-        def end(self, value):
-            return value == 10
-
-    for x in Enumerable(initial=1, update=(lambda value: value + 1), end=(lambda value: value == 10)):
-        print(x)
+    enumerable = Enumerable(finite=False)
+    print(enumerable)
 
