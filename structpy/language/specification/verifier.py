@@ -20,8 +20,17 @@ class Verifier:
         Verify that the `Implementation` satisfies all the tests in the
         spec list.
         """
+        succeeded = 0
+        failed = 0
+        run = 0
         for spec_list in self._specs_lists:
-            spec_list.verify(Implementation)
+            result = spec_list.verify(Implementation)
+            run += result.testsRun
+            failed += len(result.failures)
+            succeeded += run - failed
+        print('\n\nTEST RESULTS:', file=stderr)
+        print(succeeded, 'succeeded', file=stderr)
+        print(failed, 'failed', file=stderr)
 
     def add_spec_list(self, init_spec, specs):
         spec_list = SpecList(init_spec, specs)
