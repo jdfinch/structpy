@@ -1,11 +1,11 @@
 
 
-from structpy.language import Specification
+from structpy.language import spec
 
-@Specification
+@spec
 class UnlabeledDigraph:
 
-    @Specification.definition
+    @spec.prop
     def digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -41,7 +41,7 @@ class UnlabeledDigraph:
 
 
 
-    @Specification.definition
+    @spec.prop
     def this_is_my_method(self, Struct):
         """
 

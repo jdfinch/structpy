@@ -1,7 +1,8 @@
 
 """
-Graph
+# Graph
 
+```text
 Directed
 Undirected
 
@@ -36,6 +37,6 @@ PerfectLabeledDigraph
 source, target - label : function
 source, label - target : function
 target, label - source : function
-
+```
 
 """

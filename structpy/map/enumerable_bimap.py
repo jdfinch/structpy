@@ -1,8 +1,8 @@
 
-from structpy.language import Specification, Implementation
+from structpy.language import spec, Implementation
 
 
-@Specification
+@spec
 class EnumerableBimap:
     """
     Bijective Mapping
@@ -10,11 +10,11 @@ class EnumerableBimap:
     one-to-one mapping between keys and values
     """
 
-    @Specification.construction
+    @spec.init
     def number_bimap(Struct):
         return Struct({'one': 1, 'two': 2, 'three': 3})
 
-    @Specification.definition
+    @spec.prop
     def __getitem__(bimap, item):
         """
         get the value in the codomain associated with a domain item
@@ -23,7 +23,7 @@ class EnumerableBimap:
         assert bimap['two'] == 2
         assert bimap['three'] == 3
 
-    @Specification.definition
+    @spec.prop
     def __setitem__(bimap, key, value):
         """
         add a item pair that co-map
@@ -40,7 +40,7 @@ class EnumerableBimap:
         bimap['one'] = 0
         assert bimap['one'] == 0
 
-    @Specification.definition
+    @spec.prop
     def reverse(bimap):
         """
         returns a view of the bimap that swaps

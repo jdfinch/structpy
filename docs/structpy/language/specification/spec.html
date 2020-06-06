@@ -74,7 +74,7 @@ class Spec(TestCase):
                 return string[string.rfind(&#39;.&#39;) + 1:-2]
             if hasattr(self._object, &#39;__specification__&#39;):
                 spec_string = _class_to_string(self._object.__specification__)
-                object_string = _class_to_string(self._object.__implementation__)
+                object_string = _class_to_string(self._object)
                 return &#39;{}.{} {} &#34;{}&#34;&#39;.format(spec_string, object_string, type_string, test_string)
             else:
                 return &#39;{} {} &#34;{}&#34;&#39;.format(str(self._object), type_string, test_string)
@@ -173,7 +173,7 @@ not have a method with the specified name.</p></section>
                 return string[string.rfind(&#39;.&#39;) + 1:-2]
             if hasattr(self._object, &#39;__specification__&#39;):
                 spec_string = _class_to_string(self._object.__specification__)
-                object_string = _class_to_string(self._object.__implementation__)
+                object_string = _class_to_string(self._object)
                 return &#39;{}.{} {} &#34;{}&#34;&#39;.format(spec_string, object_string, type_string, test_string)
             else:
                 return &#39;{} {} &#34;{}&#34;&#39;.format(str(self._object), type_string, test_string)

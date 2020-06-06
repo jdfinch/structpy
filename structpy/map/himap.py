@@ -1,5 +1,5 @@
 
-from structpy.language import Specification
+from structpy.language import spec
 
 
 class Himap:

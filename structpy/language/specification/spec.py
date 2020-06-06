@@ -49,7 +49,7 @@ class Spec(TestCase):
                 return string[string.rfind('.') + 1:-2]
             if hasattr(self._object, '__specification__'):
                 spec_string = _class_to_string(self._object.__specification__)
-                object_string = _class_to_string(self._object.__implementation__)
+                object_string = _class_to_string(self._object)
                 return '{}.{} {} "{}"'.format(spec_string, object_string, type_string, test_string)
             else:
                 return '{} {} "{}"'.format(str(self._object), type_string, test_string)

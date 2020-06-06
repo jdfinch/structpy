@@ -1,8 +1,8 @@
 
-from structpy.language import Specification, Implementation
+from structpy.language import spec, Implementation
 
 
-@Specification
+@spec
 class InfiniteMarkovEnumerableSpec:
     """
     Define a sequence iterator that generates each
@@ -14,7 +14,7 @@ class InfiniteMarkovEnumerableSpec:
         'finite': False
     }
 
-    @Specification.construction
+    @spec.init
     def init(Struct):
         """
         Example of MarkovEnumerable for positive odd integers
@@ -24,7 +24,7 @@ class InfiniteMarkovEnumerableSpec:
                 return x + 2
         return EveryOtherInt(1)
 
-    @Specification.definition
+    @spec.prop
     def __iter__(struct):
         """
         MarkovEnumerable can be used by looping over it.
@@ -34,7 +34,7 @@ class InfiniteMarkovEnumerableSpec:
             if value == 7:
                 return
 
-    @Specification.definition
+    @spec.prop
     def next(struct):
         """
         Use .next() or built-in next function to get the next
@@ -43,7 +43,7 @@ class InfiniteMarkovEnumerableSpec:
         assert struct.next() == 9
         assert next(struct) == 11
 
-    @Specification.definition
+    @spec.prop
     def reset(struct):
         """
         Reset the value to the MarkovEnumerable's initial value.

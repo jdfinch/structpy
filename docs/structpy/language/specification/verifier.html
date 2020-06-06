@@ -61,6 +61,9 @@ CONSTRUCTION ERROR: {}
             elif spec.type() == &#39;definition&#39;:
                 spec.set_object(instance)
                 specs.append(spec)
+            elif spec.type() == &#39;test&#39;:
+                spec.set_object(instance)
+                specs.append(spec)
             else:
                 spec.set_object(Implementation)
                 specs.append(spec)
@@ -154,6 +157,9 @@ CONSTRUCTION ERROR: {}
             elif spec.type() == &#39;definition&#39;:
                 spec.set_object(instance)
                 specs.append(spec)
+            elif spec.type() == &#39;test&#39;:
+                spec.set_object(instance)
+                specs.append(spec)
             else:
                 spec.set_object(Implementation)
                 specs.append(spec)
@@ -199,6 +205,9 @@ CONSTRUCTION ERROR: {}
                     print_exc()
                     instance = None
             elif spec.type() == &#39;definition&#39;:
+                spec.set_object(instance)
+                specs.append(spec)
+            elif spec.type() == &#39;test&#39;:
                 spec.set_object(instance)
                 specs.append(spec)
             else:

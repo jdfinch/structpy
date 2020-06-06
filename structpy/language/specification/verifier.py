@@ -7,8 +7,8 @@ class Verifier:
     """
     Manages a suite of specs associated with a specification.
 
-    Adding a 'construction' spec sets up an object under test,
-    which is passed to each subsequent 'definition' spec.
+    Adding a `init` spec sets up an object under test,
+    which is passed to each subsequent `prop` or `test` spec.
     """
 
     def __init__(self):
@@ -17,6 +17,10 @@ class Verifier:
         self._evaluations = []
 
     def verify(self, Implementation):
+        """
+        Verify that the `Implementation` satisfies all the tests in the
+        spec list.
+        """
         suite = TestSuite()
         specs = []
         instance = None
@@ -34,6 +38,9 @@ CONSTRUCTION ERROR: {}
                     print_exc()
                     instance = None
             elif spec.type() == 'definition':
+                spec.set_object(instance)
+                specs.append(spec)
+            elif spec.type() == 'test':
                 spec.set_object(instance)
                 specs.append(spec)
             else:

@@ -1,10 +1,10 @@
 
-from structpy.language import Specification, Implementation
+from structpy.language import spec, Implementation
 
 
-@Specification
+@spec
 class EnumerableSet:
 
-    @Specification.construction
+    @spec.init
     def init(set, iterator=None, membership=None):
         pass

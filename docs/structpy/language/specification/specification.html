@@ -67,10 +67,12 @@ class _Specification:
             else:
                 specification.__verifier__.verify(implementation)
         def _implementation():
-            return specification.__implementations__[0]
+            return specification.__implementations__[0] \
+                    if hasattr(specification, &#39;__implementations__&#39;) \
+                    and specification.__implementations__ else None
         specification.__verify__ = _verify
         specification.__verifier__ = Verifier()
-        specification.__implementation__ = _implementation
+        specification.__implementation__ = _implementation()
         specs = sorted([spec for _, spec in getmembers(specification,
                 predicate=lambda x: hasattr(x, &#39;__test_type__&#39;))],
                 key=lambda x: x._order)
@@ -87,6 +89,12 @@ class _Specification:
 
     def definition(self, test):
         test.__test_type__ = &#39;definition&#39;
+        test._order = self._order
+        self._order += 1
+        return test
+
+    def test(self, test):
+        test.__test_type__ = &#39;test&#39;
         test._order = self._order
         self._order += 1
         return test
@@ -125,6 +133,11 @@ if __name__ == &#39;__main__&#39;:
         def mock_test_alt(struct):
             assert struct.x == 6
             assert struct.y == 7
+
+        @Specification.test
+        def mock_test(struct):
+            assert struct.x == 5
+            assert True
 
 
     @Implementation(MyStruct)

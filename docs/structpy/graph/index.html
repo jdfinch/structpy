@@ -20,41 +20,50 @@
 <h1 class="title">Module <code>structpy.graph</code></h1>
 </header>
 <section id="section-intro">
-<p>Graph</p>
-<p>Directed
-Undirected</p>
-<p>Labeled Directed
-Labeled Undirected</p>
-<p>Mapping options:
+<h1 id="graph">Graph</h1>
+<pre><code class="text">Directed
+Undirected
+
+Labeled Directed
+Labeled Undirected
+
+Mapping options:
 - map (many to many)
-- function (many to one)</p>
-<p>MultiLabeledDigraph
+- function (many to one)
+
+MultiLabeledDigraph
 source, target - label : map
 source, label - target : map
-target, label - source : map</p>
-<p>LabeledDigraph
+target, label - source : map
+
+LabeledDigraph
 source, target - label : function
 source, label - target : map
-target, label - source : map</p>
-<p>ForwardLabeledDigraph
+target, label - source : map
+
+ForwardLabeledDigraph
 source, target - label : function
 source, label - target : function
-target, label - source : map</p>
-<p>BackwardLabeledDigraph
+target, label - source : map
+
+BackwardLabeledDigraph
 source, target - label : function
 source, label - target : map
-target, label - source : function</p>
-<p>PerfectLabeledDigraph
+target, label - source : function
+
+PerfectLabeledDigraph
 source, target - label : function
 source, label - target : function
-target, label - source : function</p>
+target, label - source : function
+</code></pre>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">&#34;&#34;&#34;
-Graph
+# Graph
 
+```text
 Directed
 Undirected
 
@@ -89,7 +98,7 @@ PerfectLabeledDigraph
 source, target - label : function
 source, label - target : function
 target, label - source : function
-
+```
 
 &#34;&#34;&#34;</code></pre>
 </details>
@@ -101,11 +110,11 @@ target, label - source : function
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="structpy.graph.graph" href="graph.html">structpy.graph.graph</a></code></dt>
+<dt><code class="name"><a title="structpy.graph.multi_labeled_digraph" href="multi_labeled_digraph.html">structpy.graph.multi_labeled_digraph</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-<dt><code class="name"><a title="structpy.graph.multi_labeled_digraph" href="multi_labeled_digraph.html">structpy.graph.multi_labeled_digraph</a></code></dt>
+<dt><code class="name"><a title="structpy.graph.undigraph" href="undigraph.html">structpy.graph.undigraph</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -129,7 +138,9 @@ target, label - source : function
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#graph">Graph</a></li>
+</ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
@@ -140,8 +151,8 @@ target, label - source : function
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="structpy.graph.digraph" href="digraph.html">structpy.graph.digraph</a></code></li>
-<li><code><a title="structpy.graph.graph" href="graph.html">structpy.graph.graph</a></code></li>
 <li><code><a title="structpy.graph.multi_labeled_digraph" href="multi_labeled_digraph.html">structpy.graph.multi_labeled_digraph</a></code></li>
+<li><code><a title="structpy.graph.undigraph" href="undigraph.html">structpy.graph.undigraph</a></code></li>
 <li><code><a title="structpy.graph.unlabeled_digraph" href="unlabeled_digraph.html">structpy.graph.unlabeled_digraph</a></code></li>
 <li><code><a title="structpy.graph.unlabeled_graph" href="unlabeled_graph.html">structpy.graph.unlabeled_graph</a></code></li>
 </ul>
