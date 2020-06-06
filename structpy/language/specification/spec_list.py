@@ -8,6 +8,7 @@ class SpecList:
     def __init__(self, init_spec, specs):
         self.init = init_spec
         self.specs = list(specs)
+        init_spec.__spec_list__ = self
 
     def verify(self, Implementation):
         """
@@ -32,8 +33,8 @@ SPEC INIT ERROR: {}
         if not construction_error:
             msg = """
 ======================================================================
-SPEC LIST: {}
-----------------------------------------------------------------------""".format(str(self.init))
+SPEC LIST: {}""".format(str(self.init))
+            print(msg, file=stderr)
             for spec in self.specs:
                 if spec.type() == 'definition':
                     spec.set_object(instance)

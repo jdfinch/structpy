@@ -92,9 +92,20 @@ class _Specification:
                 predicate=lambda x: hasattr(x, '__test_type__'))],
             key=lambda x: x._order
         )
-        for spec in specs:
-            spec = Spec(spec, spec.__test_type__)
-            specification_class.__verifier__.add_spec(spec)
+        initial_construction = Spec(lambda: None)
+        construction = initial_construction
+        ls = []
+        for s in specs:
+            s = Spec(s, s.__test_type__)
+            if s.type() == 'construction':
+                if construction != initial_construction or ls:
+                    specification_class.__verifier__.add_spec_list(construction, ls)
+                    ls = []
+                construction = s
+            else:
+                ls.append(s)
+        if ls:
+            specification_class.__verifier__.add_spec_list(construction, ls)
         return specification_class
 
     def init(self, test):
