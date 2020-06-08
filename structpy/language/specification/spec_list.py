@@ -39,7 +39,7 @@ SPEC LIST: {}""".format(str(self.init))
                 if spec.type() == 'definition':
                     spec.set_object(instance)
                     specs.append(spec)
-                elif spec.type() == 'test':
+                elif spec.type() == 'unit':
                     spec.set_object(instance)
                     specs.append(spec)
                 else:

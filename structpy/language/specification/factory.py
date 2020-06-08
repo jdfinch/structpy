@@ -1,7 +1,6 @@
 
 import inspect
 import sys
-from structpy.language.specification import spec
 
 def module_of(function):
     return sys.modules[function.__module__]

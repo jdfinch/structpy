@@ -117,7 +117,7 @@ class _Specification:
         def ...
         ```
 
-        Marks the start of a test list,
+        Marks the start of a unit list,
         where an object is constructed and returned.
         """
         test.__test_type__ = 'construction'
@@ -134,7 +134,7 @@ class _Specification:
         def ...
         ```
 
-        Marks a specification test that represents
+        Marks a specification unit that represents
         a method in the eventual implementation class.
         """
         test.__test_type__ = 'definition'
@@ -144,22 +144,32 @@ class _Specification:
 
     def test(self, test):
         """
-        spec.test decorate function, as in
+        spec.unit decorate function, as in
 
         ```
-        @spec.test
+        @spec.unit
         def ...
         ```
 
-        Marks a specification test that addresses some
+        Marks a specification unit that addresses some
         behavior of the eventual implementation, but does
         not necessarily correspond to a implementation
         method.
         """
-        test.__test_type__ = 'test'
+        test.__test_type__ = 'unit'
         test._order = self._order
         self._order += 1
         return test
+
+    def sats(self, test):
+        """
+
+        """
+        test.__test_type__ = 'construction ref'
+        test._order = self._order
+        self._order += 1
+        return test
+
 
 spec = _Specification()
 

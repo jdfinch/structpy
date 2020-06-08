@@ -8,8 +8,8 @@ class Verifier:
     """
     Manages a suite of specs associated with a specification.
 
-    Adding a `init` spec sets up an object under test,
-    which is passed to each subsequent `prop` or `test` spec.
+    Adding a `init` spec sets up an object under unit,
+    which is passed to each subsequent `prop` or `unit` spec.
     """
 
     def __init__(self):

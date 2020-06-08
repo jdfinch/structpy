@@ -1,20 +1,20 @@
 
-from unittest import TestCase, TestSuite, TextTestRunner
+from unittest import TestCase, FunctionTestCase, TestSuite, TextTestRunner
 from inspect import signature
 
 
 class Spec(TestCase):
     """
-    Run a test function.
+    Run a unit function.
 
-    By default, the test function will be passed None for each expected argument.
+    By default, the unit function will be passed None for each expected argument.
 
     If an object is specified, the object will be passed as the functions first arg.
     """
 
     def __init__(self, test, type=None, object=None):
         if type is None:
-            type = 'test'
+            type = 'unit'
         self._object = object
         self._test_fn = test
         self._type = type
