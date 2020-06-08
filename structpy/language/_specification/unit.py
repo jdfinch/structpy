@@ -1,7 +1,7 @@
 
 from inspect import signature
 import sys, traceback, time
-from structpy.language._specification.result import Result
+from structpy.language._specification.result import Result, ResultList
 
 
 class unit:
@@ -14,7 +14,7 @@ class unit:
         self.tags = tags
 
     def __call__(self, method):
-        return Unit(method, *self.tags, self.time_requirement)
+        return Unit(method, *self.tags, time_requirement=self.time_requirement)
 
 
 class Unit:
@@ -28,7 +28,7 @@ class Unit:
     ```
     """
 
-    def __init__(self, method, *tags, time_requirement=1.0):
+    def __init__(self, method, *tags, time_requirement=None):
         self.method = method
         self.should_pass = True
         self.time_requirement = time_requirement
@@ -46,7 +46,10 @@ class Unit:
         obj = None
         t0 = time.time()
         try:
-            argv = [*args] + [None] * (nargs - len(args))
+            if nargs > 0:
+                argv = [*args] + [None] * (nargs - len(args))
+            else:
+                argv = []
             t0 = time.time()
             obj = self.method(*argv)
             t1 = time.time()
@@ -61,11 +64,10 @@ class Unit:
         result.traceback = traceback_message
         result.time_requirement = self.time_requirement
         result.time_elapsed = time_elapsed
-        result.time_passed = result.time_elapsed <= result.time_requirement
-        result.passed = result.traceback is None and result.time_passed
+        result.time_passed = result.time_requirement is None or result.time_elapsed <= result.time_requirement
+        result.passed = result.traceback is None
         result.obj = obj
         return result
-
 
 
 
