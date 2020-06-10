@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>structpy.language.specification.verifier API documentation</title>
+<title>structpy.language.unit_test.unit_sequence API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,72 +17,65 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.language.specification.verifier</code></h1>
+<h1 class="title">Module <code>structpy.language.unit_test.unit_sequence</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from unittest import TestSuite, TextTestRunner
-from traceback import print_exc
-from sys import stderr
-from structpy.language.specification.spec_list import SpecList
-
-class Verifier:
-    &#34;&#34;&#34;
-    Manages a suite of specs associated with a specification.
-
-    Adding a `init` spec sets up an object under unit,
-    which is passed to each subsequent `prop` or `unit` spec.
-    &#34;&#34;&#34;
-
-    def __init__(self):
-        self._specs_lists = []
-
-    def verify(self, Implementation):
-        &#34;&#34;&#34;
-        Verify that the `Implementation` satisfies all the tests in the
-        spec list.
-        &#34;&#34;&#34;
-        succeeded = 0
-        failed = 0
-        run = 0
-        for spec_list in self._specs_lists:
-            result = spec_list.verify(Implementation)
-            run += result.testsRun
-            failed += len(result.failures)
-            succeeded += run - failed
-        print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-        print(succeeded, &#39;succeeded&#39;, file=stderr)
-        print(failed, &#39;failed&#39;, file=stderr)
-
-    def add_spec_list(self, init_spec, specs):
-        spec_list = SpecList(init_spec, specs)
-        self._specs_lists.append(spec_list)
+<pre><code class="python">from structpy.language.unit_test.unit import unit, Unit
+from structpy.language.unit_test.result import ResultList
 
 
-# if __name__ == &#39;__main__&#39;:
-#     from structpy.language.specification.spec import Spec
-#     class MyStruct:
-#         def __init__(self, a, b):
-#             self.a = a
-#             self.b = b
-#     def specinit(Struct):
-#         return Struct(1, 2)
-#     def specfn1(x):
-#         assert x.a == 1
-#         x.b = 4
-#     def specfn2(x):
-#         assert x.b == 4
-#     sc = Spec(specinit, &#39;construction&#39;)
-#     s1 = Spec(specfn1, &#39;definition&#39;)
-#     s2 = Spec(specfn2, &#39;definition&#39;)
-#     verifier = Verifier()
-#     verifier.add_spec(sc)
-#     verifier.add_spec(s1)
-#     verifier.add_spec(s2)
-#     verifier.verify(MyStruct)</code></pre>
+class UnitSequence(list):
+
+    def test(self):
+        obj = None
+        results = ResultList()
+        for unit in self:
+            result = unit.test(obj)
+            if result.obj is not None:
+                obj = result.obj
+            results.append(result)
+        return results
+
+
+if __name__ == &#39;__main__&#39;:
+
+    @unit()
+    def test_one():
+        assert True
+
+
+    @unit(time_requirement=0.005)
+    def test_two():
+        i = 0
+        for i in range(1000000):
+            i += 1
+        assert True
+
+
+    @unit()
+    def test_three():
+        assert False
+
+
+    @unit(time_requirement=1)
+    def test_four():
+        return [1, 2, 3]
+
+
+    @unit()
+    def test_five(o):
+        assert o == [1, 2, 3]
+
+
+    unit_sequence = UnitSequence([
+        test_one, test_two, test_three, test_four, test_five
+    ])
+
+    print(unit_sequence.test())</code></pre>
 </details>
 </section>
 <section>
@@ -94,81 +87,38 @@ class Verifier:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.language.specification.verifier.Verifier"><code class="flex name class">
-<span>class <span class="ident">Verifier</span></span>
+<dt id="structpy.language.unit_test.unit_sequence.UnitSequence"><code class="flex name class">
+<span>class <span class="ident">UnitSequence</span></span>
+<span>(</span><span>iterable=())</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Manages a suite of specs associated with a specification.</p>
-<p>Adding a <code>init</code> spec sets up an object under unit,
-which is passed to each subsequent <code>prop</code> or <code>unit</code> spec.</p></section>
+<section class="desc"><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Verifier:
-    &#34;&#34;&#34;
-    Manages a suite of specs associated with a specification.
+<pre><code class="python">class UnitSequence(list):
 
-    Adding a `init` spec sets up an object under unit,
-    which is passed to each subsequent `prop` or `unit` spec.
-    &#34;&#34;&#34;
-
-    def __init__(self):
-        self._specs_lists = []
-
-    def verify(self, Implementation):
-        &#34;&#34;&#34;
-        Verify that the `Implementation` satisfies all the tests in the
-        spec list.
-        &#34;&#34;&#34;
-        succeeded = 0
-        failed = 0
-        run = 0
-        for spec_list in self._specs_lists:
-            result = spec_list.verify(Implementation)
-            run += result.testsRun
-            failed += len(result.failures)
-            succeeded += run - failed
-        print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-        print(succeeded, &#39;succeeded&#39;, file=stderr)
-        print(failed, &#39;failed&#39;, file=stderr)
-
-    def add_spec_list(self, init_spec, specs):
-        spec_list = SpecList(init_spec, specs)
-        self._specs_lists.append(spec_list)</code></pre>
+    def test(self):
+        obj = None
+        results = ResultList()
+        for unit in self:
+            result = unit.test(obj)
+            if result.obj is not None:
+                obj = result.obj
+            results.append(result)
+        return results</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.list</li>
+</ul>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.language.specification.verifier.Verifier.verify"><code class="name flex">
-<span>def <span class="ident">verify</span></span>(<span>self, Implementation)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Verify that the <code>Implementation</code> satisfies all the tests in the
-spec list.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def verify(self, Implementation):
-    &#34;&#34;&#34;
-    Verify that the `Implementation` satisfies all the tests in the
-    spec list.
-    &#34;&#34;&#34;
-    succeeded = 0
-    failed = 0
-    run = 0
-    for spec_list in self._specs_lists:
-        result = spec_list.verify(Implementation)
-        run += result.testsRun
-        failed += len(result.failures)
-        succeeded += run - failed
-    print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-    print(succeeded, &#39;succeeded&#39;, file=stderr)
-    print(failed, &#39;failed&#39;, file=stderr)</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.specification.verifier.Verifier.add_spec_list"><code class="name flex">
-<span>def <span class="ident">add_spec_list</span></span>(<span>self, init_spec, specs)</span>
+<dt id="structpy.language.unit_test.unit_sequence.UnitSequence.test"><code class="name flex">
+<span>def <span class="ident">test</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -176,9 +126,15 @@ spec list.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_spec_list(self, init_spec, specs):
-    spec_list = SpecList(init_spec, specs)
-    self._specs_lists.append(spec_list)</code></pre>
+<pre><code class="python">def test(self):
+    obj = None
+    results = ResultList()
+    for unit in self:
+        result = unit.test(obj)
+        if result.obj is not None:
+            obj = result.obj
+        results.append(result)
+    return results</code></pre>
 </details>
 </dd>
 </dl>
@@ -194,16 +150,15 @@ spec list.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.language.specification" href="index.html">structpy.language.specification</a></code></li>
+<li><code><a title="structpy.language.unit_test" href="index.html">structpy.language.unit_test</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.language.specification.verifier.Verifier" href="#structpy.language.specification.verifier.Verifier">Verifier</a></code></h4>
+<h4><code><a title="structpy.language.unit_test.unit_sequence.UnitSequence" href="#structpy.language.unit_test.unit_sequence.UnitSequence">UnitSequence</a></code></h4>
 <ul class="">
-<li><code><a title="structpy.language.specification.verifier.Verifier.verify" href="#structpy.language.specification.verifier.Verifier.verify">verify</a></code></li>
-<li><code><a title="structpy.language.specification.verifier.Verifier.add_spec_list" href="#structpy.language.specification.verifier.Verifier.add_spec_list">add_spec_list</a></code></li>
+<li><code><a title="structpy.language.unit_test.unit_sequence.UnitSequence.test" href="#structpy.language.unit_test.unit_sequence.UnitSequence.test">test</a></code></li>
 </ul>
 </li>
 </ul>

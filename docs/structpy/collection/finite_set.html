@@ -24,9 +24,9 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import Specification, Implementation
+<pre><code class="python">from structpy.language import spec, Implementation
 
-@Specification
+@spec
 class FiniteSet:
     &#34;&#34;&#34;
     Unordered collection of elements
@@ -34,32 +34,32 @@ class FiniteSet:
     Differs from python set by being hashable
     &#34;&#34;&#34;
 
-    @Specification.construction
+    @spec.init
     def init(Struct, elements=None):
         elements = {1, 2, 3, 5}
         return Struct(elements)
 
-    @Specification.definition
+    @spec.prop
     def union(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) | Struct((5, 6, 7)) == Struct((1, 2, 3, 5, 6, 7))
 
-    @Specification.definition
+    @spec.prop
     def intersection(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) &amp; Struct((2, 3, 4)) == Struct((2, 3))
 
-    @Specification.definition
+    @spec.prop
     def difference(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) - Struct((5, 6)) == Struct((1, 2, 3))
 
-    @Specification.definition
+    @spec.prop
     def symmetric_difference(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) ^ Struct((3, 4, 5)) == Struct((1, 2, 4))
 
-    @Specification.definition
+    @spec.prop
     def __hash__(set):
         &#34;&#34;&#34;
         FiniteSet is hashable, using the same hash function as built-in frozenset
@@ -109,32 +109,32 @@ if __name__ == &#39;__main__&#39;:
     Differs from python set by being hashable
     &#34;&#34;&#34;
 
-    @Specification.construction
+    @spec.init
     def init(Struct, elements=None):
         elements = {1, 2, 3, 5}
         return Struct(elements)
 
-    @Specification.definition
+    @spec.prop
     def union(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) | Struct((5, 6, 7)) == Struct((1, 2, 3, 5, 6, 7))
 
-    @Specification.definition
+    @spec.prop
     def intersection(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) &amp; Struct((2, 3, 4)) == Struct((2, 3))
 
-    @Specification.definition
+    @spec.prop
     def difference(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) - Struct((5, 6)) == Struct((1, 2, 3))
 
-    @Specification.definition
+    @spec.prop
     def symmetric_difference(set, other):
         Struct = set.__class__
         assert Struct((1, 2, 3, 5)) ^ Struct((3, 4, 5)) == Struct((1, 2, 4))
 
-    @Specification.definition
+    @spec.prop
     def __hash__(set):
         &#34;&#34;&#34;
         FiniteSet is hashable, using the same hash function as built-in frozenset
@@ -155,7 +155,7 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.construction
+<pre><code class="python">@spec.init
 def init(Struct, elements=None):
     elements = {1, 2, 3, 5}
     return Struct(elements)</code></pre>
@@ -170,7 +170,7 @@ def init(Struct, elements=None):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def union(set, other):
     Struct = set.__class__
     assert Struct((1, 2, 3, 5)) | Struct((5, 6, 7)) == Struct((1, 2, 3, 5, 6, 7))</code></pre>
@@ -185,7 +185,7 @@ def union(set, other):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def intersection(set, other):
     Struct = set.__class__
     assert Struct((1, 2, 3, 5)) &amp; Struct((2, 3, 4)) == Struct((2, 3))</code></pre>
@@ -200,7 +200,7 @@ def intersection(set, other):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def difference(set, other):
     Struct = set.__class__
     assert Struct((1, 2, 3, 5)) - Struct((5, 6)) == Struct((1, 2, 3))</code></pre>
@@ -215,7 +215,7 @@ def difference(set, other):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def symmetric_difference(set, other):
     Struct = set.__class__
     assert Struct((1, 2, 3, 5)) ^ Struct((3, 4, 5)) == Struct((1, 2, 4))</code></pre>

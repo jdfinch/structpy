@@ -24,22 +24,22 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from unittest import TestCase, TestSuite, TextTestRunner
+<pre><code class="python">from unittest import TestCase, FunctionTestCase, TestSuite, TextTestRunner
 from inspect import signature
 
 
 class Spec(TestCase):
     &#34;&#34;&#34;
-    Run a test function.
+    Run a unit function.
 
-    By default, the test function will be passed None for each expected argument.
+    By default, the unit function will be passed None for each expected argument.
 
     If an object is specified, the object will be passed as the functions first arg.
     &#34;&#34;&#34;
 
     def __init__(self, test, type=None, object=None):
         if type is None:
-            type = &#39;test&#39;
+            type = &#39;unit&#39;
         self._object = object
         self._test_fn = test
         self._type = type
@@ -117,8 +117,8 @@ if __name__ == &#39;__main__&#39;:
 <span>(</span><span>test, type=None, object=None)</span>
 </code></dt>
 <dd>
-<section class="desc"><p>Run a test function.</p>
-<p>By default, the test function will be passed None for each expected argument.</p>
+<section class="desc"><p>Run a unit function.</p>
+<p>By default, the unit function will be passed None for each expected argument.</p>
 <p>If an object is specified, the object will be passed as the functions first arg.</p>
 <p>Create an instance of the class that will use the named test
 method when executed. Raises a ValueError if the instance does
@@ -129,16 +129,16 @@ not have a method with the specified name.</p></section>
 </summary>
 <pre><code class="python">class Spec(TestCase):
     &#34;&#34;&#34;
-    Run a test function.
+    Run a unit function.
 
-    By default, the test function will be passed None for each expected argument.
+    By default, the unit function will be passed None for each expected argument.
 
     If an object is specified, the object will be passed as the functions first arg.
     &#34;&#34;&#34;
 
     def __init__(self, test, type=None, object=None):
         if type is None:
-            type = &#39;test&#39;
+            type = &#39;unit&#39;
         self._object = object
         self._test_fn = test
         self._type = type

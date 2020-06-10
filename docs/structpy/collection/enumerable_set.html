@@ -24,13 +24,13 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import Specification, Implementation
+<pre><code class="python">from structpy.language import spec, Implementation
 
 
-@Specification
+@spec
 class EnumerableSet:
 
-    @Specification.construction
+    @spec.init
     def init(set, iterator=None, membership=None):
         pass</code></pre>
 </details>
@@ -55,7 +55,7 @@ class EnumerableSet:
 </summary>
 <pre><code class="python">class EnumerableSet:
 
-    @Specification.construction
+    @spec.init
     def init(set, iterator=None, membership=None):
         pass</code></pre>
 </details>
@@ -70,7 +70,7 @@ class EnumerableSet:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.construction
+<pre><code class="python">@spec.init
 def init(set, iterator=None, membership=None):
     pass</code></pre>
 </details>

@@ -24,10 +24,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import Specification, Implementation
+<pre><code class="python">from structpy.language import spec, Implementation
 
 
-@Specification
+@spec
 class Undigraph:
     &#34;&#34;&#34;
     Undirected, unlabeled graph.
@@ -42,7 +42,7 @@ class Undigraph:
 
     }
 
-    @Specification.construction
+    @spec.init
     def INIT____Unidigraph(Graph):
         &#34;&#34;&#34;
         Creates an empty Unidigraph.
@@ -56,14 +56,14 @@ class Undigraph:
         ])
         return graph
 
-    @Specification.definition
+    @spec.prop
     def add_node(graph, node):
         &#34;&#34;&#34;
         Add a node to the graph.
         &#34;&#34;&#34;
         graph.add_node(&#39;e&#39;)
 
-    @Specification.definition
+    @spec.prop
     def add_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Add an arc between existing nodes in the graph.
@@ -71,7 +71,7 @@ class Undigraph:
         &#34;&#34;&#34;
         graph.add_arc(&#39;d&#39;, &#39;e&#39;)
 
-    @Specification.definition
+    @spec.prop
     def add(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Add a node, or an arc to the graph.
@@ -80,7 +80,7 @@ class Undigraph:
         &#34;&#34;&#34;
         graph.add(&#39;c&#39;, &#39;f&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove_node(graph, node):
         &#34;&#34;&#34;
         Remove a node from the graph, if it exists.
@@ -88,14 +88,14 @@ class Undigraph:
         &#34;&#34;&#34;
         graph.remove_node(&#39;a&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Remove an arc from the graph, if it exists.
         &#34;&#34;&#34;
         graph.remove_arc(&#39;b&#39;, &#39;c&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Remove either a node or an arc from the graph.
@@ -105,7 +105,7 @@ class Undigraph:
         &#34;&#34;&#34;
         graph.remove(&#39;c&#39;, &#39;d&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has_node(graph, node):
         &#34;&#34;&#34;
         Whether a node is in the graph.
@@ -115,7 +115,7 @@ class Undigraph:
         assert graph.has_node(&#39;f&#39;)
         assert not graph.has_node(&#39;a&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Whether an arc is in the graph.
@@ -125,7 +125,7 @@ class Undigraph:
         assert graph.has_arc(&#39;c&#39;, &#39;f&#39;)
         assert not graph.has_arc(&#39;a&#39;, &#39;f&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Whether a node is in the graph or, if neighbor is specified,
@@ -136,28 +136,28 @@ class Undigraph:
         assert not graph.has(&#39;a&#39;)
         assert graph.has(&#39;b&#39;)
 
-    @Specification.definition
+    @spec.prop
     def nodes(graph):
         &#34;&#34;&#34;
         A generator over the nodes in the graph, unordered.
         &#34;&#34;&#34;
         assert set(graph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
 
-    @Specification.definition
+    @spec.prop
     def arcs(graph):
         &#34;&#34;&#34;
         A generator over the arcs in the graph, unordered.
         &#34;&#34;&#34;
         assert False
 
-    @Specification.definition
+    @spec.prop
     def len_nodes(graph):
         &#34;&#34;&#34;
         Returns the number of nodes in the graph.
         &#34;&#34;&#34;
         assert graph.len_nodes() == 5
 
-    @Specification.definition
+    @spec.prop
     def len_arcs(graph):
         &#34;&#34;&#34;
         Returns the number of arcs in the graph.
@@ -204,7 +204,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
 
     }
 
-    @Specification.construction
+    @spec.init
     def INIT____Unidigraph(Graph):
         &#34;&#34;&#34;
         Creates an empty Unidigraph.
@@ -218,14 +218,14 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         ])
         return graph
 
-    @Specification.definition
+    @spec.prop
     def add_node(graph, node):
         &#34;&#34;&#34;
         Add a node to the graph.
         &#34;&#34;&#34;
         graph.add_node(&#39;e&#39;)
 
-    @Specification.definition
+    @spec.prop
     def add_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Add an arc between existing nodes in the graph.
@@ -233,7 +233,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         &#34;&#34;&#34;
         graph.add_arc(&#39;d&#39;, &#39;e&#39;)
 
-    @Specification.definition
+    @spec.prop
     def add(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Add a node, or an arc to the graph.
@@ -242,7 +242,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         &#34;&#34;&#34;
         graph.add(&#39;c&#39;, &#39;f&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove_node(graph, node):
         &#34;&#34;&#34;
         Remove a node from the graph, if it exists.
@@ -250,14 +250,14 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         &#34;&#34;&#34;
         graph.remove_node(&#39;a&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Remove an arc from the graph, if it exists.
         &#34;&#34;&#34;
         graph.remove_arc(&#39;b&#39;, &#39;c&#39;)
 
-    @Specification.definition
+    @spec.prop
     def remove(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Remove either a node or an arc from the graph.
@@ -267,7 +267,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         &#34;&#34;&#34;
         graph.remove(&#39;c&#39;, &#39;d&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has_node(graph, node):
         &#34;&#34;&#34;
         Whether a node is in the graph.
@@ -277,7 +277,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         assert graph.has_node(&#39;f&#39;)
         assert not graph.has_node(&#39;a&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has_arc(graph, node, neighbor):
         &#34;&#34;&#34;
         Whether an arc is in the graph.
@@ -287,7 +287,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         assert graph.has_arc(&#39;c&#39;, &#39;f&#39;)
         assert not graph.has_arc(&#39;a&#39;, &#39;f&#39;)
 
-    @Specification.definition
+    @spec.prop
     def has(graph, node, neighbor=None):
         &#34;&#34;&#34;
         Whether a node is in the graph or, if neighbor is specified,
@@ -298,28 +298,28 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
         assert not graph.has(&#39;a&#39;)
         assert graph.has(&#39;b&#39;)
 
-    @Specification.definition
+    @spec.prop
     def nodes(graph):
         &#34;&#34;&#34;
         A generator over the nodes in the graph, unordered.
         &#34;&#34;&#34;
         assert set(graph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
 
-    @Specification.definition
+    @spec.prop
     def arcs(graph):
         &#34;&#34;&#34;
         A generator over the arcs in the graph, unordered.
         &#34;&#34;&#34;
         assert False
 
-    @Specification.definition
+    @spec.prop
     def len_nodes(graph):
         &#34;&#34;&#34;
         Returns the number of nodes in the graph.
         &#34;&#34;&#34;
         assert graph.len_nodes() == 5
 
-    @Specification.definition
+    @spec.prop
     def len_arcs(graph):
         &#34;&#34;&#34;
         Returns the number of arcs in the graph.
@@ -338,7 +338,7 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></sectio
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.construction
+<pre><code class="python">@spec.init
 def INIT____Unidigraph(Graph):
     &#34;&#34;&#34;
     Creates an empty Unidigraph.
@@ -362,7 +362,7 @@ def INIT____Unidigraph(Graph):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def add_node(graph, node):
     &#34;&#34;&#34;
     Add a node to the graph.
@@ -380,7 +380,7 @@ Has no effect if the arc already exists.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def add_arc(graph, node, neighbor):
     &#34;&#34;&#34;
     Add an arc between existing nodes in the graph.
@@ -400,7 +400,7 @@ already exist, they are added automatically.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def add(graph, node, neighbor=None):
     &#34;&#34;&#34;
     Add a node, or an arc to the graph.
@@ -420,7 +420,7 @@ This will remove all arcs that contain the removed node.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def remove_node(graph, node):
     &#34;&#34;&#34;
     Remove a node from the graph, if it exists.
@@ -438,7 +438,7 @@ def remove_node(graph, node):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def remove_arc(graph, node, neighbor):
     &#34;&#34;&#34;
     Remove an arc from the graph, if it exists.
@@ -457,7 +457,7 @@ removed along with all of its arcs.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def remove(graph, node, neighbor=None):
     &#34;&#34;&#34;
     Remove either a node or an arc from the graph.
@@ -477,7 +477,7 @@ def remove(graph, node, neighbor=None):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def has_node(graph, node):
     &#34;&#34;&#34;
     Whether a node is in the graph.
@@ -497,7 +497,7 @@ def has_node(graph, node):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def has_arc(graph, node, neighbor):
     &#34;&#34;&#34;
     Whether an arc is in the graph.
@@ -518,7 +518,7 @@ whether the arc between node and neighbor is in the graph.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def has(graph, node, neighbor=None):
     &#34;&#34;&#34;
     Whether a node is in the graph or, if neighbor is specified,
@@ -539,7 +539,7 @@ def has(graph, node, neighbor=None):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def nodes(graph):
     &#34;&#34;&#34;
     A generator over the nodes in the graph, unordered.
@@ -556,7 +556,7 @@ def nodes(graph):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def arcs(graph):
     &#34;&#34;&#34;
     A generator over the arcs in the graph, unordered.
@@ -573,7 +573,7 @@ def arcs(graph):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def len_nodes(graph):
     &#34;&#34;&#34;
     Returns the number of nodes in the graph.
@@ -590,7 +590,7 @@ def len_nodes(graph):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@Specification.definition
+<pre><code class="python">@spec.prop
 def len_arcs(graph):
     &#34;&#34;&#34;
     Returns the number of arcs in the graph.

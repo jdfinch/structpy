@@ -1,6 +1,6 @@
 
 
-from structpy.language._specification.colors import colors
+from structpy.language.unit_test.colors import colors
 
 
 class Result:
@@ -40,7 +40,6 @@ class Result:
             time,
             colors.fg.black
         )
-
 
 
 class ResultList(list):

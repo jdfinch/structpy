@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>structpy.language.specification.verifier API documentation</title>
+<title>structpy.language.unit_test.scratch2 API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,72 +17,51 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.language.specification.verifier</code></h1>
+<h1 class="title">Module <code>structpy.language.unit_test.scratch2</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from unittest import TestSuite, TextTestRunner
-from traceback import print_exc
-from sys import stderr
-from structpy.language.specification.spec_list import SpecList
+<pre><code class="python">from structpy.language.unit_test.scratch import my_dec, ref, A
 
-class Verifier:
-    &#34;&#34;&#34;
-    Manages a suite of specs associated with a specification.
+@my_dec
+class B:
 
-    Adding a `init` spec sets up an object under unit,
-    which is passed to each subsequent `prop` or `unit` spec.
-    &#34;&#34;&#34;
+    hello = &#39;hello&#39;
 
-    def __init__(self):
-        self._specs_lists = []
-
-    def verify(self, Implementation):
+    def bar(self, x):
         &#34;&#34;&#34;
-        Verify that the `Implementation` satisfies all the tests in the
-        spec list.
+        doc for bar
         &#34;&#34;&#34;
-        succeeded = 0
-        failed = 0
-        run = 0
-        for spec_list in self._specs_lists:
-            result = spec_list.verify(Implementation)
-            run += result.testsRun
-            failed += len(result.failures)
-            succeeded += run - failed
-        print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-        print(succeeded, &#39;succeeded&#39;, file=stderr)
-        print(failed, &#39;failed&#39;, file=stderr)
+        return x * 3
 
-    def add_spec_list(self, init_spec, specs):
-        spec_list = SpecList(init_spec, specs)
-        self._specs_lists.append(spec_list)
+    @ref(A.foo)
+    def baz(self, x):
+        &#34;&#34;&#34;
+        doc for baz
+        &#34;&#34;&#34;
+        return x * 4
+
+    def bat(self, x):
+        &#34;&#34;&#34;
+        doc for bat
+        &#34;&#34;&#34;
+        return 5
 
 
-# if __name__ == &#39;__main__&#39;:
-#     from structpy.language.specification.spec import Spec
-#     class MyStruct:
-#         def __init__(self, a, b):
-#             self.a = a
-#             self.b = b
-#     def specinit(Struct):
-#         return Struct(1, 2)
-#     def specfn1(x):
-#         assert x.a == 1
-#         x.b = 4
-#     def specfn2(x):
-#         assert x.b == 4
-#     sc = Spec(specinit, &#39;construction&#39;)
-#     s1 = Spec(specfn1, &#39;definition&#39;)
-#     s2 = Spec(specfn2, &#39;definition&#39;)
-#     verifier = Verifier()
-#     verifier.add_spec(sc)
-#     verifier.add_spec(s1)
-#     verifier.add_spec(s2)
-#     verifier.verify(MyStruct)</code></pre>
+if __name__ == &#39;__main__&#39;:
+
+    print(B, &#39;\n&#39;)
+    for k, v in B.__dict__.items():
+        print(k, v)
+    print()
+    print(B.bar(None, 4))
+    print(B.baz(None, 4))
+    print(B.x(None))
+    print(B.y(None))
+    print(B.bat(None, 4))</code></pre>
 </details>
 </section>
 <section>
@@ -94,81 +73,8 @@ class Verifier:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.language.specification.verifier.Verifier"><code class="flex name class">
-<span>class <span class="ident">Verifier</span></span>
-</code></dt>
-<dd>
-<section class="desc"><p>Manages a suite of specs associated with a specification.</p>
-<p>Adding a <code>init</code> spec sets up an object under unit,
-which is passed to each subsequent <code>prop</code> or <code>unit</code> spec.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Verifier:
-    &#34;&#34;&#34;
-    Manages a suite of specs associated with a specification.
-
-    Adding a `init` spec sets up an object under unit,
-    which is passed to each subsequent `prop` or `unit` spec.
-    &#34;&#34;&#34;
-
-    def __init__(self):
-        self._specs_lists = []
-
-    def verify(self, Implementation):
-        &#34;&#34;&#34;
-        Verify that the `Implementation` satisfies all the tests in the
-        spec list.
-        &#34;&#34;&#34;
-        succeeded = 0
-        failed = 0
-        run = 0
-        for spec_list in self._specs_lists:
-            result = spec_list.verify(Implementation)
-            run += result.testsRun
-            failed += len(result.failures)
-            succeeded += run - failed
-        print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-        print(succeeded, &#39;succeeded&#39;, file=stderr)
-        print(failed, &#39;failed&#39;, file=stderr)
-
-    def add_spec_list(self, init_spec, specs):
-        spec_list = SpecList(init_spec, specs)
-        self._specs_lists.append(spec_list)</code></pre>
-</details>
-<h3>Methods</h3>
-<dl>
-<dt id="structpy.language.specification.verifier.Verifier.verify"><code class="name flex">
-<span>def <span class="ident">verify</span></span>(<span>self, Implementation)</span>
-</code></dt>
-<dd>
-<section class="desc"><p>Verify that the <code>Implementation</code> satisfies all the tests in the
-spec list.</p></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def verify(self, Implementation):
-    &#34;&#34;&#34;
-    Verify that the `Implementation` satisfies all the tests in the
-    spec list.
-    &#34;&#34;&#34;
-    succeeded = 0
-    failed = 0
-    run = 0
-    for spec_list in self._specs_lists:
-        result = spec_list.verify(Implementation)
-        run += result.testsRun
-        failed += len(result.failures)
-        succeeded += run - failed
-    print(&#39;\n\nTEST RESULTS:&#39;, file=stderr)
-    print(succeeded, &#39;succeeded&#39;, file=stderr)
-    print(failed, &#39;failed&#39;, file=stderr)</code></pre>
-</details>
-</dd>
-<dt id="structpy.language.specification.verifier.Verifier.add_spec_list"><code class="name flex">
-<span>def <span class="ident">add_spec_list</span></span>(<span>self, init_spec, specs)</span>
+<dt id="structpy.language.unit_test.scratch2.B"><code class="flex name class">
+<span>class <span class="ident">B</span></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -176,9 +82,117 @@ spec list.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_spec_list(self, init_spec, specs):
-    spec_list = SpecList(init_spec, specs)
-    self._specs_lists.append(spec_list)</code></pre>
+<pre><code class="python">class B:
+
+    hello = &#39;hello&#39;
+
+    def bar(self, x):
+        &#34;&#34;&#34;
+        doc for bar
+        &#34;&#34;&#34;
+        return x * 3
+
+    @ref(A.foo)
+    def baz(self, x):
+        &#34;&#34;&#34;
+        doc for baz
+        &#34;&#34;&#34;
+        return x * 4
+
+    def bat(self, x):
+        &#34;&#34;&#34;
+        doc for bat
+        &#34;&#34;&#34;
+        return 5</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="structpy.language.unit_test.scratch2.B.hello"><code class="name">var <span class="ident">hello</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.language.unit_test.scratch2.B.bar"><code class="name flex">
+<span>def <span class="ident">bar</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for bar</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bar(self, x):
+    &#34;&#34;&#34;
+    doc for bar
+    &#34;&#34;&#34;
+    return x * 3</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.unit_test.scratch2.B.baz"><code class="name flex">
+<span>def <span class="ident">baz</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for baz</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@ref(A.foo)
+def baz(self, x):
+    &#34;&#34;&#34;
+    doc for baz
+    &#34;&#34;&#34;
+    return x * 4</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.unit_test.scratch2.B.x"><code class="name flex">
+<span>def <span class="ident">x</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for x</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def x(self):
+    &#34;&#34;&#34;
+    doc for x
+    &#34;&#34;&#34;
+    return &#39;x&#39;</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.unit_test.scratch2.B.y"><code class="name flex">
+<span>def <span class="ident">y</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for y</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def y(self):
+    &#34;&#34;&#34;
+    doc for y
+    &#34;&#34;&#34;
+    return &#39;y&#39;</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.unit_test.scratch2.B.bat"><code class="name flex">
+<span>def <span class="ident">bat</span></span>(<span>self, x)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for bat</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bat(self, x):
+    &#34;&#34;&#34;
+    doc for bat
+    &#34;&#34;&#34;
+    return 5</code></pre>
 </details>
 </dd>
 </dl>
@@ -194,16 +208,20 @@ spec list.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.language.specification" href="index.html">structpy.language.specification</a></code></li>
+<li><code><a title="structpy.language.unit_test" href="index.html">structpy.language.unit_test</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.language.specification.verifier.Verifier" href="#structpy.language.specification.verifier.Verifier">Verifier</a></code></h4>
-<ul class="">
-<li><code><a title="structpy.language.specification.verifier.Verifier.verify" href="#structpy.language.specification.verifier.Verifier.verify">verify</a></code></li>
-<li><code><a title="structpy.language.specification.verifier.Verifier.add_spec_list" href="#structpy.language.specification.verifier.Verifier.add_spec_list">add_spec_list</a></code></li>
+<h4><code><a title="structpy.language.unit_test.scratch2.B" href="#structpy.language.unit_test.scratch2.B">B</a></code></h4>
+<ul class="two-column">
+<li><code><a title="structpy.language.unit_test.scratch2.B.bar" href="#structpy.language.unit_test.scratch2.B.bar">bar</a></code></li>
+<li><code><a title="structpy.language.unit_test.scratch2.B.baz" href="#structpy.language.unit_test.scratch2.B.baz">baz</a></code></li>
+<li><code><a title="structpy.language.unit_test.scratch2.B.x" href="#structpy.language.unit_test.scratch2.B.x">x</a></code></li>
+<li><code><a title="structpy.language.unit_test.scratch2.B.y" href="#structpy.language.unit_test.scratch2.B.y">y</a></code></li>
+<li><code><a title="structpy.language.unit_test.scratch2.B.bat" href="#structpy.language.unit_test.scratch2.B.bat">bat</a></code></li>
+<li><code><a title="structpy.language.unit_test.scratch2.B.hello" href="#structpy.language.unit_test.scratch2.B.hello">hello</a></code></li>
 </ul>
 </li>
 </ul>

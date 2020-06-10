@@ -2,7 +2,8 @@
 from structpy.language.specification.verifier import Verifier
 from structpy.language.specification.spec import Spec
 from inspect import getmembers
-
+import types
+from sys import stderr
 
 def __verify__(cls):
     cls.__specification__.__verify__(cls)
@@ -34,6 +35,7 @@ class _Specification:
 
     def __init__(self):
         self._order = 0
+        self._constructor = None
 
     def __call__(self, specification_class):
         """
@@ -88,10 +90,10 @@ class _Specification:
 
         # sort the tests defined in the `specification_class` by order of appearance
         specs = sorted(
-            [spec for _, spec in getmembers(specification_class,
-                predicate=lambda x: hasattr(x, '__test_type__'))],
+            [v for k, v in specification_class.__dict__.items() if hasattr(v, '__test_type__')],
             key=lambda x: x._order
         )
+        print('\n'.join([str(x) for x in specs]), file=stderr)
         initial_construction = Spec(lambda: None)
         construction = initial_construction
         ls = []
@@ -121,8 +123,10 @@ class _Specification:
         where an object is constructed and returned.
         """
         test.__test_type__ = 'construction'
+        test._sequence = []
         test._order = self._order
         self._order += 1
+        self._constructor = test
         return test
 
     def prop(self, test):
@@ -140,41 +144,46 @@ class _Specification:
         test.__test_type__ = 'definition'
         test._order = self._order
         self._order += 1
+        if self._constructor:
+            self._constructor._sequence.append(test)
         return test
 
-    def test(self, test):
-        """
-        spec.unit decorate function, as in
+    class _sats:
 
-        ```
-        @spec.unit
-        def ...
-        ```
+        def __init__(self, specification, reference):
+            self.specification = specification
+            self.reference = reference
 
-        Marks a specification unit that addresses some
-        behavior of the eventual implementation, but does
-        not necessarily correspond to a implementation
-        method.
-        """
-        test.__test_type__ = 'unit'
-        test._order = self._order
-        self._order += 1
-        return test
+        def __call__(self, test):
+            test.__test_type__ = 'construction'
+            test._order = self.specification._order
+            test._sequence = list(self.reference._sequence)
+            for t in test._sequence:
+                setattr(self.specification, 'placeholder', t)
+            self.specification._order += 1
+            self.specification._constructor = test
+            return test
 
-    def sats(self, test):
-        """
-
-        """
-        test.__test_type__ = 'construction ref'
-        test._order = self._order
-        self._order += 1
-        return test
+    def sats(self, reference):
+        return _Specification._sats(self, reference)
 
 
 spec = _Specification()
 
 
 if __name__ == '__main__':
+
+    @spec
+    class ToImport:
+
+        @spec.init
+        def not_imported(Struct):
+            s = Struct()
+            s.x = 999
+
+        @spec.prop
+        def imported(struct):
+            assert struct.x == 999
 
     @spec
     class MyStruct:
@@ -193,6 +202,12 @@ if __name__ == '__main__':
         def mock_test_2(struct):
             assert struct.y == 3
 
+        @spec.sats(ToImport.not_imported)
+        def construct_to_satisfy(Struct):
+            s = Struct()
+            s.x = 0
+            s.x += 999
+            s.y = 8
 
         @spec.init
         def mock_init(Struct):
@@ -206,7 +221,7 @@ if __name__ == '__main__':
             assert struct.x == 6
             assert struct.y == 7
 
-        @spec.test
+        @spec.prop
         def mock_test(struct):
             assert struct.x == 5
             assert True
