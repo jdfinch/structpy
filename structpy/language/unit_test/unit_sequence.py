@@ -6,14 +6,8 @@ from structpy.language.unit_test.result import ResultList
 class UnitSequence(list):
 
     def test(self):
-        obj = None
-        results = ResultList()
-        for unit in self:
-            result = unit.test(obj)
-            if result.obj is not None:
-                obj = result.obj
-            results.append(result)
-        return results
+        for u in self:
+            yield u.test()
 
 
 if __name__ == '__main__':
@@ -50,4 +44,7 @@ if __name__ == '__main__':
         test_one, test_two, test_three, test_four, test_five
     ])
 
-    print(unit_sequence.test())
+    from time import sleep
+    for result in unit_sequence.test():
+        sleep(1)
+        print(result)

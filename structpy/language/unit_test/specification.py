@@ -1,23 +1,13 @@
 
-import types
-from structpy.language.unit_test.unit import unit
+from structpy.language.unit_test.unit import unit, Unit
 from structpy.language.unit_test.unit_sequence import UnitSequence
 
+
 def verify(spec, *args, **kwargs):
-    spec.__units__.test(*args, **kwargs)
-
-def specification(cls):
-    properties = []
-    for k, v in cls.__dict__.items():
-        if hasattr(v, '__call__') and v.__name__[0].isalpha():
-            properties.append(v)
-    units = UnitSequence([unit(prop) for prop in properties])
-    cls.__units__ = units
-    cls.__verify__ = verify
-    return cls
+    return spec.__units__.test(*args, **kwargs)
 
 
-def rebuild(cls, prop_order):
+def _rebuild(cls, prop_order):
     reorder = {}
     for item in prop_order:
         reorder[item] = cls.__dict__[item]
@@ -26,24 +16,27 @@ def rebuild(cls, prop_order):
         setattr(cls, k, v)
 
 
-def my_dec(cls):
+def specification(cls):
     ordering = []
     for k, v in list(cls.__dict__.items()):
         if hasattr(v, '__call__'):
             ordering.append(k)
-            if hasattr(v, 'extras'):
-                for extra in v.extras:
+            if hasattr(v, 'unit_sequence'):
+                for extra in v.unit_sequence:
                     setattr(cls, extra.__name__, extra)
                     ordering.append(extra.__name__)
-    rebuild(cls, ordering)
+    _rebuild(cls, ordering)
+    units = UnitSequence([Unit(cls.__dict__[prop]) for prop in ordering])
+    cls.__units__ = units
+    cls.__verify__ = classmethod(verify)
     return cls
 
 
-class ref:
+class satisfies:
     def __init__(self, other):
         self.other = other
     def __call__(self, f):
-        f.extras = self.other.extras
+        f.unit_sequence = list(self.other.unit_sequence)
         return f
 
 
@@ -64,11 +57,11 @@ class A:
         """
         return 'y'
 
-    foo.extras = [
+    foo.unit_sequence = [
         x, y
     ]
 
-@my_dec
+@specification
 class B:
 
     hello = 'hello'
@@ -79,7 +72,7 @@ class B:
         """
         return x * 3
 
-    @ref(A.foo)
+    @satisfies(A.foo)
     def baz(self, x):
         """
         doc for baz
@@ -103,3 +96,6 @@ if __name__ == '__main__':
     print(B.x(None))
     print(B.y(None))
     print(B.bat(None, 4))
+
+    print()
+    print(B.__verify__())

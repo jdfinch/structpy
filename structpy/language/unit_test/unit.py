@@ -28,17 +28,19 @@ class Unit:
     ```
     """
 
-    def __init__(self, method, *tags, time_requirement=None):
+    def __init__(self, method, *tags, args=None, kwargs=None, time_requirement=None):
         self.method = method
         self.should_pass = True
+        self.args = args
+        self.kwargs = kwargs
         self.time_requirement = time_requirement
         self.tags = tags
 
-    def test(self, *args):
+    def test(self, *args, **kwargs):
         """
         Run the unit test.
 
-        `*args` will be passed to the test method.
+        `*args` and `**kwargs` will be passed to the test method.
         """
         sig = signature(self.method)
         nargs = len(sig.parameters)

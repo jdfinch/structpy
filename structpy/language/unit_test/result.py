@@ -69,11 +69,12 @@ class ResultList(list):
         passed, failed, run, time_fail = self.summary()
         failed_msg = '{} failed'.format(failed) if failed else ''
         time_fail_msg = '{} timed out'.format(time_fail) if time_fail else ''
+        time_fail_sep = ', ' if time_fail_msg else ''
         traces = '\n\n'.join([str(result) + '\n' + result.traceback
                               for result in self if not result.passed])
-        return '\n{}\n{}\n\n{}\n{}{} passed{}, {}{}{}, {}{}{}'.format(
+        return '\n{}\n{}\n\n{}\n{}{} passed{}, {}{}{}{}{}{}{}'.format(
             title, table,
             traces,
             colors.fg.green, passed, colors.fg.black,
-            colors.fg.red, failed_msg, colors.fg.black,
+            colors.fg.red, failed_msg, colors.fg.black, time_fail_sep,
             colors.fg.red, time_fail_msg, colors.fg.black)
