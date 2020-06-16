@@ -1,6 +1,6 @@
 
 from structpy.language.unit_test.unit import unit, Unit
-from structpy.language.unit_test.result import ResultList
+from structpy.language.unit_test.result_list import ResultList
 
 
 class UnitSequence(list):
@@ -44,7 +44,11 @@ if __name__ == '__main__':
         test_one, test_two, test_three, test_four, test_five
     ])
 
-    from time import sleep
+
     for result in unit_sequence.test():
-        sleep(1)
         print(result)
+
+    print('-'*80)
+    print()
+    import sys
+    print(dir(sys.modules[__name__]))

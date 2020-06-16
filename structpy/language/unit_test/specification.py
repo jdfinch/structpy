@@ -1,10 +1,25 @@
 
-from structpy.language.unit_test.unit import unit, Unit
+from structpy.language.unit_test.unit import Unit
 from structpy.language.unit_test.unit_sequence import UnitSequence
+from structpy.language.unit_test.result_list import ResultList
 
 
 def verify(spec, *args, **kwargs):
     return spec.__units__.test(*args, **kwargs)
+
+
+class SpecificationUnitSequence(UnitSequence):
+
+    def test(self):
+        results = ResultList()
+        arg = None
+        for unit in self:
+            result = unit.test(arg)
+            obj = result.obj
+            if obj is not None:
+                arg = obj
+            results.append(result)
+        return results
 
 
 def _rebuild(cls, prop_order):
@@ -17,85 +32,93 @@ def _rebuild(cls, prop_order):
 
 
 def specification(cls):
+    cls.__sequence__ = []
+    sequenced = cls
     ordering = []
     for k, v in list(cls.__dict__.items()):
         if hasattr(v, '__call__'):
             ordering.append(k)
-            if hasattr(v, 'unit_sequence'):
-                for extra in v.unit_sequence:
-                    setattr(cls, extra.__name__, extra)
-                    ordering.append(extra.__name__)
+            if hasattr(v, 'is_ref'):
+                for prop in v.__sequence__:
+                    setattr(cls, prop.__name__, prop)
+                    ordering.append(prop.__name__)
+            if hasattr(v, 'is_init'):
+                sequenced = v
+            else:
+                sequenced.__sequence__.append(v)
     _rebuild(cls, ordering)
-    units = UnitSequence([Unit(cls.__dict__[prop]) for prop in ordering])
+    units = SpecificationUnitSequence()
+    for method_name in ordering:
+        method = cls.__dict__[method_name]
+        unit = Unit(method, 'specification')
+        units.append(unit)
     cls.__units__ = units
     cls.__verify__ = classmethod(verify)
     return cls
+
+
+def init(f):
+    f.is_init = True
+    f.__sequence__ = []
+    return f
 
 
 class satisfies:
     def __init__(self, other):
         self.other = other
     def __call__(self, f):
-        f.unit_sequence = list(self.other.unit_sequence)
+        f = init(f)
+        f.is_ref = True
+        f.__sequence__ = list(self.other.__sequence__)
         return f
 
 
+specification.satisfies = satisfies
+specification.init = init
+
+
+@specification
 class A:
 
-    def foo(self, x):
-        return x * 2
+    @specification.init
+    def foo(struct):
+        return []
 
-    def x(self):
+    def x(struct):
         """
         doc for x
         """
-        return 'x'
+        struct.append(5)
 
-    def y(self):
+    def y(struct):
         """
         doc for y
         """
-        return 'y'
-
-    foo.unit_sequence = [
-        x, y
-    ]
+        assert len(struct) == 1 and struct[0] == 5
 
 @specification
 class B:
 
-    hello = 'hello'
 
-    def bar(self, x):
+    def bar(struct):
         """
         doc for bar
         """
-        return x * 3
+        assert True
 
     @satisfies(A.foo)
-    def baz(self, x):
+    def baz(struct):
         """
         doc for baz
         """
-        return x * 4
+        return []
 
-    def bat(self, x):
+    def bat(struct):
         """
         doc for bat
         """
-        return 5
+        assert True
 
 if __name__ == '__main__':
 
-    print(B, '\n')
-    for k, v in B.__dict__.items():
-        print(k, v)
-    print()
-    print(B.bar(None, 4))
-    print(B.baz(None, 4))
-    print(B.x(None))
-    print(B.y(None))
-    print(B.bat(None, 4))
-
-    print()
     print(B.__verify__())

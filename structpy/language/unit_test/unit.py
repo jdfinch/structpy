@@ -1,7 +1,7 @@
 
-from inspect import signature
+from inspect import signature, Parameter
 import sys, traceback, time
-from structpy.language.unit_test.result import Result, ResultList
+from structpy.language.unit_test.result import Result
 
 
 class unit:
@@ -29,6 +29,10 @@ class Unit:
     """
 
     def __init__(self, method, *tags, args=None, kwargs=None, time_requirement=None):
+        if args is None:
+            args = []
+        if kwargs is None:
+            kwargs = {}
         self.method = method
         self.should_pass = True
         self.args = args
@@ -36,24 +40,37 @@ class Unit:
         self.time_requirement = time_requirement
         self.tags = tags
 
+
+    def set_args(self, *args, **kwargs):
+        self.args = args
+        self.kwargs = kwargs
+
+
     def test(self, *args, **kwargs):
         """
         Run the unit test.
 
         `*args` and `**kwargs` will be passed to the test method.
         """
+        if args:
+            self.args = args
+        if kwargs:
+            self.kwargs = kwargs
+        args, kwargs = self.args, self.kwargs
         sig = signature(self.method)
-        nargs = len(sig.parameters)
+        args = list(reversed(args)) if args else None
+        arguments = {}
+        for parameter in sig.parameters:
+            if args:
+                arguments[parameter] = args.pop()
+            elif kwargs and parameter in kwargs:
+                arguments[parameter] = kwargs[parameter]
         result = Result()
         obj = None
         t0 = time.time()
         try:
-            if nargs > 0:
-                argv = [*args] + [None] * (nargs - len(args))
-            else:
-                argv = []
             t0 = time.time()
-            obj = self.method(*argv)
+            obj = self.method(**arguments)
             t1 = time.time()
             traceback_message = None
         except Exception:
@@ -66,11 +83,11 @@ class Unit:
         result.traceback = traceback_message
         result.time_requirement = self.time_requirement
         result.time_elapsed = time_elapsed
-        result.time_passed = result.time_requirement is None or result.time_elapsed <= result.time_requirement
+        result.time_passed = result.time_requirement is None \
+                             or result.time_elapsed <= result.time_requirement
         result.passed = result.traceback is None
         result.obj = obj
         return result
-
 
 
 
