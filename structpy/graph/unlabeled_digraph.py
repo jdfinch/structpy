@@ -1,11 +1,10 @@
 
 
-from structpy.language import spec
+from structpy.language import specification
 
-@spec
+@specification
 class UnlabeledDigraph:
 
-    @spec.prop
     def digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -39,9 +38,6 @@ class UnlabeledDigraph:
         assert graph.arcs('a', 'b') == {('a', 'b', 1), ('a', 'b', 2)}
         assert graph.arcs('a', label=5) == {('d', 'a', 5)}
 
-
-
-    @spec.prop
     def this_is_my_method(self, Struct):
         """
 

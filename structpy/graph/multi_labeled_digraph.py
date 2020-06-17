@@ -1,11 +1,10 @@
 
-from structpy.language import spec
+from structpy.language import specification
 
 
-@spec
+@specification
 class MultiLabeledDigraph:
 
-    @spec.prop
     def multi_labeled_digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([

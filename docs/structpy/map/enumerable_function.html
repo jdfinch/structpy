@@ -24,10 +24,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import spec, Implementation
+<pre><code class="python">from structpy.language import specification, implementation
 
 
-@spec
+@specification
 class EnumerableFunction:
     &#34;&#34;&#34;
     Function Mapping
@@ -35,11 +35,10 @@ class EnumerableFunction:
     many-to-one mapping between keys and values
     &#34;&#34;&#34;
 
-    @spec.init
+    @specification.init
     def number_bimap(Struct):
         return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})
 
-    @spec.prop
     def __getitem__(bimap, item):
         &#34;&#34;&#34;
         get the value in the codomain associated with a domain item
@@ -48,7 +47,6 @@ class EnumerableFunction:
         assert bimap[&#39;two&#39;] == 2
         assert bimap[&#39;three&#39;] == 3
 
-    @spec.prop
     def __setitem__(bimap, key, value):
         &#34;&#34;&#34;
         add a item pair that co-map
@@ -63,7 +61,6 @@ class EnumerableFunction:
         bimap[&#39;dos&#39;] = 3
         assert bimap[&#39;dos&#39;] == 3
 
-    @spec.prop
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a lookup (one-to-many mapping) representing
@@ -101,11 +98,10 @@ class EnumerableFunction:
     many-to-one mapping between keys and values
     &#34;&#34;&#34;
 
-    @spec.init
+    @specification.init
     def number_bimap(Struct):
         return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})
 
-    @spec.prop
     def __getitem__(bimap, item):
         &#34;&#34;&#34;
         get the value in the codomain associated with a domain item
@@ -114,7 +110,6 @@ class EnumerableFunction:
         assert bimap[&#39;two&#39;] == 2
         assert bimap[&#39;three&#39;] == 3
 
-    @spec.prop
     def __setitem__(bimap, key, value):
         &#34;&#34;&#34;
         add a item pair that co-map
@@ -129,7 +124,6 @@ class EnumerableFunction:
         bimap[&#39;dos&#39;] = 3
         assert bimap[&#39;dos&#39;] == 3
 
-    @spec.prop
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a lookup (one-to-many mapping) representing
@@ -151,7 +145,7 @@ class EnumerableFunction:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.init
+<pre><code class="python">@specification.init
 def number_bimap(Struct):
     return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})</code></pre>
 </details>
@@ -166,8 +160,7 @@ a mapping with domain and codomain swapped</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def reverse(bimap):
+<pre><code class="python">def reverse(bimap):
     &#34;&#34;&#34;
     returns a lookup (one-to-many mapping) representing
     a mapping with domain and codomain swapped

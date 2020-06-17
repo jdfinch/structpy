@@ -2,6 +2,8 @@
 """
 Defines a potentially infinite sequence of values that can be iterated
 over, where each value is derived from an update of the previous one.
+
+Test.
 """
 
 from structpy.language.specification.factory import Factory

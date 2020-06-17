@@ -1,7 +1,7 @@
 
 from inspect import signature, Parameter
 import sys, traceback, time
-from structpy.language.unit_test.result import Result
+from structpy.language.specification.result import Result
 
 
 class unit:

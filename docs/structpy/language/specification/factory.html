@@ -77,7 +77,7 @@ class Factory:
         specpairs = set()
         for kwargs, production in self.pairs:
             kwargs = dict(kwargs)
-            production = production.__specification__
+            production = production.__specifications__[0]
             if &#39;implementation&#39; in kwargs:
                 del kwargs[&#39;implementation&#39;]
             production.___kwargs_for_update_function_docstring = kwargs
@@ -231,7 +231,7 @@ class Factory:
         specpairs = set()
         for kwargs, production in self.pairs:
             kwargs = dict(kwargs)
-            production = production.__specification__
+            production = production.__specifications__[0]
             if &#39;implementation&#39; in kwargs:
                 del kwargs[&#39;implementation&#39;]
             production.___kwargs_for_update_function_docstring = kwargs

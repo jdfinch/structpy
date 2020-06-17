@@ -1,8 +1,8 @@
 
-from structpy.language import spec, Implementation
+from structpy.language import specification, implementation
 
 
-@spec
+@specification
 class FiniteMarkovEnumerableSpec:
     """
     Define a sequence iterator that generates each
@@ -17,7 +17,7 @@ class FiniteMarkovEnumerableSpec:
         'finite': True
     }
 
-    @spec.init
+    @specification.init
     def FINITE_MARKOV_ENUMERABLE(Struct):
         """
         Example of MarkovEnumerable for positive odd single-digit integers
@@ -29,7 +29,7 @@ class FiniteMarkovEnumerableSpec:
                 return x >= 10
         return EveryOtherIntToTen(1)
 
-    @spec.prop
+
     def iter(enumerable):
         """
         MarkovEnumerable can be used by looping over it.
@@ -37,7 +37,7 @@ class FiniteMarkovEnumerableSpec:
         for value in enumerable:
             assert value % 2 == 1
 
-    @spec.prop
+
     def reset(enumerable):
         """
         Reset the value to the MarkovEnumerable's initial value.
@@ -55,7 +55,7 @@ class FiniteMarkovEnumerableSpec:
             break
         assert enumerable.reset() == enumerable
 
-    @spec.prop
+
     def next(enumerable):
         """
         Use .next() or built-in next function to get the next
@@ -67,7 +67,7 @@ class FiniteMarkovEnumerableSpec:
 
 from abc import ABC, abstractmethod
 
-@Implementation(FiniteMarkovEnumerableSpec)
+@implementation(FiniteMarkovEnumerableSpec)
 class FiniteMarkovEnumerable(ABC):
 
     __kwargs__ = {
@@ -105,4 +105,4 @@ class FiniteMarkovEnumerable(ABC):
 
 
 if __name__ == '__main__':
-    FiniteMarkovEnumerableSpec.__verify__()
+    print(FiniteMarkovEnumerableSpec.__verify__())

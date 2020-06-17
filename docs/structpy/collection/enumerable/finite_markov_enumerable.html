@@ -24,10 +24,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import spec, Implementation
+<pre><code class="python">from structpy.language import specification, implementation
 
 
-@spec
+@specification
 class FiniteMarkovEnumerableSpec:
     &#34;&#34;&#34;
     Define a sequence iterator that generates each
@@ -42,7 +42,7 @@ class FiniteMarkovEnumerableSpec:
         &#39;finite&#39;: True
     }
 
-    @spec.init
+    @specification.init
     def FINITE_MARKOV_ENUMERABLE(Struct):
         &#34;&#34;&#34;
         Example of MarkovEnumerable for positive odd single-digit integers
@@ -54,7 +54,7 @@ class FiniteMarkovEnumerableSpec:
                 return x &gt;= 10
         return EveryOtherIntToTen(1)
 
-    @spec.prop
+
     def iter(enumerable):
         &#34;&#34;&#34;
         MarkovEnumerable can be used by looping over it.
@@ -62,7 +62,7 @@ class FiniteMarkovEnumerableSpec:
         for value in enumerable:
             assert value % 2 == 1
 
-    @spec.prop
+
     def reset(enumerable):
         &#34;&#34;&#34;
         Reset the value to the MarkovEnumerable&#39;s initial value.
@@ -80,7 +80,7 @@ class FiniteMarkovEnumerableSpec:
             break
         assert enumerable.reset() == enumerable
 
-    @spec.prop
+
     def next(enumerable):
         &#34;&#34;&#34;
         Use .next() or built-in next function to get the next
@@ -92,7 +92,7 @@ class FiniteMarkovEnumerableSpec:
 
 from abc import ABC, abstractmethod
 
-@Implementation(FiniteMarkovEnumerableSpec)
+@implementation(FiniteMarkovEnumerableSpec)
 class FiniteMarkovEnumerable(ABC):
 
     __kwargs__ = {
@@ -168,7 +168,7 @@ the end of the sequence.</p></section>
         &#39;finite&#39;: True
     }
 
-    @spec.init
+    @specification.init
     def FINITE_MARKOV_ENUMERABLE(Struct):
         &#34;&#34;&#34;
         Example of MarkovEnumerable for positive odd single-digit integers
@@ -180,7 +180,7 @@ the end of the sequence.</p></section>
                 return x &gt;= 10
         return EveryOtherIntToTen(1)
 
-    @spec.prop
+
     def iter(enumerable):
         &#34;&#34;&#34;
         MarkovEnumerable can be used by looping over it.
@@ -188,7 +188,7 @@ the end of the sequence.</p></section>
         for value in enumerable:
             assert value % 2 == 1
 
-    @spec.prop
+
     def reset(enumerable):
         &#34;&#34;&#34;
         Reset the value to the MarkovEnumerable&#39;s initial value.
@@ -206,7 +206,7 @@ the end of the sequence.</p></section>
             break
         assert enumerable.reset() == enumerable
 
-    @spec.prop
+
     def next(enumerable):
         &#34;&#34;&#34;
         Use .next() or built-in next function to get the next
@@ -226,7 +226,7 @@ the end of the sequence.</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.init
+<pre><code class="python">@specification.init
 def FINITE_MARKOV_ENUMERABLE(Struct):
     &#34;&#34;&#34;
     Example of MarkovEnumerable for positive odd single-digit integers
@@ -248,8 +248,7 @@ def FINITE_MARKOV_ENUMERABLE(Struct):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def iter(enumerable):
+<pre><code class="python">def iter(enumerable):
     &#34;&#34;&#34;
     MarkovEnumerable can be used by looping over it.
     &#34;&#34;&#34;
@@ -266,8 +265,7 @@ def iter(enumerable):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def reset(enumerable):
+<pre><code class="python">def reset(enumerable):
     &#34;&#34;&#34;
     Reset the value to the MarkovEnumerable&#39;s initial value.
     &#34;&#34;&#34;
@@ -295,8 +293,7 @@ value from the MarkovEnumerable</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def next(enumerable):
+<pre><code class="python">def next(enumerable):
     &#34;&#34;&#34;
     Use .next() or built-in next function to get the next
     value from the MarkovEnumerable

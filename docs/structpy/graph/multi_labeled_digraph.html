@@ -24,13 +24,12 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import spec
+<pre><code class="python">from structpy.language import specification
 
 
-@spec
+@specification
 class MultiLabeledDigraph:
 
-    @spec.prop
     def multi_labeled_digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -87,7 +86,6 @@ class MultiLabeledDigraph:
 </summary>
 <pre><code class="python">class MultiLabeledDigraph:
 
-    @spec.prop
     def multi_labeled_digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -134,8 +132,7 @@ class MultiLabeledDigraph:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def multi_labeled_digraph_access_patterns(self, Struct):
+<pre><code class="python">def multi_labeled_digraph_access_patterns(self, Struct):
     graph = Struct()
     graph.add_arcs([
         (&#39;a&#39;, &#39;b&#39;, 1),

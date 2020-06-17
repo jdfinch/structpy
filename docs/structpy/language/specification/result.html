@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>structpy.language.specification API documentation</title>
+<title>structpy.language.specification.result API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,55 +17,123 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.language.specification</code></h1>
+<h1 class="title">Module <code>structpy.language.specification.result</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language.specification.specification import specification, implementation
-from structpy.language.specification.factory import Factory</code></pre>
+<pre><code class="python">from structpy.language.specification.colors import colors
+
+
+class Result:
+
+    def __init__(self):
+        self.unit = None
+        self.passed = None
+        self.time_requirement = None
+        self.time_elapsed = None
+        self.time_passed = None
+        self.traceback = None
+        self.obj = None
+
+    def __str__(self):
+        test_string = self.unit.method.__name__
+        if self.obj:
+            def _class_to_string(cls):
+                string = str(cls)
+                return string[string.rfind(&#39;.&#39;) + 1:-2]
+            if hasattr(self.obj, &#39;__specification__&#39;):
+                spec_string = _class_to_string(self.obj.__specification__)
+                object_string = _class_to_string(self.obj)
+                title = &#39;{}.{} {}&#39;.format(spec_string, object_string, test_string)
+            else:
+                title = &#39;{:29} {:20.20}&#39;.format(test_string, str(self.obj))
+        else:
+            title = &#39;{:50.50}&#39;.format(test_string)
+        time = &#39;{:.4f}&#39;.format(self.time_elapsed).lstrip(&#39;0&#39;) if \
+            self.time_requirement is not None and self.passed else &#39;&#39;
+        time_color = colors.fg.green if self.time_passed else colors.fg.red
+        passed_color = colors.fg.green if self.passed else colors.fg.red
+        if self.traceback:
+            traceback = &#39;\n\n{}\n\n&#39;.format(self.traceback)
+        else:
+            traceback = &#39;&#39;
+        format = &#39;{}{:&lt;50}  {}{:10}{}{}&#39;
+        return format.format(
+            passed_color,
+            title,
+            time_color,
+            time,
+            colors.fg.black,
+            traceback
+        )</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="structpy.language.specification.colors" href="colors.html">structpy.language.specification.colors</a></code></dt>
+<dt id="structpy.language.specification.result.Result"><code class="flex name class">
+<span>class <span class="ident">Result</span></span>
+</code></dt>
 <dd>
 <section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.factory" href="factory.html">structpy.language.specification.factory</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.result" href="result.html">structpy.language.specification.result</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.result_list" href="result_list.html">structpy.language.specification.result_list</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.specification" href="specification.html">structpy.language.specification.specification</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.unit" href="unit.html">structpy.language.specification.unit</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.unit_sequence" href="unit_sequence.html">structpy.language.specification.unit_sequence</a></code></dt>
-<dd>
-<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Result:
+
+    def __init__(self):
+        self.unit = None
+        self.passed = None
+        self.time_requirement = None
+        self.time_elapsed = None
+        self.time_passed = None
+        self.traceback = None
+        self.obj = None
+
+    def __str__(self):
+        test_string = self.unit.method.__name__
+        if self.obj:
+            def _class_to_string(cls):
+                string = str(cls)
+                return string[string.rfind(&#39;.&#39;) + 1:-2]
+            if hasattr(self.obj, &#39;__specification__&#39;):
+                spec_string = _class_to_string(self.obj.__specification__)
+                object_string = _class_to_string(self.obj)
+                title = &#39;{}.{} {}&#39;.format(spec_string, object_string, test_string)
+            else:
+                title = &#39;{:29} {:20.20}&#39;.format(test_string, str(self.obj))
+        else:
+            title = &#39;{:50.50}&#39;.format(test_string)
+        time = &#39;{:.4f}&#39;.format(self.time_elapsed).lstrip(&#39;0&#39;) if \
+            self.time_requirement is not None and self.passed else &#39;&#39;
+        time_color = colors.fg.green if self.time_passed else colors.fg.red
+        passed_color = colors.fg.green if self.passed else colors.fg.red
+        if self.traceback:
+            traceback = &#39;\n\n{}\n\n&#39;.format(self.traceback)
+        else:
+            traceback = &#39;&#39;
+        format = &#39;{}{:&lt;50}  {}{:10}{}{}&#39;
+        return format.format(
+            passed_color,
+            title,
+            time_color,
+            time,
+            colors.fg.black,
+            traceback
+        )</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -76,18 +144,14 @@ from structpy.language.specification.factory import Factory</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.language" href="../index.html">structpy.language</a></code></li>
+<li><code><a title="structpy.language.specification" href="index.html">structpy.language.specification</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="structpy.language.specification.colors" href="colors.html">structpy.language.specification.colors</a></code></li>
-<li><code><a title="structpy.language.specification.factory" href="factory.html">structpy.language.specification.factory</a></code></li>
-<li><code><a title="structpy.language.specification.result" href="result.html">structpy.language.specification.result</a></code></li>
-<li><code><a title="structpy.language.specification.result_list" href="result_list.html">structpy.language.specification.result_list</a></code></li>
-<li><code><a title="structpy.language.specification.specification" href="specification.html">structpy.language.specification.specification</a></code></li>
-<li><code><a title="structpy.language.specification.unit" href="unit.html">structpy.language.specification.unit</a></code></li>
-<li><code><a title="structpy.language.specification.unit_sequence" href="unit_sequence.html">structpy.language.specification.unit_sequence</a></code></li>
+<li>
+<h4><code><a title="structpy.language.specification.result.Result" href="#structpy.language.specification.result.Result">Result</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>structpy.language.specification API documentation</title>
+<title>structpy.language.specification.result_list API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,55 +17,142 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.language.specification</code></h1>
+<h1 class="title">Module <code>structpy.language.specification.result_list</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language.specification.specification import specification, implementation
-from structpy.language.specification.factory import Factory</code></pre>
+<pre><code class="python">from structpy.language.specification.colors import colors
+
+class ResultList(list):
+
+    def summary(self):
+        passed = 0
+        failed = 0
+        run = 0
+        time_fail = 0
+        for result in self:
+            if result.passed:
+                if result.time_passed:
+                    passed += 1
+            else:
+                failed += 1
+            run += 1
+            if not result.time_passed:
+                time_fail += 1
+        return passed, failed, run, time_fail
+
+    def __add__(self, other):
+        return ResultList(self + other)
+
+    def __str__(self):
+        title = &#39;{s:{c}^70}&#39;.format(s=&#39; Unit Test Results &#39;, c=&#39;=&#39;)
+        table = &#39;\n&#39;.join([str(result) for result in self])
+        passed, failed, run, time_fail = self.summary()
+        failed_sep = &#39;, &#39; if failed else &#39;&#39;
+        failed_msg = &#39;{} failed&#39;.format(failed) if failed else &#39;&#39;
+        time_fail_msg = &#39;{} timed out&#39;.format(time_fail) if time_fail else &#39;&#39;
+        time_fail_sep = &#39;, &#39; if time_fail_msg else &#39;&#39;
+        return &#39;\n{}\n{}\n\n{}{} passed{}{}{}{}{}{}{}{}{}&#39;.format(
+            title, table,
+            colors.fg.green, passed, colors.fg.black, failed_sep,
+            colors.fg.red, failed_msg, colors.fg.black, time_fail_sep,
+            colors.fg.red, time_fail_msg, colors.fg.black)</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="structpy.language.specification.colors" href="colors.html">structpy.language.specification.colors</a></code></dt>
+<dt id="structpy.language.specification.result_list.ResultList"><code class="flex name class">
+<span>class <span class="ident">ResultList</span></span>
+<span>(</span><span>iterable=())</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ResultList(list):
+
+    def summary(self):
+        passed = 0
+        failed = 0
+        run = 0
+        time_fail = 0
+        for result in self:
+            if result.passed:
+                if result.time_passed:
+                    passed += 1
+            else:
+                failed += 1
+            run += 1
+            if not result.time_passed:
+                time_fail += 1
+        return passed, failed, run, time_fail
+
+    def __add__(self, other):
+        return ResultList(self + other)
+
+    def __str__(self):
+        title = &#39;{s:{c}^70}&#39;.format(s=&#39; Unit Test Results &#39;, c=&#39;=&#39;)
+        table = &#39;\n&#39;.join([str(result) for result in self])
+        passed, failed, run, time_fail = self.summary()
+        failed_sep = &#39;, &#39; if failed else &#39;&#39;
+        failed_msg = &#39;{} failed&#39;.format(failed) if failed else &#39;&#39;
+        time_fail_msg = &#39;{} timed out&#39;.format(time_fail) if time_fail else &#39;&#39;
+        time_fail_sep = &#39;, &#39; if time_fail_msg else &#39;&#39;
+        return &#39;\n{}\n{}\n\n{}{} passed{}{}{}{}{}{}{}{}{}&#39;.format(
+            title, table,
+            colors.fg.green, passed, colors.fg.black, failed_sep,
+            colors.fg.red, failed_msg, colors.fg.black, time_fail_sep,
+            colors.fg.red, time_fail_msg, colors.fg.black)</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.list</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.language.specification.result_list.ResultList.summary"><code class="name flex">
+<span>def <span class="ident">summary</span></span>(<span>self)</span>
+</code></dt>
 <dd>
 <section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.factory" href="factory.html">structpy.language.specification.factory</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.result" href="result.html">structpy.language.specification.result</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.result_list" href="result_list.html">structpy.language.specification.result_list</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.specification" href="specification.html">structpy.language.specification.specification</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.unit" href="unit.html">structpy.language.specification.unit</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification.unit_sequence" href="unit_sequence.html">structpy.language.specification.unit_sequence</a></code></dt>
-<dd>
-<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def summary(self):
+    passed = 0
+    failed = 0
+    run = 0
+    time_fail = 0
+    for result in self:
+        if result.passed:
+            if result.time_passed:
+                passed += 1
+        else:
+            failed += 1
+        run += 1
+        if not result.time_passed:
+            time_fail += 1
+    return passed, failed, run, time_fail</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -76,18 +163,17 @@ from structpy.language.specification.factory import Factory</code></pre>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.language" href="../index.html">structpy.language</a></code></li>
+<li><code><a title="structpy.language.specification" href="index.html">structpy.language.specification</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="structpy.language.specification.colors" href="colors.html">structpy.language.specification.colors</a></code></li>
-<li><code><a title="structpy.language.specification.factory" href="factory.html">structpy.language.specification.factory</a></code></li>
-<li><code><a title="structpy.language.specification.result" href="result.html">structpy.language.specification.result</a></code></li>
-<li><code><a title="structpy.language.specification.result_list" href="result_list.html">structpy.language.specification.result_list</a></code></li>
-<li><code><a title="structpy.language.specification.specification" href="specification.html">structpy.language.specification.specification</a></code></li>
-<li><code><a title="structpy.language.specification.unit" href="unit.html">structpy.language.specification.unit</a></code></li>
-<li><code><a title="structpy.language.specification.unit_sequence" href="unit_sequence.html">structpy.language.specification.unit_sequence</a></code></li>
+<li>
+<h4><code><a title="structpy.language.specification.result_list.ResultList" href="#structpy.language.specification.result_list.ResultList">ResultList</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.language.specification.result_list.ResultList.summary" href="#structpy.language.specification.result_list.ResultList.summary">summary</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -1,237 +1,145 @@
 
-from structpy.language.specification.verifier import Verifier
-from structpy.language.specification.spec import Spec
-from inspect import getmembers
-import types
-from sys import stderr
-
-def __verify__(cls):
-    cls.__specification__.__verify__(cls)
+from structpy.language.specification.unit import Unit
+from structpy.language.specification.unit_sequence import UnitSequence
+from structpy.language.specification.result_list import ResultList
 
 
-class Implementation:
-    def __init__(self, specification):
-        self.__specification__ = specification
-    def __call__(self, implementation):
-        implementation.__specification__ = self.__specification__
-        implementation.__verify__ = classmethod(__verify__)
-        self.__specification__.__add_implementation__(implementation)
-        if hasattr(implementation, '__kwargs__'):
-            tmp = implementation.__kwargs__
-        else:
-            tmp = {}
-        if hasattr(implementation.__specification__, '__kwargs__'):
-            implementation.__kwargs__ = implementation.__specification__.__kwargs__
-        else:
-            implementation.__kwargs__ = {}
-        implementation.__kwargs__.update(tmp)
-        return implementation
+def verify(spec, implementation=None):
+    if implementation is None:
+        results = ResultList()
+        for implementation in spec.__implementations__:
+            results += spec.__units__.test(implementation)
+        return results
+    else:
+        return spec.__units__.test(implementation)
 
 
-class _Specification:
-    """
-    spec decorator
-    """
+class SpecificationUnitSequence(UnitSequence):
 
-    def __init__(self):
-        self._order = 0
-        self._constructor = None
-
-    def __call__(self, specification_class):
-        """
-        spec decorate function, as in
-
-        ```
-        @spec(specification)
-        class ...
-        ```
-
-        specification: the class that is loaded as a specification
-        """
-
-        def _add_implementation(Implementation_):
-            """
-            function to be added to the `specification_class`
-
-            allows adding an implementation to the `specification_class`
-            """
-            if not hasattr(specification_class, '__implementations__'):
-                specification_class.__implementations__ = []
-            specification_class.__implementations__.append(Implementation_)
-
-        def _verify(implementation='all'):
-            """
-            function to be added to the `specification class`
-
-            verifies a provided impementation, or all implementations defined
-            in the `__implementations__` list
-            """
-            if implementation == 'all':
-                for imp in specification_class.__implementations__:
-                    specification_class.__verifier__.verify(imp)
+    def test(self, implementation=None):
+        results = ResultList()
+        arg = None
+        for unit in self:
+            if hasattr(unit.method, 'is_init'):
+                result = unit.test(implementation)
+                arg = result.obj
             else:
-                specification_class.__verifier__.verify(implementation)
+                result = unit.test(arg)
+            results.append(result)
+        return results
 
-        def _implementation():
-            """
-            function to be added to the `specification_class`
 
-            gets the default implementation of the specification
-            """
-            return specification_class.__implementations__[0] \
-                    if hasattr(specification_class, '__implementations__') \
-                       and specification_class.__implementations__ else None
+def _rebuild(cls, prop_order):
+    reorder = {}
+    for item in prop_order:
+        reorder[item] = cls.__dict__[item]
+        delattr(cls, item)
+    for k, v in reorder.items():
+        setattr(cls, k, v)
 
-        # add the functions to the `specification_class`
-        specification_class.__add_implementation__ = _add_implementation
-        specification_class.__verify__ = _verify
-        specification_class.__verifier__ = Verifier()
-        specification_class.__implementation__ = _implementation()
 
-        # sort the tests defined in the `specification_class` by order of appearance
-        specs = sorted(
-            [v for k, v in specification_class.__dict__.items() if hasattr(v, '__test_type__')],
-            key=lambda x: x._order
-        )
-        print('\n'.join([str(x) for x in specs]), file=stderr)
-        initial_construction = Spec(lambda: None)
-        construction = initial_construction
-        ls = []
-        for s in specs:
-            s = Spec(s, s.__test_type__)
-            if s.type() == 'construction':
-                if construction != initial_construction or ls:
-                    specification_class.__verifier__.add_spec_list(construction, ls)
-                    ls = []
-                construction = s
+def specification(cls):
+    cls.__sequence__ = []
+    sequenced = cls
+    ordering = []
+    for k, v in list(cls.__dict__.items()):
+        if hasattr(v, '__call__'):
+            ordering.append(k)
+            if hasattr(v, 'is_ref'):
+                for prop in v.__sequence__:
+                    setattr(cls, prop.__name__, prop)
+                    ordering.append(prop.__name__)
+            if hasattr(v, 'is_init'):
+                sequenced = v
             else:
-                ls.append(s)
-        if ls:
-            specification_class.__verifier__.add_spec_list(construction, ls)
-        return specification_class
+                sequenced.__sequence__.append(v)
+    _rebuild(cls, ordering)
+    units = SpecificationUnitSequence()
+    for method_name in ordering:
+        method = cls.__dict__[method_name]
+        unit = Unit(method, 'specification')
+        units.append(unit)
+    cls.__units__ = units
+    cls.__verify__ = classmethod(verify)
+    cls.__implementations__ = []
+    return cls
 
-    def init(self, test):
+
+def init(f):
+    f.is_init = True
+    f.__sequence__ = []
+    return f
+
+
+class satisfies:
+    def __init__(self, other):
+        self.other = other
+    def __call__(self, f):
+        f = init(f)
+        f.is_ref = True
+        f.__sequence__ = list(self.other.__sequence__)
+        return f
+
+
+specification.satisfies = satisfies
+specification.init = init
+
+
+class implementation:
+
+    def __init__(self, *specs):
+        self.specifications = specs
+
+    def __call__(self, cls):
+        cls.__specifications__ = self.specifications
+        for spec in self.specifications:
+            spec.__implementations__.append(cls)
+        return cls
+
+
+@specification
+class A:
+
+    @specification.init
+    def foo(struct):
+        return struct([1, 2 ,3])
+
+    def x(struct):
         """
-        spec.init decorate function, as in
-
-        ```
-        @spec.init
-        def ...
-        ```
-
-        Marks the start of a unit list,
-        where an object is constructed and returned.
+        doc for x
         """
-        test.__test_type__ = 'construction'
-        test._sequence = []
-        test._order = self._order
-        self._order += 1
-        self._constructor = test
-        return test
+        struct.append(5)
 
-    def prop(self, test):
+    def y(struct):
         """
-        spec.prop decorate function, as in
-
-        ```
-        @spec.prop
-        def ...
-        ```
-
-        Marks a specification unit that represents
-        a method in the eventual implementation class.
+        doc for y
         """
-        test.__test_type__ = 'definition'
-        test._order = self._order
-        self._order += 1
-        if self._constructor:
-            self._constructor._sequence.append(test)
-        return test
+        assert len(struct) == 4 and struct[-1] == 5
 
-    class _sats:
-
-        def __init__(self, specification, reference):
-            self.specification = specification
-            self.reference = reference
-
-        def __call__(self, test):
-            test.__test_type__ = 'construction'
-            test._order = self.specification._order
-            test._sequence = list(self.reference._sequence)
-            for t in test._sequence:
-                setattr(self.specification, 'placeholder', t)
-            self.specification._order += 1
-            self.specification._constructor = test
-            return test
-
-    def sats(self, reference):
-        return _Specification._sats(self, reference)
+@specification
+class B:
 
 
-spec = _Specification()
+    def bar(struct):
+        """
+        doc for bar
+        """
+        assert True
 
+    @satisfies(A.foo)
+    def baz(struct):
+        """
+        doc for baz
+        """
+        return struct([3, 4, 4])
+
+    def bat(struct):
+        """
+        doc for bat
+        """
+        assert 4 in struct
+        assert 1 not in struct
 
 if __name__ == '__main__':
 
-    @spec
-    class ToImport:
-
-        @spec.init
-        def not_imported(Struct):
-            s = Struct()
-            s.x = 999
-
-        @spec.prop
-        def imported(struct):
-            assert struct.x == 999
-
-    @spec
-    class MyStruct:
-
-        @spec.init
-        def mock_constructor(Struct):
-            s = Struct()
-            return s
-
-        @spec.prop
-        def mock_test_1(struct):
-            assert struct.x == 1
-            struct.y = 3
-
-        @spec.prop
-        def mock_test_2(struct):
-            assert struct.y == 3
-
-        @spec.sats(ToImport.not_imported)
-        def construct_to_satisfy(Struct):
-            s = Struct()
-            s.x = 0
-            s.x += 999
-            s.y = 8
-
-        @spec.init
-        def mock_init(Struct):
-            s = Struct()
-            s.x = 6
-            s.y = 7
-            return s
-
-        @spec.prop
-        def mock_test_alt(struct):
-            assert struct.x == 6
-            assert struct.y == 7
-
-        @spec.prop
-        def mock_test(struct):
-            assert struct.x == 5
-            assert True
-
-
-    @Implementation(MyStruct)
-    class MyStructImplementation:
-
-        def __init__(self):
-            self.x = 1
-            self.y = 2
-
-    MyStruct.__verify__(MyStructImplementation)
+    print(B.__verify__(list))

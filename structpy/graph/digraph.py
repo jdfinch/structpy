@@ -1,5 +1,5 @@
 
-from structpy.language import spec
+from structpy.language import specification
 
 
 class Digraph:

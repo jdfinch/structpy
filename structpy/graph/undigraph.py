@@ -1,8 +1,8 @@
 
-from structpy.language import spec, Implementation
+from structpy.language import specification, implementation
 
 
-@spec
+@specification
 class Undigraph:
     """
     Undirected, unlabeled graph.
@@ -17,7 +17,7 @@ class Undigraph:
 
     }
 
-    @spec.init
+    @specification.init
     def INIT____Unidigraph(Graph):
         """
         Creates an empty Unidigraph.
@@ -31,14 +31,12 @@ class Undigraph:
         ])
         return graph
 
-    @spec.prop
     def add_node(graph, node):
         """
         Add a node to the graph.
         """
         graph.add_node('e')
 
-    @spec.prop
     def add_arc(graph, node, neighbor):
         """
         Add an arc between existing nodes in the graph.
@@ -46,7 +44,7 @@ class Undigraph:
         """
         graph.add_arc('d', 'e')
 
-    @spec.prop
+
     def add(graph, node, neighbor=None):
         """
         Add a node, or an arc to the graph.
@@ -55,7 +53,7 @@ class Undigraph:
         """
         graph.add('c', 'f')
 
-    @spec.prop
+
     def remove_node(graph, node):
         """
         Remove a node from the graph, if it exists.
@@ -63,14 +61,14 @@ class Undigraph:
         """
         graph.remove_node('a')
 
-    @spec.prop
+
     def remove_arc(graph, node, neighbor):
         """
         Remove an arc from the graph, if it exists.
         """
         graph.remove_arc('b', 'c')
 
-    @spec.prop
+
     def remove(graph, node, neighbor=None):
         """
         Remove either a node or an arc from the graph.
@@ -80,7 +78,7 @@ class Undigraph:
         """
         graph.remove('c', 'd')
 
-    @spec.prop
+
     def has_node(graph, node):
         """
         Whether a node is in the graph.
@@ -90,7 +88,7 @@ class Undigraph:
         assert graph.has_node('f')
         assert not graph.has_node('a')
 
-    @spec.prop
+
     def has_arc(graph, node, neighbor):
         """
         Whether an arc is in the graph.
@@ -100,7 +98,7 @@ class Undigraph:
         assert graph.has_arc('c', 'f')
         assert not graph.has_arc('a', 'f')
 
-    @spec.prop
+
     def has(graph, node, neighbor=None):
         """
         Whether a node is in the graph or, if neighbor is specified,
@@ -111,28 +109,28 @@ class Undigraph:
         assert not graph.has('a')
         assert graph.has('b')
 
-    @spec.prop
+
     def nodes(graph):
         """
         A generator over the nodes in the graph, unordered.
         """
         assert set(graph.nodes()) == {'b', 'c', 'd', 'e', 'f'}
 
-    @spec.prop
+
     def arcs(graph):
         """
         A generator over the arcs in the graph, unordered.
         """
         assert False
 
-    @spec.prop
+
     def len_nodes(graph):
         """
         Returns the number of nodes in the graph.
         """
         assert graph.len_nodes() == 5
 
-    @spec.prop
+
     def len_arcs(graph):
         """
         Returns the number of arcs in the graph.

@@ -52,7 +52,7 @@ class Factory:
         specpairs = set()
         for kwargs, production in self.pairs:
             kwargs = dict(kwargs)
-            production = production.__specification__
+            production = production.__specifications__[0]
             if 'implementation' in kwargs:
                 del kwargs['implementation']
             production.___kwargs_for_update_function_docstring = kwargs

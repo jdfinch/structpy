@@ -1,5 +1,5 @@
 
-from structpy.language.unit_test.colors import colors
+from structpy.language.specification.colors import colors
 
 class ResultList(list):
 

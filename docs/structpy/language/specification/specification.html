@@ -24,242 +24,150 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language.specification.verifier import Verifier
-from structpy.language.specification.spec import Spec
-from inspect import getmembers
-import types
-from sys import stderr
-
-def __verify__(cls):
-    cls.__specification__.__verify__(cls)
+<pre><code class="python">from structpy.language.specification.unit import Unit
+from structpy.language.specification.unit_sequence import UnitSequence
+from structpy.language.specification.result_list import ResultList
 
 
-class Implementation:
-    def __init__(self, specification):
-        self.__specification__ = specification
-    def __call__(self, implementation):
-        implementation.__specification__ = self.__specification__
-        implementation.__verify__ = classmethod(__verify__)
-        self.__specification__.__add_implementation__(implementation)
-        if hasattr(implementation, &#39;__kwargs__&#39;):
-            tmp = implementation.__kwargs__
-        else:
-            tmp = {}
-        if hasattr(implementation.__specification__, &#39;__kwargs__&#39;):
-            implementation.__kwargs__ = implementation.__specification__.__kwargs__
-        else:
-            implementation.__kwargs__ = {}
-        implementation.__kwargs__.update(tmp)
-        return implementation
+def verify(spec, implementation=None):
+    if implementation is None:
+        results = ResultList()
+        for implementation in spec.__implementations__:
+            results += spec.__units__.test(implementation)
+        return results
+    else:
+        return spec.__units__.test(implementation)
 
 
-class _Specification:
-    &#34;&#34;&#34;
-    spec decorator
-    &#34;&#34;&#34;
+class SpecificationUnitSequence(UnitSequence):
 
-    def __init__(self):
-        self._order = 0
-        self._constructor = None
-
-    def __call__(self, specification_class):
-        &#34;&#34;&#34;
-        spec decorate function, as in
-
-        ```
-        @spec(specification)
-        class ...
-        ```
-
-        specification: the class that is loaded as a specification
-        &#34;&#34;&#34;
-
-        def _add_implementation(Implementation_):
-            &#34;&#34;&#34;
-            function to be added to the `specification_class`
-
-            allows adding an implementation to the `specification_class`
-            &#34;&#34;&#34;
-            if not hasattr(specification_class, &#39;__implementations__&#39;):
-                specification_class.__implementations__ = []
-            specification_class.__implementations__.append(Implementation_)
-
-        def _verify(implementation=&#39;all&#39;):
-            &#34;&#34;&#34;
-            function to be added to the `specification class`
-
-            verifies a provided impementation, or all implementations defined
-            in the `__implementations__` list
-            &#34;&#34;&#34;
-            if implementation == &#39;all&#39;:
-                for imp in specification_class.__implementations__:
-                    specification_class.__verifier__.verify(imp)
+    def test(self, implementation=None):
+        results = ResultList()
+        arg = None
+        for unit in self:
+            if hasattr(unit.method, &#39;is_init&#39;):
+                result = unit.test(implementation)
+                arg = result.obj
             else:
-                specification_class.__verifier__.verify(implementation)
+                result = unit.test(arg)
+            results.append(result)
+        return results
 
-        def _implementation():
-            &#34;&#34;&#34;
-            function to be added to the `specification_class`
 
-            gets the default implementation of the specification
-            &#34;&#34;&#34;
-            return specification_class.__implementations__[0] \
-                    if hasattr(specification_class, &#39;__implementations__&#39;) \
-                       and specification_class.__implementations__ else None
+def _rebuild(cls, prop_order):
+    reorder = {}
+    for item in prop_order:
+        reorder[item] = cls.__dict__[item]
+        delattr(cls, item)
+    for k, v in reorder.items():
+        setattr(cls, k, v)
 
-        # add the functions to the `specification_class`
-        specification_class.__add_implementation__ = _add_implementation
-        specification_class.__verify__ = _verify
-        specification_class.__verifier__ = Verifier()
-        specification_class.__implementation__ = _implementation()
 
-        # sort the tests defined in the `specification_class` by order of appearance
-        specs = sorted(
-            [v for k, v in specification_class.__dict__.items() if hasattr(v, &#39;__test_type__&#39;)],
-            key=lambda x: x._order
-        )
-        print(&#39;\n&#39;.join([str(x) for x in specs]), file=stderr)
-        initial_construction = Spec(lambda: None)
-        construction = initial_construction
-        ls = []
-        for s in specs:
-            s = Spec(s, s.__test_type__)
-            if s.type() == &#39;construction&#39;:
-                if construction != initial_construction or ls:
-                    specification_class.__verifier__.add_spec_list(construction, ls)
-                    ls = []
-                construction = s
+def specification(cls):
+    cls.__sequence__ = []
+    sequenced = cls
+    ordering = []
+    for k, v in list(cls.__dict__.items()):
+        if hasattr(v, &#39;__call__&#39;):
+            ordering.append(k)
+            if hasattr(v, &#39;is_ref&#39;):
+                for prop in v.__sequence__:
+                    setattr(cls, prop.__name__, prop)
+                    ordering.append(prop.__name__)
+            if hasattr(v, &#39;is_init&#39;):
+                sequenced = v
             else:
-                ls.append(s)
-        if ls:
-            specification_class.__verifier__.add_spec_list(construction, ls)
-        return specification_class
+                sequenced.__sequence__.append(v)
+    _rebuild(cls, ordering)
+    units = SpecificationUnitSequence()
+    for method_name in ordering:
+        method = cls.__dict__[method_name]
+        unit = Unit(method, &#39;specification&#39;)
+        units.append(unit)
+    cls.__units__ = units
+    cls.__verify__ = classmethod(verify)
+    cls.__implementations__ = []
+    return cls
 
-    def init(self, test):
+
+def init(f):
+    f.is_init = True
+    f.__sequence__ = []
+    return f
+
+
+class satisfies:
+    def __init__(self, other):
+        self.other = other
+    def __call__(self, f):
+        f = init(f)
+        f.is_ref = True
+        f.__sequence__ = list(self.other.__sequence__)
+        return f
+
+
+specification.satisfies = satisfies
+specification.init = init
+
+
+class implementation:
+
+    def __init__(self, *specs):
+        self.specifications = specs
+
+    def __call__(self, cls):
+        cls.__specifications__ = self.specifications
+        for spec in self.specifications:
+            spec.__implementations__.append(cls)
+        return cls
+
+
+@specification
+class A:
+
+    @specification.init
+    def foo(struct):
+        return struct([1, 2 ,3])
+
+    def x(struct):
         &#34;&#34;&#34;
-        spec.init decorate function, as in
-
-        ```
-        @spec.init
-        def ...
-        ```
-
-        Marks the start of a unit list,
-        where an object is constructed and returned.
+        doc for x
         &#34;&#34;&#34;
-        test.__test_type__ = &#39;construction&#39;
-        test._sequence = []
-        test._order = self._order
-        self._order += 1
-        self._constructor = test
-        return test
+        struct.append(5)
 
-    def prop(self, test):
+    def y(struct):
         &#34;&#34;&#34;
-        spec.prop decorate function, as in
-
-        ```
-        @spec.prop
-        def ...
-        ```
-
-        Marks a specification unit that represents
-        a method in the eventual implementation class.
+        doc for y
         &#34;&#34;&#34;
-        test.__test_type__ = &#39;definition&#39;
-        test._order = self._order
-        self._order += 1
-        if self._constructor:
-            self._constructor._sequence.append(test)
-        return test
+        assert len(struct) == 4 and struct[-1] == 5
 
-    class _sats:
-
-        def __init__(self, specification, reference):
-            self.specification = specification
-            self.reference = reference
-
-        def __call__(self, test):
-            test.__test_type__ = &#39;construction&#39;
-            test._order = self.specification._order
-            test._sequence = list(self.reference._sequence)
-            for t in test._sequence:
-                setattr(self.specification, &#39;placeholder&#39;, t)
-            self.specification._order += 1
-            self.specification._constructor = test
-            return test
-
-    def sats(self, reference):
-        return _Specification._sats(self, reference)
+@specification
+class B:
 
 
-spec = _Specification()
+    def bar(struct):
+        &#34;&#34;&#34;
+        doc for bar
+        &#34;&#34;&#34;
+        assert True
 
+    @satisfies(A.foo)
+    def baz(struct):
+        &#34;&#34;&#34;
+        doc for baz
+        &#34;&#34;&#34;
+        return struct([3, 4, 4])
+
+    def bat(struct):
+        &#34;&#34;&#34;
+        doc for bat
+        &#34;&#34;&#34;
+        assert 4 in struct
+        assert 1 not in struct
 
 if __name__ == &#39;__main__&#39;:
 
-    @spec
-    class ToImport:
-
-        @spec.init
-        def not_imported(Struct):
-            s = Struct()
-            s.x = 999
-
-        @spec.prop
-        def imported(struct):
-            assert struct.x == 999
-
-    @spec
-    class MyStruct:
-
-        @spec.init
-        def mock_constructor(Struct):
-            s = Struct()
-            return s
-
-        @spec.prop
-        def mock_test_1(struct):
-            assert struct.x == 1
-            struct.y = 3
-
-        @spec.prop
-        def mock_test_2(struct):
-            assert struct.y == 3
-
-        @spec.sats(ToImport.not_imported)
-        def construct_to_satisfy(Struct):
-            s = Struct()
-            s.x = 0
-            s.x += 999
-            s.y = 8
-
-        @spec.init
-        def mock_init(Struct):
-            s = Struct()
-            s.x = 6
-            s.y = 7
-            return s
-
-        @spec.prop
-        def mock_test_alt(struct):
-            assert struct.x == 6
-            assert struct.y == 7
-
-        @spec.prop
-        def mock_test(struct):
-            assert struct.x == 5
-            assert True
-
-
-    @Implementation(MyStruct)
-    class MyStructImplementation:
-
-        def __init__(self):
-            self.x = 1
-            self.y = 2
-
-    MyStruct.__verify__(MyStructImplementation)</code></pre>
+    print(B.__verify__(list))</code></pre>
 </details>
 </section>
 <section>
@@ -267,13 +175,10 @@ if __name__ == &#39;__main__&#39;:
 <section>
 </section>
 <section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="structpy.language.specification.specification.Implementation"><code class="flex name class">
-<span>class <span class="ident">Implementation</span></span>
-<span>(</span><span>specification)</span>
+<dt id="structpy.language.specification.specification.verify"><code class="name flex">
+<span>def <span class="ident">verify</span></span>(<span>spec, implementation=None)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -281,24 +186,365 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Implementation:
-    def __init__(self, specification):
-        self.__specification__ = specification
-    def __call__(self, implementation):
-        implementation.__specification__ = self.__specification__
-        implementation.__verify__ = classmethod(__verify__)
-        self.__specification__.__add_implementation__(implementation)
-        if hasattr(implementation, &#39;__kwargs__&#39;):
-            tmp = implementation.__kwargs__
-        else:
-            tmp = {}
-        if hasattr(implementation.__specification__, &#39;__kwargs__&#39;):
-            implementation.__kwargs__ = implementation.__specification__.__kwargs__
-        else:
-            implementation.__kwargs__ = {}
-        implementation.__kwargs__.update(tmp)
-        return implementation</code></pre>
+<pre><code class="python">def verify(spec, implementation=None):
+    if implementation is None:
+        results = ResultList()
+        for implementation in spec.__implementations__:
+            results += spec.__units__.test(implementation)
+        return results
+    else:
+        return spec.__units__.test(implementation)</code></pre>
 </details>
+</dd>
+<dt id="structpy.language.specification.specification.specification"><code class="name flex">
+<span>def <span class="ident">specification</span></span>(<span>cls)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def specification(cls):
+    cls.__sequence__ = []
+    sequenced = cls
+    ordering = []
+    for k, v in list(cls.__dict__.items()):
+        if hasattr(v, &#39;__call__&#39;):
+            ordering.append(k)
+            if hasattr(v, &#39;is_ref&#39;):
+                for prop in v.__sequence__:
+                    setattr(cls, prop.__name__, prop)
+                    ordering.append(prop.__name__)
+            if hasattr(v, &#39;is_init&#39;):
+                sequenced = v
+            else:
+                sequenced.__sequence__.append(v)
+    _rebuild(cls, ordering)
+    units = SpecificationUnitSequence()
+    for method_name in ordering:
+        method = cls.__dict__[method_name]
+        unit = Unit(method, &#39;specification&#39;)
+        units.append(unit)
+    cls.__units__ = units
+    cls.__verify__ = classmethod(verify)
+    cls.__implementations__ = []
+    return cls</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.init"><code class="name flex">
+<span>def <span class="ident">init</span></span>(<span>f)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def init(f):
+    f.is_init = True
+    f.__sequence__ = []
+    return f</code></pre>
+</details>
+</dd>
+</dl>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="structpy.language.specification.specification.SpecificationUnitSequence"><code class="flex name class">
+<span>class <span class="ident">SpecificationUnitSequence</span></span>
+<span>(</span><span>iterable=())</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Built-in mutable sequence.</p>
+<p>If no argument is given, the constructor creates a new empty list.
+The argument must be an iterable if specified.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SpecificationUnitSequence(UnitSequence):
+
+    def test(self, implementation=None):
+        results = ResultList()
+        arg = None
+        for unit in self:
+            if hasattr(unit.method, &#39;is_init&#39;):
+                result = unit.test(implementation)
+                arg = result.obj
+            else:
+                result = unit.test(arg)
+            results.append(result)
+        return results</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="structpy.language.specification.unit_sequence.UnitSequence" href="unit_sequence.html#structpy.language.specification.unit_sequence.UnitSequence">UnitSequence</a></li>
+<li>builtins.list</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.language.specification.specification.SpecificationUnitSequence.test"><code class="name flex">
+<span>def <span class="ident">test</span></span>(<span>self, implementation=None)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test(self, implementation=None):
+    results = ResultList()
+    arg = None
+    for unit in self:
+        if hasattr(unit.method, &#39;is_init&#39;):
+            result = unit.test(implementation)
+            arg = result.obj
+        else:
+            result = unit.test(arg)
+        results.append(result)
+    return results</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="structpy.language.specification.specification.satisfies"><code class="flex name class">
+<span>class <span class="ident">satisfies</span></span>
+<span>(</span><span>other)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class satisfies:
+    def __init__(self, other):
+        self.other = other
+    def __call__(self, f):
+        f = init(f)
+        f.is_ref = True
+        f.__sequence__ = list(self.other.__sequence__)
+        return f</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.implementation"><code class="flex name class">
+<span>class <span class="ident">implementation</span></span>
+<span>(</span><span>*specs)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class implementation:
+
+    def __init__(self, *specs):
+        self.specifications = specs
+
+    def __call__(self, cls):
+        cls.__specifications__ = self.specifications
+        for spec in self.specifications:
+            spec.__implementations__.append(cls)
+        return cls</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.A"><code class="flex name class">
+<span>class <span class="ident">A</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class A:
+
+    @specification.init
+    def foo(struct):
+        return struct([1, 2 ,3])
+
+    def x(struct):
+        &#34;&#34;&#34;
+        doc for x
+        &#34;&#34;&#34;
+        struct.append(5)
+
+    def y(struct):
+        &#34;&#34;&#34;
+        doc for y
+        &#34;&#34;&#34;
+        assert len(struct) == 4 and struct[-1] == 5</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.language.specification.specification.A.foo"><code class="name flex">
+<span>def <span class="ident">foo</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@specification.init
+def foo(struct):
+    return struct([1, 2 ,3])</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.A.x"><code class="name flex">
+<span>def <span class="ident">x</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for x</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def x(struct):
+    &#34;&#34;&#34;
+    doc for x
+    &#34;&#34;&#34;
+    struct.append(5)</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.A.y"><code class="name flex">
+<span>def <span class="ident">y</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for y</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def y(struct):
+    &#34;&#34;&#34;
+    doc for y
+    &#34;&#34;&#34;
+    assert len(struct) == 4 and struct[-1] == 5</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+<dt id="structpy.language.specification.specification.B"><code class="flex name class">
+<span>class <span class="ident">B</span></span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class B:
+
+
+    def bar(struct):
+        &#34;&#34;&#34;
+        doc for bar
+        &#34;&#34;&#34;
+        assert True
+
+    @satisfies(A.foo)
+    def baz(struct):
+        &#34;&#34;&#34;
+        doc for baz
+        &#34;&#34;&#34;
+        return struct([3, 4, 4])
+
+    def bat(struct):
+        &#34;&#34;&#34;
+        doc for bat
+        &#34;&#34;&#34;
+        assert 4 in struct
+        assert 1 not in struct</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.language.specification.specification.B.bar"><code class="name flex">
+<span>def <span class="ident">bar</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for bar</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bar(struct):
+    &#34;&#34;&#34;
+    doc for bar
+    &#34;&#34;&#34;
+    assert True</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.B.baz"><code class="name flex">
+<span>def <span class="ident">baz</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for baz</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@satisfies(A.foo)
+def baz(struct):
+    &#34;&#34;&#34;
+    doc for baz
+    &#34;&#34;&#34;
+    return struct([3, 4, 4])</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.B.x"><code class="name flex">
+<span>def <span class="ident">x</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for x</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def x(struct):
+    &#34;&#34;&#34;
+    doc for x
+    &#34;&#34;&#34;
+    struct.append(5)</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.B.y"><code class="name flex">
+<span>def <span class="ident">y</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for y</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def y(struct):
+    &#34;&#34;&#34;
+    doc for y
+    &#34;&#34;&#34;
+    assert len(struct) == 4 and struct[-1] == 5</code></pre>
+</details>
+</dd>
+<dt id="structpy.language.specification.specification.B.bat"><code class="name flex">
+<span>def <span class="ident">bat</span></span>(<span>struct)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>doc for bat</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bat(struct):
+    &#34;&#34;&#34;
+    doc for bat
+    &#34;&#34;&#34;
+    assert 4 in struct
+    assert 1 not in struct</code></pre>
+</details>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -314,10 +560,44 @@ if __name__ == &#39;__main__&#39;:
 <li><code><a title="structpy.language.specification" href="index.html">structpy.language.specification</a></code></li>
 </ul>
 </li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="structpy.language.specification.specification.verify" href="#structpy.language.specification.specification.verify">verify</a></code></li>
+<li><code><a title="structpy.language.specification.specification.specification" href="#structpy.language.specification.specification.specification">specification</a></code></li>
+<li><code><a title="structpy.language.specification.specification.init" href="#structpy.language.specification.specification.init">init</a></code></li>
+</ul>
+</li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.language.specification.specification.Implementation" href="#structpy.language.specification.specification.Implementation">Implementation</a></code></h4>
+<h4><code><a title="structpy.language.specification.specification.SpecificationUnitSequence" href="#structpy.language.specification.specification.SpecificationUnitSequence">SpecificationUnitSequence</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.language.specification.specification.SpecificationUnitSequence.test" href="#structpy.language.specification.specification.SpecificationUnitSequence.test">test</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="structpy.language.specification.specification.satisfies" href="#structpy.language.specification.specification.satisfies">satisfies</a></code></h4>
+</li>
+<li>
+<h4><code><a title="structpy.language.specification.specification.implementation" href="#structpy.language.specification.specification.implementation">implementation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="structpy.language.specification.specification.A" href="#structpy.language.specification.specification.A">A</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.language.specification.specification.A.foo" href="#structpy.language.specification.specification.A.foo">foo</a></code></li>
+<li><code><a title="structpy.language.specification.specification.A.x" href="#structpy.language.specification.specification.A.x">x</a></code></li>
+<li><code><a title="structpy.language.specification.specification.A.y" href="#structpy.language.specification.specification.A.y">y</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="structpy.language.specification.specification.B" href="#structpy.language.specification.specification.B">B</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.language.specification.specification.B.bar" href="#structpy.language.specification.specification.B.bar">bar</a></code></li>
+<li><code><a title="structpy.language.specification.specification.B.baz" href="#structpy.language.specification.specification.B.baz">baz</a></code></li>
+<li><code><a title="structpy.language.specification.specification.B.x" href="#structpy.language.specification.specification.B.x">x</a></code></li>
+<li><code><a title="structpy.language.specification.specification.B.y" href="#structpy.language.specification.specification.B.y">y</a></code></li>
+<li><code><a title="structpy.language.specification.specification.B.bat" href="#structpy.language.specification.specification.B.bat">bat</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

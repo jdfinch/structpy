@@ -24,12 +24,11 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import spec
+<pre><code class="python">from structpy.language import specification
 
-@spec
+@specification
 class UnlabeledDigraph:
 
-    @spec.prop
     def digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -63,9 +62,6 @@ class UnlabeledDigraph:
         assert graph.arcs(&#39;a&#39;, &#39;b&#39;) == {(&#39;a&#39;, &#39;b&#39;, 1), (&#39;a&#39;, &#39;b&#39;, 2)}
         assert graph.arcs(&#39;a&#39;, label=5) == {(&#39;d&#39;, &#39;a&#39;, 5)}
 
-
-
-    @spec.prop
     def this_is_my_method(self, Struct):
         &#34;&#34;&#34;
 
@@ -93,7 +89,6 @@ class UnlabeledDigraph:
 </summary>
 <pre><code class="python">class UnlabeledDigraph:
 
-    @spec.prop
     def digraph_access_patterns(self, Struct):
         graph = Struct()
         graph.add_arcs([
@@ -127,9 +122,6 @@ class UnlabeledDigraph:
         assert graph.arcs(&#39;a&#39;, &#39;b&#39;) == {(&#39;a&#39;, &#39;b&#39;, 1), (&#39;a&#39;, &#39;b&#39;, 2)}
         assert graph.arcs(&#39;a&#39;, label=5) == {(&#39;d&#39;, &#39;a&#39;, 5)}
 
-
-
-    @spec.prop
     def this_is_my_method(self, Struct):
         &#34;&#34;&#34;
 
@@ -147,8 +139,7 @@ class UnlabeledDigraph:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def digraph_access_patterns(self, Struct):
+<pre><code class="python">def digraph_access_patterns(self, Struct):
     graph = Struct()
     graph.add_arcs([
         (&#39;a&#39;, &#39;b&#39;),
@@ -191,8 +182,7 @@ def digraph_access_patterns(self, Struct):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def this_is_my_method(self, Struct):
+<pre><code class="python">def this_is_my_method(self, Struct):
     &#34;&#34;&#34;
 
     &#34;&#34;&#34;

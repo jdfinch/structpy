@@ -24,10 +24,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language import spec, Implementation
+<pre><code class="python">from structpy.language import specification, implementation
 
 
-@spec
+@specification
 class EnumerableBimap:
     &#34;&#34;&#34;
     Bijective Mapping
@@ -35,11 +35,10 @@ class EnumerableBimap:
     one-to-one mapping between keys and values
     &#34;&#34;&#34;
 
-    @spec.init
+    @specification.init
     def number_bimap(Struct):
         return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;three&#39;: 3})
 
-    @spec.prop
     def __getitem__(bimap, item):
         &#34;&#34;&#34;
         get the value in the codomain associated with a domain item
@@ -48,7 +47,6 @@ class EnumerableBimap:
         assert bimap[&#39;two&#39;] == 2
         assert bimap[&#39;three&#39;] == 3
 
-    @spec.prop
     def __setitem__(bimap, key, value):
         &#34;&#34;&#34;
         add a item pair that co-map
@@ -65,7 +63,6 @@ class EnumerableBimap:
         bimap[&#39;one&#39;] = 0
         assert bimap[&#39;one&#39;] == 0
 
-    @spec.prop
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
@@ -77,7 +74,7 @@ class EnumerableBimap:
         assert r[3] == &#39;three&#39;
 
 
-@Implementation(EnumerableBimap)
+@implementation(EnumerableBimap)
 class Bimap1:
 
     def __init__(self, mapping=None):
@@ -140,11 +137,10 @@ if __name__ == &#39;__main__&#39;:
     one-to-one mapping between keys and values
     &#34;&#34;&#34;
 
-    @spec.init
+    @specification.init
     def number_bimap(Struct):
         return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;three&#39;: 3})
 
-    @spec.prop
     def __getitem__(bimap, item):
         &#34;&#34;&#34;
         get the value in the codomain associated with a domain item
@@ -153,7 +149,6 @@ if __name__ == &#39;__main__&#39;:
         assert bimap[&#39;two&#39;] == 2
         assert bimap[&#39;three&#39;] == 3
 
-    @spec.prop
     def __setitem__(bimap, key, value):
         &#34;&#34;&#34;
         add a item pair that co-map
@@ -170,7 +165,6 @@ if __name__ == &#39;__main__&#39;:
         bimap[&#39;one&#39;] = 0
         assert bimap[&#39;one&#39;] == 0
 
-    @spec.prop
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
@@ -192,7 +186,7 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.init
+<pre><code class="python">@specification.init
 def number_bimap(Struct):
     return Struct({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;three&#39;: 3})</code></pre>
 </details>
@@ -207,8 +201,7 @@ the domain and codomain for reverse mapping</p></section>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">@spec.prop
-def reverse(bimap):
+<pre><code class="python">def reverse(bimap):
     &#34;&#34;&#34;
     returns a view of the bimap that swaps
     the domain and codomain for reverse mapping

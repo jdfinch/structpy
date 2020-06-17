@@ -1,5 +1,5 @@
 
-from structpy.language import spec
+from structpy import specification
 
 
 class EnumerableLookup:

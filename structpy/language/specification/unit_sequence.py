@@ -1,6 +1,6 @@
 
-from structpy.language.unit_test.unit import unit, Unit
-from structpy.language.unit_test.result_list import ResultList
+from structpy.language.specification.unit import unit, Unit
+from structpy.language.specification.result_list import ResultList
 
 
 class UnitSequence(list):

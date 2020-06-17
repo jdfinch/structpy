@@ -1,2 +1,3 @@
 
-from structpy.language.specification import spec, Implementation
+
+from structpy.language.specification import specification, implementation
