@@ -18,7 +18,7 @@ class Undigraph:
     }
 
     @specification.init
-    def INIT____Unidigraph(Graph):
+    def UNDIGRAPH(Graph):
         """
         Creates an empty Unidigraph.
 

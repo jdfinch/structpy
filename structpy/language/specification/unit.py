@@ -65,6 +65,8 @@ class Unit:
                 arguments[parameter] = args.pop()
             elif kwargs and parameter in kwargs:
                 arguments[parameter] = kwargs[parameter]
+            else:
+                arguments[parameter] = None
         result = Result()
         obj = None
         t0 = time.time()

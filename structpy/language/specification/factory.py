@@ -47,7 +47,7 @@ class Factory:
 
     def _update_function_docstring(self, factory_function):
         module = module_of(factory_function)
-        module.__doc__ = '# {}({})\n\n{}\n\n'.format(
+        module.__doc__ = '## **{}**({})\n\n{}\n\n'.format(
             factory_function.__name__, kwargs_str(self.__kwargs__), module.__doc__)
         specpairs = set()
         for kwargs, production in self.pairs:
