@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
 <title>structpy.collection.enumerable API documentation</title>
-<meta name="description" content="**Enumerable**(type=&#39;markov&#39;, finite=True, implementation=&#39;standard&#39;) …" />
+<meta name="description" content="Defines a potentially infinite sequence of values that can be iterated
+over, where each value is derived from an update of the previous one …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,24 +21,33 @@
 <h1 class="title">Module <code>structpy.collection.enumerable</code></h1>
 </header>
 <section id="section-intro">
-<h2 id="enumerabletypemarkov-finitetrue-implementationstandard"><strong>Enumerable</strong>(type='markov', finite=True, implementation='standard')</h2>
 <p>Defines a potentially infinite sequence of values that can be iterated
 over, where each value is derived from an update of the previous one.</p>
 <p>Test.</p>
-<p><br/></p>
-<h3 id="infinitemarkovenumerablespec"><code><a title="structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec" href="infinite_markov_enumerable.html#structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec">InfiniteMarkovEnumerableSpec</a></code></h3>
-<p><code>type='markov', finite=False</code></p>
-<p>Define a sequence iterator that generates each
-value based on the previous value.</p>
 <p><br/>
-<br/></p>
-<h3 id="finitemarkovenumerablespec"><code><a title="structpy.collection.enumerable.finite_markov_enumerable.FiniteMarkovEnumerableSpec" href="finite_markov_enumerable.html#structpy.collection.enumerable.finite_markov_enumerable.FiniteMarkovEnumerableSpec">FiniteMarkovEnumerableSpec</a></code></h3>
-<p><code>type='markov', finite=True</code></p>
-<p>Define a sequence iterator that generates each
+<code><a title="structpy.collection.enumerable.finite_markov_enumerable.FiniteMarkovEnumerableSpec" href="finite_markov_enumerable.html#structpy.collection.enumerable.finite_markov_enumerable.FiniteMarkovEnumerableSpec">FiniteMarkovEnumerableSpec</a></code>
+<br/>
+Define a sequence iterator that generates each
 value based on the previous value.</p>
 <p>A boolean end function is specified to define
-the end of the sequence.</p>
-<p><br/></p>
+the end of the sequence.
+<br/>
+<br/>
+<code><a title="structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec" href="infinite_markov_enumerable.html#structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec">InfiniteMarkovEnumerableSpec</a></code>
+<br/>
+Define a sequence iterator that generates each
+value based on the previous value.
+<br/>
+<br/>
+<code><a title="structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable" href="infinite_markov_enumerable.html#structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable">InfiniteMarkovEnumerable</a></code>
+<br/>
+<class 'structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable'>
+<br/>
+<br/>
+<code>MyFunction</code>
+<br/>
+this is a function
+<br/></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -49,28 +59,29 @@ over, where each value is derived from an update of the previous one.
 Test.
 &#34;&#34;&#34;
 
-from structpy.language.specification.factory import Factory
-
 from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpec
-from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec
+from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec, InfiniteMarkovEnumerable
 
-@Factory
-def Enumerable(type=&#39;markov&#39;, finite=True, implementation=&#39;standard&#39;):
-    return FiniteMarkovEnumerableSpec, InfiniteMarkovEnumerableSpec
+def MyFunction():
+    &#34;&#34;&#34;this is a function&#34;&#34;&#34;
+    return 2
 
-if __name__ == &#39;__main__&#39;:
-    enumerable = Enumerable(finite=False)
-    print(enumerable)</code></pre>
+__all__ = [
+    &#39;FiniteMarkovEnumerableSpec&#39;,
+    &#39;InfiniteMarkovEnumerableSpec&#39;,
+    &#39;InfiniteMarkovEnumerable&#39;,
+    &#39;MyFunction&#39;
+]</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="structpy.collection.enumerable.finite_markov_enumerable" href="finite_markov_enumerable.html">structpy.collection.enumerable.finite_markov_enumerable</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.enumerable.finite_markov_enumerable" href="finite_markov_enumerable.html">finite_markov_enumerable</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">structpy.collection.enumerable.infinite_markov_enumerable</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">infinite_markov_enumerable</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -86,24 +97,18 @@ if __name__ == &#39;__main__&#39;:
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#enumerabletypemarkov-finitetrue-implementationstandard">Enumerable(type='markov', finite=True, implementation='standard')</a><ul>
-<li><a href="#structpycollectionenumerableinfinite_markov_enumerableinfinitemarkovenumerablespec">structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec</a></li>
-<li><a href="#structpycollectionenumerablefinite_markov_enumerablefinitemarkovenumerablespec">structpy.collection.enumerable.finite_markov_enumerable.FiniteMarkovEnumerableSpec</a></li>
-</ul>
-</li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.collection" href="../index.html">structpy.collection</a></code></li>
+<li><code><a title="structpy.collection" href="../index.html">collection</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="structpy.collection.enumerable.finite_markov_enumerable" href="finite_markov_enumerable.html">structpy.collection.enumerable.finite_markov_enumerable</a></code></li>
-<li><code><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">structpy.collection.enumerable.infinite_markov_enumerable</a></code></li>
+<li><code><a title="structpy.collection.enumerable.finite_markov_enumerable" href="finite_markov_enumerable.html">finite_markov_enumerable</a></code></li>
+<li><code><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">infinite_markov_enumerable</a></code></li>
 </ul>
 </li>
 </ul>

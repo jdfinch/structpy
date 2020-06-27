@@ -6,16 +6,16 @@ over, where each value is derived from an update of the previous one.
 Test.
 """
 
-from structpy.language.specification.factory import Factory
-
 from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpec
-from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec
+from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec, InfiniteMarkovEnumerable
 
-@Factory
-def Enumerable(type='markov', finite=True, implementation='standard'):
-    return FiniteMarkovEnumerableSpec, InfiniteMarkovEnumerableSpec
+def MyFunction():
+    """this is a function"""
+    return 2
 
-if __name__ == '__main__':
-    enumerable = Enumerable(finite=False)
-    print(enumerable)
-
+__all__ = [
+    'FiniteMarkovEnumerableSpec',
+    'InfiniteMarkovEnumerableSpec',
+    'InfiniteMarkovEnumerable',
+    'MyFunction'
+]

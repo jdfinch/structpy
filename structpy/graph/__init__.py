@@ -1,6 +1,6 @@
 
 """
-# Graph
+Defines graphs.
 
 ```text
 Directed
