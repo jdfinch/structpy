@@ -28,22 +28,29 @@ def doc_str(obj):
 
 def link(obj):
     if hasattr(obj, '__verify__'):
-        return '`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
+        return '###`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
     elif hasattr(obj, '__specifications__'):
-        return '`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
+        return '###`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
     else:
-        return '`{}`'.format(obj.__name__.split('.')[-1])
+        return '###`{}`'.format(obj.__name__.split('.')[-1])
 
 def dynamic_docstrings(module):
     for pkg in list(sub_packages(module)):
         if hasattr(pkg, '__all__'):
             for attr, obj in pkg.__dict__.items():
                 if attr in pkg.__all__:
+                    if hasattr(obj, '__specifications__'):
+                        if obj.__doc__ is None:
+                            obj.__doc__ = ''
+                        obj.__doc__ = 'Implementation of ' \
+                                      + ', '.join(['`{}`'.format(x.__module__ + '.' + x.__qualname__)
+                                                 for x in obj.__specifications__]) \
+                                      + '\n<br/>\n' + obj.__doc__
                     l = link(obj)
                     d = doc_str(obj)
                     if pkg.__doc__ is None:
                         pkg.__doc__ = ''
-                    pkg.__doc__ += '\n<br/>\n{}\n<br/>\n{}\n<br/>'.format(l, d)
+                    pkg.__doc__ += '\n<br/>\n{}\n{}\n<br/>'.format(l, d)
             pkg.__pdoc__ = {x: False for x in pkg.__all__}
         pkg.__qualname__ = pkg.__name__.split('.')[-1]
 
