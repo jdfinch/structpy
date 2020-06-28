@@ -26,13 +26,24 @@ def doc_str(obj):
     else:
         return str(obj)
 
-def link(obj):
+link_tmp = r'<a title="structpy.graph.undirected.unlabeled.specification.Graph" ' \
+           r'href="undirected/unlabeled/specification.html#structpy.graph.undirected.unlabeled.specification.Graph">Graph</a>'
+link_template = '<a title="{}" href="{}">{}</a/>'
+
+def relative_path(module, cls):
+    module_directory = os.path.dirname(module.__file__)
+    cls_html = sys.modules[cls.__module__].__file__.replace('.py', '.html')
+    return os.path.relpath(cls_html, module_directory)
+
+
+def link(obj, module, attr):
     if hasattr(obj, '__verify__'):
-        return '###`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
+        return '### [{}]({})'.format(attr, relative_path(module, obj))
     elif hasattr(obj, '__specifications__'):
         return '###`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
     else:
         return '###`{}`'.format(obj.__name__.split('.')[-1])
+
 
 def dynamic_docstrings(module):
     for pkg in list(sub_packages(module)):
@@ -46,7 +57,7 @@ def dynamic_docstrings(module):
                                       + ', '.join(['`{}`'.format(x.__module__ + '.' + x.__qualname__)
                                                  for x in obj.__specifications__]) \
                                       + '\n<br/>\n' + obj.__doc__
-                    l = link(obj)
+                    l = link(obj, pkg, attr)
                     d = doc_str(obj)
                     if pkg.__doc__ is None:
                         pkg.__doc__ = ''

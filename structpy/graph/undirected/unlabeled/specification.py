@@ -3,7 +3,7 @@ from structpy.language import specification, implementation
 
 
 @specification
-class Undigraph:
+class Graph:
     """
     Undirected, unlabeled graph.
 
@@ -13,14 +13,10 @@ class Undigraph:
     Therefore, arc `A-B` is the same as arc `B-A`.
     """
 
-    __kwargs__ = {
-
-    }
-
     @specification.init
-    def UNDIGRAPH(Graph):
+    def GRAPH(Graph):
         """
-        Creates an empty Unidigraph.
+        Creates an empty Graph.
 
         Nodes and arcs are added using the `add` method.
         """
@@ -139,5 +135,5 @@ class Undigraph:
 
 
 if __name__ == '__main__':
-    Undigraph.__verify__()
+    Graph.__verify__()
 

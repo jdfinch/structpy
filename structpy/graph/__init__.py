@@ -2,6 +2,9 @@
 """
 Defines graphs.
 
+"""
+
+doc = """
 ```text
 Directed
 Undirected
@@ -37,6 +40,10 @@ PerfectLabeledDigraph
 source, target - label : function
 source, label - target : function
 target, label - source : function
-```
+```"""
 
-"""
+from structpy.graph.undirected.unlabeled.specification import Graph as Undigraph
+
+__all__ = [
+    'Undigraph'
+]

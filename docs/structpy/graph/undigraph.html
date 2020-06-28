@@ -38,129 +38,125 @@ class Undigraph:
     Therefore, arc `A-B` is the same as arc `B-A`.
     &#34;&#34;&#34;
 
-    __kwargs__ = {
-
-    }
-
     @specification.init
-    def UNDIGRAPH(Graph):
+    def UNDIGRAPH(Undigraph):
         &#34;&#34;&#34;
-        Creates an empty Unidigraph.
+        Creates an empty Undigraph.
 
         Nodes and arcs are added using the `add` method.
         &#34;&#34;&#34;
-        graph = Graph(arcs=[
+        graph = Undigraph(arcs=[
             (&#39;a&#39;, &#39;b&#39;),
             (&#39;b&#39;, &#39;c&#39;),
             (&#39;c&#39;, &#39;d&#39;)
         ])
         return graph
 
-    def add_node(graph, node):
+    def add_node(undigraph, node):
         &#34;&#34;&#34;
         Add a node to the graph.
         &#34;&#34;&#34;
-        graph.add_node(&#39;e&#39;)
+        undigraph.add_node(&#39;e&#39;)
 
-    def add_arc(graph, node, neighbor):
+    def add_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Add an arc between existing nodes in the graph.
+        Add an arc between existing nodes in the undigraph.
         Has no effect if the arc already exists.
         &#34;&#34;&#34;
-        graph.add_arc(&#39;d&#39;, &#39;e&#39;)
+        undigraph.add_arc(&#39;d&#39;, &#39;e&#39;)
 
 
-    def add(graph, node, neighbor=None):
+    def add(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Add a node, or an arc to the graph.
+        Add a node, or an arc to the undigraph.
         If an arc is added between two nodes that do not
         already exist, they are added automatically.
         &#34;&#34;&#34;
-        graph.add(&#39;c&#39;, &#39;f&#39;)
+        undigraph.add(&#39;c&#39;, &#39;f&#39;)
 
 
-    def remove_node(graph, node):
+    def remove_node(undigraph, node):
         &#34;&#34;&#34;
-        Remove a node from the graph, if it exists.
+        Remove a node from the undigraph, if it exists.
         This will remove all arcs that contain the removed node.
         &#34;&#34;&#34;
-        graph.remove_node(&#39;a&#39;)
+        undigraph.remove_node(&#39;a&#39;)
 
 
-    def remove_arc(graph, node, neighbor):
+    def remove_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Remove an arc from the graph, if it exists.
+        Remove an arc from the undigraph, if it exists.
         &#34;&#34;&#34;
-        graph.remove_arc(&#39;b&#39;, &#39;c&#39;)
+        undigraph.remove_arc(&#39;b&#39;, &#39;c&#39;)
 
 
-    def remove(graph, node, neighbor=None):
+    def remove(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Remove either a node or an arc from the graph.
+        Remove either a node or an arc from the undigraph.
 
         If adjecent node is not specified, a node will be
         removed along with all of its arcs.
         &#34;&#34;&#34;
-        graph.remove(&#39;c&#39;, &#39;d&#39;)
+        undigraph.remove(&#39;c&#39;, &#39;d&#39;)
 
 
-    def has_node(graph, node):
+    def has_node(undigraph, node):
         &#34;&#34;&#34;
-        Whether a node is in the graph.
+        Whether a node is in the undigraph.
         &#34;&#34;&#34;
-        assert graph.has_node(&#39;b&#39;)
-        assert graph.has_node(&#39;e&#39;)
-        assert graph.has_node(&#39;f&#39;)
-        assert not graph.has_node(&#39;a&#39;)
+        assert undigraph.has_node(&#39;b&#39;)
+        assert undigraph.has_node(&#39;e&#39;)
+        assert undigraph.has_node(&#39;f&#39;)
+        assert not undigraph.has_node(&#39;a&#39;)
 
 
-    def has_arc(graph, node, neighbor):
+    def has_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Whether an arc is in the graph.
+        Whether an arc is in the undigraph.
         &#34;&#34;&#34;
-        assert not graph.has_arc(&#39;b&#39;, &#39;c&#39;)
-        assert graph.has_arc(&#39;d&#39;, &#39;e&#39;)
-        assert graph.has_arc(&#39;c&#39;, &#39;f&#39;)
-        assert not graph.has_arc(&#39;a&#39;, &#39;f&#39;)
+        assert not undigraph.has_arc(&#39;b&#39;, &#39;c&#39;)
+        assert undigraph.has_arc(&#39;d&#39;, &#39;e&#39;)
+        assert undigraph.has_arc(&#39;c&#39;, &#39;f&#39;)
+        assert not undigraph.has_arc(&#39;a&#39;, &#39;f&#39;)
 
 
-    def has(graph, node, neighbor=None):
+    def has(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Whether a node is in the graph or, if neighbor is specified,
-        whether the arc between node and neighbor is in the graph.
+        Whether a node is in the undigraph or, if neighbor is specified,
+        whether the arc between node and neighbor is in the undigraph.
         &#34;&#34;&#34;
-        assert not graph.has(&#39;b&#39;, &#39;c&#39;)
-        assert graph.has(&#39;d&#39;, &#39;e&#39;)
-        assert not graph.has(&#39;a&#39;)
-        assert graph.has(&#39;b&#39;)
+        assert not undigraph.has(&#39;b&#39;, &#39;c&#39;)
+        assert undigraph.has(&#39;d&#39;, &#39;e&#39;)
+        assert not undigraph.has(&#39;a&#39;)
+        assert undigraph.has(&#39;b&#39;)
 
 
-    def nodes(graph):
+    def nodes(undigraph):
         &#34;&#34;&#34;
-        A generator over the nodes in the graph, unordered.
+        A generator over the nodes in the undigraph, unordered.
         &#34;&#34;&#34;
-        assert set(graph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
+        assert set(undigraph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
 
 
-    def arcs(graph):
+    def arcs(undigraph):
         &#34;&#34;&#34;
-        A generator over the arcs in the graph, unordered.
+        A generator over the arcs in the undigraph, unordered.
         &#34;&#34;&#34;
         assert False
 
 
-    def len_nodes(graph):
+    def len_nodes(undigraph):
         &#34;&#34;&#34;
-        Returns the number of nodes in the graph.
+        Returns the number of nodes in the undigraph.
         &#34;&#34;&#34;
-        assert graph.len_nodes() == 5
+        assert undigraph.len_nodes() == 5
 
 
-    def len_arcs(graph):
+    def len_arcs(undigraph):
         &#34;&#34;&#34;
-        Returns the number of arcs in the graph.
+        Returns the number of arcs in the undigraph.
         &#34;&#34;&#34;
-        assert graph.len_arcs() == 2
+        assert undigraph.len_arcs() == 2
 
 
 if __name__ == &#39;__main__&#39;:
@@ -198,150 +194,146 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></div>
     Therefore, arc `A-B` is the same as arc `B-A`.
     &#34;&#34;&#34;
 
-    __kwargs__ = {
-
-    }
-
     @specification.init
-    def UNDIGRAPH(Graph):
+    def UNDIGRAPH(Undigraph):
         &#34;&#34;&#34;
-        Creates an empty Unidigraph.
+        Creates an empty Undigraph.
 
         Nodes and arcs are added using the `add` method.
         &#34;&#34;&#34;
-        graph = Graph(arcs=[
+        graph = Undigraph(arcs=[
             (&#39;a&#39;, &#39;b&#39;),
             (&#39;b&#39;, &#39;c&#39;),
             (&#39;c&#39;, &#39;d&#39;)
         ])
         return graph
 
-    def add_node(graph, node):
+    def add_node(undigraph, node):
         &#34;&#34;&#34;
         Add a node to the graph.
         &#34;&#34;&#34;
-        graph.add_node(&#39;e&#39;)
+        undigraph.add_node(&#39;e&#39;)
 
-    def add_arc(graph, node, neighbor):
+    def add_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Add an arc between existing nodes in the graph.
+        Add an arc between existing nodes in the undigraph.
         Has no effect if the arc already exists.
         &#34;&#34;&#34;
-        graph.add_arc(&#39;d&#39;, &#39;e&#39;)
+        undigraph.add_arc(&#39;d&#39;, &#39;e&#39;)
 
 
-    def add(graph, node, neighbor=None):
+    def add(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Add a node, or an arc to the graph.
+        Add a node, or an arc to the undigraph.
         If an arc is added between two nodes that do not
         already exist, they are added automatically.
         &#34;&#34;&#34;
-        graph.add(&#39;c&#39;, &#39;f&#39;)
+        undigraph.add(&#39;c&#39;, &#39;f&#39;)
 
 
-    def remove_node(graph, node):
+    def remove_node(undigraph, node):
         &#34;&#34;&#34;
-        Remove a node from the graph, if it exists.
+        Remove a node from the undigraph, if it exists.
         This will remove all arcs that contain the removed node.
         &#34;&#34;&#34;
-        graph.remove_node(&#39;a&#39;)
+        undigraph.remove_node(&#39;a&#39;)
 
 
-    def remove_arc(graph, node, neighbor):
+    def remove_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Remove an arc from the graph, if it exists.
+        Remove an arc from the undigraph, if it exists.
         &#34;&#34;&#34;
-        graph.remove_arc(&#39;b&#39;, &#39;c&#39;)
+        undigraph.remove_arc(&#39;b&#39;, &#39;c&#39;)
 
 
-    def remove(graph, node, neighbor=None):
+    def remove(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Remove either a node or an arc from the graph.
+        Remove either a node or an arc from the undigraph.
 
         If adjecent node is not specified, a node will be
         removed along with all of its arcs.
         &#34;&#34;&#34;
-        graph.remove(&#39;c&#39;, &#39;d&#39;)
+        undigraph.remove(&#39;c&#39;, &#39;d&#39;)
 
 
-    def has_node(graph, node):
+    def has_node(undigraph, node):
         &#34;&#34;&#34;
-        Whether a node is in the graph.
+        Whether a node is in the undigraph.
         &#34;&#34;&#34;
-        assert graph.has_node(&#39;b&#39;)
-        assert graph.has_node(&#39;e&#39;)
-        assert graph.has_node(&#39;f&#39;)
-        assert not graph.has_node(&#39;a&#39;)
+        assert undigraph.has_node(&#39;b&#39;)
+        assert undigraph.has_node(&#39;e&#39;)
+        assert undigraph.has_node(&#39;f&#39;)
+        assert not undigraph.has_node(&#39;a&#39;)
 
 
-    def has_arc(graph, node, neighbor):
+    def has_arc(undigraph, node, neighbor):
         &#34;&#34;&#34;
-        Whether an arc is in the graph.
+        Whether an arc is in the undigraph.
         &#34;&#34;&#34;
-        assert not graph.has_arc(&#39;b&#39;, &#39;c&#39;)
-        assert graph.has_arc(&#39;d&#39;, &#39;e&#39;)
-        assert graph.has_arc(&#39;c&#39;, &#39;f&#39;)
-        assert not graph.has_arc(&#39;a&#39;, &#39;f&#39;)
+        assert not undigraph.has_arc(&#39;b&#39;, &#39;c&#39;)
+        assert undigraph.has_arc(&#39;d&#39;, &#39;e&#39;)
+        assert undigraph.has_arc(&#39;c&#39;, &#39;f&#39;)
+        assert not undigraph.has_arc(&#39;a&#39;, &#39;f&#39;)
 
 
-    def has(graph, node, neighbor=None):
+    def has(undigraph, node, neighbor=None):
         &#34;&#34;&#34;
-        Whether a node is in the graph or, if neighbor is specified,
-        whether the arc between node and neighbor is in the graph.
+        Whether a node is in the undigraph or, if neighbor is specified,
+        whether the arc between node and neighbor is in the undigraph.
         &#34;&#34;&#34;
-        assert not graph.has(&#39;b&#39;, &#39;c&#39;)
-        assert graph.has(&#39;d&#39;, &#39;e&#39;)
-        assert not graph.has(&#39;a&#39;)
-        assert graph.has(&#39;b&#39;)
+        assert not undigraph.has(&#39;b&#39;, &#39;c&#39;)
+        assert undigraph.has(&#39;d&#39;, &#39;e&#39;)
+        assert not undigraph.has(&#39;a&#39;)
+        assert undigraph.has(&#39;b&#39;)
 
 
-    def nodes(graph):
+    def nodes(undigraph):
         &#34;&#34;&#34;
-        A generator over the nodes in the graph, unordered.
+        A generator over the nodes in the undigraph, unordered.
         &#34;&#34;&#34;
-        assert set(graph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
+        assert set(undigraph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}
 
 
-    def arcs(graph):
+    def arcs(undigraph):
         &#34;&#34;&#34;
-        A generator over the arcs in the graph, unordered.
+        A generator over the arcs in the undigraph, unordered.
         &#34;&#34;&#34;
         assert False
 
 
-    def len_nodes(graph):
+    def len_nodes(undigraph):
         &#34;&#34;&#34;
-        Returns the number of nodes in the graph.
+        Returns the number of nodes in the undigraph.
         &#34;&#34;&#34;
-        assert graph.len_nodes() == 5
+        assert undigraph.len_nodes() == 5
 
 
-    def len_arcs(graph):
+    def len_arcs(undigraph):
         &#34;&#34;&#34;
-        Returns the number of arcs in the graph.
+        Returns the number of arcs in the undigraph.
         &#34;&#34;&#34;
-        assert graph.len_arcs() == 2</code></pre>
+        assert undigraph.len_arcs() == 2</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="structpy.graph.undigraph.Undigraph.UNDIGRAPH"><code class="name flex">
-<span>def <span class="ident">UNDIGRAPH</span></span>(<span>Graph)</span>
+<span>def <span class="ident">UNDIGRAPH</span></span>(<span>Undigraph)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Creates an empty Unidigraph.</p>
+<div class="desc"><p>Creates an empty Undigraph.</p>
 <p>Nodes and arcs are added using the <code>add</code> method.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@specification.init
-def UNDIGRAPH(Graph):
+def UNDIGRAPH(Undigraph):
     &#34;&#34;&#34;
-    Creates an empty Unidigraph.
+    Creates an empty Undigraph.
 
     Nodes and arcs are added using the `add` method.
     &#34;&#34;&#34;
-    graph = Graph(arcs=[
+    graph = Undigraph(arcs=[
         (&#39;a&#39;, &#39;b&#39;),
         (&#39;b&#39;, &#39;c&#39;),
         (&#39;c&#39;, &#39;d&#39;)
@@ -350,7 +342,7 @@ def UNDIGRAPH(Graph):
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.add_node"><code class="name flex">
-<span>def <span class="ident">add_node</span></span>(<span>graph, node)</span>
+<span>def <span class="ident">add_node</span></span>(<span>undigraph, node)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Add a node to the graph.</p></div>
@@ -358,227 +350,227 @@ def UNDIGRAPH(Graph):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_node(graph, node):
+<pre><code class="python">def add_node(undigraph, node):
     &#34;&#34;&#34;
     Add a node to the graph.
     &#34;&#34;&#34;
-    graph.add_node(&#39;e&#39;)</code></pre>
+    undigraph.add_node(&#39;e&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.add_arc"><code class="name flex">
-<span>def <span class="ident">add_arc</span></span>(<span>graph, node, neighbor)</span>
+<span>def <span class="ident">add_arc</span></span>(<span>undigraph, node, neighbor)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Add an arc between existing nodes in the graph.
+<div class="desc"><p>Add an arc between existing nodes in the undigraph.
 Has no effect if the arc already exists.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add_arc(graph, node, neighbor):
+<pre><code class="python">def add_arc(undigraph, node, neighbor):
     &#34;&#34;&#34;
-    Add an arc between existing nodes in the graph.
+    Add an arc between existing nodes in the undigraph.
     Has no effect if the arc already exists.
     &#34;&#34;&#34;
-    graph.add_arc(&#39;d&#39;, &#39;e&#39;)</code></pre>
+    undigraph.add_arc(&#39;d&#39;, &#39;e&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>graph, node, neighbor=None)</span>
+<span>def <span class="ident">add</span></span>(<span>undigraph, node, neighbor=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Add a node, or an arc to the graph.
+<div class="desc"><p>Add a node, or an arc to the undigraph.
 If an arc is added between two nodes that do not
 already exist, they are added automatically.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add(graph, node, neighbor=None):
+<pre><code class="python">def add(undigraph, node, neighbor=None):
     &#34;&#34;&#34;
-    Add a node, or an arc to the graph.
+    Add a node, or an arc to the undigraph.
     If an arc is added between two nodes that do not
     already exist, they are added automatically.
     &#34;&#34;&#34;
-    graph.add(&#39;c&#39;, &#39;f&#39;)</code></pre>
+    undigraph.add(&#39;c&#39;, &#39;f&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.remove_node"><code class="name flex">
-<span>def <span class="ident">remove_node</span></span>(<span>graph, node)</span>
+<span>def <span class="ident">remove_node</span></span>(<span>undigraph, node)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove a node from the graph, if it exists.
+<div class="desc"><p>Remove a node from the undigraph, if it exists.
 This will remove all arcs that contain the removed node.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def remove_node(graph, node):
+<pre><code class="python">def remove_node(undigraph, node):
     &#34;&#34;&#34;
-    Remove a node from the graph, if it exists.
+    Remove a node from the undigraph, if it exists.
     This will remove all arcs that contain the removed node.
     &#34;&#34;&#34;
-    graph.remove_node(&#39;a&#39;)</code></pre>
+    undigraph.remove_node(&#39;a&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.remove_arc"><code class="name flex">
-<span>def <span class="ident">remove_arc</span></span>(<span>graph, node, neighbor)</span>
+<span>def <span class="ident">remove_arc</span></span>(<span>undigraph, node, neighbor)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove an arc from the graph, if it exists.</p></div>
+<div class="desc"><p>Remove an arc from the undigraph, if it exists.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def remove_arc(graph, node, neighbor):
+<pre><code class="python">def remove_arc(undigraph, node, neighbor):
     &#34;&#34;&#34;
-    Remove an arc from the graph, if it exists.
+    Remove an arc from the undigraph, if it exists.
     &#34;&#34;&#34;
-    graph.remove_arc(&#39;b&#39;, &#39;c&#39;)</code></pre>
+    undigraph.remove_arc(&#39;b&#39;, &#39;c&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.remove"><code class="name flex">
-<span>def <span class="ident">remove</span></span>(<span>graph, node, neighbor=None)</span>
+<span>def <span class="ident">remove</span></span>(<span>undigraph, node, neighbor=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove either a node or an arc from the graph.</p>
+<div class="desc"><p>Remove either a node or an arc from the undigraph.</p>
 <p>If adjecent node is not specified, a node will be
 removed along with all of its arcs.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def remove(graph, node, neighbor=None):
+<pre><code class="python">def remove(undigraph, node, neighbor=None):
     &#34;&#34;&#34;
-    Remove either a node or an arc from the graph.
+    Remove either a node or an arc from the undigraph.
 
     If adjecent node is not specified, a node will be
     removed along with all of its arcs.
     &#34;&#34;&#34;
-    graph.remove(&#39;c&#39;, &#39;d&#39;)</code></pre>
+    undigraph.remove(&#39;c&#39;, &#39;d&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.has_node"><code class="name flex">
-<span>def <span class="ident">has_node</span></span>(<span>graph, node)</span>
+<span>def <span class="ident">has_node</span></span>(<span>undigraph, node)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Whether a node is in the graph.</p></div>
+<div class="desc"><p>Whether a node is in the undigraph.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def has_node(graph, node):
+<pre><code class="python">def has_node(undigraph, node):
     &#34;&#34;&#34;
-    Whether a node is in the graph.
+    Whether a node is in the undigraph.
     &#34;&#34;&#34;
-    assert graph.has_node(&#39;b&#39;)
-    assert graph.has_node(&#39;e&#39;)
-    assert graph.has_node(&#39;f&#39;)
-    assert not graph.has_node(&#39;a&#39;)</code></pre>
+    assert undigraph.has_node(&#39;b&#39;)
+    assert undigraph.has_node(&#39;e&#39;)
+    assert undigraph.has_node(&#39;f&#39;)
+    assert not undigraph.has_node(&#39;a&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.has_arc"><code class="name flex">
-<span>def <span class="ident">has_arc</span></span>(<span>graph, node, neighbor)</span>
+<span>def <span class="ident">has_arc</span></span>(<span>undigraph, node, neighbor)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Whether an arc is in the graph.</p></div>
+<div class="desc"><p>Whether an arc is in the undigraph.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def has_arc(graph, node, neighbor):
+<pre><code class="python">def has_arc(undigraph, node, neighbor):
     &#34;&#34;&#34;
-    Whether an arc is in the graph.
+    Whether an arc is in the undigraph.
     &#34;&#34;&#34;
-    assert not graph.has_arc(&#39;b&#39;, &#39;c&#39;)
-    assert graph.has_arc(&#39;d&#39;, &#39;e&#39;)
-    assert graph.has_arc(&#39;c&#39;, &#39;f&#39;)
-    assert not graph.has_arc(&#39;a&#39;, &#39;f&#39;)</code></pre>
+    assert not undigraph.has_arc(&#39;b&#39;, &#39;c&#39;)
+    assert undigraph.has_arc(&#39;d&#39;, &#39;e&#39;)
+    assert undigraph.has_arc(&#39;c&#39;, &#39;f&#39;)
+    assert not undigraph.has_arc(&#39;a&#39;, &#39;f&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.has"><code class="name flex">
-<span>def <span class="ident">has</span></span>(<span>graph, node, neighbor=None)</span>
+<span>def <span class="ident">has</span></span>(<span>undigraph, node, neighbor=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Whether a node is in the graph or, if neighbor is specified,
-whether the arc between node and neighbor is in the graph.</p></div>
+<div class="desc"><p>Whether a node is in the undigraph or, if neighbor is specified,
+whether the arc between node and neighbor is in the undigraph.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def has(graph, node, neighbor=None):
+<pre><code class="python">def has(undigraph, node, neighbor=None):
     &#34;&#34;&#34;
-    Whether a node is in the graph or, if neighbor is specified,
-    whether the arc between node and neighbor is in the graph.
+    Whether a node is in the undigraph or, if neighbor is specified,
+    whether the arc between node and neighbor is in the undigraph.
     &#34;&#34;&#34;
-    assert not graph.has(&#39;b&#39;, &#39;c&#39;)
-    assert graph.has(&#39;d&#39;, &#39;e&#39;)
-    assert not graph.has(&#39;a&#39;)
-    assert graph.has(&#39;b&#39;)</code></pre>
+    assert not undigraph.has(&#39;b&#39;, &#39;c&#39;)
+    assert undigraph.has(&#39;d&#39;, &#39;e&#39;)
+    assert not undigraph.has(&#39;a&#39;)
+    assert undigraph.has(&#39;b&#39;)</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.nodes"><code class="name flex">
-<span>def <span class="ident">nodes</span></span>(<span>graph)</span>
+<span>def <span class="ident">nodes</span></span>(<span>undigraph)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A generator over the nodes in the graph, unordered.</p></div>
+<div class="desc"><p>A generator over the nodes in the undigraph, unordered.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def nodes(graph):
+<pre><code class="python">def nodes(undigraph):
     &#34;&#34;&#34;
-    A generator over the nodes in the graph, unordered.
+    A generator over the nodes in the undigraph, unordered.
     &#34;&#34;&#34;
-    assert set(graph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}</code></pre>
+    assert set(undigraph.nodes()) == {&#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;}</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.arcs"><code class="name flex">
-<span>def <span class="ident">arcs</span></span>(<span>graph)</span>
+<span>def <span class="ident">arcs</span></span>(<span>undigraph)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>A generator over the arcs in the graph, unordered.</p></div>
+<div class="desc"><p>A generator over the arcs in the undigraph, unordered.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def arcs(graph):
+<pre><code class="python">def arcs(undigraph):
     &#34;&#34;&#34;
-    A generator over the arcs in the graph, unordered.
+    A generator over the arcs in the undigraph, unordered.
     &#34;&#34;&#34;
     assert False</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.len_nodes"><code class="name flex">
-<span>def <span class="ident">len_nodes</span></span>(<span>graph)</span>
+<span>def <span class="ident">len_nodes</span></span>(<span>undigraph)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Returns the number of nodes in the graph.</p></div>
+<div class="desc"><p>Returns the number of nodes in the undigraph.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def len_nodes(graph):
+<pre><code class="python">def len_nodes(undigraph):
     &#34;&#34;&#34;
-    Returns the number of nodes in the graph.
+    Returns the number of nodes in the undigraph.
     &#34;&#34;&#34;
-    assert graph.len_nodes() == 5</code></pre>
+    assert undigraph.len_nodes() == 5</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.undigraph.Undigraph.len_arcs"><code class="name flex">
-<span>def <span class="ident">len_arcs</span></span>(<span>graph)</span>
+<span>def <span class="ident">len_arcs</span></span>(<span>undigraph)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Returns the number of arcs in the graph.</p></div>
+<div class="desc"><p>Returns the number of arcs in the undigraph.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def len_arcs(graph):
+<pre><code class="python">def len_arcs(undigraph):
     &#34;&#34;&#34;
-    Returns the number of arcs in the graph.
+    Returns the number of arcs in the undigraph.
     &#34;&#34;&#34;
-    assert graph.len_arcs() == 2</code></pre>
+    assert undigraph.len_arcs() == 2</code></pre>
 </details>
 </dd>
 </dl>

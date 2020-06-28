@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.graph API documentation</title>
-<meta name="description" content="Defines graphs …" />
+<title>structpy.graph.undirected.unlabeled API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,91 +17,14 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.graph</code></h1>
+<h1 class="title">Module <code>structpy.graph.undirected.unlabeled</code></h1>
 </header>
 <section id="section-intro">
-<p>Defines graphs.</p>
-<p><br/></p>
-<h3 id="undigraph"><a href="undirected/unlabeled/specification.html">Undigraph</a></h3>
-<p>Undirected, unlabeled graph.</p>
-<p>Each node must be a unique hashable object.</p>
-<p>Arcs are identified by node pairs, which are unordered.
-Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.
-<br/></p>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">&#34;&#34;&#34;
-Defines graphs.
-
-&#34;&#34;&#34;
-
-doc = &#34;&#34;&#34;
-```text
-Directed
-Undirected
-
-Labeled Directed
-Labeled Undirected
-
-Mapping options:
-- map (many to many)
-- function (many to one)
-
-MultiLabeledDigraph
-source, target - label : map
-source, label - target : map
-target, label - source : map
-
-LabeledDigraph
-source, target - label : function
-source, label - target : map
-target, label - source : map
-
-ForwardLabeledDigraph
-source, target - label : function
-source, label - target : function
-target, label - source : map
-
-BackwardLabeledDigraph
-source, target - label : function
-source, label - target : map
-target, label - source : function
-
-PerfectLabeledDigraph
-source, target - label : function
-source, label - target : function
-target, label - source : function
-```&#34;&#34;&#34;
-
-from structpy.graph.undirected.unlabeled.specification import Graph as Undigraph
-
-__all__ = [
-    &#39;Undigraph&#39;
-]</code></pre>
-</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="structpy.graph.digraph" href="digraph.html">digraph</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="structpy.graph.multi_labeled_digraph" href="multi_labeled_digraph.html">multi_labeled_digraph</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="structpy.graph.undirected" href="undirected/index.html">undirected</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="structpy.graph.unlabeled_digraph" href="unlabeled_digraph.html">unlabeled_digraph</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="structpy.graph.unlabeled_graph" href="unlabeled_graph.html">unlabeled_graph</a></code></dt>
+<dt><code class="name"><a title="structpy.graph.undirected.unlabeled.specification" href="specification.html">specification</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -117,23 +40,17 @@ __all__ = [
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#undigraph">Undigraph</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy" href="../index.html">structpy</a></code></li>
+<li><code><a title="structpy.graph.undirected" href="../index.html">undirected</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="structpy.graph.digraph" href="digraph.html">digraph</a></code></li>
-<li><code><a title="structpy.graph.multi_labeled_digraph" href="multi_labeled_digraph.html">multi_labeled_digraph</a></code></li>
-<li><code><a title="structpy.graph.undirected" href="undirected/index.html">undirected</a></code></li>
-<li><code><a title="structpy.graph.unlabeled_digraph" href="unlabeled_digraph.html">unlabeled_digraph</a></code></li>
-<li><code><a title="structpy.graph.unlabeled_graph" href="unlabeled_graph.html">unlabeled_graph</a></code></li>
+<li><code><a title="structpy.graph.undirected.unlabeled.specification" href="specification.html">specification</a></code></li>
 </ul>
 </li>
 </ul>
