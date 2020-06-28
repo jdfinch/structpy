@@ -40,7 +40,7 @@ def link(obj, module, attr):
     if hasattr(obj, '__verify__'):
         return '### [{}]({})'.format(attr, relative_path(module, obj))
     elif hasattr(obj, '__specifications__'):
-        return '###`{}`'.format(obj.__module__ + '.' + obj.__qualname__)
+        return '### [{}]({})'.format(attr, relative_path(module, obj))
     else:
         return '###`{}`'.format(obj.__name__.split('.')[-1])
 

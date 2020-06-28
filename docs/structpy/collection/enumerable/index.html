@@ -25,19 +25,19 @@ over, where each value is derived from an update of the previous one …" />
 over, where each value is derived from an update of the previous one.</p>
 <p>Test.</p>
 <p><br/></p>
-<h3 id="finitemarkovenumerablespec"><a href="finite_markov_enumerable.html">FiniteMarkovEnumerableSpec</a></h3>
+<h3 id="fmes"><a href="finite_markov_enumerable.html">FMES</a></h3>
 <p>Define a sequence iterator that generates each
 value based on the previous value.</p>
 <p>A boolean end function is specified to define
 the end of the sequence.
 <br/>
 <br/></p>
-<h3 id="infinitemarkovenumerablespec"><a href="infinite_markov_enumerable.html">InfiniteMarkovEnumerableSpec</a></h3>
+<h3 id="imes"><a href="infinite_markov_enumerable.html">IMES</a></h3>
 <p>Define a sequence iterator that generates each
 value based on the previous value.
 <br/>
 <br/></p>
-<h3 id="infinitemarkovenumerable"><code><a title="structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable" href="infinite_markov_enumerable.html#structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable">InfiniteMarkovEnumerable</a></code></h3>
+<h3 id="ime"><a href="infinite_markov_enumerable_implementation.html">IME</a></h3>
 <p>Implementation of <code><a title="structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec" href="infinite_markov_enumerable.html#structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerableSpec">InfiniteMarkovEnumerableSpec</a></code>
 <br/>
 <br/>
@@ -56,17 +56,18 @@ over, where each value is derived from an update of the previous one.
 Test.
 &#34;&#34;&#34;
 
-from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpec
-from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec, InfiniteMarkovEnumerable
+from structpy.collection.enumerable.finite_markov_enumerable import FiniteMarkovEnumerableSpec as FMES
+from structpy.collection.enumerable.infinite_markov_enumerable import InfiniteMarkovEnumerableSpec as IMES
+from structpy.collection.enumerable.infinite_markov_enumerable_implementation import InfiniteMarkovEnumerable as IME
 
 def MyFunction():
     &#34;&#34;&#34;this is a function&#34;&#34;&#34;
     return 2
 
 __all__ = [
-    &#39;FiniteMarkovEnumerableSpec&#39;,
-    &#39;InfiniteMarkovEnumerableSpec&#39;,
-    &#39;InfiniteMarkovEnumerable&#39;,
+    &#39;FMES&#39;,
+    &#39;IMES&#39;,
+    &#39;IME&#39;,
     &#39;MyFunction&#39;
 ]</code></pre>
 </details>
@@ -79,6 +80,10 @@ __all__ = [
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">infinite_markov_enumerable</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.enumerable.infinite_markov_enumerable_implementation" href="infinite_markov_enumerable_implementation.html">infinite_markov_enumerable_implementation</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -95,9 +100,9 @@ __all__ = [
 <h1>Index</h1>
 <div class="toc">
 <ul>
-<li><a href="#finitemarkovenumerablespec">FiniteMarkovEnumerableSpec</a></li>
-<li><a href="#infinitemarkovenumerablespec">InfiniteMarkovEnumerableSpec</a></li>
-<li><a href="#structpycollectionenumerableinfinite_markov_enumerableinfinitemarkovenumerable">structpy.collection.enumerable.infinite_markov_enumerable.InfiniteMarkovEnumerable</a></li>
+<li><a href="#fmes">FMES</a></li>
+<li><a href="#imes">IMES</a></li>
+<li><a href="#ime">IME</a></li>
 <li><a href="#myfunction">MyFunction</a></li>
 </ul>
 </div>
@@ -111,6 +116,7 @@ __all__ = [
 <ul>
 <li><code><a title="structpy.collection.enumerable.finite_markov_enumerable" href="finite_markov_enumerable.html">finite_markov_enumerable</a></code></li>
 <li><code><a title="structpy.collection.enumerable.infinite_markov_enumerable" href="infinite_markov_enumerable.html">infinite_markov_enumerable</a></code></li>
+<li><code><a title="structpy.collection.enumerable.infinite_markov_enumerable_implementation" href="infinite_markov_enumerable_implementation.html">infinite_markov_enumerable_implementation</a></code></li>
 </ul>
 </li>
 </ul>
