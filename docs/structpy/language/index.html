@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
 <title>structpy.language API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="&lt;br/&gt;
+`specification`
+&lt;function specification at 0x7f972684f170&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+`implementation`
+&lt;class …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,25 +26,48 @@
 <h1 class="title">Module <code>structpy.language</code></h1>
 </header>
 <section id="section-intro">
+<p><br/></p>
+<h3 id="specification"><code>specification</code></h3>
+<p><function specification at 0x7f972684f170>
+<br/>
+<br/></p>
+<h3 id="implementation"><code>implementation</code></h3>
+<p><class 'structpy.language.specification.specification.implementation'>
+<br/>
+<br/></p>
+<h3 id="i"><a href="interface_implementation.html">I</a></h3>
+<p>Implementation of <code><a title="structpy.language.interface_spec.InterfaceSpec" href="interface_spec.html#structpy.language.interface_spec.InterfaceSpec">InterfaceSpec</a></code>
+<br/></p>
+<p>Interface wraps an object using composition, but preserving the entire
+public interface of the inner object on the wrapper.</p>
+<p>This allows object-level method overriding without contaminating
+class data.</p>
+<p>Note that the object comparator <code>is</code> will not recognize an interface
+as the original (wrapped) object.</p>
+<p><br/>
+<br/></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy.language.specification import specification, implementation</code></pre>
+<pre><code class="python">from structpy.language.specification import specification, implementation
+from structpy.language.interface_implementation import I
+
+__all__ = [
+    &#39;specification&#39;,
+    &#39;implementation&#39;,
+    &#39;I&#39;
+]</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="structpy.language.integer" href="integer.html">integer</a></code></dt>
+<dt><code class="name"><a title="structpy.language.interface_implementation" href="interface_implementation.html">interface_implementation</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="structpy.language.pointer" href="pointer.html">pointer</a></code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="structpy.language.specification" href="specification/index.html">specification</a></code></dt>
+<dt><code class="name"><a title="structpy.language.interface_spec" href="interface_spec.html">interface_spec</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -54,7 +83,11 @@
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#specification">specification</a></li>
+<li><a href="#implementation">implementation</a></li>
+<li><a href="#i">I</a></li>
+</ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
@@ -64,9 +97,8 @@
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="structpy.language.integer" href="integer.html">integer</a></code></li>
-<li><code><a title="structpy.language.pointer" href="pointer.html">pointer</a></code></li>
-<li><code><a title="structpy.language.specification" href="specification/index.html">specification</a></code></li>
+<li><code><a title="structpy.language.interface_implementation" href="interface_implementation.html">interface_implementation</a></code></li>
+<li><code><a title="structpy.language.interface_spec" href="interface_spec.html">interface_spec</a></code></li>
 </ul>
 </li>
 </ul>

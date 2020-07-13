@@ -60,4 +60,4 @@ class InfiniteMarkovEnumerableSpec:
 
 
 if __name__ == '__main__':
-    print(InfiniteMarkovEnumerableSpec.__verify__())
+    print(InfiniteMarkovEnumerableSpec.verify())

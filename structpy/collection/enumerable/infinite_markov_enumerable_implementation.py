@@ -36,4 +36,4 @@ class InfiniteMarkovEnumerable(ABC):
 
 
 if __name__ == '__main__':
-    print(InfiniteMarkovEnumerableSpec.__verify__(InfiniteMarkovEnumerable))
+    print(InfiniteMarkovEnumerableSpec.verify(InfiniteMarkovEnumerable))

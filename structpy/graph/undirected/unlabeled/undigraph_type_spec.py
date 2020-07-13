@@ -11,4 +11,4 @@ class UndigraphTypeSpec:
 
 
 if __name__ == '__main__':
-    print(UndigraphTypeSpec.__verify__())
+    print(UndigraphTypeSpec.verify())

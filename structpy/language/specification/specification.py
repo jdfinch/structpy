@@ -60,7 +60,7 @@ def specification(cls):
         unit = Unit(method, 'specification')
         units.append(unit)
     cls.__units__ = units
-    cls.__verify__ = classmethod(verify)
+    cls.verify = classmethod(verify)
     cls.__implementations__ = []
     return cls
 
@@ -142,4 +142,4 @@ class B:
 
 if __name__ == '__main__':
 
-    print(B.__verify__(list))
+    print(B.verify(list))

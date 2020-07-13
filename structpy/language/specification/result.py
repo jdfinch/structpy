@@ -16,7 +16,7 @@ class Result:
 
     def __str__(self):
         test_string = self.unit.method.__name__
-        if self.obj:
+        if self.obj is not None:
             def _class_to_string(cls):
                 string = str(cls)
                 return string[string.rfind('.') + 1:-2]

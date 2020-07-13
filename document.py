@@ -37,7 +37,7 @@ def relative_path(module, cls):
 
 
 def link(obj, module, attr):
-    if hasattr(obj, '__verify__'):
+    if hasattr(obj, 'verify'):
         return '### [{}]({})'.format(attr, relative_path(module, obj))
     elif hasattr(obj, '__specifications__'):
         return '### [{}]({})'.format(attr, relative_path(module, obj))
@@ -53,10 +53,12 @@ def dynamic_docstrings(module):
                     if hasattr(obj, '__specifications__'):
                         if obj.__doc__ is None:
                             obj.__doc__ = ''
-                        obj.__doc__ = 'Implementation of ' \
+                        if 'Implementation of' not in obj.__doc__:
+                            implementation_string ='Implementation of ' \
                                       + ', '.join(['`{}`'.format(x.__module__ + '.' + x.__qualname__)
-                                                 for x in obj.__specifications__]) \
-                                      + '\n<br/>\n' + obj.__doc__
+                                                 for x in obj.__specifications__])
+                            specification_string = '\n<br/>\n' + '\n<br/>\n'.join([s.__doc__ for s in obj.__specifications__ if s.__doc__])
+                            obj.__doc__ = implementation_string + specification_string + '\n<br/>\n' + obj.__doc__
                     l = link(obj, pkg, attr)
                     d = doc_str(obj)
                     if pkg.__doc__ is None:

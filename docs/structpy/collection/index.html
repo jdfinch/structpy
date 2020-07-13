@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
 <title>structpy.collection API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="Homogeneous collections of elements …" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -20,20 +20,48 @@
 <h1 class="title">Module <code>structpy.collection</code></h1>
 </header>
 <section id="section-intro">
+<p>Homogeneous collections of elements.</p>
+<p><br/></p>
+<h3 id="set"><a href="enforcer/enforcer_set_implementation.html">Set</a></h3>
+<p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec" href="enforcer/enforcer_set_spec.html#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec">EnforcerSetSpec</a></code>
+<br/></p>
+<p>Implementation of vanilla python <code>set</code> with Enforcer hooks
+<code>add_function</code> and <code>remove_function</code>.</p>
+<p><br/>
+<br/></p>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+Homogeneous collections of elements.
+&#34;&#34;&#34;
+
+from structpy.collection.enforcer import EnforcerSet as Set
+
+__all__ = [
+    &#39;Set&#39;
+]</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
+<dt><code class="name"><a title="structpy.collection.enforcer" href="enforcer/index.html">enforcer</a></code></dt>
+<dd>
+<div class="desc"><p>Enforcer collections have function hooks that allow the user
+to enforce data consistency whenever the collection is updated …</p></div>
+</dd>
 <dt><code class="name"><a title="structpy.collection.enumerable" href="enumerable/index.html">enumerable</a></code></dt>
 <dd>
 <div class="desc"><p>Defines a potentially infinite sequence of values that can be iterated
 over, where each value is derived from an update of the previous one …</p></div>
 </dd>
-<dt><code class="name"><a title="structpy.collection.enumerable_set" href="enumerable_set.html">enumerable_set</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.set_implementation" href="set_implementation.html">set_implementation</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="structpy.collection.finite_set" href="finite_set.html">finite_set</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.set_spec" href="set_spec.html">set_spec</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -49,7 +77,9 @@ over, where each value is derived from an update of the previous one …</p></di
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul></ul>
+<ul>
+<li><a href="#set">Set</a></li>
+</ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
@@ -59,9 +89,10 @@ over, where each value is derived from an update of the previous one …</p></di
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
+<li><code><a title="structpy.collection.enforcer" href="enforcer/index.html">enforcer</a></code></li>
 <li><code><a title="structpy.collection.enumerable" href="enumerable/index.html">enumerable</a></code></li>
-<li><code><a title="structpy.collection.enumerable_set" href="enumerable_set.html">enumerable_set</a></code></li>
-<li><code><a title="structpy.collection.finite_set" href="finite_set.html">finite_set</a></code></li>
+<li><code><a title="structpy.collection.set_implementation" href="set_implementation.html">set_implementation</a></code></li>
+<li><code><a title="structpy.collection.set_spec" href="set_spec.html">set_spec</a></code></li>
 </ul>
 </li>
 </ul>

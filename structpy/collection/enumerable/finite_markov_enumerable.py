@@ -105,4 +105,4 @@ class FiniteMarkovEnumerable(ABC):
 
 
 if __name__ == '__main__':
-    print(FiniteMarkovEnumerableSpec.__verify__())
+    print(FiniteMarkovEnumerableSpec.verify())

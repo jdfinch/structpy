@@ -29,7 +29,7 @@ from structpy.graph.undirected.unlabeled.undigraph_spec import UndigraphSpec
 
 
 @implementation(UndigraphSpec)
-class UndigraphRaw:
+class Undigraph:
 
     def __init__(self, arcs=None):
         self.arcs = {}
@@ -37,7 +37,7 @@ class UndigraphRaw:
 
 
 if __name__ == &#39;__main__&#39;:
-    print(UndigraphSpec.__verify__(UndigraphRaw))</code></pre>
+    print(UndigraphSpec.verify(Undigraph))</code></pre>
 </details>
 </section>
 <section>
@@ -49,8 +49,8 @@ if __name__ == &#39;__main__&#39;:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.graph.undirected.unlabeled.undigraph_raw.UndigraphRaw"><code class="flex name class">
-<span>class <span class="ident">UndigraphRaw</span></span>
+<dt id="structpy.graph.undirected.unlabeled.undigraph_raw.Undigraph"><code class="flex name class">
+<span>class <span class="ident">Undigraph</span></span>
 <span>(</span><span>arcs=None)</span>
 </code></dt>
 <dd>
@@ -59,7 +59,7 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class UndigraphRaw:
+<pre><code class="python">class Undigraph:
 
     def __init__(self, arcs=None):
         self.arcs = {}</code></pre>
@@ -82,7 +82,7 @@ if __name__ == &#39;__main__&#39;:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.graph.undirected.unlabeled.undigraph_raw.UndigraphRaw" href="#structpy.graph.undirected.unlabeled.undigraph_raw.UndigraphRaw">UndigraphRaw</a></code></h4>
+<h4><code><a title="structpy.graph.undirected.unlabeled.undigraph_raw.Undigraph" href="#structpy.graph.undirected.unlabeled.undigraph_raw.Undigraph">Undigraph</a></code></h4>
 </li>
 </ul>
 </li>

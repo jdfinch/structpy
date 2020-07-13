@@ -160,7 +160,7 @@ class UndigraphSpec:
 
 
 if __name__ == &#39;__main__&#39;:
-    print(UndigraphSpec.__verify__())</code></pre>
+    print(UndigraphSpec.verify())</code></pre>
 </details>
 </section>
 <section>
@@ -314,6 +314,28 @@ Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.</p></div>
         &#34;&#34;&#34;
         assert undigraph.len_arcs() == 2</code></pre>
 </details>
+<h3>Static methods</h3>
+<dl>
+<dt id="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.verify"><code class="name flex">
+<span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def verify(spec, implementation=None):
+    if implementation is None:
+        results = ResultList()
+        for implementation in spec.__implementations__:
+            results += spec.__units__.test(implementation)
+        return results
+    else:
+        return spec.__units__.test(implementation)</code></pre>
+</details>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.UNDIGRAPH"><code class="name flex">
@@ -594,6 +616,7 @@ whether the arc between node and neighbor is in the undigraph.</p></div>
 <li>
 <h4><code><a title="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec" href="#structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec">UndigraphSpec</a></code></h4>
 <ul class="two-column">
+<li><code><a title="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.verify" href="#structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.verify">verify</a></code></li>
 <li><code><a title="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.UNDIGRAPH" href="#structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.UNDIGRAPH">UNDIGRAPH</a></code></li>
 <li><code><a title="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.add_node" href="#structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.add_node">add_node</a></code></li>
 <li><code><a title="structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.add_arc" href="#structpy.graph.undirected.unlabeled.undigraph_spec.UndigraphSpec.add_arc">add_arc</a></code></li>

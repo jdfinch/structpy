@@ -38,7 +38,7 @@ def specification(cls):
             properties.append(v)
     units = UnitSequence([unit(prop) for prop in properties])
     cls.__units__ = units
-    cls.__verify__ = verify
+    cls.verify = verify
     return cls
 
 
@@ -166,7 +166,7 @@ if __name__ == &#39;__main__&#39;:
             properties.append(v)
     units = UnitSequence([unit(prop) for prop in properties])
     cls.__units__ = units
-    cls.__verify__ = verify
+    cls.verify = verify
     return cls</code></pre>
 </details>
 </dd>
