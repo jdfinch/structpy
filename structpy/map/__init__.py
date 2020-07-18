@@ -1,6 +1,6 @@
 
 """
-Mapping elements between a domain and codomain.
+Mapping elements between a domain and domain.
 """
 
 from structpy.map.map_implementation import Map

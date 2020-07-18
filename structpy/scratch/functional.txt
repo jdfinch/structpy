@@ -1,0 +1,30 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def unnested(x):
+    return check(x, 9) >> check( , 8) >> check( , 7) >> check( , 2)
+
+def unnested(x):
+    return check(x, 9)
+    >> check( , 8)
+    >> check( , 7)
+    >> check( , 2)
+
+def check(x, m):
+    if x is not None and x % m != 0:
+        return x
+    else:
+        return None

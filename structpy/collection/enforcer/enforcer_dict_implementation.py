@@ -57,8 +57,8 @@ class EnforcerDict(dict):
     def update(self, other):
         intersection = set(other.keys()) & set(self.keys())
         self.remove_function([(k, self[k]) for k in intersection])
-        self.add_function(other.items())
         dict.update(self, other)
+        self.add_function(other.items())
 
 
 if __name__ == '__main__':

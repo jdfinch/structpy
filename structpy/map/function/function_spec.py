@@ -16,7 +16,7 @@ class FunctionSpec:
 
     def __getitem__(function, item):
         """
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         """
         assert function['one'] == 1
         assert function['two'] == 2
@@ -27,7 +27,7 @@ class FunctionSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         """
         function['dos'] = 2
         assert function['dos'] == 2
@@ -39,7 +39,7 @@ class FunctionSpec:
     def reverse(function):
         """
         returns a lookup (one-to-many mapping) representing
-        a mapping with domain and codomain swapped
+        a mapping with domain and domain swapped
         """
         r = function.reverse()
         assert 'one' in r[1]

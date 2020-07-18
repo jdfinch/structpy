@@ -5,7 +5,7 @@ from structpy.language import specification
 @specification
 class BimapSpec:
     """
-    Finite one-to-one mapping between elements in a domain and codomain.
+    Finite one-to-one mapping between elements in a domain and domain.
     """
 
     @specification.init
@@ -14,7 +14,7 @@ class BimapSpec:
 
     def getitem(bimap, item):
         """
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         """
         assert bimap['one'] == 1
         assert bimap['two'] == 2
@@ -25,7 +25,7 @@ class BimapSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         """
         bimap['four'] = 4
         bimap['five'] = 5
@@ -39,7 +39,7 @@ class BimapSpec:
     def reverse(bimap):
         """
         returns a view of the bimap that swaps
-        the domain and codomain for reverse mapping
+        the domain and domain for reverse mapping
         """
         r = bimap.reverse()
         assert r[0] == 'one'

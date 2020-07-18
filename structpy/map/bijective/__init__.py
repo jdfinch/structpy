@@ -1,6 +1,6 @@
 
 """
-Mappings betwen a domain and codomain that are bijective,
+Mappings betwen a domain and domain that are bijective,
 i.e. the mapping is one-to-one and onto.
 """
 
