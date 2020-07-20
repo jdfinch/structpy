@@ -32,30 +32,29 @@ from structpy.collection.enforcer.enforcer_dict_spec import EnforcerDictSpec
 class EnforcerDict(dict):
 
     def __init__(self, dict_like=None, add_function=None, remove_function=None):
-        if dict_like is None:
-            dict_like = {}
-        dict.__init__(self, dict_like)
+        dict.__init__(self)
         self.add_function = add_function
         self.remove_function = remove_function
-        self.add_function (self, dict_like.items())
+        if dict_like is not None:
+            self.update(dict_like)
 
     def __setitem__(self, key, value):
         if key not in self:
             dict.__setitem__(self, key, value)
-            self.add_function(self, [(key, value)])
+            self.add_function([(key, value)])
         else:
             original_value = self[key]
-            self.remove_function(self, [(key, original_value)])
+            self.remove_function([(key, original_value)])
             dict.__setitem__(self, key, value)
-            self.add_function(self, [(key, value)])
+            self.add_function([(key, value)])
 
     def __delitem__(self, key):
         value = self[key]
         dict.__delitem__(self, key)
-        self.remove_function(self, [(key, value)])
+        self.remove_function([(key, value)])
 
     def clear(self):
-        self.remove_function(self, self.items())
+        self.remove_function(self.items())
         dict.clear(self)
 
     def pop(self, key, default=None):
@@ -63,7 +62,7 @@ class EnforcerDict(dict):
             return default
         value = self[key]
         dict.__delitem__(self, key)
-        self.remove_function(self, [(key, value)])
+        self.remove_function([(key, value)])
         return value
 
     def popitem(self):
@@ -80,9 +79,9 @@ class EnforcerDict(dict):
 
     def update(self, other):
         intersection = set(other.keys()) &amp; set(self.keys())
-        self.remove_function(self, [(k, self[k]) for k in intersection])
-        self.add_function(self, other.items())
+        self.remove_function([(k, self[k]) for k in intersection])
         dict.update(self, other)
+        self.add_function(other.items())
 
 
 if __name__ == &#39;__main__&#39;:
@@ -103,17 +102,12 @@ if __name__ == &#39;__main__&#39;:
 <span>(</span><span>dict_like=None, add_function=None, remove_function=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>dict() -&gt; new empty dictionary
-dict(mapping) -&gt; new dictionary initialized from a mapping object's
-(key, value) pairs
-dict(iterable) -&gt; new dictionary initialized as if via:
-d = {}
-for k, v in iterable:
-d[k] = v
-dict(**kwargs) -&gt; new dictionary initialized with the name=value pairs
-in the keyword argument list.
-For example:
-dict(one=1, two=2)</p></div>
+<div class="desc"><p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
+<br/></p>
+<pre><code>An extension of python &lt;code&gt;dict&lt;/code&gt; with enforcment hooks that call functions
+whenever items are added/overwritten or removed/overwritten.
+</code></pre>
+<p><br/></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -121,30 +115,29 @@ dict(one=1, two=2)</p></div>
 <pre><code class="python">class EnforcerDict(dict):
 
     def __init__(self, dict_like=None, add_function=None, remove_function=None):
-        if dict_like is None:
-            dict_like = {}
-        dict.__init__(self, dict_like)
+        dict.__init__(self)
         self.add_function = add_function
         self.remove_function = remove_function
-        self.add_function (self, dict_like.items())
+        if dict_like is not None:
+            self.update(dict_like)
 
     def __setitem__(self, key, value):
         if key not in self:
             dict.__setitem__(self, key, value)
-            self.add_function(self, [(key, value)])
+            self.add_function([(key, value)])
         else:
             original_value = self[key]
-            self.remove_function(self, [(key, original_value)])
+            self.remove_function([(key, original_value)])
             dict.__setitem__(self, key, value)
-            self.add_function(self, [(key, value)])
+            self.add_function([(key, value)])
 
     def __delitem__(self, key):
         value = self[key]
         dict.__delitem__(self, key)
-        self.remove_function(self, [(key, value)])
+        self.remove_function([(key, value)])
 
     def clear(self):
-        self.remove_function(self, self.items())
+        self.remove_function(self.items())
         dict.clear(self)
 
     def pop(self, key, default=None):
@@ -152,7 +145,7 @@ dict(one=1, two=2)</p></div>
             return default
         value = self[key]
         dict.__delitem__(self, key)
-        self.remove_function(self, [(key, value)])
+        self.remove_function([(key, value)])
         return value
 
     def popitem(self):
@@ -169,13 +162,18 @@ dict(one=1, two=2)</p></div>
 
     def update(self, other):
         intersection = set(other.keys()) &amp; set(self.keys())
-        self.remove_function(self, [(k, self[k]) for k in intersection])
-        self.add_function(self, other.items())
-        dict.update(self, other)</code></pre>
+        self.remove_function([(k, self[k]) for k in intersection])
+        dict.update(self, other)
+        self.add_function(other.items())</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.dict</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="structpy.map.bijective.bimap_implementation.Bimap" href="../../map/bijective/bimap_implementation.html#structpy.map.bijective.bimap_implementation.Bimap">Bimap</a></li>
+<li><a title="structpy.map.map_implementation.Map" href="../../map/map_implementation.html#structpy.map.map_implementation.Map">Map</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -190,7 +188,7 @@ Remove all items from D.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def clear(self):
-    self.remove_function(self, self.items())
+    self.remove_function(self.items())
     dict.clear(self)</code></pre>
 </details>
 </dd>
@@ -209,7 +207,7 @@ If key is not found, d is returned if given, otherwise KeyError is raised</p></d
         return default
     value = self[key]
     dict.__delitem__(self, key)
-    self.remove_function(self, [(key, value)])
+    self.remove_function([(key, value)])
     return value</code></pre>
 </details>
 </dd>
@@ -265,9 +263,9 @@ D[k] = F[k]</p></div>
 </summary>
 <pre><code class="python">def update(self, other):
     intersection = set(other.keys()) &amp; set(self.keys())
-    self.remove_function(self, [(k, self[k]) for k in intersection])
-    self.add_function(self, other.items())
-    dict.update(self, other)</code></pre>
+    self.remove_function([(k, self[k]) for k in intersection])
+    dict.update(self, other)
+    self.add_function(other.items())</code></pre>
 </details>
 </dd>
 </dl>

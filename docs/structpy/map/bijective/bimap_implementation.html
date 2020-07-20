@@ -26,40 +26,32 @@
 </summary>
 <pre><code class="python">from structpy import implementation
 from structpy.map.bijective.bimap_spec import BimapSpec
+from structpy.collection.enforcer import EnforcerDict
 
 
 @implementation(BimapSpec)
-class Bimap:
+class Bimap(EnforcerDict):
 
     def __init__(self, mapping=None):
-        self._forward = {}
-        self._reverse = {}
-        if mapping is not None:
-            for k, v in mapping.items():
-               self.__setitem__(k, v)
+        EnforcerDict.__init__(self)
+        self.add_function = self._add_function
+        self.remove_function = self._remove_function
+        if isinstance(mapping, Bimap):
+            self._reverse = mapping
+        else:
+            self._reverse = Bimap(self)
+            if mapping is not None:
+                self.update(mapping)
+
+    def _add_function(self, items):
+        dict.update(self._reverse, [(v, k) for k, v in items])
+
+    def _remove_function(self, items):
+        for key, value in items:
+            dict.__delitem__(self._reverse, value)
 
     def reverse(self):
-        reverse_bimap = Bimap()
-        reverse_bimap._reverse = self._forward
-        reverse_bimap._forward = self._reverse
-        return reverse_bimap
-
-    def __getitem__(self, item):
-        return self._forward[item]
-
-    def __setitem__(self, key, value):
-        if key in self._forward:
-            del self._forward[key]
-        if value in self._reverse:
-            del self.reverse()[value]
-        self._forward[key] = value
-        self._reverse.__setitem__(value, key)
-
-    def __delitem__(self, key):
-        value = self._forward[key]
-        del self._reverse[value]
-        del self._forward[key]
-
+        return self._reverse
 
 if __name__ == &#39;__main__&#39;:
     print(BimapSpec.verify(Bimap))</code></pre>
@@ -81,44 +73,41 @@ if __name__ == &#39;__main__&#39;:
 <dd>
 <div class="desc"><p>Implementation of <code><a title="structpy.map.bijective.bimap_spec.BimapSpec" href="bimap_spec.html#structpy.map.bijective.bimap_spec.BimapSpec">BimapSpec</a></code>
 <br/></p>
-<pre><code>Finite one-to-one mapping between elements in a domain and codomain.
+<pre><code>Finite one-to-one mapping between elements in a domain and domain.
 </code></pre>
 <p><br/></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Bimap:
+<pre><code class="python">class Bimap(EnforcerDict):
 
     def __init__(self, mapping=None):
-        self._forward = {}
-        self._reverse = {}
-        if mapping is not None:
-            for k, v in mapping.items():
-               self.__setitem__(k, v)
+        EnforcerDict.__init__(self)
+        self.add_function = self._add_function
+        self.remove_function = self._remove_function
+        if isinstance(mapping, Bimap):
+            self._reverse = mapping
+        else:
+            self._reverse = Bimap(self)
+            if mapping is not None:
+                self.update(mapping)
+
+    def _add_function(self, items):
+        dict.update(self._reverse, [(v, k) for k, v in items])
+
+    def _remove_function(self, items):
+        for key, value in items:
+            dict.__delitem__(self._reverse, value)
 
     def reverse(self):
-        reverse_bimap = Bimap()
-        reverse_bimap._reverse = self._forward
-        reverse_bimap._forward = self._reverse
-        return reverse_bimap
-
-    def __getitem__(self, item):
-        return self._forward[item]
-
-    def __setitem__(self, key, value):
-        if key in self._forward:
-            del self._forward[key]
-        if value in self._reverse:
-            del self.reverse()[value]
-        self._forward[key] = value
-        self._reverse.__setitem__(value, key)
-
-    def __delitem__(self, key):
-        value = self._forward[key]
-        del self._reverse[value]
-        del self._forward[key]</code></pre>
+        return self._reverse</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></li>
+<li>builtins.dict</li>
+</ul>
 <h3>Methods</h3>
 <dl>
 <dt id="structpy.map.bijective.bimap_implementation.Bimap.reverse"><code class="name flex">
@@ -131,11 +120,65 @@ if __name__ == &#39;__main__&#39;:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def reverse(self):
-    reverse_bimap = Bimap()
-    reverse_bimap._reverse = self._forward
-    reverse_bimap._forward = self._reverse
-    return reverse_bimap</code></pre>
+    return self._reverse</code></pre>
 </details>
+</dd>
+<dt id="structpy.map.bijective.bimap_implementation.Bimap.clear"><code class="name flex">
+<span>def <span class="ident">clear</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.clear" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.clear">clear</a></code>
+</p>
+<div class="desc inherited"><p>D.clear() -&gt; None.
+Remove all items from D.</p></div>
+</dd>
+<dt id="structpy.map.bijective.bimap_implementation.Bimap.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self, key, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.pop" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.pop">pop</a></code>
+</p>
+<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
+If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
+</dd>
+<dt id="structpy.map.bijective.bimap_implementation.Bimap.popitem"><code class="name flex">
+<span>def <span class="ident">popitem</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.popitem" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.popitem">popitem</a></code>
+</p>
+<div class="desc inherited"><p>D.popitem() -&gt; (k, v), remove and return some (key, value) pair as a
+2-tuple; but raise KeyError if D is empty.</p></div>
+</dd>
+<dt id="structpy.map.bijective.bimap_implementation.Bimap.setdefault"><code class="name flex">
+<span>def <span class="ident">setdefault</span></span>(<span>self, key, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.setdefault" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.setdefault">setdefault</a></code>
+</p>
+<div class="desc inherited"><p>Insert key with a value of default if key is not in the dictionary …</p></div>
+</dd>
+<dt id="structpy.map.bijective.bimap_implementation.Bimap.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, other)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.update" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.collection.enforcer.enforcer_dict_implementation.EnforcerDict.update">update</a></code>
+</p>
+<div class="desc inherited"><p>D.update([E, ]**F) -&gt; None.
+Update D from dict/iterable E and F.
+If E is present and has a .keys() method, then does:
+for k in E: D[k] = E[k]
+If E …</p></div>
 </dd>
 </dl>
 </dd>
@@ -157,8 +200,13 @@ if __name__ == &#39;__main__&#39;:
 <ul>
 <li>
 <h4><code><a title="structpy.map.bijective.bimap_implementation.Bimap" href="#structpy.map.bijective.bimap_implementation.Bimap">Bimap</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.reverse" href="#structpy.map.bijective.bimap_implementation.Bimap.reverse">reverse</a></code></li>
+<li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.clear" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.map.bijective.bimap_implementation.Bimap.clear">clear</a></code></li>
+<li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.pop" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.map.bijective.bimap_implementation.Bimap.pop">pop</a></code></li>
+<li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.popitem" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.map.bijective.bimap_implementation.Bimap.popitem">popitem</a></code></li>
+<li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.setdefault" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.map.bijective.bimap_implementation.Bimap.setdefault">setdefault</a></code></li>
+<li><code><a title="structpy.map.bijective.bimap_implementation.Bimap.update" href="../../collection/enforcer/enforcer_dict_implementation.html#structpy.map.bijective.bimap_implementation.Bimap.update">update</a></code></li>
 </ul>
 </li>
 </ul>

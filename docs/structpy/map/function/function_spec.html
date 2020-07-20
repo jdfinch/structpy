@@ -41,7 +41,7 @@ class FunctionSpec:
 
     def __getitem__(function, item):
         &#34;&#34;&#34;
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
@@ -52,7 +52,7 @@ class FunctionSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         &#34;&#34;&#34;
         function[&#39;dos&#39;] = 2
         assert function[&#39;dos&#39;] == 2
@@ -64,7 +64,7 @@ class FunctionSpec:
     def reverse(function):
         &#34;&#34;&#34;
         returns a lookup (one-to-many mapping) representing
-        a mapping with domain and codomain swapped
+        a mapping with domain and domain swapped
         &#34;&#34;&#34;
         r = function.reverse()
         assert &#39;one&#39; in r[1]
@@ -104,7 +104,7 @@ class FunctionSpec:
 
     def __getitem__(function, item):
         &#34;&#34;&#34;
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
@@ -115,7 +115,7 @@ class FunctionSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         &#34;&#34;&#34;
         function[&#39;dos&#39;] = 2
         assert function[&#39;dos&#39;] == 2
@@ -127,7 +127,7 @@ class FunctionSpec:
     def reverse(function):
         &#34;&#34;&#34;
         returns a lookup (one-to-many mapping) representing
-        a mapping with domain and codomain swapped
+        a mapping with domain and domain swapped
         &#34;&#34;&#34;
         r = function.reverse()
         assert &#39;one&#39; in r[1]
@@ -177,7 +177,7 @@ def FUNCTION(Function):
 </code></dt>
 <dd>
 <div class="desc"><p>returns a lookup (one-to-many mapping) representing
-a mapping with domain and codomain swapped</p></div>
+a mapping with domain and domain swapped</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -185,7 +185,7 @@ a mapping with domain and codomain swapped</p></div>
 <pre><code class="python">def reverse(function):
     &#34;&#34;&#34;
     returns a lookup (one-to-many mapping) representing
-    a mapping with domain and codomain swapped
+    a mapping with domain and domain swapped
     &#34;&#34;&#34;
     r = function.reverse()
     assert &#39;one&#39; in r[1]

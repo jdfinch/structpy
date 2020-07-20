@@ -45,9 +45,9 @@ class EnforcerSetSpec:
 
         `add_function` and `remove_function` can be specified, causing:
 
-        when elements are added to enforcer_set: `add_function(enforcer_set, elements)`
+        when elements are added to enforcer_set: `add_function(elements)`
 
-        when elements are removed from enforcer_set: `remove_function(enforcer_set, elements)`
+        when elements are removed from enforcer_set: `remove_function(elements)`
         &#34;&#34;&#34;
 
         # In this example, we have an integer value stored in another object
@@ -56,9 +56,9 @@ class EnforcerSetSpec:
         class Other:
             def __init__(self):
                 self.value = 0
-            def add_function(self, _, elements):
+            def add_function(self, elements):
                 for element in elements: self.value += element
-            def remove_function(self, _, elements):
+            def remove_function(self, elements):
                 for element in elements: self.value -= element
 
         global other
@@ -148,9 +148,9 @@ class EnforcerSetSpec:
 
         `add_function` and `remove_function` can be specified, causing:
 
-        when elements are added to enforcer_set: `add_function(enforcer_set, elements)`
+        when elements are added to enforcer_set: `add_function(elements)`
 
-        when elements are removed from enforcer_set: `remove_function(enforcer_set, elements)`
+        when elements are removed from enforcer_set: `remove_function(elements)`
         &#34;&#34;&#34;
 
         # In this example, we have an integer value stored in another object
@@ -159,9 +159,9 @@ class EnforcerSetSpec:
         class Other:
             def __init__(self):
                 self.value = 0
-            def add_function(self, _, elements):
+            def add_function(self, elements):
                 for element in elements: self.value += element
-            def remove_function(self, _, elements):
+            def remove_function(self, elements):
                 for element in elements: self.value -= element
 
         global other
@@ -248,8 +248,8 @@ class EnforcerSetSpec:
 <dd>
 <div class="desc"><p>Create a Set with elements specified by iterable <code>elements</code>.</p>
 <p><code>add_function</code> and <code>remove_function</code> can be specified, causing:</p>
-<p>when elements are added to enforcer_set: <code>add_function(enforcer_set, elements)</code></p>
-<p>when elements are removed from enforcer_set: <code>remove_function(enforcer_set, elements)</code></p></div>
+<p>when elements are added to enforcer_set: <code>add_function(elements)</code></p>
+<p>when elements are removed from enforcer_set: <code>remove_function(elements)</code></p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -261,9 +261,9 @@ def ENFORCER_SET(EnforcerSet, elements=None, add_function=None, remove_function=
 
     `add_function` and `remove_function` can be specified, causing:
 
-    when elements are added to enforcer_set: `add_function(enforcer_set, elements)`
+    when elements are added to enforcer_set: `add_function(elements)`
 
-    when elements are removed from enforcer_set: `remove_function(enforcer_set, elements)`
+    when elements are removed from enforcer_set: `remove_function(elements)`
     &#34;&#34;&#34;
 
     # In this example, we have an integer value stored in another object
@@ -272,9 +272,9 @@ def ENFORCER_SET(EnforcerSet, elements=None, add_function=None, remove_function=
     class Other:
         def __init__(self):
             self.value = 0
-        def add_function(self, _, elements):
+        def add_function(self, elements):
             for element in elements: self.value += element
-        def remove_function(self, _, elements):
+        def remove_function(self, elements):
             for element in elements: self.value -= element
 
     global other

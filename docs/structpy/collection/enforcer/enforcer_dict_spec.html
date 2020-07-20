@@ -31,17 +31,21 @@ other = None
 
 @specification
 class EnforcerDictSpec:
+    &#34;&#34;&#34;
+    An extension of python `dict` with enforcment hooks that call functions
+    whenever items are added/overwritten or removed/overwritten.
+    &#34;&#34;&#34;
 
     @specification.init
     def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_function=None):
         &#34;&#34;&#34;
         Build a dictionary with enforcement hooks.
 
-        `add_function(enforcer_dict, added)` is a function that is called whenever a new
+        `add_function(added)` is a function that is called whenever a new
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
         as an argument.
 
-        `remove_function(enforcer_dict, removed)` is a function that is called whenever a key:value pair
+        `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
         `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
         &#34;&#34;&#34;
@@ -49,11 +53,11 @@ class EnforcerDictSpec:
             def __init__(self):
                 self.keystring = &#39;&#39;
                 self.valuesum = 0
-            def add_function(self, _, items):
+            def add_function(self, items):
                 for key, value in items:
                     self.valuesum += value
                     self.keystring += key
-            def remove_function(self, _, items):
+            def remove_function(self, items):
                 for key, value in items:
                     self.valuesum -= value
                     self.keystring = self.keystring.replace(key, &#39;&#39;)
@@ -71,7 +75,7 @@ class EnforcerDictSpec:
     def add(enforcer_dict, key, value):
         &#34;&#34;&#34;
         Adding or replacing key-value pairs in the enforcer dict results in a call
-        to `add_function(enforcer_dict, pairs)` where `pairs` is an
+        to `add_function(pairs)` where `pairs` is an
         iterable&lt;tuple&lt;key, value&gt;&gt; of all newly added key-vlaue pairs.
         &#34;&#34;&#34;
         enforcer_dict[&#39;d&#39;] = 4
@@ -85,7 +89,7 @@ class EnforcerDictSpec:
     def remove(enforcer_dict, key):
         &#34;&#34;&#34;
         Removing or overwriting key-value from the enforcer dict results in a call
-        to `remove_function(enforcer_dict, pairs)` where `pairs` is an
+        to `remove_function(pairs)` where `pairs` is an
         iterable&lt;tuple&lt;key, value&gt;&gt; of all removed/overwritten key-value pairs.
         &#34;&#34;&#34;
         del enforcer_dict[&#39;f&#39;]
@@ -114,23 +118,28 @@ class EnforcerDictSpec:
 <span>class <span class="ident">EnforcerDictSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>An extension of python <code>dict</code> with enforcment hooks that call functions
+whenever items are added/overwritten or removed/overwritten.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class EnforcerDictSpec:
+    &#34;&#34;&#34;
+    An extension of python `dict` with enforcment hooks that call functions
+    whenever items are added/overwritten or removed/overwritten.
+    &#34;&#34;&#34;
 
     @specification.init
     def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_function=None):
         &#34;&#34;&#34;
         Build a dictionary with enforcement hooks.
 
-        `add_function(enforcer_dict, added)` is a function that is called whenever a new
+        `add_function(added)` is a function that is called whenever a new
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
         as an argument.
 
-        `remove_function(enforcer_dict, removed)` is a function that is called whenever a key:value pair
+        `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
         `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
         &#34;&#34;&#34;
@@ -138,11 +147,11 @@ class EnforcerDictSpec:
             def __init__(self):
                 self.keystring = &#39;&#39;
                 self.valuesum = 0
-            def add_function(self, _, items):
+            def add_function(self, items):
                 for key, value in items:
                     self.valuesum += value
                     self.keystring += key
-            def remove_function(self, _, items):
+            def remove_function(self, items):
                 for key, value in items:
                     self.valuesum -= value
                     self.keystring = self.keystring.replace(key, &#39;&#39;)
@@ -160,7 +169,7 @@ class EnforcerDictSpec:
     def add(enforcer_dict, key, value):
         &#34;&#34;&#34;
         Adding or replacing key-value pairs in the enforcer dict results in a call
-        to `add_function(enforcer_dict, pairs)` where `pairs` is an
+        to `add_function(pairs)` where `pairs` is an
         iterable&lt;tuple&lt;key, value&gt;&gt; of all newly added key-vlaue pairs.
         &#34;&#34;&#34;
         enforcer_dict[&#39;d&#39;] = 4
@@ -174,7 +183,7 @@ class EnforcerDictSpec:
     def remove(enforcer_dict, key):
         &#34;&#34;&#34;
         Removing or overwriting key-value from the enforcer dict results in a call
-        to `remove_function(enforcer_dict, pairs)` where `pairs` is an
+        to `remove_function(pairs)` where `pairs` is an
         iterable&lt;tuple&lt;key, value&gt;&gt; of all removed/overwritten key-value pairs.
         &#34;&#34;&#34;
         del enforcer_dict[&#39;f&#39;]
@@ -218,10 +227,10 @@ class EnforcerDictSpec:
 </code></dt>
 <dd>
 <div class="desc"><p>Build a dictionary with enforcement hooks.</p>
-<p><code>add_function(enforcer_dict, added)</code> is a function that is called whenever a new
+<p><code>add_function(added)</code> is a function that is called whenever a new
 key:value pair is added, and it should expect <code>added</code> to be a <code>iterable&lt;tuple&lt;key, value&gt;&gt;</code>
 as an argument.</p>
-<p><code>remove_function(enforcer_dict, removed)</code> is a function that is called whenever a key:value pair
+<p><code>remove_function(removed)</code> is a function that is called whenever a key:value pair
 is removed
 (including those overwritten by new value), and it should expect <code>removed</code> to be
 <code>iterable&lt;tuple&lt;key:value&gt;&gt;</code> as an argument.</p></div>
@@ -234,11 +243,11 @@ def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_functi
     &#34;&#34;&#34;
     Build a dictionary with enforcement hooks.
 
-    `add_function(enforcer_dict, added)` is a function that is called whenever a new
+    `add_function(added)` is a function that is called whenever a new
     key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
     as an argument.
 
-    `remove_function(enforcer_dict, removed)` is a function that is called whenever a key:value pair
+    `remove_function(removed)` is a function that is called whenever a key:value pair
     is removed  (including those overwritten by new value), and it should expect `removed` to be
     `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
     &#34;&#34;&#34;
@@ -246,11 +255,11 @@ def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_functi
         def __init__(self):
             self.keystring = &#39;&#39;
             self.valuesum = 0
-        def add_function(self, _, items):
+        def add_function(self, items):
             for key, value in items:
                 self.valuesum += value
                 self.keystring += key
-        def remove_function(self, _, items):
+        def remove_function(self, items):
             for key, value in items:
                 self.valuesum -= value
                 self.keystring = self.keystring.replace(key, &#39;&#39;)
@@ -271,7 +280,7 @@ def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_functi
 </code></dt>
 <dd>
 <div class="desc"><p>Adding or replacing key-value pairs in the enforcer dict results in a call
-to <code>add_function(enforcer_dict, pairs)</code> where <code>pairs</code> is an
+to <code>add_function(pairs)</code> where <code>pairs</code> is an
 iterable<tuple\<key, value>> of all newly added key-vlaue pairs.</p></div>
 <details class="source">
 <summary>
@@ -280,7 +289,7 @@ iterable<tuple\<key, value>> of all newly added key-vlaue pairs.</p></div>
 <pre><code class="python">def add(enforcer_dict, key, value):
     &#34;&#34;&#34;
     Adding or replacing key-value pairs in the enforcer dict results in a call
-    to `add_function(enforcer_dict, pairs)` where `pairs` is an
+    to `add_function(pairs)` where `pairs` is an
     iterable&lt;tuple&lt;key, value&gt;&gt; of all newly added key-vlaue pairs.
     &#34;&#34;&#34;
     enforcer_dict[&#39;d&#39;] = 4
@@ -297,7 +306,7 @@ iterable<tuple\<key, value>> of all newly added key-vlaue pairs.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>Removing or overwriting key-value from the enforcer dict results in a call
-to <code>remove_function(enforcer_dict, pairs)</code> where <code>pairs</code> is an
+to <code>remove_function(pairs)</code> where <code>pairs</code> is an
 iterable<tuple\<key, value>> of all removed/overwritten key-value pairs.</p></div>
 <details class="source">
 <summary>
@@ -306,7 +315,7 @@ iterable<tuple\<key, value>> of all removed/overwritten key-value pairs.</p></di
 <pre><code class="python">def remove(enforcer_dict, key):
     &#34;&#34;&#34;
     Removing or overwriting key-value from the enforcer dict results in a call
-    to `remove_function(enforcer_dict, pairs)` where `pairs` is an
+    to `remove_function(pairs)` where `pairs` is an
     iterable&lt;tuple&lt;key, value&gt;&gt; of all removed/overwritten key-value pairs.
     &#34;&#34;&#34;
     del enforcer_dict[&#39;f&#39;]

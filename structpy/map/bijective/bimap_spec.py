@@ -36,13 +36,18 @@ class BimapSpec:
         bimap['one'] = 0
         assert bimap['one'] == 0
 
+        # many-to-one mappings not allowed, resulting in overwrite
+        bimap['zero'] = 0
+        assert bimap['zero'] == 0
+        assert 'one' not in bimap
+
     def reverse(bimap):
         """
         returns a view of the bimap that swaps
         the domain and domain for reverse mapping
         """
         r = bimap.reverse()
-        assert r[0] == 'one'
+        assert r[0] == 'zero'
         assert r[2] == 'two'
         assert r[3] == 'three'
 

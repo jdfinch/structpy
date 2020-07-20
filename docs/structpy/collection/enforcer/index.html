@@ -30,6 +30,14 @@ to enforce data consistency whenever the collection is updated.</p>
 <p>Implementation of vanilla python <code>set</code> with Enforcer hooks
 <code>add_function</code> and <code>remove_function</code>.</p>
 <p><br/>
+<br/>
+<br/></p>
+<h3 id="enforcerdict"><a href="enforcer_dict_implementation.html">EnforcerDict</a></h3>
+<p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
+<br/></p>
+<p>An extension of python <code>dict</code> with enforcment hooks that call functions
+whenever items are added/overwritten or removed/overwritten.</p>
+<p><br/>
 <br/></p>
 <details class="source">
 <summary>
@@ -41,9 +49,11 @@ to enforce data consistency whenever the collection is updated.
 &#34;&#34;&#34;
 
 from structpy.collection.enforcer.enforcer_set_implementation import EnforcerSet
+from structpy.collection.enforcer.enforcer_dict_implementation import EnforcerDict
 
 __all__ = [
-    &#39;EnforcerSet&#39;
+    &#39;EnforcerSet&#39;,
+    &#39;EnforcerDict&#39;
 ]</code></pre>
 </details>
 </section>
@@ -80,6 +90,7 @@ __all__ = [
 <div class="toc">
 <ul>
 <li><a href="#enforcerset">EnforcerSet</a></li>
+<li><a href="#enforcerdict">EnforcerDict</a></li>
 </ul>
 </div>
 <ul id="index">

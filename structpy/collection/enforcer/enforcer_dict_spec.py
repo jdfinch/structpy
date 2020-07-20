@@ -80,5 +80,55 @@ class EnforcerDictSpec:
         assert other.valuesum == 0
 
 
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerDict):
+        """
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        """
+
+        class Other:
+            def __init__(self):
+                self.keystring = ''
+                self.valuesum = 0
+            def add_function(self, items):
+                for key, value in items:
+                    if value % 2 == 0 and key.islower():
+                        self.valuesum += value
+                        self.keystring += key
+                        yield key, value
+            # noinspection PyUnreachableCode
+            def remove_function(self, items):
+                return
+                yield
+
+        global other
+        other = Other()
+
+        enforcer_dict = EnforcerDict(
+            dict(A=1, b=2, c=3, D=4),
+            add_function=other.add_function,
+            remove_function=other.remove_function
+        )
+
+        assert other.keystring == 'b'
+        assert other.valuesum == 2
+
+        del enforcer_dict['b']
+
+        assert other.keystring == 'b'
+        assert other.valuesum == 2
+
+        return enforcer_dict
+
+
+
+
+
+
+
+
+
+
 
 

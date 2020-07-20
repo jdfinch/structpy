@@ -71,3 +71,4 @@ class MapSpec:
         r = map.reverse()
         assert r['chris'] == {'avengers'}
         assert r['adam'] == {'marriage story', 'star wars'}
+        assert r['daisy'] == {'star wars'}

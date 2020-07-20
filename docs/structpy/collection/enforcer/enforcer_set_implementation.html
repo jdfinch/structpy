@@ -42,27 +42,27 @@ class EnforcerSet(set):
         l = len(self)
         set.add(self, element)
         if len(self) &gt; l and self.add_function is not None:
-            self.add_function(self, [element])
+            self.add_function([element])
 
     def remove(self, element):
         l = len(self)
         set.remove(self, element)
         if len(self) &lt; l and self.remove_function is not None:
-            self.remove_function(self, [element])
+            self.remove_function([element])
 
     def discard(self, element):
         set.discard(self, element)
         if self.remove_function is not None:
-            self.remove_function(self, [element])
+            self.remove_function([element])
 
     def pop(self):
         e = set.pop(self)
         if self.remove_function is not None:
-            self.remove_function(self, [e])
+            self.remove_function([e])
 
     def clear(self):
         if self.remove_function is not None:
-            self.remove_function(self, self)
+            self.remove_function(self)
         set.clear(self)
 
     def update(self, iterable):
@@ -70,26 +70,26 @@ class EnforcerSet(set):
         difference.difference_update(self)
         set.update(self, difference)
         if self.add_function is not None:
-            self.add_function(self, difference)
+            self.add_function(difference)
 
     def difference_update(self, iterable):
         intersection = set(iterable)
         intersection.intersection_update(self)
         set.difference_update(self, intersection)
         if self.remove_function is not None:
-            self.remove_function(self, intersection)
+            self.remove_function(intersection)
 
     def symmetric_difference_update(self, iterable):
         intersection = set(iterable)
         intersection.intersection_update(self)
         set.difference_update(self, intersection)
         if self.remove_function is not None:
-            self.remove_function(self, intersection)
+            self.remove_function(intersection)
         difference = set(iterable)
         difference.difference_update(intersection)
         set.update(self, difference)
         if self.add_function is not None:
-            self.add_function(self, difference)
+            self.add_function(difference)
 
 
 
@@ -149,27 +149,27 @@ if __name__ == &#39;__main__&#39;:
         l = len(self)
         set.add(self, element)
         if len(self) &gt; l and self.add_function is not None:
-            self.add_function(self, [element])
+            self.add_function([element])
 
     def remove(self, element):
         l = len(self)
         set.remove(self, element)
         if len(self) &lt; l and self.remove_function is not None:
-            self.remove_function(self, [element])
+            self.remove_function([element])
 
     def discard(self, element):
         set.discard(self, element)
         if self.remove_function is not None:
-            self.remove_function(self, [element])
+            self.remove_function([element])
 
     def pop(self):
         e = set.pop(self)
         if self.remove_function is not None:
-            self.remove_function(self, [e])
+            self.remove_function([e])
 
     def clear(self):
         if self.remove_function is not None:
-            self.remove_function(self, self)
+            self.remove_function(self)
         set.clear(self)
 
     def update(self, iterable):
@@ -177,30 +177,34 @@ if __name__ == &#39;__main__&#39;:
         difference.difference_update(self)
         set.update(self, difference)
         if self.add_function is not None:
-            self.add_function(self, difference)
+            self.add_function(difference)
 
     def difference_update(self, iterable):
         intersection = set(iterable)
         intersection.intersection_update(self)
         set.difference_update(self, intersection)
         if self.remove_function is not None:
-            self.remove_function(self, intersection)
+            self.remove_function(intersection)
 
     def symmetric_difference_update(self, iterable):
         intersection = set(iterable)
         intersection.intersection_update(self)
         set.difference_update(self, intersection)
         if self.remove_function is not None:
-            self.remove_function(self, intersection)
+            self.remove_function(intersection)
         difference = set(iterable)
         difference.difference_update(intersection)
         set.update(self, difference)
         if self.add_function is not None:
-            self.add_function(self, difference)</code></pre>
+            self.add_function(difference)</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
 <li>builtins.set</li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="structpy.map.map_implementation.DomainSet" href="../../map/map_implementation.html#structpy.map.map_implementation.DomainSet">DomainSet</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -218,7 +222,7 @@ if __name__ == &#39;__main__&#39;:
     l = len(self)
     set.add(self, element)
     if len(self) &gt; l and self.add_function is not None:
-        self.add_function(self, [element])</code></pre>
+        self.add_function([element])</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.remove"><code class="name flex">
@@ -235,7 +239,7 @@ if __name__ == &#39;__main__&#39;:
     l = len(self)
     set.remove(self, element)
     if len(self) &lt; l and self.remove_function is not None:
-        self.remove_function(self, [element])</code></pre>
+        self.remove_function([element])</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.discard"><code class="name flex">
@@ -251,7 +255,7 @@ if __name__ == &#39;__main__&#39;:
 <pre><code class="python">def discard(self, element):
     set.discard(self, element)
     if self.remove_function is not None:
-        self.remove_function(self, [element])</code></pre>
+        self.remove_function([element])</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.pop"><code class="name flex">
@@ -267,7 +271,7 @@ Raises KeyError if the set is empty.</p></div>
 <pre><code class="python">def pop(self):
     e = set.pop(self)
     if self.remove_function is not None:
-        self.remove_function(self, [e])</code></pre>
+        self.remove_function([e])</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.clear"><code class="name flex">
@@ -281,7 +285,7 @@ Raises KeyError if the set is empty.</p></div>
 </summary>
 <pre><code class="python">def clear(self):
     if self.remove_function is not None:
-        self.remove_function(self, self)
+        self.remove_function(self)
     set.clear(self)</code></pre>
 </details>
 </dd>
@@ -299,7 +303,7 @@ Raises KeyError if the set is empty.</p></div>
     difference.difference_update(self)
     set.update(self, difference)
     if self.add_function is not None:
-        self.add_function(self, difference)</code></pre>
+        self.add_function(difference)</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.difference_update"><code class="name flex">
@@ -316,7 +320,7 @@ Raises KeyError if the set is empty.</p></div>
     intersection.intersection_update(self)
     set.difference_update(self, intersection)
     if self.remove_function is not None:
-        self.remove_function(self, intersection)</code></pre>
+        self.remove_function(intersection)</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_implementation.EnforcerSet.symmetric_difference_update"><code class="name flex">
@@ -333,12 +337,12 @@ Raises KeyError if the set is empty.</p></div>
     intersection.intersection_update(self)
     set.difference_update(self, intersection)
     if self.remove_function is not None:
-        self.remove_function(self, intersection)
+        self.remove_function(intersection)
     difference = set(iterable)
     difference.difference_update(intersection)
     set.update(self, difference)
     if self.add_function is not None:
-        self.add_function(self, difference)</code></pre>
+        self.add_function(difference)</code></pre>
 </details>
 </dd>
 </dl>

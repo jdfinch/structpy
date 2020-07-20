@@ -30,7 +30,7 @@
 @specification
 class BimapSpec:
     &#34;&#34;&#34;
-    Finite one-to-one mapping between elements in a domain and codomain.
+    Finite one-to-one mapping between elements in a domain and domain.
     &#34;&#34;&#34;
 
     @specification.init
@@ -39,7 +39,7 @@ class BimapSpec:
 
     def getitem(bimap, item):
         &#34;&#34;&#34;
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         &#34;&#34;&#34;
         assert bimap[&#39;one&#39;] == 1
         assert bimap[&#39;two&#39;] == 2
@@ -50,7 +50,7 @@ class BimapSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         &#34;&#34;&#34;
         bimap[&#39;four&#39;] = 4
         bimap[&#39;five&#39;] = 5
@@ -61,13 +61,18 @@ class BimapSpec:
         bimap[&#39;one&#39;] = 0
         assert bimap[&#39;one&#39;] == 0
 
+        # many-to-one mappings not allowed, resulting in overwrite
+        bimap[&#39;zero&#39;] = 0
+        assert bimap[&#39;zero&#39;] == 0
+        assert &#39;one&#39; not in bimap
+
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
-        the domain and codomain for reverse mapping
+        the domain and domain for reverse mapping
         &#34;&#34;&#34;
         r = bimap.reverse()
-        assert r[0] == &#39;one&#39;
+        assert r[0] == &#39;zero&#39;
         assert r[2] == &#39;two&#39;
         assert r[3] == &#39;three&#39;</code></pre>
 </details>
@@ -85,14 +90,14 @@ class BimapSpec:
 <span>class <span class="ident">BimapSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Finite one-to-one mapping between elements in a domain and codomain.</p></div>
+<div class="desc"><p>Finite one-to-one mapping between elements in a domain and domain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class BimapSpec:
     &#34;&#34;&#34;
-    Finite one-to-one mapping between elements in a domain and codomain.
+    Finite one-to-one mapping between elements in a domain and domain.
     &#34;&#34;&#34;
 
     @specification.init
@@ -101,7 +106,7 @@ class BimapSpec:
 
     def getitem(bimap, item):
         &#34;&#34;&#34;
-        get the value in the codomain associated with a domain item
+        get the value in the domain associated with a domain item
         &#34;&#34;&#34;
         assert bimap[&#39;one&#39;] == 1
         assert bimap[&#39;two&#39;] == 2
@@ -112,7 +117,7 @@ class BimapSpec:
         add a item pair that co-map
 
         the first item is added to the domain
-        the second item is added to the codomain
+        the second item is added to the domain
         &#34;&#34;&#34;
         bimap[&#39;four&#39;] = 4
         bimap[&#39;five&#39;] = 5
@@ -123,13 +128,18 @@ class BimapSpec:
         bimap[&#39;one&#39;] = 0
         assert bimap[&#39;one&#39;] == 0
 
+        # many-to-one mappings not allowed, resulting in overwrite
+        bimap[&#39;zero&#39;] = 0
+        assert bimap[&#39;zero&#39;] == 0
+        assert &#39;one&#39; not in bimap
+
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
-        the domain and codomain for reverse mapping
+        the domain and domain for reverse mapping
         &#34;&#34;&#34;
         r = bimap.reverse()
-        assert r[0] == &#39;one&#39;
+        assert r[0] == &#39;zero&#39;
         assert r[2] == &#39;two&#39;
         assert r[3] == &#39;three&#39;</code></pre>
 </details>
@@ -175,14 +185,14 @@ def BIMAP(Bimap):
 <span>def <span class="ident">getitem</span></span>(<span>bimap, item)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>get the value in the codomain associated with a domain item</p></div>
+<div class="desc"><p>get the value in the domain associated with a domain item</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def getitem(bimap, item):
     &#34;&#34;&#34;
-    get the value in the codomain associated with a domain item
+    get the value in the domain associated with a domain item
     &#34;&#34;&#34;
     assert bimap[&#39;one&#39;] == 1
     assert bimap[&#39;two&#39;] == 2
@@ -195,7 +205,7 @@ def BIMAP(Bimap):
 <dd>
 <div class="desc"><p>add a item pair that co-map</p>
 <p>the first item is added to the domain
-the second item is added to the codomain</p></div>
+the second item is added to the domain</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -205,7 +215,7 @@ the second item is added to the codomain</p></div>
     add a item pair that co-map
 
     the first item is added to the domain
-    the second item is added to the codomain
+    the second item is added to the domain
     &#34;&#34;&#34;
     bimap[&#39;four&#39;] = 4
     bimap[&#39;five&#39;] = 5
@@ -214,7 +224,12 @@ the second item is added to the codomain</p></div>
 
     # overwrite key-value pair
     bimap[&#39;one&#39;] = 0
-    assert bimap[&#39;one&#39;] == 0</code></pre>
+    assert bimap[&#39;one&#39;] == 0
+
+    # many-to-one mappings not allowed, resulting in overwrite
+    bimap[&#39;zero&#39;] = 0
+    assert bimap[&#39;zero&#39;] == 0
+    assert &#39;one&#39; not in bimap</code></pre>
 </details>
 </dd>
 <dt id="structpy.map.bijective.bimap_spec.BimapSpec.reverse"><code class="name flex">
@@ -222,7 +237,7 @@ the second item is added to the codomain</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>returns a view of the bimap that swaps
-the domain and codomain for reverse mapping</p></div>
+the domain and domain for reverse mapping</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -230,10 +245,10 @@ the domain and codomain for reverse mapping</p></div>
 <pre><code class="python">def reverse(bimap):
     &#34;&#34;&#34;
     returns a view of the bimap that swaps
-    the domain and codomain for reverse mapping
+    the domain and domain for reverse mapping
     &#34;&#34;&#34;
     r = bimap.reverse()
-    assert r[0] == &#39;one&#39;
+    assert r[0] == &#39;zero&#39;
     assert r[2] == &#39;two&#39;
     assert r[3] == &#39;three&#39;</code></pre>
 </details>
