@@ -20,8 +20,11 @@ class Bimap(EnforcerDict):
 
     def _add_function(self, items):
         for key, value in items:
-            if key in self or value in self._reverse:
+            if key in self:
                 del self[key]
+            if value in self._reverse:
+                del self._reverse[value]
+            dict.__setitem__(self._reverse, value, key)
 
 
     def _remove_function(self, items):

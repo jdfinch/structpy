@@ -1,4 +1,3 @@
-
 from structpy import specification
 from structpy.collection.set_spec import SetSpec
 
@@ -59,15 +58,9 @@ class EnforcerSetSpec:
 
         `.add(element)` and `.update(elements)` both have this behavior
         """
-        enforcer_set.add(2)
-        assert other.value == 11
-
-        # Since 3 is already in the Set, only 4 and 6 will be added
         enforcer_set.update((3, 4, 6))
-        assert other.value == 21
-
-        assert enforcer_set == {1, 2, 3, 4, 5, 6}
-        assert sum(enforcer_set) == other.value
+        assert other.value == 22
+        assert enforcer_set == {1, 3, 4, 5, 6}
 
     def remove(enforcer_set, element):
         """
@@ -76,15 +69,49 @@ class EnforcerSetSpec:
         results in a call to `remove_function(elements)` where `elements`
         is an iterable of elements that were removed from the enforcer Set.
         """
-        enforcer_set.remove(3)
-        assert other.value == 18
-
-        # 9 was not in enforcer_set, so it is not subtracted from other.value
-        enforcer_set.difference_update((1, 2, 9))
-        assert other.value == 15
-
+        enforcer_set.difference_update((1, 3, 9))
+        assert other.value == 9
         assert enforcer_set == {4, 5, 6}
-        assert sum(enforcer_set) == other.value
+
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerSet):
+        """
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        """
+
+        class SumSet(EnforcerSet):
+
+            def __init__(self, elements=None):
+                self.sum = 0
+                EnforcerSet.__init__(self,
+                    elements,
+                    add_function=self._add,
+                    remove_function=self._remove
+                )
+
+            def _add(self, elements):
+                new = set(elements) - self
+                self.sum += sum(new)
+                return new
+
+            def _remove(self, elements):
+                existing = set(elements) & self
+                self.sum -= sum(existing)
+                return existing
+
+        sum_set = SumSet((1, 2, 3, 4, 5))
+        assert sum_set.sum == 15
+
+        sum_set.update({1, 6})
+        assert sum_set.sum == 21
+
+        sum_set.difference_update({2, 8})
+        assert sum_set.sum == 19
+
+        assert sum_set == {1, 3, 4, 5, 6}
+
+        return sum_set
 
     @specification.satisfies(SetSpec.SET_OPERATIONS)
     def SET_OPERATIONS(EnforcerSet):

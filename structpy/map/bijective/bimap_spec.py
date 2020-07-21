@@ -41,6 +41,8 @@ class BimapSpec:
         assert bimap['zero'] == 0
         assert 'one' not in bimap
 
+        assert bimap == {'zero': 0, 'two': 2, 'three': 3, 'four': 4, 'five': 5}
+
     def reverse(bimap):
         """
         returns a view of the bimap that swaps
@@ -50,6 +52,8 @@ class BimapSpec:
         assert r[0] == 'zero'
         assert r[2] == 'two'
         assert r[3] == 'three'
+
+        assert r == {0: 'zero', 2: 'two', 3: 'three', 4: 'four', 5: 'five'}
 
 
 
