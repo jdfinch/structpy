@@ -55,7 +55,7 @@ class EnforcerSet(set):
     def clear(self):
         if self.remove_function is None:
             return set.clear(self)
-        elements = self.remove_function(self, self)
+        elements = self.remove_function(self)
         if elements is not None:
             set.difference_update(self, elements)
         else:
