@@ -84,15 +84,9 @@ class EnforcerSetSpec:
 
         `.add(element)` and `.update(elements)` both have this behavior
         &#34;&#34;&#34;
-        enforcer_set.add(2)
-        assert other.value == 11
-
-        # Since 3 is already in the Set, only 4 and 6 will be added
         enforcer_set.update((3, 4, 6))
-        assert other.value == 21
-
-        assert enforcer_set == {1, 2, 3, 4, 5, 6}
-        assert sum(enforcer_set) == other.value
+        assert other.value == 22
+        assert enforcer_set == {1, 3, 4, 5, 6}
 
     def remove(enforcer_set, element):
         &#34;&#34;&#34;
@@ -101,15 +95,49 @@ class EnforcerSetSpec:
         results in a call to `remove_function(elements)` where `elements`
         is an iterable of elements that were removed from the enforcer Set.
         &#34;&#34;&#34;
-        enforcer_set.remove(3)
-        assert other.value == 18
-
-        # 9 was not in enforcer_set, so it is not subtracted from other.value
-        enforcer_set.difference_update((1, 2, 9))
-        assert other.value == 15
-
+        enforcer_set.difference_update((1, 3, 9))
+        assert other.value == 9
         assert enforcer_set == {4, 5, 6}
-        assert sum(enforcer_set) == other.value
+
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerSet):
+        &#34;&#34;&#34;
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        &#34;&#34;&#34;
+
+        class SumSet(EnforcerSet):
+
+            def __init__(self, elements=None):
+                self.sum = 0
+                EnforcerSet.__init__(self,
+                    elements,
+                    add_function=self._add,
+                    remove_function=self._remove
+                )
+
+            def _add(self, elements):
+                new = set(elements) - self
+                self.sum += sum(new)
+                return new
+
+            def _remove(self, elements):
+                existing = set(elements) &amp; self
+                self.sum -= sum(existing)
+                return existing
+
+        sum_set = SumSet((1, 2, 3, 4, 5))
+        assert sum_set.sum == 15
+
+        sum_set.update({1, 6})
+        assert sum_set.sum == 21
+
+        sum_set.difference_update({2, 8})
+        assert sum_set.sum == 19
+
+        assert sum_set == {1, 3, 4, 5, 6}
+
+        return sum_set
 
     @specification.satisfies(SetSpec.SET_OPERATIONS)
     def SET_OPERATIONS(EnforcerSet):
@@ -187,15 +215,9 @@ class EnforcerSetSpec:
 
         `.add(element)` and `.update(elements)` both have this behavior
         &#34;&#34;&#34;
-        enforcer_set.add(2)
-        assert other.value == 11
-
-        # Since 3 is already in the Set, only 4 and 6 will be added
         enforcer_set.update((3, 4, 6))
-        assert other.value == 21
-
-        assert enforcer_set == {1, 2, 3, 4, 5, 6}
-        assert sum(enforcer_set) == other.value
+        assert other.value == 22
+        assert enforcer_set == {1, 3, 4, 5, 6}
 
     def remove(enforcer_set, element):
         &#34;&#34;&#34;
@@ -204,15 +226,49 @@ class EnforcerSetSpec:
         results in a call to `remove_function(elements)` where `elements`
         is an iterable of elements that were removed from the enforcer Set.
         &#34;&#34;&#34;
-        enforcer_set.remove(3)
-        assert other.value == 18
-
-        # 9 was not in enforcer_set, so it is not subtracted from other.value
-        enforcer_set.difference_update((1, 2, 9))
-        assert other.value == 15
-
+        enforcer_set.difference_update((1, 3, 9))
+        assert other.value == 9
         assert enforcer_set == {4, 5, 6}
-        assert sum(enforcer_set) == other.value
+
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerSet):
+        &#34;&#34;&#34;
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        &#34;&#34;&#34;
+
+        class SumSet(EnforcerSet):
+
+            def __init__(self, elements=None):
+                self.sum = 0
+                EnforcerSet.__init__(self,
+                    elements,
+                    add_function=self._add,
+                    remove_function=self._remove
+                )
+
+            def _add(self, elements):
+                new = set(elements) - self
+                self.sum += sum(new)
+                return new
+
+            def _remove(self, elements):
+                existing = set(elements) &amp; self
+                self.sum -= sum(existing)
+                return existing
+
+        sum_set = SumSet((1, 2, 3, 4, 5))
+        assert sum_set.sum == 15
+
+        sum_set.update({1, 6})
+        assert sum_set.sum == 21
+
+        sum_set.difference_update({2, 8})
+        assert sum_set.sum == 19
+
+        assert sum_set == {1, 3, 4, 5, 6}
+
+        return sum_set
 
     @specification.satisfies(SetSpec.SET_OPERATIONS)
     def SET_OPERATIONS(EnforcerSet):
@@ -313,15 +369,9 @@ all newly added elements.</p>
 
     `.add(element)` and `.update(elements)` both have this behavior
     &#34;&#34;&#34;
-    enforcer_set.add(2)
-    assert other.value == 11
-
-    # Since 3 is already in the Set, only 4 and 6 will be added
     enforcer_set.update((3, 4, 6))
-    assert other.value == 21
-
-    assert enforcer_set == {1, 2, 3, 4, 5, 6}
-    assert sum(enforcer_set) == other.value</code></pre>
+    assert other.value == 22
+    assert enforcer_set == {1, 3, 4, 5, 6}</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.remove"><code class="name flex">
@@ -343,15 +393,60 @@ is an iterable of elements that were removed from the enforcer Set.</p></div>
     results in a call to `remove_function(elements)` where `elements`
     is an iterable of elements that were removed from the enforcer Set.
     &#34;&#34;&#34;
-    enforcer_set.remove(3)
-    assert other.value == 18
+    enforcer_set.difference_update((1, 3, 9))
+    assert other.value == 9
+    assert enforcer_set == {4, 5, 6}</code></pre>
+</details>
+</dd>
+<dt id="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS"><code class="name flex">
+<span>def <span class="ident">ENFORCEMENT_FUNCTIONS_AS_MODIFIERS</span></span>(<span>EnforcerSet)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enforcement functions <code>add_function</code> and <code>remove_function</code> can
+modify items added/removed by returning an updated items iterable.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@specification.init
+def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerSet):
+    &#34;&#34;&#34;
+    Enforcement functions `add_function` and `remove_function` can
+    modify items added/removed by returning an updated items iterable.
+    &#34;&#34;&#34;
 
-    # 9 was not in enforcer_set, so it is not subtracted from other.value
-    enforcer_set.difference_update((1, 2, 9))
-    assert other.value == 15
+    class SumSet(EnforcerSet):
 
-    assert enforcer_set == {4, 5, 6}
-    assert sum(enforcer_set) == other.value</code></pre>
+        def __init__(self, elements=None):
+            self.sum = 0
+            EnforcerSet.__init__(self,
+                elements,
+                add_function=self._add,
+                remove_function=self._remove
+            )
+
+        def _add(self, elements):
+            new = set(elements) - self
+            self.sum += sum(new)
+            return new
+
+        def _remove(self, elements):
+            existing = set(elements) &amp; self
+            self.sum -= sum(existing)
+            return existing
+
+    sum_set = SumSet((1, 2, 3, 4, 5))
+    assert sum_set.sum == 15
+
+    sum_set.update({1, 6})
+    assert sum_set.sum == 21
+
+    sum_set.difference_update({2, 8})
+    assert sum_set.sum == 19
+
+    assert sum_set == {1, 3, 4, 5, 6}
+
+    return sum_set</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.SET_OPERATIONS"><code class="name flex">
@@ -457,6 +552,7 @@ def SET_OPERATIONS(EnforcerSet):
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.ENFORCER_SET" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.ENFORCER_SET">ENFORCER_SET</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.add" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.add">add</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.remove" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.remove">remove</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS">ENFORCEMENT_FUNCTIONS_AS_MODIFIERS</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.SET_OPERATIONS" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.SET_OPERATIONS">SET_OPERATIONS</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.union" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.union">union</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.intersection" href="#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec.intersection">intersection</a></code></li>

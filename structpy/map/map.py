@@ -46,17 +46,26 @@ class Map(EnforcerDict):
             self.codomain = dict_like
         else:
             self.codomain = Map(self)
-            self.update({k: DomainSet(self.codomain, k, values)
-                         for k, values in dict_like.items()})
+        self.update(dict_like)
+
+    def update(self, other):
+        if hasattr(other, 'items'):
+            other = other.items()
+        for key, values in other:
+            self[key].update(values)
 
     def __getitem__(self, item):
         if item not in self:
             dict.__setitem__(self, item, DomainSet(self.codomain, item))
         return dict.__getitem__(self, item)
 
+    def __setitem__(self, key, value):
+        EnforcerDict.__setitem__(self, key, DomainSet(self.codomain, key))
+
     def _add_function(self, items):
         for key, values in items:
             self[key].update(values)
+        return []
 
     def _remove_function(self, items):
         for key, values in items:

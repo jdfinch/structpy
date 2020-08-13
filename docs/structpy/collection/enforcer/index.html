@@ -23,22 +23,22 @@ to enforce data consistency whenever the collection is updated …" />
 <section id="section-intro">
 <p>Enforcer collections have function hooks that allow the user
 to enforce data consistency whenever the collection is updated.</p>
-<p><br/></p>
-<h3 id="enforcerset"><a href="enforcer_set_implementation.html">EnforcerSet</a></h3>
+<p><br></p>
+<h3 id="enforcerset"><a href="enforcer_set.html">EnforcerSet</a></h3>
 <p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec" href="enforcer_set_spec.html#structpy.collection.enforcer.enforcer_set_spec.EnforcerSetSpec">EnforcerSetSpec</a></code>
-<br/></p>
+<br></p>
 <p>Implementation of vanilla python <code>set</code> with Enforcer hooks
-<code>add_function</code> and <code>remove_function</code>.</p>
-<p><br/>
-<br/>
-<br/></p>
-<h3 id="enforcerdict"><a href="enforcer_dict_implementation.html">EnforcerDict</a></h3>
+<code>add_function</code> and <code>remove_function</code>.
+<br>
+<br>
+<br></p>
+<h3 id="enforcerdict"><a href="enforcer_dict.html">EnforcerDict</a></h3>
 <p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
-<br/></p>
+<br></p>
 <p>An extension of python <code>dict</code> with enforcment hooks that call functions
-whenever items are added/overwritten or removed/overwritten.</p>
-<p><br/>
-<br/></p>
+whenever items are added/overwritten or removed/overwritten.
+<br>
+<br></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -48,8 +48,8 @@ Enforcer collections have function hooks that allow the user
 to enforce data consistency whenever the collection is updated.
 &#34;&#34;&#34;
 
-from structpy.collection.enforcer.enforcer_set_implementation import EnforcerSet
-from structpy.collection.enforcer.enforcer_dict_implementation import EnforcerDict
+from structpy.collection.enforcer.enforcer_set import EnforcerSet
+from structpy.collection.enforcer.enforcer_dict import EnforcerDict
 
 __all__ = [
     &#39;EnforcerSet&#39;,
@@ -60,7 +60,7 @@ __all__ = [
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_dict_implementation" href="enforcer_dict_implementation.html">enforcer_dict_implementation</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_dict" href="enforcer_dict.html">enforcer_dict</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -68,7 +68,7 @@ __all__ = [
 <dd>
 <div class="desc"></div>
 </dd>
-<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_set_implementation" href="enforcer_set_implementation.html">enforcer_set_implementation</a></code></dt>
+<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_set" href="enforcer_set.html">enforcer_set</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -101,9 +101,9 @@ __all__ = [
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="structpy.collection.enforcer.enforcer_dict_implementation" href="enforcer_dict_implementation.html">enforcer_dict_implementation</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_dict" href="enforcer_dict.html">enforcer_dict</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_dict_spec" href="enforcer_dict_spec.html">enforcer_dict_spec</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_set_implementation" href="enforcer_set_implementation.html">enforcer_set_implementation</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_set" href="enforcer_set.html">enforcer_set</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec" href="enforcer_set_spec.html">enforcer_set_spec</a></code></li>
 </ul>
 </li>

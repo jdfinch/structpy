@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.graph API documentation</title>
-<meta name="description" content="Defines graphs …" />
+<title>structpy.collection.set API documentation</title>
+<meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
@@ -17,110 +17,87 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.graph</code></h1>
+<h1 class="title">Module <code>structpy.collection.set</code></h1>
 </header>
 <section id="section-intro">
-<p>Defines graphs.</p>
-<p><br></p>
-<h3 id="undigraphspec"><a href="undirected/unlabeled/undigraph_spec.html">UndigraphSpec</a></h3>
-<p>Undirected, unlabeled undigraph.</p>
-<p>Each node must be a unique hashable object.</p>
-<p>Arcs are identified by node pairs, which are unordered.
-Therefore, arc <code>A-B</code> is the same as arc <code>B-A</code>.
-<br>
-<br></p>
-<h3 id="undigraphtypespec"><a href="undirected/unlabeled/undigraph_type_spec.html">UndigraphTypeSpec</a></h3>
-<p>Abstract class for defining an undirected, unlabeled graph like Undigraph.
-<br></p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-Defines graphs.
+<pre><code class="python">from structpy import implementation
+from structpy.collection.set_spec import SetSpec
 
-&#34;&#34;&#34;
 
-note = &#34;&#34;&#34;
-```text
-Directed
-Undirected
+@implementation(SetSpec)
+class Set(set):
+    &#34;&#34;&#34;
+    Simple implementation of FiniteSet by overriding python Set `__hash__` and `__eq__`
+    &#34;&#34;&#34;
 
-Labeled Directed
-Labeled Undirected
+    def __eq__(self, other):
+        return set.__eq__(self, other)
 
-Mapping options:
-- map (many to many)
-- function (many to one)
+    def __hash__(self):
+        return hash(frozenset(self))
 
-MultiLabeledDigraph
-source, target - label : map
-source, label - target : map
-target, label - source : map
-
-LabeledDigraph
-source, target - label : function
-source, label - target : map
-target, label - source : map
-
-ForwardLabeledDigraph
-source, target - label : function
-source, label - target : function
-target, label - source : map
-
-BackwardLabeledDigraph
-source, target - label : function
-source, label - target : map
-target, label - source : function
-
-PerfectLabeledDigraph
-source, target - label : function
-source, label - target : function
-target, label - source : function
-```&#34;&#34;&#34;
-
-from structpy.graph.undirected.unlabeled.undigraph_spec import UndigraphSpec
-from structpy.graph.undirected.unlabeled.undigraph_type_spec import UndigraphTypeSpec
-
-__all__ = [
-    &#39;UndigraphSpec&#39;,
-    &#39;UndigraphTypeSpec&#39;
-]</code></pre>
+if __name__ == &#39;__main__&#39;:
+    print(SetSpec.verify(Set))</code></pre>
 </details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt><code class="name"><a title="structpy.graph.undirected" href="undirected/index.html">undirected</a></code></dt>
+<dt id="structpy.collection.set.Set"><code class="flex name class">
+<span>class <span class="ident">Set</span></span>
+<span>(</span><span>...)</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Simple implementation of FiniteSet by overriding python Set <code>__hash__</code> and <code>__eq__</code></p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Set(set):
+    &#34;&#34;&#34;
+    Simple implementation of FiniteSet by overriding python Set `__hash__` and `__eq__`
+    &#34;&#34;&#34;
+
+    def __eq__(self, other):
+        return set.__eq__(self, other)
+
+    def __hash__(self):
+        return hash(frozenset(self))</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.set</li>
+</ul>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
 </section>
 </article>
 <nav id="sidebar">
 <h1>Index</h1>
 <div class="toc">
-<ul>
-<li><a href="#undigraphspec">UndigraphSpec</a></li>
-<li><a href="#undigraphtypespec">UndigraphTypeSpec</a></li>
-</ul>
+<ul></ul>
 </div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy" href="../index.html">structpy</a></code></li>
+<li><code><a title="structpy.collection" href="index.html">collection</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li><code><a title="structpy.graph.undirected" href="undirected/index.html">undirected</a></code></li>
+<li>
+<h4><code><a title="structpy.collection.set.Set" href="#structpy.collection.set.Set">Set</a></code></h4>
+</li>
 </ul>
 </li>
 </ul>

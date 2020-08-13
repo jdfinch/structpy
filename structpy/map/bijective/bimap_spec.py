@@ -14,7 +14,7 @@ class BimapSpec:
 
     def getitem(bimap, item):
         """
-        get the value in the domain associated with a domain item
+        Get the value in the domain associated with a domain item.
         """
         assert bimap['one'] == 1
         assert bimap['two'] == 2
@@ -22,10 +22,10 @@ class BimapSpec:
 
     def setitem(bimap, key, value):
         """
-        add a item pair that co-map
+        Add a item pair that co-map.
 
-        the first item is added to the domain
-        the second item is added to the domain
+        The first item is added to the domain.
+        The second item is added to the domain.
         """
         bimap['four'] = 4
         bimap['five'] = 5
@@ -45,8 +45,8 @@ class BimapSpec:
 
     def reverse(bimap):
         """
-        returns a view of the bimap that swaps
-        the domain and domain for reverse mapping
+        Returns a view of the bimap that swaps
+        the domain and domain for reverse mapping.
         """
         r = bimap.reverse()
         assert r[0] == 'zero'

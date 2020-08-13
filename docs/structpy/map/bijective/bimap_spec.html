@@ -66,6 +66,8 @@ class BimapSpec:
         assert bimap[&#39;zero&#39;] == 0
         assert &#39;one&#39; not in bimap
 
+        assert bimap == {&#39;zero&#39;: 0, &#39;two&#39;: 2, &#39;three&#39;: 3, &#39;four&#39;: 4, &#39;five&#39;: 5}
+
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
@@ -74,7 +76,9 @@ class BimapSpec:
         r = bimap.reverse()
         assert r[0] == &#39;zero&#39;
         assert r[2] == &#39;two&#39;
-        assert r[3] == &#39;three&#39;</code></pre>
+        assert r[3] == &#39;three&#39;
+
+        assert r == {0: &#39;zero&#39;, 2: &#39;two&#39;, 3: &#39;three&#39;, 4: &#39;four&#39;, 5: &#39;five&#39;}</code></pre>
 </details>
 </section>
 <section>
@@ -133,6 +137,8 @@ class BimapSpec:
         assert bimap[&#39;zero&#39;] == 0
         assert &#39;one&#39; not in bimap
 
+        assert bimap == {&#39;zero&#39;: 0, &#39;two&#39;: 2, &#39;three&#39;: 3, &#39;four&#39;: 4, &#39;five&#39;: 5}
+
     def reverse(bimap):
         &#34;&#34;&#34;
         returns a view of the bimap that swaps
@@ -141,7 +147,9 @@ class BimapSpec:
         r = bimap.reverse()
         assert r[0] == &#39;zero&#39;
         assert r[2] == &#39;two&#39;
-        assert r[3] == &#39;three&#39;</code></pre>
+        assert r[3] == &#39;three&#39;
+
+        assert r == {0: &#39;zero&#39;, 2: &#39;two&#39;, 3: &#39;three&#39;, 4: &#39;four&#39;, 5: &#39;five&#39;}</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -229,7 +237,9 @@ the second item is added to the domain</p></div>
     # many-to-one mappings not allowed, resulting in overwrite
     bimap[&#39;zero&#39;] = 0
     assert bimap[&#39;zero&#39;] == 0
-    assert &#39;one&#39; not in bimap</code></pre>
+    assert &#39;one&#39; not in bimap
+
+    assert bimap == {&#39;zero&#39;: 0, &#39;two&#39;: 2, &#39;three&#39;: 3, &#39;four&#39;: 4, &#39;five&#39;: 5}</code></pre>
 </details>
 </dd>
 <dt id="structpy.map.bijective.bimap_spec.BimapSpec.reverse"><code class="name flex">
@@ -250,7 +260,9 @@ the domain and domain for reverse mapping</p></div>
     r = bimap.reverse()
     assert r[0] == &#39;zero&#39;
     assert r[2] == &#39;two&#39;
-    assert r[3] == &#39;three&#39;</code></pre>
+    assert r[3] == &#39;three&#39;
+
+    assert r == {0: &#39;zero&#39;, 2: &#39;two&#39;, 3: &#39;three&#39;, 4: &#39;four&#39;, 5: &#39;five&#39;}</code></pre>
 </details>
 </dd>
 </dl>

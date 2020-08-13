@@ -28,7 +28,7 @@ def doc_str(obj):
 
 link_tmp = r'<a title="structpy.graph.undirected.unlabeled.specification.Graph" ' \
            r'href="undirected/unlabeled/specification.html#structpy.graph.undirected.unlabeled.specification.Graph">Graph</a>'
-link_template = '<a title="{}" href="{}">{}</a/>'
+link_template = '<a title="{}" href="{}">{}</a>'
 
 def relative_path(module, cls):
     module_directory = os.path.dirname(module.__file__)
@@ -57,13 +57,13 @@ def dynamic_docstrings(module):
                             implementation_string ='Implementation of ' \
                                       + ', '.join(['`{}`'.format(x.__module__ + '.' + x.__qualname__)
                                                  for x in obj.__specifications__])
-                            specification_string = '\n<br/>\n' + '\n<br/>\n'.join([s.__doc__ for s in obj.__specifications__ if s.__doc__])
-                            obj.__doc__ = implementation_string + specification_string + '\n<br/>\n' + obj.__doc__
+                            specification_string = '\n<br>\n' + '<br>\n'.join([s.__doc__ for s in obj.__specifications__ if s.__doc__])
+                            obj.__doc__ = implementation_string + specification_string + '<br>\n' + obj.__doc__
                     l = link(obj, pkg, attr)
                     d = doc_str(obj)
                     if pkg.__doc__ is None:
                         pkg.__doc__ = ''
-                    pkg.__doc__ += '\n<br/>\n{}\n{}\n<br/>'.format(l, d)
+                    pkg.__doc__ += '\n<br>\n{}\n{}\n<br>'.format(l, d)
             pkg.__pdoc__ = {x: False for x in pkg.__all__}
         pkg.__qualname__ = pkg.__name__.split('.')[-1]
 

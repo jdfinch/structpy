@@ -19,13 +19,13 @@ class MapSpec:
 
     def getitem(map, item):
         """
-        Get a reference to the elements in the domain associated
+        Get a reference to the elements in the codomain associated
         with domain element item.
         """
         assert map['avengers'] == {'scarlett', 'chris'}
         assert map['star wars'] == {'adam'}
 
-        # Elements can be added individually using the reference
+        # Elements can be added individually using the reference.
         map['avengers'].add('robert')
         assert map['avengers'] == {'scarlett', 'chris', 'robert'}
 
@@ -41,13 +41,15 @@ class MapSpec:
         map['star wars'].update(['daisy'])
         assert map['star wars'] == {'adam', 'daisy'}
 
+        # Adding an item can be done via getitem subscript as well.
+        map['captain america']
+        assert map['captain america'] == set()
+        assert 'captain america' in map
+
     def delitem(map, element):
         """
         Remove an element from the map domain.
         """
-        map['captain america']
-        assert map['captain america'] == set()
-        assert 'captain america' in map
         del map['captain america']
         assert 'captain america' not in map
 
@@ -59,9 +61,10 @@ class MapSpec:
         """
         map.update(
             {'harry potter': {'rupert', 'emma'},
-             'twilight': {'kristen'}
+             'avengers': {'sam'}
             }
         )
+        assert map['avengers'] == {'scarlett', 'chris', 'robert', 'sam'}
 
     def reverse(map):
         """

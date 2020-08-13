@@ -102,7 +102,49 @@ class EnforcerDictSpec:
 
         enforcer_dict.clear()
         assert other.keystring == &#39;&#39;
-        assert other.valuesum == 0</code></pre>
+        assert other.valuesum == 0
+
+
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerDict):
+        &#34;&#34;&#34;
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        &#34;&#34;&#34;
+
+        class Other:
+            def __init__(self):
+                self.keystring = &#39;&#39;
+                self.valuesum = 0
+            def add_function(self, items):
+                for key, value in items:
+                    if value % 2 == 0 and key.islower():
+                        self.valuesum += value
+                        self.keystring += key
+                        yield key, value
+            # noinspection PyUnreachableCode
+            def remove_function(self, items):
+                return
+                yield
+
+        global other
+        other = Other()
+
+        enforcer_dict = EnforcerDict(
+            dict(A=1, b=2, c=3, D=4),
+            add_function=other.add_function,
+            remove_function=other.remove_function
+        )
+
+        assert other.keystring == &#39;b&#39;
+        assert other.valuesum == 2
+
+        del enforcer_dict[&#39;b&#39;]
+
+        assert other.keystring == &#39;b&#39;
+        assert other.valuesum == 2
+
+        return enforcer_dict</code></pre>
 </details>
 </section>
 <section>
@@ -196,7 +238,49 @@ whenever items are added/overwritten or removed/overwritten.</p></div>
 
         enforcer_dict.clear()
         assert other.keystring == &#39;&#39;
-        assert other.valuesum == 0</code></pre>
+        assert other.valuesum == 0
+
+
+    @specification.init
+    def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerDict):
+        &#34;&#34;&#34;
+        Enforcement functions `add_function` and `remove_function` can
+        modify items added/removed by returning an updated items iterable.
+        &#34;&#34;&#34;
+
+        class Other:
+            def __init__(self):
+                self.keystring = &#39;&#39;
+                self.valuesum = 0
+            def add_function(self, items):
+                for key, value in items:
+                    if value % 2 == 0 and key.islower():
+                        self.valuesum += value
+                        self.keystring += key
+                        yield key, value
+            # noinspection PyUnreachableCode
+            def remove_function(self, items):
+                return
+                yield
+
+        global other
+        other = Other()
+
+        enforcer_dict = EnforcerDict(
+            dict(A=1, b=2, c=3, D=4),
+            add_function=other.add_function,
+            remove_function=other.remove_function
+        )
+
+        assert other.keystring == &#39;b&#39;
+        assert other.valuesum == 2
+
+        del enforcer_dict[&#39;b&#39;]
+
+        assert other.keystring == &#39;b&#39;
+        assert other.valuesum == 2
+
+        return enforcer_dict</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -331,6 +415,58 @@ iterable<tuple\<key, value>> of all removed/overwritten key-value pairs.</p></di
     assert other.valuesum == 0</code></pre>
 </details>
 </dd>
+<dt id="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS"><code class="name flex">
+<span>def <span class="ident">ENFORCEMENT_FUNCTIONS_AS_MODIFIERS</span></span>(<span>EnforcerDict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Enforcement functions <code>add_function</code> and <code>remove_function</code> can
+modify items added/removed by returning an updated items iterable.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@specification.init
+def ENFORCEMENT_FUNCTIONS_AS_MODIFIERS(EnforcerDict):
+    &#34;&#34;&#34;
+    Enforcement functions `add_function` and `remove_function` can
+    modify items added/removed by returning an updated items iterable.
+    &#34;&#34;&#34;
+
+    class Other:
+        def __init__(self):
+            self.keystring = &#39;&#39;
+            self.valuesum = 0
+        def add_function(self, items):
+            for key, value in items:
+                if value % 2 == 0 and key.islower():
+                    self.valuesum += value
+                    self.keystring += key
+                    yield key, value
+        # noinspection PyUnreachableCode
+        def remove_function(self, items):
+            return
+            yield
+
+    global other
+    other = Other()
+
+    enforcer_dict = EnforcerDict(
+        dict(A=1, b=2, c=3, D=4),
+        add_function=other.add_function,
+        remove_function=other.remove_function
+    )
+
+    assert other.keystring == &#39;b&#39;
+    assert other.valuesum == 2
+
+    del enforcer_dict[&#39;b&#39;]
+
+    assert other.keystring == &#39;b&#39;
+    assert other.valuesum == 2
+
+    return enforcer_dict</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -356,6 +492,7 @@ iterable<tuple\<key, value>> of all removed/overwritten key-value pairs.</p></di
 <li><code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.ENFORCER_DICT" href="#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.ENFORCER_DICT">ENFORCER_DICT</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.add" href="#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.add">add</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.remove" href="#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.remove">remove</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS" href="#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec.ENFORCEMENT_FUNCTIONS_AS_MODIFIERS">ENFORCEMENT_FUNCTIONS_AS_MODIFIERS</a></code></li>
 </ul>
 </li>
 </ul>

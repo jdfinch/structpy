@@ -5,29 +5,29 @@ from structpy import specification
 @specification
 class FunctionSpec:
     """
-    Function Mapping
-
-    many-to-one mapping between keys and values
+    Many-to-one mapping between elements in a domain to elements in a codomain.
     """
 
     @specification.init
     def FUNCTION(Function):
-        return Function({'one': 1, 'two': 2, 'uno': 1})
+        function = Function({
+            'one': 1,
+            'two': 2,
+            'uno': 1
+        })
+        return function
 
-    def __getitem__(function, item):
+    def getitem(function, item):
         """
-        get the value in the domain associated with a domain item
+        Get the value in the domain associated with a domain item.
         """
         assert function['one'] == 1
         assert function['two'] == 2
         assert function['three'] == 3
 
-    def __setitem__(function, key, value):
+    def setitem(function, key, value):
         """
-        add a item pair that co-map
-
-        the first item is added to the domain
-        the second item is added to the domain
+        Add a item pair that co-map.
         """
         function['dos'] = 2
         assert function['dos'] == 2
@@ -36,10 +36,17 @@ class FunctionSpec:
         function['dos'] = 3
         assert function['dos'] == 3
 
+    def delitem(function, element):
+        """
+        Remove an item pair from the function by key (domain element).
+        """
+        del function['three']
+        assert 'three' not in function
+
     def reverse(function):
         """
-        returns a lookup (one-to-many mapping) representing
-        a mapping with domain and domain swapped
+        Returns a lookup (one-to-many mapping) representing
+        a function with domain and codomain swapped.
         """
         r = function.reverse()
         assert 'one' in r[1]
