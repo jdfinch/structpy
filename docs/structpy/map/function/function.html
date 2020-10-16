@@ -43,17 +43,22 @@ class Function(EnforcerDict):
         self.codomain = None
         if hasattr(dict_like, &#39;codomain&#39;):
             self.codomain = dict_like
+            for key, values in self.codomain.items():
+                for value in values:
+                    self[value] = key
         else:
             self.codomain = index.Index(self)
-        self.update(dict_like)
+            self.update(dict_like)
 
     def _add_function(self, items):
         for key, value in items:
-            self.codomain[value].add(key)
+            set.add(self.codomain[value], key)
 
     def _remove_function(self, items):
         for key, value in items:
-            self.codomain[value].remove(key)
+            set.discard(self.codomain[value], key)
+            if len(self.codomain[value]) == 0:
+                del self.codomain[value]
 
     def reverse(self):
         return self.codomain
@@ -77,10 +82,9 @@ if __name__ == &#39;__main__&#39;:
 <span>(</span><span>dict_like=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="../../collection/enforcer/enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
+<div class="desc"><p>Implementation of <code><a title="structpy.map.function.function_spec.FunctionSpec" href="function_spec.html#structpy.map.function.function_spec.FunctionSpec">FunctionSpec</a></code>
 <br></p>
-<pre><code>An extension of python &lt;code&gt;dict&lt;/code&gt; with enforcment hooks that call functions
-whenever items are added/overwritten or removed/overwritten.
+<pre><code>Many-to-one mapping between elements in a domain to elements in a codomain.
 &lt;br&gt;
 </code></pre></div>
 <details class="source">
@@ -97,17 +101,22 @@ whenever items are added/overwritten or removed/overwritten.
         self.codomain = None
         if hasattr(dict_like, &#39;codomain&#39;):
             self.codomain = dict_like
+            for key, values in self.codomain.items():
+                for value in values:
+                    self[value] = key
         else:
             self.codomain = index.Index(self)
-        self.update(dict_like)
+            self.update(dict_like)
 
     def _add_function(self, items):
         for key, value in items:
-            self.codomain[value].add(key)
+            set.add(self.codomain[value], key)
 
     def _remove_function(self, items):
         for key, value in items:
-            self.codomain[value].remove(key)
+            set.discard(self.codomain[value], key)
+            if len(self.codomain[value]) == 0:
+                del self.codomain[value]
 
     def reverse(self):
         return self.codomain</code></pre>

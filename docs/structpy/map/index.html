@@ -34,6 +34,20 @@
 <br></p>
 <p>Finite one-to-one mapping between elements in a domain and domain.
 <br>
+<br>
+<br></p>
+<h3 id="index"><a href="index/index.html">Index</a></h3>
+<p>Implementation of <code><a title="structpy.map.index.index_spec.IndexSpec" href="index/index_spec.html#structpy.map.index.index_spec.IndexSpec">IndexSpec</a></code>
+<br></p>
+<p>Finite one-to-many mapping between a domain and codomain.
+<br>
+<br>
+<br></p>
+<h3 id="function"><a href="function/function.html">Function</a></h3>
+<p>Implementation of <code><a title="structpy.map.function.function_spec.FunctionSpec" href="function/function_spec.html#structpy.map.function.function_spec.FunctionSpec">FunctionSpec</a></code>
+<br></p>
+<p>Many-to-one mapping between elements in a domain to elements in a codomain.
+<br>
 <br></p>
 <details class="source">
 <summary>
@@ -45,10 +59,14 @@ Mapping elements between a domain and domain.
 
 from structpy.map.map import Map
 from structpy.map.bijective.bimap import Bimap
+from structpy.map.index.index import Index
+from structpy.map.function.function import Function
 
 __all__ = [
     &#39;Map&#39;,
-    &#39;Bimap&#39;
+    &#39;Bimap&#39;,
+    &#39;Index&#39;,
+    &#39;Function&#39;
 ]</code></pre>
 </details>
 </section>
@@ -91,6 +109,8 @@ i.e. the mapping is one-to-one and onto …</p></div>
 <ul>
 <li><a href="#map">Map</a></li>
 <li><a href="#bimap">Bimap</a></li>
+<li><a href="#index">Index</a></li>
+<li><a href="#function">Function</a></li>
 </ul>
 </div>
 <ul id="index">

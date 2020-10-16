@@ -49,7 +49,6 @@ class FunctionSpec:
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
-        assert function[&#39;three&#39;] == 3
 
     def setitem(function, key, value):
         &#34;&#34;&#34;
@@ -66,8 +65,19 @@ class FunctionSpec:
         &#34;&#34;&#34;
         Remove an item pair from the function by key (domain element).
         &#34;&#34;&#34;
-        del function[&#39;three&#39;]
-        assert &#39;three&#39; not in function
+        del function[&#39;two&#39;]
+        assert &#39;two&#39; not in function
+
+    def reverse(function):
+        &#34;&#34;&#34;
+        Reverses a `Function` into an `Index` representation.
+        &#34;&#34;&#34;
+        idx = function.reverse()
+        assert &#39;one&#39; in idx[1]
+        assert &#39;uno&#39; in idx[1]
+        assert &#39;dos&#39; in idx[3]
+        del idx[3]
+        assert &#39;dos&#39; not in function
 
     # @specification.satisfies(indexspec.IndexSpec.INDEX)
     # def REVERSE(Function):
@@ -123,7 +133,6 @@ class FunctionSpec:
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
-        assert function[&#39;three&#39;] == 3
 
     def setitem(function, key, value):
         &#34;&#34;&#34;
@@ -140,8 +149,19 @@ class FunctionSpec:
         &#34;&#34;&#34;
         Remove an item pair from the function by key (domain element).
         &#34;&#34;&#34;
-        del function[&#39;three&#39;]
-        assert &#39;three&#39; not in function</code></pre>
+        del function[&#39;two&#39;]
+        assert &#39;two&#39; not in function
+
+    def reverse(function):
+        &#34;&#34;&#34;
+        Reverses a `Function` into an `Index` representation.
+        &#34;&#34;&#34;
+        idx = function.reverse()
+        assert &#39;one&#39; in idx[1]
+        assert &#39;uno&#39; in idx[1]
+        assert &#39;dos&#39; in idx[3]
+        del idx[3]
+        assert &#39;dos&#39; not in function</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -200,8 +220,7 @@ def FUNCTION(Function):
     Get the value in the domain associated with a domain item.
     &#34;&#34;&#34;
     assert function[&#39;one&#39;] == 1
-    assert function[&#39;two&#39;] == 2
-    assert function[&#39;three&#39;] == 3</code></pre>
+    assert function[&#39;two&#39;] == 2</code></pre>
 </details>
 </dd>
 <dt id="structpy.map.function.function_spec.FunctionSpec.setitem"><code class="name flex">
@@ -238,8 +257,29 @@ def FUNCTION(Function):
     &#34;&#34;&#34;
     Remove an item pair from the function by key (domain element).
     &#34;&#34;&#34;
-    del function[&#39;three&#39;]
-    assert &#39;three&#39; not in function</code></pre>
+    del function[&#39;two&#39;]
+    assert &#39;two&#39; not in function</code></pre>
+</details>
+</dd>
+<dt id="structpy.map.function.function_spec.FunctionSpec.reverse"><code class="name flex">
+<span>def <span class="ident">reverse</span></span>(<span>function)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reverses a <code>Function</code> into an <code>Index</code> representation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reverse(function):
+    &#34;&#34;&#34;
+    Reverses a `Function` into an `Index` representation.
+    &#34;&#34;&#34;
+    idx = function.reverse()
+    assert &#39;one&#39; in idx[1]
+    assert &#39;uno&#39; in idx[1]
+    assert &#39;dos&#39; in idx[3]
+    del idx[3]
+    assert &#39;dos&#39; not in function</code></pre>
 </details>
 </dd>
 </dl>
@@ -262,12 +302,13 @@ def FUNCTION(Function):
 <ul>
 <li>
 <h4><code><a title="structpy.map.function.function_spec.FunctionSpec" href="#structpy.map.function.function_spec.FunctionSpec">FunctionSpec</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.verify" href="#structpy.map.function.function_spec.FunctionSpec.verify">verify</a></code></li>
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.FUNCTION" href="#structpy.map.function.function_spec.FunctionSpec.FUNCTION">FUNCTION</a></code></li>
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.getitem" href="#structpy.map.function.function_spec.FunctionSpec.getitem">getitem</a></code></li>
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.setitem" href="#structpy.map.function.function_spec.FunctionSpec.setitem">setitem</a></code></li>
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.delitem" href="#structpy.map.function.function_spec.FunctionSpec.delitem">delitem</a></code></li>
+<li><code><a title="structpy.map.function.function_spec.FunctionSpec.reverse" href="#structpy.map.function.function_spec.FunctionSpec.reverse">reverse</a></code></li>
 </ul>
 </li>
 </ul>

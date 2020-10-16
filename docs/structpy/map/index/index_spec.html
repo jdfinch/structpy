@@ -105,6 +105,18 @@ class IndexSpec:
         assert index[1] == {&#39;one&#39;, &#39;uno&#39;, &#39;hana&#39;, &#39;1&#39;}
         assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}
 
+    def reverse(index):
+        &#34;&#34;&#34;
+        Reverse an index into a `Function` representation.
+        &#34;&#34;&#34;
+        f = index.reverse()
+        assert f[&#39;one&#39;] == 1
+        assert f[&#39;uno&#39;] == 1
+        assert f[&#39;five&#39;] == 5
+        del f[&#39;one&#39;]
+        assert &#39;one&#39; not in index[1]
+
+
     # @specification.satisfies(functionspec.FunctionSpec.FUNCTION)
     # def REVERSE(Index):
     #     &#34;&#34;&#34;
@@ -212,7 +224,18 @@ class IndexSpec:
         )
         assert index[0] == {&#39;zero&#39;}
         assert index[1] == {&#39;one&#39;, &#39;uno&#39;, &#39;hana&#39;, &#39;1&#39;}
-        assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}</code></pre>
+        assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}
+
+    def reverse(index):
+        &#34;&#34;&#34;
+        Reverse an index into a `Function` representation.
+        &#34;&#34;&#34;
+        f = index.reverse()
+        assert f[&#39;one&#39;] == 1
+        assert f[&#39;uno&#39;] == 1
+        assert f[&#39;five&#39;] == 5
+        del f[&#39;one&#39;]
+        assert &#39;one&#39; not in index[1]</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -364,6 +387,27 @@ a direct reference to the provided values object.</p></div>
     assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}</code></pre>
 </details>
 </dd>
+<dt id="structpy.map.index.index_spec.IndexSpec.reverse"><code class="name flex">
+<span>def <span class="ident">reverse</span></span>(<span>index)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Reverse an index into a <code>Function</code> representation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def reverse(index):
+    &#34;&#34;&#34;
+    Reverse an index into a `Function` representation.
+    &#34;&#34;&#34;
+    f = index.reverse()
+    assert f[&#39;one&#39;] == 1
+    assert f[&#39;uno&#39;] == 1
+    assert f[&#39;five&#39;] == 5
+    del f[&#39;one&#39;]
+    assert &#39;one&#39; not in index[1]</code></pre>
+</details>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -391,6 +435,7 @@ a direct reference to the provided values object.</p></div>
 <li><code><a title="structpy.map.index.index_spec.IndexSpec.additem" href="#structpy.map.index.index_spec.IndexSpec.additem">additem</a></code></li>
 <li><code><a title="structpy.map.index.index_spec.IndexSpec.delitem" href="#structpy.map.index.index_spec.IndexSpec.delitem">delitem</a></code></li>
 <li><code><a title="structpy.map.index.index_spec.IndexSpec.update" href="#structpy.map.index.index_spec.IndexSpec.update">update</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.reverse" href="#structpy.map.index.index_spec.IndexSpec.reverse">reverse</a></code></li>
 </ul>
 </li>
 </ul>

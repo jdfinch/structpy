@@ -42,9 +42,17 @@ class FunctionSpec:
         """
         del function['two']
         assert 'two' not in function
-        print('Function:')
-        print(function)
-        print(function.codomain)
+
+    def reverse(function):
+        """
+        Reverses a `Function` into an `Index` representation.
+        """
+        idx = function.reverse()
+        assert 'one' in idx[1]
+        assert 'uno' in idx[1]
+        assert 'dos' in idx[3]
+        del idx[3]
+        assert 'dos' not in function
 
     # @specification.satisfies(indexspec.IndexSpec.INDEX)
     # def REVERSE(Function):

@@ -69,6 +69,8 @@ class Map(EnforcerDict):
         self.codomain = None
         if hasattr(dict_like, &#39;codomain&#39;):
             self.codomain = dict_like
+            for key, values in self.codomain.items():
+                self[key] = values
         else:
             self.codomain = Map(self)
             self.update(dict_like)
@@ -269,6 +271,8 @@ Raises KeyError if the set is empty.</p></div>
         self.codomain = None
         if hasattr(dict_like, &#39;codomain&#39;):
             self.codomain = dict_like
+            for key, values in self.codomain.items():
+                self[key] = values
         else:
             self.codomain = Map(self)
             self.update(dict_like)

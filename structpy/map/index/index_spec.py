@@ -80,6 +80,17 @@ class IndexSpec:
         assert index[1] == {'one', 'uno', 'hana', '1'}
         assert index[5] == {'five', 'cinco'}
 
+    def reverse(index):
+        """
+        Reverse an index into a `Function` representation.
+        """
+        f = index.reverse()
+        assert f['one'] == 1
+        assert f['uno'] == 1
+        assert f['five'] == 5
+        del f['one']
+        assert 'one' not in index[1]
+
 
     # @specification.satisfies(functionspec.FunctionSpec.FUNCTION)
     # def REVERSE(Index):

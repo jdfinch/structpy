@@ -44,15 +44,18 @@ class DomainSet(EnforcerSet):
             self.update(elements)
 
     def _add_function(self, elements):
+        for element in elements:
+            if element in self.domain:
+                del self.domain[element]
         elements = set(elements) - self
         for e in elements:
-            self.domain[e] = self.element
+            dict.__setitem__(self.domain, e, self.element)
         return elements
 
     def _remove_function(self, elements):
         elements = set(elements) &amp; self
         for e in elements:
-            del self.domain[e]
+            dict.__delitem__(self.domain, e)
         return elements
 
 
@@ -140,15 +143,18 @@ if __name__ == &#39;__main__&#39;:
             self.update(elements)
 
     def _add_function(self, elements):
+        for element in elements:
+            if element in self.domain:
+                del self.domain[element]
         elements = set(elements) - self
         for e in elements:
-            self.domain[e] = self.element
+            dict.__setitem__(self.domain, e, self.element)
         return elements
 
     def _remove_function(self, elements):
         elements = set(elements) &amp; self
         for e in elements:
-            del self.domain[e]
+            dict.__delitem__(self.domain, e)
         return elements</code></pre>
 </details>
 <h3>Ancestors</h3>
@@ -246,10 +252,9 @@ Raises KeyError if the set is empty.</p></div>
 <span>(</span><span>dict_like=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="../../collection/enforcer/enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
+<div class="desc"><p>Implementation of <code><a title="structpy.map.index.index_spec.IndexSpec" href="index_spec.html#structpy.map.index.index_spec.IndexSpec">IndexSpec</a></code>
 <br></p>
-<pre><code>An extension of python &lt;code&gt;dict&lt;/code&gt; with enforcment hooks that call functions
-whenever items are added/overwritten or removed/overwritten.
+<pre><code>Finite one-to-many mapping between a domain and codomain.
 &lt;br&gt;
 </code></pre></div>
 <details class="source">

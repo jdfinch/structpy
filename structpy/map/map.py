@@ -44,6 +44,8 @@ class Map(EnforcerDict):
         self.codomain = None
         if hasattr(dict_like, 'codomain'):
             self.codomain = dict_like
+            for key, values in self.codomain.items():
+                self[key] = values
         else:
             self.codomain = Map(self)
             self.update(dict_like)
