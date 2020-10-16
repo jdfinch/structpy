@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.map.map_spec API documentation</title>
+<title>structpy.map.index.index_spec API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.map.map_spec</code></h1>
+<h1 class="title">Module <code>structpy.map.index.index_spec</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -25,36 +25,37 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from structpy import specification
+import structpy.map.function.function_spec as functionspec
 
 
 @specification
-class MapSpec:
+class IndexSpec:
     &#34;&#34;&#34;
-    Finite many-to-many mapping between a domain and domain.
+    Finite one-to-many mapping between a domain and codomain.
     &#34;&#34;&#34;
 
     @specification.init
-    def MAP(Map, mapping=None):
-        map = Map({
-                &#39;avengers&#39;: {&#39;scarlett&#39;, &#39;chris&#39;},
-                &#39;marriage story&#39;: {&#39;scarlett&#39;, &#39;adam&#39;},
-                &#39;star wars&#39;: {&#39;adam&#39;}
-            })
-        return map
+    def INDEX(Index, mapping=None):
+        index = Index({
+            1: {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;},
+            2: {&#39;dos&#39;, &#39;two&#39;},
+            3: {&#39;three&#39;}
+        })
+        return index
 
-    def getitem(map, item):
+    def getitem(index, item):
         &#34;&#34;&#34;
         Get a reference to the elements in the codomain associated
-        with domain element item.
+        with a domain element.
         &#34;&#34;&#34;
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
-        assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
+        assert index[1] == {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;}
+        assert index[3] == {&#39;three&#39;}
 
         # Elements can be added individually using the reference.
-        map[&#39;avengers&#39;].add(&#39;robert&#39;)
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;}
+        index[3].add(&#39;tres&#39;)
+        assert &#39;tres&#39; in index[3]
 
-    def additem(map, key, values):
+    def additem(index, key, values):
         &#34;&#34;&#34;
         Set the domain elements associated with a key to all the
         elements present in values.
@@ -62,44 +63,61 @@ class MapSpec:
         Each element of values is added to the domain, without
         a direct reference to the provided values object.
         &#34;&#34;&#34;
-        map[&#39;star wars&#39;].add(&#39;adam&#39;)
-        map[&#39;star wars&#39;].update([&#39;daisy&#39;])
-        assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
+        index[4].add(&#39;four&#39;)
+        index[4].update([&#39;cuatro&#39;, &#39;net&#39;])
+        assert 4 in index
+        assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-        # Adding an item can be done via getitem subscript as well.
-        map[&#39;captain america&#39;]
-        assert map[&#39;captain america&#39;] == set()
-        assert &#39;captain america&#39; in map
+        # Adding an item can be done via subscript as well.
+        index[5]
+        assert 5 in index
+        assert index[5] == set()
 
-    def delitem(map, element):
+        # Many-to-one consistency enforced when adding
+        index[5].add(&#39;cuatro&#39;)
+        assert &#39;cuatro&#39; not in index[4]
+        assert &#39;cuatro&#39; in index[5]
+        index[4].add(&#39;cuatro&#39;)
+        assert &#39;cuatro&#39; in index[4]
+        assert &#39;cuatro&#39; not in index[5]
+
+    def delitem(index, item):
         &#34;&#34;&#34;
-        Remove an element from the map domain.
+        Remove an element from the index domain.
         &#34;&#34;&#34;
-        del map[&#39;captain america&#39;]
-        assert &#39;captain america&#39; not in map
+        del index[2]
+        assert 2 not in index
 
-    def update(map, mapping):
+    def update(index, mapping):
         &#34;&#34;&#34;
         Join a many-to-many mapping of elements to the map.
 
         `mapping` should be like `dict&lt;key: iterable&lt;value&gt;&gt;`.
         &#34;&#34;&#34;
-        map.update(
-            {&#39;harry potter&#39;: {&#39;rupert&#39;, &#39;emma&#39;},
-             &#39;avengers&#39;: {&#39;sam&#39;}
+        index.update(
+            {
+                0: {&#39;zero&#39;},
+                1: {&#39;1&#39;},
+                5: {&#39;five&#39;, &#39;cinco&#39;}
             }
         )
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;, &#39;sam&#39;}
+        assert index[0] == {&#39;zero&#39;}
+        assert index[1] == {&#39;one&#39;, &#39;uno&#39;, &#39;hana&#39;, &#39;1&#39;}
+        assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}
 
-    def reverse(map):
-        &#34;&#34;&#34;
-        Returns a view of the map that swaps the domain and domain
-        for reverse mapping.
-        &#34;&#34;&#34;
-        r = map.reverse()
-        assert r[&#39;chris&#39;] == {&#39;avengers&#39;}
-        assert r[&#39;adam&#39;] == {&#39;marriage story&#39;, &#39;star wars&#39;}
-        assert r[&#39;daisy&#39;] == {&#39;star wars&#39;}</code></pre>
+    # @specification.satisfies(functionspec.FunctionSpec.FUNCTION)
+    # def REVERSE(Index):
+    #     &#34;&#34;&#34;
+    #     Index reverses to a Function.
+    #     &#34;&#34;&#34;
+    #     return Index(
+    #         {
+    #             1: {&#39;one&#39;, &#39;uno&#39;},
+    #             2: {&#39;two&#39;}
+    #         }
+    #     ).reverse()
+
+# functionspec.FunctionSpec.REVERSE = specification.satisfies(IndexSpec.INDEX)</code></pre>
 </details>
 </section>
 <section>
@@ -111,42 +129,42 @@ class MapSpec:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.map.map_spec.MapSpec"><code class="flex name class">
-<span>class <span class="ident">MapSpec</span></span>
+<dt id="structpy.map.index.index_spec.IndexSpec"><code class="flex name class">
+<span>class <span class="ident">IndexSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Finite many-to-many mapping between a domain and domain.</p></div>
+<div class="desc"><p>Finite one-to-many mapping between a domain and codomain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MapSpec:
+<pre><code class="python">class IndexSpec:
     &#34;&#34;&#34;
-    Finite many-to-many mapping between a domain and domain.
+    Finite one-to-many mapping between a domain and codomain.
     &#34;&#34;&#34;
 
     @specification.init
-    def MAP(Map, mapping=None):
-        map = Map({
-                &#39;avengers&#39;: {&#39;scarlett&#39;, &#39;chris&#39;},
-                &#39;marriage story&#39;: {&#39;scarlett&#39;, &#39;adam&#39;},
-                &#39;star wars&#39;: {&#39;adam&#39;}
-            })
-        return map
+    def INDEX(Index, mapping=None):
+        index = Index({
+            1: {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;},
+            2: {&#39;dos&#39;, &#39;two&#39;},
+            3: {&#39;three&#39;}
+        })
+        return index
 
-    def getitem(map, item):
+    def getitem(index, item):
         &#34;&#34;&#34;
         Get a reference to the elements in the codomain associated
-        with domain element item.
+        with a domain element.
         &#34;&#34;&#34;
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
-        assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
+        assert index[1] == {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;}
+        assert index[3] == {&#39;three&#39;}
 
         # Elements can be added individually using the reference.
-        map[&#39;avengers&#39;].add(&#39;robert&#39;)
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;}
+        index[3].add(&#39;tres&#39;)
+        assert &#39;tres&#39; in index[3]
 
-    def additem(map, key, values):
+    def additem(index, key, values):
         &#34;&#34;&#34;
         Set the domain elements associated with a key to all the
         elements present in values.
@@ -154,48 +172,51 @@ class MapSpec:
         Each element of values is added to the domain, without
         a direct reference to the provided values object.
         &#34;&#34;&#34;
-        map[&#39;star wars&#39;].add(&#39;adam&#39;)
-        map[&#39;star wars&#39;].update([&#39;daisy&#39;])
-        assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
+        index[4].add(&#39;four&#39;)
+        index[4].update([&#39;cuatro&#39;, &#39;net&#39;])
+        assert 4 in index
+        assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-        # Adding an item can be done via getitem subscript as well.
-        map[&#39;captain america&#39;]
-        assert map[&#39;captain america&#39;] == set()
-        assert &#39;captain america&#39; in map
+        # Adding an item can be done via subscript as well.
+        index[5]
+        assert 5 in index
+        assert index[5] == set()
 
-    def delitem(map, element):
+        # Many-to-one consistency enforced when adding
+        index[5].add(&#39;cuatro&#39;)
+        assert &#39;cuatro&#39; not in index[4]
+        assert &#39;cuatro&#39; in index[5]
+        index[4].add(&#39;cuatro&#39;)
+        assert &#39;cuatro&#39; in index[4]
+        assert &#39;cuatro&#39; not in index[5]
+
+    def delitem(index, item):
         &#34;&#34;&#34;
-        Remove an element from the map domain.
+        Remove an element from the index domain.
         &#34;&#34;&#34;
-        del map[&#39;captain america&#39;]
-        assert &#39;captain america&#39; not in map
+        del index[2]
+        assert 2 not in index
 
-    def update(map, mapping):
+    def update(index, mapping):
         &#34;&#34;&#34;
         Join a many-to-many mapping of elements to the map.
 
         `mapping` should be like `dict&lt;key: iterable&lt;value&gt;&gt;`.
         &#34;&#34;&#34;
-        map.update(
-            {&#39;harry potter&#39;: {&#39;rupert&#39;, &#39;emma&#39;},
-             &#39;avengers&#39;: {&#39;sam&#39;}
+        index.update(
+            {
+                0: {&#39;zero&#39;},
+                1: {&#39;1&#39;},
+                5: {&#39;five&#39;, &#39;cinco&#39;}
             }
         )
-        assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;, &#39;sam&#39;}
-
-    def reverse(map):
-        &#34;&#34;&#34;
-        Returns a view of the map that swaps the domain and domain
-        for reverse mapping.
-        &#34;&#34;&#34;
-        r = map.reverse()
-        assert r[&#39;chris&#39;] == {&#39;avengers&#39;}
-        assert r[&#39;adam&#39;] == {&#39;marriage story&#39;, &#39;star wars&#39;}
-        assert r[&#39;daisy&#39;] == {&#39;star wars&#39;}</code></pre>
+        assert index[0] == {&#39;zero&#39;}
+        assert index[1] == {&#39;one&#39;, &#39;uno&#39;, &#39;hana&#39;, &#39;1&#39;}
+        assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
-<dt id="structpy.map.map_spec.MapSpec.verify"><code class="name flex">
+<dt id="structpy.map.index.index_spec.IndexSpec.verify"><code class="name flex">
 <span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
 </code></dt>
 <dd>
@@ -217,8 +238,8 @@ class MapSpec:
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.map.map_spec.MapSpec.MAP"><code class="name flex">
-<span>def <span class="ident">MAP</span></span>(<span>Map, mapping=None)</span>
+<dt id="structpy.map.index.index_spec.IndexSpec.INDEX"><code class="name flex">
+<span>def <span class="ident">INDEX</span></span>(<span>Index, mapping=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -227,40 +248,40 @@ class MapSpec:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@specification.init
-def MAP(Map, mapping=None):
-    map = Map({
-            &#39;avengers&#39;: {&#39;scarlett&#39;, &#39;chris&#39;},
-            &#39;marriage story&#39;: {&#39;scarlett&#39;, &#39;adam&#39;},
-            &#39;star wars&#39;: {&#39;adam&#39;}
-        })
-    return map</code></pre>
+def INDEX(Index, mapping=None):
+    index = Index({
+        1: {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;},
+        2: {&#39;dos&#39;, &#39;two&#39;},
+        3: {&#39;three&#39;}
+    })
+    return index</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.map_spec.MapSpec.getitem"><code class="name flex">
-<span>def <span class="ident">getitem</span></span>(<span>map, item)</span>
+<dt id="structpy.map.index.index_spec.IndexSpec.getitem"><code class="name flex">
+<span>def <span class="ident">getitem</span></span>(<span>index, item)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get a reference to the elements in the codomain associated
-with domain element item.</p></div>
+with a domain element.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getitem(map, item):
+<pre><code class="python">def getitem(index, item):
     &#34;&#34;&#34;
     Get a reference to the elements in the codomain associated
-    with domain element item.
+    with a domain element.
     &#34;&#34;&#34;
-    assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
-    assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
+    assert index[1] == {&#39;one&#39;, &#39;hana&#39;, &#39;uno&#39;}
+    assert index[3] == {&#39;three&#39;}
 
     # Elements can be added individually using the reference.
-    map[&#39;avengers&#39;].add(&#39;robert&#39;)
-    assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;}</code></pre>
+    index[3].add(&#39;tres&#39;)
+    assert &#39;tres&#39; in index[3]</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.map_spec.MapSpec.additem"><code class="name flex">
-<span>def <span class="ident">additem</span></span>(<span>map, key, values)</span>
+<dt id="structpy.map.index.index_spec.IndexSpec.additem"><code class="name flex">
+<span>def <span class="ident">additem</span></span>(<span>index, key, values)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Set the domain elements associated with a key to all the
@@ -271,7 +292,7 @@ a direct reference to the provided values object.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def additem(map, key, values):
+<pre><code class="python">def additem(index, key, values):
     &#34;&#34;&#34;
     Set the domain elements associated with a key to all the
     elements present in values.
@@ -279,35 +300,44 @@ a direct reference to the provided values object.</p></div>
     Each element of values is added to the domain, without
     a direct reference to the provided values object.
     &#34;&#34;&#34;
-    map[&#39;star wars&#39;].add(&#39;adam&#39;)
-    map[&#39;star wars&#39;].update([&#39;daisy&#39;])
-    assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
+    index[4].add(&#39;four&#39;)
+    index[4].update([&#39;cuatro&#39;, &#39;net&#39;])
+    assert 4 in index
+    assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-    # Adding an item can be done via getitem subscript as well.
-    map[&#39;captain america&#39;]
-    assert map[&#39;captain america&#39;] == set()
-    assert &#39;captain america&#39; in map</code></pre>
+    # Adding an item can be done via subscript as well.
+    index[5]
+    assert 5 in index
+    assert index[5] == set()
+
+    # Many-to-one consistency enforced when adding
+    index[5].add(&#39;cuatro&#39;)
+    assert &#39;cuatro&#39; not in index[4]
+    assert &#39;cuatro&#39; in index[5]
+    index[4].add(&#39;cuatro&#39;)
+    assert &#39;cuatro&#39; in index[4]
+    assert &#39;cuatro&#39; not in index[5]</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.map_spec.MapSpec.delitem"><code class="name flex">
-<span>def <span class="ident">delitem</span></span>(<span>map, element)</span>
+<dt id="structpy.map.index.index_spec.IndexSpec.delitem"><code class="name flex">
+<span>def <span class="ident">delitem</span></span>(<span>index, item)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove an element from the map domain.</p></div>
+<div class="desc"><p>Remove an element from the index domain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delitem(map, element):
+<pre><code class="python">def delitem(index, item):
     &#34;&#34;&#34;
-    Remove an element from the map domain.
+    Remove an element from the index domain.
     &#34;&#34;&#34;
-    del map[&#39;captain america&#39;]
-    assert &#39;captain america&#39; not in map</code></pre>
+    del index[2]
+    assert 2 not in index</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.map_spec.MapSpec.update"><code class="name flex">
-<span>def <span class="ident">update</span></span>(<span>map, mapping)</span>
+<dt id="structpy.map.index.index_spec.IndexSpec.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>index, mapping)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Join a many-to-many mapping of elements to the map.</p>
@@ -316,39 +346,22 @@ a direct reference to the provided values object.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def update(map, mapping):
+<pre><code class="python">def update(index, mapping):
     &#34;&#34;&#34;
     Join a many-to-many mapping of elements to the map.
 
     `mapping` should be like `dict&lt;key: iterable&lt;value&gt;&gt;`.
     &#34;&#34;&#34;
-    map.update(
-        {&#39;harry potter&#39;: {&#39;rupert&#39;, &#39;emma&#39;},
-         &#39;avengers&#39;: {&#39;sam&#39;}
+    index.update(
+        {
+            0: {&#39;zero&#39;},
+            1: {&#39;1&#39;},
+            5: {&#39;five&#39;, &#39;cinco&#39;}
         }
     )
-    assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;, &#39;robert&#39;, &#39;sam&#39;}</code></pre>
-</details>
-</dd>
-<dt id="structpy.map.map_spec.MapSpec.reverse"><code class="name flex">
-<span>def <span class="ident">reverse</span></span>(<span>map)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Returns a view of the map that swaps the domain and domain
-for reverse mapping.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def reverse(map):
-    &#34;&#34;&#34;
-    Returns a view of the map that swaps the domain and domain
-    for reverse mapping.
-    &#34;&#34;&#34;
-    r = map.reverse()
-    assert r[&#39;chris&#39;] == {&#39;avengers&#39;}
-    assert r[&#39;adam&#39;] == {&#39;marriage story&#39;, &#39;star wars&#39;}
-    assert r[&#39;daisy&#39;] == {&#39;star wars&#39;}</code></pre>
+    assert index[0] == {&#39;zero&#39;}
+    assert index[1] == {&#39;one&#39;, &#39;uno&#39;, &#39;hana&#39;, &#39;1&#39;}
+    assert index[5] == {&#39;five&#39;, &#39;cinco&#39;}</code></pre>
 </details>
 </dd>
 </dl>
@@ -364,21 +377,20 @@ for reverse mapping.</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.map" href="index.html">map</a></code></li>
+<li><code><a title="structpy.map.index" href="index.html">index</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.map.map_spec.MapSpec" href="#structpy.map.map_spec.MapSpec">MapSpec</a></code></h4>
+<h4><code><a title="structpy.map.index.index_spec.IndexSpec" href="#structpy.map.index.index_spec.IndexSpec">IndexSpec</a></code></h4>
 <ul class="two-column">
-<li><code><a title="structpy.map.map_spec.MapSpec.verify" href="#structpy.map.map_spec.MapSpec.verify">verify</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.MAP" href="#structpy.map.map_spec.MapSpec.MAP">MAP</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.getitem" href="#structpy.map.map_spec.MapSpec.getitem">getitem</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.additem" href="#structpy.map.map_spec.MapSpec.additem">additem</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.delitem" href="#structpy.map.map_spec.MapSpec.delitem">delitem</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.update" href="#structpy.map.map_spec.MapSpec.update">update</a></code></li>
-<li><code><a title="structpy.map.map_spec.MapSpec.reverse" href="#structpy.map.map_spec.MapSpec.reverse">reverse</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.verify" href="#structpy.map.index.index_spec.IndexSpec.verify">verify</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.INDEX" href="#structpy.map.index.index_spec.IndexSpec.INDEX">INDEX</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.getitem" href="#structpy.map.index.index_spec.IndexSpec.getitem">getitem</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.additem" href="#structpy.map.index.index_spec.IndexSpec.additem">additem</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.delitem" href="#structpy.map.index.index_spec.IndexSpec.delitem">delitem</a></code></li>
+<li><code><a title="structpy.map.index.index_spec.IndexSpec.update" href="#structpy.map.index.index_spec.IndexSpec.update">update</a></code></li>
 </ul>
 </li>
 </ul>

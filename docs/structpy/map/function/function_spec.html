@@ -25,34 +25,35 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from structpy import specification
+# import structpy.map.index.index_spec as indexspec
 
 
 @specification
 class FunctionSpec:
     &#34;&#34;&#34;
-    Function Mapping
-
-    many-to-one mapping between keys and values
+    Many-to-one mapping between elements in a domain to elements in a codomain.
     &#34;&#34;&#34;
 
     @specification.init
     def FUNCTION(Function):
-        return Function({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})
+        function = Function({
+            &#39;one&#39;: 1,
+            &#39;two&#39;: 2,
+            &#39;uno&#39;: 1
+        })
+        return function
 
-    def __getitem__(function, item):
+    def getitem(function, item):
         &#34;&#34;&#34;
-        get the value in the domain associated with a domain item
+        Get the value in the domain associated with a domain item.
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
         assert function[&#39;three&#39;] == 3
 
-    def __setitem__(function, key, value):
+    def setitem(function, key, value):
         &#34;&#34;&#34;
-        add a item pair that co-map
-
-        the first item is added to the domain
-        the second item is added to the domain
+        Add a item pair that co-map.
         &#34;&#34;&#34;
         function[&#39;dos&#39;] = 2
         assert function[&#39;dos&#39;] == 2
@@ -61,15 +62,27 @@ class FunctionSpec:
         function[&#39;dos&#39;] = 3
         assert function[&#39;dos&#39;] == 3
 
-    def reverse(function):
+    def delitem(function, element):
         &#34;&#34;&#34;
-        returns a lookup (one-to-many mapping) representing
-        a mapping with domain and domain swapped
+        Remove an item pair from the function by key (domain element).
         &#34;&#34;&#34;
-        r = function.reverse()
-        assert &#39;one&#39; in r[1]
-        assert &#39;uno&#39; in r[1]
-        assert &#39;two&#39; in r[2]</code></pre>
+        del function[&#39;three&#39;]
+        assert &#39;three&#39; not in function
+
+    # @specification.satisfies(indexspec.IndexSpec.INDEX)
+    # def REVERSE(Function):
+    #     &#34;&#34;&#34;
+    #     Returns a index (one-to-many mapping) representing
+    #     a function with domain and codomain swapped.
+    #     &#34;&#34;&#34;
+    #     return Function({
+    #         &#39;one&#39;: 1,
+    #         &#39;hana&#39;: 1,
+    #         &#39;uno&#39;: 1,
+    #         &#39;dos&#39;: 2,
+    #         &#39;two&#39;: 2,
+    #         &#39;three&#39;: 3
+    #     }).reverse()</code></pre>
 </details>
 </section>
 <section>
@@ -85,37 +98,36 @@ class FunctionSpec:
 <span>class <span class="ident">FunctionSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Function Mapping</p>
-<p>many-to-one mapping between keys and values</p></div>
+<div class="desc"><p>Many-to-one mapping between elements in a domain to elements in a codomain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class FunctionSpec:
     &#34;&#34;&#34;
-    Function Mapping
-
-    many-to-one mapping between keys and values
+    Many-to-one mapping between elements in a domain to elements in a codomain.
     &#34;&#34;&#34;
 
     @specification.init
     def FUNCTION(Function):
-        return Function({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})
+        function = Function({
+            &#39;one&#39;: 1,
+            &#39;two&#39;: 2,
+            &#39;uno&#39;: 1
+        })
+        return function
 
-    def __getitem__(function, item):
+    def getitem(function, item):
         &#34;&#34;&#34;
-        get the value in the domain associated with a domain item
+        Get the value in the domain associated with a domain item.
         &#34;&#34;&#34;
         assert function[&#39;one&#39;] == 1
         assert function[&#39;two&#39;] == 2
         assert function[&#39;three&#39;] == 3
 
-    def __setitem__(function, key, value):
+    def setitem(function, key, value):
         &#34;&#34;&#34;
-        add a item pair that co-map
-
-        the first item is added to the domain
-        the second item is added to the domain
+        Add a item pair that co-map.
         &#34;&#34;&#34;
         function[&#39;dos&#39;] = 2
         assert function[&#39;dos&#39;] == 2
@@ -124,15 +136,12 @@ class FunctionSpec:
         function[&#39;dos&#39;] = 3
         assert function[&#39;dos&#39;] == 3
 
-    def reverse(function):
+    def delitem(function, element):
         &#34;&#34;&#34;
-        returns a lookup (one-to-many mapping) representing
-        a mapping with domain and domain swapped
+        Remove an item pair from the function by key (domain element).
         &#34;&#34;&#34;
-        r = function.reverse()
-        assert &#39;one&#39; in r[1]
-        assert &#39;uno&#39; in r[1]
-        assert &#39;two&#39; in r[2]</code></pre>
+        del function[&#39;three&#39;]
+        assert &#39;three&#39; not in function</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -169,28 +178,68 @@ class FunctionSpec:
 </summary>
 <pre><code class="python">@specification.init
 def FUNCTION(Function):
-    return Function({&#39;one&#39;: 1, &#39;two&#39;: 2, &#39;uno&#39;: 1})</code></pre>
+    function = Function({
+        &#39;one&#39;: 1,
+        &#39;two&#39;: 2,
+        &#39;uno&#39;: 1
+    })
+    return function</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.function.function_spec.FunctionSpec.reverse"><code class="name flex">
-<span>def <span class="ident">reverse</span></span>(<span>function)</span>
+<dt id="structpy.map.function.function_spec.FunctionSpec.getitem"><code class="name flex">
+<span>def <span class="ident">getitem</span></span>(<span>function, item)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>returns a lookup (one-to-many mapping) representing
-a mapping with domain and domain swapped</p></div>
+<div class="desc"><p>Get the value in the domain associated with a domain item.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def reverse(function):
+<pre><code class="python">def getitem(function, item):
     &#34;&#34;&#34;
-    returns a lookup (one-to-many mapping) representing
-    a mapping with domain and domain swapped
+    Get the value in the domain associated with a domain item.
     &#34;&#34;&#34;
-    r = function.reverse()
-    assert &#39;one&#39; in r[1]
-    assert &#39;uno&#39; in r[1]
-    assert &#39;two&#39; in r[2]</code></pre>
+    assert function[&#39;one&#39;] == 1
+    assert function[&#39;two&#39;] == 2
+    assert function[&#39;three&#39;] == 3</code></pre>
+</details>
+</dd>
+<dt id="structpy.map.function.function_spec.FunctionSpec.setitem"><code class="name flex">
+<span>def <span class="ident">setitem</span></span>(<span>function, key, value)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add a item pair that co-map.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def setitem(function, key, value):
+    &#34;&#34;&#34;
+    Add a item pair that co-map.
+    &#34;&#34;&#34;
+    function[&#39;dos&#39;] = 2
+    assert function[&#39;dos&#39;] == 2
+
+    # overwrite key-value pair
+    function[&#39;dos&#39;] = 3
+    assert function[&#39;dos&#39;] == 3</code></pre>
+</details>
+</dd>
+<dt id="structpy.map.function.function_spec.FunctionSpec.delitem"><code class="name flex">
+<span>def <span class="ident">delitem</span></span>(<span>function, element)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Remove an item pair from the function by key (domain element).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def delitem(function, element):
+    &#34;&#34;&#34;
+    Remove an item pair from the function by key (domain element).
+    &#34;&#34;&#34;
+    del function[&#39;three&#39;]
+    assert &#39;three&#39; not in function</code></pre>
 </details>
 </dd>
 </dl>
@@ -216,7 +265,9 @@ a mapping with domain and domain swapped</p></div>
 <ul class="">
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.verify" href="#structpy.map.function.function_spec.FunctionSpec.verify">verify</a></code></li>
 <li><code><a title="structpy.map.function.function_spec.FunctionSpec.FUNCTION" href="#structpy.map.function.function_spec.FunctionSpec.FUNCTION">FUNCTION</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.reverse" href="#structpy.map.function.function_spec.FunctionSpec.reverse">reverse</a></code></li>
+<li><code><a title="structpy.map.function.function_spec.FunctionSpec.getitem" href="#structpy.map.function.function_spec.FunctionSpec.getitem">getitem</a></code></li>
+<li><code><a title="structpy.map.function.function_spec.FunctionSpec.setitem" href="#structpy.map.function.function_spec.FunctionSpec.setitem">setitem</a></code></li>
+<li><code><a title="structpy.map.function.function_spec.FunctionSpec.delitem" href="#structpy.map.function.function_spec.FunctionSpec.delitem">delitem</a></code></li>
 </ul>
 </li>
 </ul>

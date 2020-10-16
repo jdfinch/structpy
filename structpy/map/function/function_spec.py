@@ -1,5 +1,6 @@
 
 from structpy import specification
+# import structpy.map.index.index_spec as indexspec
 
 
 @specification
@@ -23,7 +24,6 @@ class FunctionSpec:
         """
         assert function['one'] == 1
         assert function['two'] == 2
-        assert function['three'] == 3
 
     def setitem(function, key, value):
         """
@@ -40,18 +40,26 @@ class FunctionSpec:
         """
         Remove an item pair from the function by key (domain element).
         """
-        del function['three']
-        assert 'three' not in function
+        del function['two']
+        assert 'two' not in function
+        print('Function:')
+        print(function)
+        print(function.codomain)
 
-    def reverse(function):
-        """
-        Returns a lookup (one-to-many mapping) representing
-        a function with domain and codomain swapped.
-        """
-        r = function.reverse()
-        assert 'one' in r[1]
-        assert 'uno' in r[1]
-        assert 'two' in r[2]
+    # @specification.satisfies(indexspec.IndexSpec.INDEX)
+    # def REVERSE(Function):
+    #     """
+    #     Returns a index (one-to-many mapping) representing
+    #     a function with domain and codomain swapped.
+    #     """
+    #     return Function({
+    #         'one': 1,
+    #         'hana': 1,
+    #         'uno': 1,
+    #         'dos': 2,
+    #         'two': 2,
+    #         'three': 3
+    #     }).reverse()
 
 
 

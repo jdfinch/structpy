@@ -27,12 +27,40 @@
 <pre><code class="python">from structpy import implementation
 from structpy.map.function.function_spec import FunctionSpec
 
+import structpy.map.index.index as index
+
+from structpy.collection.enforcer import EnforcerDict
+
 
 @implementation(FunctionSpec)
-class Function:
+class Function(EnforcerDict):
 
-    def __init__(self):
-        pass</code></pre>
+    def __init__(self, dict_like=None):
+        EnforcerDict.__init__(self,
+            add_function=self._add_function,
+            remove_function=self._remove_function
+        )
+        self.codomain = None
+        if hasattr(dict_like, &#39;codomain&#39;):
+            self.codomain = dict_like
+        else:
+            self.codomain = index.Index(self)
+        self.update(dict_like)
+
+    def _add_function(self, items):
+        for key, value in items:
+            self.codomain[value].add(key)
+
+    def _remove_function(self, items):
+        for key, value in items:
+            self.codomain[value].remove(key)
+
+    def reverse(self):
+        return self.codomain
+
+
+if __name__ == &#39;__main__&#39;:
+    print(FunctionSpec.verify(Function))</code></pre>
 </details>
 </section>
 <section>
@@ -46,6 +74,53 @@ class Function:
 <dl>
 <dt id="structpy.map.function.function.Function"><code class="flex name class">
 <span>class <span class="ident">Function</span></span>
+<span>(</span><span>dict_like=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec" href="../../collection/enforcer/enforcer_dict_spec.html#structpy.collection.enforcer.enforcer_dict_spec.EnforcerDictSpec">EnforcerDictSpec</a></code>
+<br></p>
+<pre><code>An extension of python &lt;code&gt;dict&lt;/code&gt; with enforcment hooks that call functions
+whenever items are added/overwritten or removed/overwritten.
+&lt;br&gt;
+</code></pre></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Function(EnforcerDict):
+
+    def __init__(self, dict_like=None):
+        EnforcerDict.__init__(self,
+            add_function=self._add_function,
+            remove_function=self._remove_function
+        )
+        self.codomain = None
+        if hasattr(dict_like, &#39;codomain&#39;):
+            self.codomain = dict_like
+        else:
+            self.codomain = index.Index(self)
+        self.update(dict_like)
+
+    def _add_function(self, items):
+        for key, value in items:
+            self.codomain[value].add(key)
+
+    def _remove_function(self, items):
+        for key, value in items:
+            self.codomain[value].remove(key)
+
+    def reverse(self):
+        return self.codomain</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></li>
+<li>builtins.dict</li>
+</ul>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.map.function.function.Function.reverse"><code class="name flex">
+<span>def <span class="ident">reverse</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -53,11 +128,68 @@ class Function:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Function:
-
-    def __init__(self):
-        pass</code></pre>
+<pre><code class="python">def reverse(self):
+    return self.codomain</code></pre>
 </details>
+</dd>
+<dt id="structpy.map.function.function.Function.clear"><code class="name flex">
+<span>def <span class="ident">clear</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict.clear" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict.clear">clear</a></code>
+</p>
+<div class="desc inherited"><p>D.clear() -&gt; None.
+Remove all items from D.</p></div>
+</dd>
+<dt id="structpy.map.function.function.Function.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self, key, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict.pop" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict.pop">pop</a></code>
+</p>
+<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
+If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
+</dd>
+<dt id="structpy.map.function.function.Function.popitem"><code class="name flex">
+<span>def <span class="ident">popitem</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict.popitem" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict.popitem">popitem</a></code>
+</p>
+<div class="desc inherited"><p>D.popitem() -&gt; (k, v), remove and return some (key, value) pair as a
+2-tuple; but raise KeyError if D is empty.</p></div>
+</dd>
+<dt id="structpy.map.function.function.Function.setdefault"><code class="name flex">
+<span>def <span class="ident">setdefault</span></span>(<span>self, key, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict.setdefault" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict.setdefault">setdefault</a></code>
+</p>
+<div class="desc inherited"><p>Insert key with a value of default if key is not in the dictionary …</p></div>
+</dd>
+<dt id="structpy.map.function.function.Function.update"><code class="name flex">
+<span>def <span class="ident">update</span></span>(<span>self, other)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict">EnforcerDict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_dict.EnforcerDict.update" href="../../collection/enforcer/enforcer_dict.html#structpy.collection.enforcer.enforcer_dict.EnforcerDict.update">update</a></code>
+</p>
+<div class="desc inherited"><p>D.update([E, ]**F) -&gt; None.
+Update D from dict/iterable E and F.
+If E is present and has a .keys() method, then does:
+for k in E: D[k] = E[k]
+If E …</p></div>
+</dd>
+</dl>
 </dd>
 </dl>
 </section>
@@ -77,6 +209,14 @@ class Function:
 <ul>
 <li>
 <h4><code><a title="structpy.map.function.function.Function" href="#structpy.map.function.function.Function">Function</a></code></h4>
+<ul class="two-column">
+<li><code><a title="structpy.map.function.function.Function.reverse" href="#structpy.map.function.function.Function.reverse">reverse</a></code></li>
+<li><code><a title="structpy.map.function.function.Function.clear" href="../../collection/enforcer/enforcer_dict.html#structpy.map.function.function.Function.clear">clear</a></code></li>
+<li><code><a title="structpy.map.function.function.Function.pop" href="../../collection/enforcer/enforcer_dict.html#structpy.map.function.function.Function.pop">pop</a></code></li>
+<li><code><a title="structpy.map.function.function.Function.popitem" href="../../collection/enforcer/enforcer_dict.html#structpy.map.function.function.Function.popitem">popitem</a></code></li>
+<li><code><a title="structpy.map.function.function.Function.setdefault" href="../../collection/enforcer/enforcer_dict.html#structpy.map.function.function.Function.setdefault">setdefault</a></code></li>
+<li><code><a title="structpy.map.function.function.Function.update" href="../../collection/enforcer/enforcer_dict.html#structpy.map.function.function.Function.update">update</a></code></li>
+</ul>
 </li>
 </ul>
 </li>

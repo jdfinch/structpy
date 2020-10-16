@@ -1,9 +1,9 @@
 
 from structpy import implementation
-from structpy.map.map_spec import MapSpec
+from structpy.map.index.index_spec import IndexSpec
 
-from structpy.collection.enforcer import EnforcerDict
-from structpy.collection.enforcer import EnforcerSet
+from structpy.collection.enforcer import EnforcerDict, EnforcerSet
+import structpy.map.function.function as function
 
 
 class DomainSet(EnforcerSet):
@@ -19,33 +19,34 @@ class DomainSet(EnforcerSet):
             self.update(elements)
 
     def _add_function(self, elements):
+        for element in elements:
+            if element in self.domain:
+                del self.domain[element]
         elements = set(elements) - self
         for e in elements:
-            set.add(self.domain[e], self.element)
+            dict.__setitem__(self.domain, e, self.element)
         return elements
 
     def _remove_function(self, elements):
         elements = set(elements) & self
         for e in elements:
-            set.remove(self.domain[e], self.element)
-            if not self.domain[e]:
-                dict.__delitem__(self.domain, e)
+            dict.__delitem__(self.domain, e)
         return elements
 
 
-@implementation(MapSpec)
-class Map(EnforcerDict):
+@implementation(IndexSpec)
+class Index(EnforcerDict):
 
     def __init__(self, dict_like=None):
         EnforcerDict.__init__(self,
-            add_function = self._add_function,
-            remove_function = self._remove_function
+            add_function=self._add_function,
+            remove_function=self._remove_function
         )
         self.codomain = None
         if hasattr(dict_like, 'codomain'):
             self.codomain = dict_like
         else:
-            self.codomain = Map(self)
+            self.codomain = function.Function(self)
             self.update(dict_like)
 
     def _add_function(self, items):
@@ -77,4 +78,5 @@ class Map(EnforcerDict):
 
 
 if __name__ == '__main__':
-    print(MapSpec.verify(Map))
+    print(IndexSpec.verify(Index))
+
