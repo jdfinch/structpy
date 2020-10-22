@@ -28,6 +28,18 @@
 <p>Implementation of vanilla python <code><a title="structpy.collection.set" href="set.html">set</a></code> with Enforcer hooks
 <code>add_function</code> and <code>remove_function</code>.
 <br>
+<br>
+<br></p>
+<h3 id="hidict"><a href="hidict.html">Hidict</a></h3>
+<p>Implementation of <code><a title="structpy.collection.hidict_spec.HidictSpec" href="hidict_spec.html#structpy.collection.hidict_spec.HidictSpec">HidictSpec</a></code>
+<br></p>
+<p>Hierarchical dictionary.</p>
+<p>For an order-N hidict, N+1 ordered keys are mapped to a value in each
+hidict entry.</p>
+<p>Hidict supports access patterns where only part of the key sequence
+is specified, allowing flexibility in lookup patterns where multiple
+keys are associated with a value.
+<br>
 <br></p>
 <details class="source">
 <summary>
@@ -38,9 +50,11 @@ Homogeneous collections of elements.
 &#34;&#34;&#34;
 
 from structpy.collection.enforcer import EnforcerSet as Set
+from structpy.collection.hidict import Hidict
 
 __all__ = [
-    &#39;Set&#39;
+    &#39;Set&#39;,
+    &#39;Hidict&#39;
 ]</code></pre>
 </details>
 </section>
@@ -56,6 +70,14 @@ to enforce data consistency whenever the collection is updated …</p></div>
 <dd>
 <div class="desc"><p>Defines a potentially infinite sequence of values that can be iterated
 over, where each value is derived from an update of the previous one …</p></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.hidict" href="hidict.html">hidict</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.hidict_spec" href="hidict_spec.html">hidict_spec</a></code></dt>
+<dd>
+<div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="structpy.collection.set" href="set.html">set</a></code></dt>
 <dd>
@@ -79,6 +101,7 @@ over, where each value is derived from an update of the previous one …</p></di
 <div class="toc">
 <ul>
 <li><a href="#set">Set</a></li>
+<li><a href="#hidict">Hidict</a></li>
 </ul>
 </div>
 <ul id="index">
@@ -91,6 +114,8 @@ over, where each value is derived from an update of the previous one …</p></di
 <ul>
 <li><code><a title="structpy.collection.enforcer" href="enforcer/index.html">enforcer</a></code></li>
 <li><code><a title="structpy.collection.enumerable" href="enumerable/index.html">enumerable</a></code></li>
+<li><code><a title="structpy.collection.hidict" href="hidict.html">hidict</a></code></li>
+<li><code><a title="structpy.collection.hidict_spec" href="hidict_spec.html">hidict_spec</a></code></li>
 <li><code><a title="structpy.collection.set" href="set.html">set</a></code></li>
 <li><code><a title="structpy.collection.set_spec" href="set_spec.html">set_spec</a></code></li>
 </ul>

@@ -42,10 +42,7 @@ source, label - target : function
 target, label - source : function
 ```"""
 
-from structpy.graph.undirected.unlabeled.undigraph_spec import UndigraphSpec
-from structpy.graph.undirected.unlabeled.undigraph_type_spec import UndigraphTypeSpec
 
 __all__ = [
-    'UndigraphSpec',
-    'UndigraphTypeSpec'
+
 ]

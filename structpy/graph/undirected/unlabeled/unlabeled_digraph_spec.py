@@ -3,7 +3,7 @@ from structpy import specification
 
 
 @specification
-class UndigraphSpec:
+class UnlabeledDigraphSpec:
     """
     Undirected, unlabeled undigraph.
 
@@ -135,5 +135,5 @@ class UndigraphSpec:
 
 
 if __name__ == '__main__':
-    print(UndigraphSpec.verify())
+    print(UnlabeledDigraphSpec.verify())
 
