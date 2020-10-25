@@ -13,12 +13,13 @@ class Hidict(dict):
         Create a subdict. Abstract to allow derived classes (e.g. EnforcerHidict)
         to create custom subdict objects.
         """
-        return Hidict(self.order - 1)
+        return Hidict(self.order - 1, None, *self.superkeys, key)
 
-    def __init__(self, order, dict_like=None):
+    def __init__(self, order, dict_like=None, *superkeys):
         dict.__init__(self)
         assert order >= 0
         self.order = order
+        self.superkeys = superkeys
         if dict_like is not None:
             self.update(dict_like)
 
@@ -105,21 +106,21 @@ class Hidict(dict):
             return True
 
     def get(self, *keys, default=None):
-        return self[keys if len(keys) > 1 else keys[0]] if keys in self else default
+        return self[keys] if keys in self else default
 
     def items(self, _previous_keys=tuple()):
         if self.order <= 0:
-            return [(*_previous_keys, key, value) for key, value in dict.items(self)]
+            return [(*self.superkeys, key, value) for key, value in dict.items(self)]
         else:
             return reduce(list.__add__,
-                    [[]] + [value.items((*_previous_keys, key)) for key, value in dict.items(self)])
+                    [[]] + [value.items((*self.superkeys, key)) for key, value in dict.items(self)])
 
     def keys(self, _previous_keys=tuple()):
         if self.order <= 0:
-            return [(*_previous_keys, key) for key in dict.keys(self)]
+            return [(*self.superkeys, key) for key in dict.keys(self)]
         else:
             return reduce(list.__add__,
-                          [[]] + [value.keys((*_previous_keys, key))
+                          [[]] + [value.keys((*self.superkeys, key))
                                   for key, value in dict.items(self)])
 
     def reversed(self):
