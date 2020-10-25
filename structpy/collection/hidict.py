@@ -108,20 +108,19 @@ class Hidict(dict):
     def get(self, *keys, default=None):
         return self[keys] if keys in self else default
 
-    def items(self, _previous_keys=tuple()):
+    def items(self):
         if self.order <= 0:
             return [(*self.superkeys, key, value) for key, value in dict.items(self)]
         else:
             return reduce(list.__add__,
-                    [[]] + [value.items((*self.superkeys, key)) for key, value in dict.items(self)])
+                    [[]] + [value.items() for key, value in dict.items(self)])
 
-    def keys(self, _previous_keys=tuple()):
+    def keys(self):
         if self.order <= 0:
             return [(*self.superkeys, key) for key in dict.keys(self)]
         else:
             return reduce(list.__add__,
-                          [[]] + [value.keys((*self.superkeys, key))
-                                  for key, value in dict.items(self)])
+                          [[]] + [value.keys() for key, value in dict.items(self)])
 
     def reversed(self):
         return reversed(self.keys())
