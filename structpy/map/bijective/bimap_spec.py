@@ -14,7 +14,7 @@ class BimapSpec:
 
     def getitem(bimap, item):
         """
-        Get the value in the domain associated with a domain item.
+        Get the value in the domain associated with a domain keys.
         """
         assert bimap['one'] == 1
         assert bimap['two'] == 2
@@ -22,10 +22,10 @@ class BimapSpec:
 
     def setitem(bimap, key, value):
         """
-        Add a item pair that co-map.
+        Add a keys pair that co-map.
 
-        The first item is added to the domain.
-        The second item is added to the domain.
+        The first keys is added to the domain.
+        The second keys is added to the domain.
         """
         bimap['four'] = 4
         bimap['five'] = 5

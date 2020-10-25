@@ -7,7 +7,7 @@
     list_class_variables_in_index = True
     sort_identifiers = False
     show_type_annotations = False
-    # Show collapsed source code block next to each item.
+    # Show collapsed source code block next to each keys.
     # Disabling this can improve rendering speed of large modules.
     show_source_code = True
     # If Set, format links to objects in online source code repository

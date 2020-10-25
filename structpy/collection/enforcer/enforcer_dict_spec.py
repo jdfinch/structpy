@@ -16,13 +16,16 @@ class EnforcerDictSpec:
         """
         Build a dictionary with enforcement hooks.
 
-        `add_function(added)` is a function that is called whenever a new
+        `add_function(added)` is a function that is called whenever a new (or replacement)
         key:value pair is added, and it should expect `added` to be a `iterable<tuple<key, value>>`
-        as an argument.
+        as an argument. The return of `add_function(added)` should be an `iterable<tuple<key, value>>`,
+        which represent the entries that will actually be added to the `enforcer_dict` object.
 
         `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
-        `iterable<tuple<key:value>>` as an argument.
+        `iterable<tuple<key, value>>` as an argument. The return of `remove_function(removed)` should
+        be an `iterable<tuple<key, value>>` which represents the entries that will actually be removed
+        from the `enforcer_dict` object.
         """
         class Other:
             def __init__(self):

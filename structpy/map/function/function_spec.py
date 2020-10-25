@@ -20,14 +20,14 @@ class FunctionSpec:
 
     def getitem(function, item):
         """
-        Get the value in the domain associated with a domain item.
+        Get the value in the domain associated with a domain keys.
         """
         assert function['one'] == 1
         assert function['two'] == 2
 
     def setitem(function, key, value):
         """
-        Add a item pair that co-map.
+        Add a keys pair that co-map.
         """
         function['dos'] = 2
         assert function['dos'] == 2
@@ -38,7 +38,7 @@ class FunctionSpec:
 
     def delitem(function, element):
         """
-        Remove an item pair from the function by key (domain element).
+        Remove an keys pair from the function by key (domain element).
         """
         del function['two']
         assert 'two' not in function

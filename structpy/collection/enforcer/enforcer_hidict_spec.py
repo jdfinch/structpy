@@ -19,71 +19,110 @@ class EnforcerHidictSpec:
         """
         Build a hierarchical dictionary.
 
-        `add_function(added)` is a function that is called whenever a new
-        key:value pair is added, and it should expect `added` to be a `iterable<tuple<key, value>>`
-        as an argument.
+        `add_function(added)` is a function that is called whenever a new (or replacement)
+        key:value pair is added, and it should expect `added` to be a `iterable<tuple<key1, key2, ..., value>>`
+        as an argument. The return of `add_function(added)` should be an `iterable<tuple<key1, key2, ..., value>>`,
+        which represent the entries that will actually be added to the `enforcer_dict` object.
 
         `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
-        `iterable<tuple<key:value>>` as an argument.
+        `iterable<tuple<key1, key2, ..., value>>` as an argument. The return of `remove_function(removed)`
+        should be an `iterable<tuple<key1, key2, ..., value>>` which represents the entries that will
+        actually be removed from the `enforcer_dict` object.
         """
-        class LetterCount:
+        class EntryCount:
             def __init__(self):
                 self.value = 0
             def add_function(self, items):
                 for _, value in items:
-                    self.value += len(value)
+                    self.value += 1
             def remove_function(self, items):
                 for _, value in items:
-                    self.value -= len(value)
+                    self.value -= 1
 
         global other
-        other = LetterCount()
+        other = EntryCount()
 
-        hidict = EnforcerHidict(
+        hidict = EnforcerHidict(2,
             {
-                'duck': {'has': 'bill', 'is': 'bird'},
-                'robin': {'has': 'wings', 'is': 'bird'},
-                'plane': {'has': 'wings', 'is': 'vehicle'}
+                'Mary': {
+                    'likes': {'lot': 'Bob', 'little': 'Sue'},
+                    'dislikes': {'lot': 'Randy'}
+                },
+                'Bob': {
+                    'likes': {'lot': 'Mary'},
+                    'dislikes': {'lot': 'Sue', 'medium': 'Joe'}
+                }
             },
             add_function=other.add_function,
-            remove_function=other.remove_function,
-            order=1
+            remove_function=other.remove_function
         )
+        assert other.value == 6
         return hidict
 
-    def add(hidict, key, value):
-        hidict['duck', 'sound'] = 'quack'
-        assert hidict['duck', 'sound'] == 'quack'
-        assert hidict['duck'] == {'has': 'bill', 'is': 'bird', 'sound': 'quack'}
-        assert other.value == 34
+    def getitem(hidict, keys):
+        """
+        Use `hidict[key1, key2, ...]` to access hidict entries.
 
-        hidict.update({
-            'robin': {'sound': 'chirp', 'color': 'red'},
-            'eagle': {'quality': 'magnificent'}
-        })
-        assert hidict['eagle']['quality'] == 'magnificent'
-        assert 'sound' in hidict['robin']
+        Providing less than `order+1` keys will return a subdictionary object.
+        """
+        assert hidict['Mary', 'likes', 'lot'] == 'Bob'
+        keys = ('Mary', 'likes', 'little')
+        assert hidict[keys] == 'Sue'
+        assert hidict['Mary', 'dislikes'] == {'lot': 'Randy'}
 
-    def remove(hidict, key, value):
-        del hidict['robin']
-        del hidict['eagle']
-        assert 'robin' not in hidict
-        assert 'eagle' not in hidict
-        assert other.value == 25
+    def setitem(hidict, keys, value):
+        """
+        Use `hidict[key1, key2, ...] = value` to reassign or add entries to the hidict.
 
-        hidict['duck', 'has'] == 'webbing'
-        assert hidict['duck', 'has'] == 'webbing'
-        other.value == 28
+        `keys` should be a tuple of keys with length `order+1`.
+        """
+        hidict['Bob', 'likes', 'little'] = 'George'
+        assert hidict['Bob', 'likes', 'little'] == 'George'
+        hidict['Bob', 'dislikes']['lot'] = 'Sam'
+        assert hidict['Bob', 'dislikes', 'lot'] == 'Sam'
+        assert other.value == 8
 
-        hidict['duck'].clear()
-        assert other.value == 12
-        assert 'duck' in hidict
-        assert 'has' not in hidict['duck']
+    def delitem(hidict, keys):
+        """
+        `del hidict[key1, key2, ...]` will delete an entry from hidict.
 
-        hidict.clear()
-        assert other.value == 0
-        assert len(hidict) == 0
+        If less than `order-1` keys are provided, the specified intermediate dictionary
+        will be cleared.
+        """
+        del hidict['Bob', 'likes', 'little']
+        assert 'little' not in hidict['Bob', 'likes']
+        del hidict['Bob', 'dislikes']
+        assert hidict['Bob', 'dislikes'] == {}
+        assert other.value == 4
+
+    def contains(hidict, keys):
+        """
+        `(key1, key2, ...) in hidict` will return whether the provided keys are found in
+        the hidict.
+
+        Checking the membership of a key sequence of length less than `order+1` is valid.
+
+        Additionally, membership check `(key1, key2, ..., value) in hidict` can be used
+        to check for a specific key sequence and value pairing.
+        """
+        assert 'Mary' in hidict
+        assert ('Mary', 'likes', 'lot') in hidict
+        assert ('Mary', 'likes') in hidict
+        assert ('Marvin', 'likes') not in hidict
+        assert ('Mary', 'likes', 'lot', 'Bob') in hidict
+
+    def items(hidict):
+        """
+        Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidict.
+
+        Length of the tuples is `order+2`.
+        """
+        items = hidict.items()
+        assert ('Mary', 'likes', 'lot', 'Bob') in items
+        assert ('Mary', 'likes', 'little', 'Sue') in items
+        assert ('Bob', 'likes', 'lot', 'Mary') in items
+        assert not ('Bob', 'likes', 'little', 'Joe') in items
 
 
 

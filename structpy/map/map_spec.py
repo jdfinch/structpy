@@ -20,7 +20,7 @@ class MapSpec:
     def getitem(map, item):
         """
         Get a reference to the elements in the codomain associated
-        with domain element item.
+        with domain element keys.
         """
         assert map['avengers'] == {'scarlett', 'chris'}
         assert map['star wars'] == {'adam'}
@@ -41,7 +41,7 @@ class MapSpec:
         map['star wars'].update(['daisy'])
         assert map['star wars'] == {'adam', 'daisy'}
 
-        # Adding an item can be done via getitem subscript as well.
+        # Adding an keys can be done via getitem subscript as well.
         map['captain america']
         assert map['captain america'] == set()
         assert 'captain america' in map

@@ -8,60 +8,75 @@ from functools import reduce
 @implementation(HidictSpec)
 class Hidict(dict):
 
+    def _generate_subdict(self, key):
+        """
+        Create a subdict. Abstract to allow derived classes (e.g. EnforcerHidict)
+        to create custom subdict objects.
+        """
+        return Hidict(self.order - 1)
+
     def __init__(self, order, dict_like=None):
         dict.__init__(self)
-        assert isinstance(order, int) and order > 0
+        assert order >= 0
         self.order = order
         if dict_like is not None:
             self.update(dict_like)
 
     def __getitem__(self, keys):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
         value = self
         for key in keys:
             value = dict.__getitem__(value, key)
         return value
 
     def __setitem__(self, keys, value):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
         key0, keys = keys[0], keys[1:]
-        if self.order > 1:
-            if not dict.__contains__(self, key0):
-                dict.__setitem__(self, key0, Hidict(self.order - 1))
-            dict.__getitem__(self, key0)[keys] = value
+        if self.order <= 0:
+            dict.__setitem__(self, key0, value)
         else:
             if not dict.__contains__(self, key0):
-                dict.__setitem__(self, key0, {})
-            dict.__getitem__(self, key0)[keys[0]] = value
+                subdict = self._generate_subdict(key0)
+                dict.__setitem__(self, key0, subdict)
+            else:
+                subdict = dict.__getitem__(self, key0)
+            subdict[keys] = value
 
     def update(self, dict_like):
-        if self.order == 1:
+        if self.order <= 0:
             for key, value in dict_like.items():
-                dict.__setitem__(self, key, {k: v for k, v in value.items()})
+                dict.__setitem__(self, key, value)
         else:
             for key, value in dict_like.items():
-                subdict = Hidict(self.order - 1)
+                subdict = self._generate_subdict(key)
                 subdict.update(value)
                 dict.__setitem__(self, key, subdict)
 
     def __delitem__(self, keys):
         key0, keys = keys[0], keys[1:]
-        if len(keys) == 0:
+        if len(keys) == 0 and self.order > 0:
             dict.__getitem__(self, key0).clear()
-        elif self.order == 1:
-            dict.__getitem__(self, key0).__delitem__(keys[0])
+        elif self.order <= 0:
+            dict.__delitem__(self, key0)
         else:
-            dict.__getitem__(self, key0).__delitem__(keys)
+            del dict.__getitem__(self, key0)[keys]
 
     def pop(self, *keys, default=None):
-        if keys not in self and default is not None:
+        if keys not in self:
             return default
-        value = self.__getitem__(*keys)
+        value = self[keys]
         del self[keys]
         return value
 
     def popitem(self):
-        key, value = dict.popitem(self)
-        dict.__setitem__(self, key, value)
-        return (key,) + value.popitem()
+        if self.order <= 0:
+            return dict.popitem(self)
+        else:
+            key, value = dict.popitem(self)
+            dict.__setitem__(self, key, value)
+            return (key,) + value.popitem()
 
     def setdefault(self, *keys, default=None):
         if keys in self:
@@ -70,51 +85,54 @@ class Hidict(dict):
             self[keys] = default
             return default
 
-    def __contains__(self, item):
-        if not isinstance(item, tuple):
-            item = (item,)
-        key0, keys = item[0], item[1:]
-        if self.order == 1 and len(keys) == 2:
-            return dict.__contains__(self, key0) and dict.__getitem__(self, key0)[keys[0]] == keys[1]
-        elif self.order == 1:
-            return dict.__contains__(self, key0) and (not keys or keys[0] in dict.__getitem__(self, key0))
+    def __contains__(self, keys):
+        value = None
+        value_included = False
+        if not isinstance(keys, tuple):
+            keys = (keys,)
+        elif len(keys) > self.order + 1:
+            keys, value = keys[:-1], keys[-1]
+            value_included = True
+        subdict = self
+        for key in keys:
+            if not dict.__contains__(subdict, key):
+                return False
+            else:
+                subdict = dict.__getitem__(subdict, key)
+        if value_included:
+            return value == subdict
         else:
-            return dict.__contains__(self, key0) and (not keys or keys in dict.__getitem__(self, key0))
+            return True
 
     def get(self, *keys, default=None):
-        return self[keys] if keys in self else default
+        return self[keys if len(keys) > 1 else keys[0]] if keys in self else default
 
     def items(self, _previous_keys=tuple()):
-        items = list(dict.items(self))
-        if self.order == 1:
-            return reduce(list.__add__,
-                          [[(*_previous_keys, key1, key2, val) for key2, val in value.items()]
-                           for key1, value in items])
+        if self.order <= 0:
+            return [(*_previous_keys, key, value) for key, value in dict.items(self)]
         else:
             return reduce(list.__add__,
-                          [value.items((*_previous_keys, key))
-                           for key, value in items])
+                    [[]] + [value.items((*_previous_keys, key)) for key, value in dict.items(self)])
 
     def keys(self, _previous_keys=tuple()):
-        items = list(dict.items(self))
-        if self.order == 1:
-            return reduce(list.__add__,
-                          [[(*_previous_keys, key1, key2) for key2 in value.keys()]
-                           for key1, value in items])
+        if self.order <= 0:
+            return [(*_previous_keys, key) for key in dict.keys(self)]
         else:
             return reduce(list.__add__,
-                          [value.keys((*_previous_keys, key))
-                           for key, value in items])
+                          [[]] + [value.keys((*_previous_keys, key))
+                                  for key, value in dict.items(self)])
 
     def reversed(self):
         return reversed(self.keys())
 
     def values(self):
-        items = list(dict.items(self))
-        return reduce(list.__add__, [value.values() for _, value in items])
+        if self.order <= 0:
+            return list(dict.values(self))
+        else:
+            return reduce(list.__add__, [value.values() for value in dict.values(self)])
 
     def copy(self):
-        c = Hidict()
+        c = Hidict(self.order)
         for item in self.items():
             c[item[:-1]] = item[-1]
         return c
