@@ -46,16 +46,22 @@ class Hidict(dict):
             subdict[keys] = value
 
     def update(self, dict_like):
-        if self.order <= 0:
-            for key, value in dict_like.items():
-                dict.__setitem__(self, key, value)
+        if isinstance(dict_like, dict):
+            if self.order <= 0:
+                for key, value in dict_like.items():
+                    dict.__setitem__(self, key, value)
+            else:
+                for key, value in dict_like.items():
+                    subdict = self._generate_subdict(key)
+                    subdict.update(value)
+                    dict.__setitem__(self, key, subdict)
         else:
-            for key, value in dict_like.items():
-                subdict = self._generate_subdict(key)
-                subdict.update(value)
-                dict.__setitem__(self, key, subdict)
+            for item in dict_like:
+                Hidict.__setitem__(self, item[:-1], item[-1])
 
     def __delitem__(self, keys):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
         key0, keys = keys[0], keys[1:]
         if len(keys) == 0 and self.order > 0:
             dict.__getitem__(self, key0).clear()

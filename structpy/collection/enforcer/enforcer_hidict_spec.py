@@ -34,11 +34,13 @@ class EnforcerHidictSpec:
             def __init__(self):
                 self.value = 0
             def add_function(self, items):
-                for _, value in items:
+                for _ in items:
                     self.value += 1
+                return items
             def remove_function(self, items):
-                for _, value in items:
+                for _ in items:
                     self.value -= 1
+                return items
 
         global other
         other = EntryCount()
@@ -81,7 +83,7 @@ class EnforcerHidictSpec:
         assert hidict['Bob', 'likes', 'little'] == 'George'
         hidict['Bob', 'dislikes']['lot'] = 'Sam'
         assert hidict['Bob', 'dislikes', 'lot'] == 'Sam'
-        assert other.value == 8
+        assert other.value == 7
 
     def delitem(hidict, keys):
         """
