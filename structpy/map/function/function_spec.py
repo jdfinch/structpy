@@ -10,7 +10,7 @@ class FunctionSpec:
     """
 
     @specification.init
-    def FUNCTION(Function):
+    def FUNCTION(Function, mapping=None):
         function = Function({
             'one': 1,
             'two': 2,
