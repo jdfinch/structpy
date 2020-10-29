@@ -70,13 +70,22 @@ class HiindexSpec:
         `mapping` should be like `dict<key: iterable<value>>`.
         """
         hiindex.update({
-
+            'Steve': {
+                'like': {
+                    'little': {'Rob'}
+                }
+            },
+            'Joe': {
+                'like': {
+                    'little': {'Mark'}
+                }
+            }
         })
         assert hiindex == {
             'Steve': {
                 'like': {
                     'lot': {'Sue'},
-                    'little': {'Jon', 'Sue'}
+                    'little': {'Jon', 'Sue', 'Rob'}
                 }
             },
             'Carl': {
@@ -118,6 +127,13 @@ class HiindexSpec:
             'Mark': {
                 'like': {
                     'little': 'Joe'
+                }
+            },
+            'Rob': {
+                'like': {
+                    'little': {
+                        'Steve'
+                    }
                 }
             }
         }

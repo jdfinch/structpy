@@ -19,7 +19,7 @@ class HidictSpec:
     def HIDICT_SPEC(Hidict, order, dict_like=None):
         """
         Create a hierarchical dictionary from the dictionary structure
-        passed in to `dict_like`.
+        passed in to `other`.
 
         `order` represents the number of intermediate keys to look up a
         value, e.g. an order-2 `Hidict` would have items of the form
@@ -68,9 +68,9 @@ class HidictSpec:
         will be cleared.
         """
         del hidict['Bob', 'likes', 'little']
-        assert 'little' not in hidict['Bob', 'likes']
+        assert ('Bob', 'likes', 'little') not in hidict
         del hidict['Bob', 'dislikes']
-        assert hidict['Bob', 'dislikes'] == {}
+        assert ('Bob', 'dislikes') not in hidict
 
     def contains(hidict, keys):
         """
@@ -94,7 +94,7 @@ class HidictSpec:
 
         Length of the tuples is `order+2`.
         """
-        items = hidict.items()
+        items = list(hidict.items())
         assert ('Mary', 'likes', 'lot', 'Bob') in items
         assert ('Mary', 'likes', 'little', 'Sue') in items
         assert ('Bob', 'likes', 'lot', 'Mary') in items

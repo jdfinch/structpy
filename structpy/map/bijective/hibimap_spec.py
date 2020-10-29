@@ -9,7 +9,7 @@ class HibimapSpec:
     """
 
     @specification.init
-    def HIBIMAP(Hibimap):
+    def HIBIMAP(Hibimap, order, mapping=None):
         return Hibimap(2, {
             1: {
                 'english': {'abbr': 'o', 'full': 'one'},
@@ -35,7 +35,7 @@ class HibimapSpec:
         The second keys is added to the domain.
         """
         hibimap[2, 'english', 'full'] = '222'
-        assert hibimap[2, 'spanish', 'abbr'] == '222'
+        assert hibimap[2, 'english', 'full'] == '222'
 
         # overwrite key-value pair
         hibimap[2, 'english', 'full'] = 'three'
