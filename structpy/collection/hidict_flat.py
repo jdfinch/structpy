@@ -1,8 +1,6 @@
 from structpy import implementation
 from structpy.collection.hidict_spec import HidictSpec
 
-from functools import reduce
-
 
 @implementation(HidictSpec)
 class Hidict(dict):
