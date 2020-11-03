@@ -52,7 +52,7 @@ class Hidict(dict):
             for i, key in enumerate(keys):
                 if key not in d:
                     superkeys = keys[:i+1]
-                    d[key] = Hidict(len(superkeys), None, superkeys)
+                    dict.__setitem__(d, key, Hidict(len(superkeys), None, superkeys))
                 d = dict.__getitem__(d, key)
             dict.__setitem__(d, keyprime, value)
         else:
