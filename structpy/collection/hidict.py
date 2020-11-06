@@ -1,21 +1,11 @@
-
 from structpy import implementation
 from structpy.collection.hidict_spec import HidictSpec
-
-from functools import reduce
 
 
 @implementation(HidictSpec)
 class Hidict(dict):
 
-    def _generate_subdict(self, key):
-        """
-        Create a subdict. Abstract to allow derived classes (e.g. EnforcerHidict)
-        to create custom subdict objects.
-        """
-        return Hidict(self.order - 1, None, *self.superkeys, key)
-
-    def __init__(self, order, dict_like=None, *superkeys):
+    def __init__(self, order, dict_like=None, superkeys=tuple()):
         dict.__init__(self)
         assert order >= 0
         self.order = order
@@ -31,44 +21,92 @@ class Hidict(dict):
             value = dict.__getitem__(value, key)
         return value
 
+    def __contains__(self, keys):
+        if not isinstance(keys, tuple):
+            keys = (keys,)
+        if len(keys) <= self.order + 1:
+            assert len(keys) <= self.order + 1
+            value = self
+            for key in keys:
+                if not dict.__contains__(value, key):
+                    return False
+                value = dict.__getitem__(value, key)
+            return True
+        elif len(keys) == self.order + 2:
+            value = self
+            for key in keys[:-1]:
+                if not dict.__contains__(value, key):
+                    return False
+                value = dict.__getitem__(value, key)
+            return value == keys[-1]
+        else:
+            raise KeyError(keys, self)
+
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        key0, keys = keys[0], keys[1:]
-        if self.order <= 0:
-            dict.__setitem__(self, key0, value)
+        assert len(keys) <= self.order + 1
+        if len(keys) == self.order + 1:
+            keys, keyprime = keys[:-1], keys[-1]
+            d = self
+            for i, key in enumerate(keys):
+                if key not in d:
+                    superkeys = keys[:i+1]
+                    dict.__setitem__(d, key, self._generate_subdict(key))
+                d = dict.__getitem__(d, key)
+            dict.__setitem__(d, keyprime, value)
         else:
-            if not dict.__contains__(self, key0):
-                subdict = self._generate_subdict(key0)
-                dict.__setitem__(self, key0, subdict)
-            else:
-                subdict = dict.__getitem__(self, key0)
-            subdict[keys] = value
+            d = self
+            for i, key in enumerate(keys):
+                if key not in d:
+                    superkeys = keys[:i+1]
+                    dict.__setitem__(d, key, self._generate_subdict(key))
+                d = dict.__getitem__(d, key)
+            stack = [(d, value, keys)]
+            while stack:
+                this, other, superkeys = stack.pop()
+                for key, value in dict.items(other):
+                    keys = (*superkeys, key)
+                    if key not in this:
+                        dict.__setitem__(this, key, self._generate_subdict(key))
+                    if len(keys) == self.order:
+                        dict.update(dict.__getitem__(this, key), value)
+                    else:
+                        stack.append((dict.__getitem__(this, key), value, keys))
 
-    def update(self, dict_like):
-        if isinstance(dict_like, dict):
-            if self.order <= 0:
-                for key, value in dict_like.items():
-                    dict.__setitem__(self, key, value)
-            else:
-                for key, value in dict_like.items():
-                    subdict = self._generate_subdict(key)
-                    subdict.update(value)
-                    dict.__setitem__(self, key, subdict)
+    def update(self, other):
+        if isinstance(other, dict):
+            stack = [(self, other, tuple())]
+            while stack:
+                this, other, superkeys = stack.pop()
+                for key, value in dict.items(other):
+                    keys = (*superkeys, key)
+                    if key not in this:
+                        dict.__setitem__(this, key, self._generate_subdict(key))
+                    if len(keys) == self.order:
+                        dict.update(dict.__getitem__(this, key), value)
+                    else:
+                        stack.append((dict.__getitem__(this, key), value, keys))
         else:
-            for item in dict_like:
-                Hidict.__setitem__(self, item[:-1], item[-1])
+            for item in other:
+                Hidict.__setitem__(self, item[:-1],  item[-1])
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        key0, keys = keys[0], keys[1:]
-        if len(keys) == 0 and self.order > 0:
-            dict.__getitem__(self, key0).clear()
-        elif self.order <= 0:
-            dict.__delitem__(self, key0)
-        else:
-            del dict.__getitem__(self, key0)[keys]
+        assert len(keys) <= self.order + 1
+        keys, keyprime = keys[:-1], keys[-1]
+        value = self
+        trail = []
+        for key in keys:
+            trail.append((value, key))
+            value = dict.__getitem__(value, key)
+        dict.__delitem__(value, keyprime)
+        for d, key in trail[::-1]:
+            if not dict.__getitem__(d, key):
+                dict.__delitem__(d, key)
+            else:
+                break
 
     def pop(self, *keys, default=None):
         if keys not in self:
@@ -78,12 +116,7 @@ class Hidict(dict):
         return value
 
     def popitem(self):
-        if self.order <= 0:
-            return dict.popitem(self)
-        else:
-            key, value = dict.popitem(self)
-            dict.__setitem__(self, key, value)
-            return (key,) + value.popitem()
+        raise AttributeError
 
     def setdefault(self, *keys, default=None):
         if keys in self:
@@ -92,57 +125,52 @@ class Hidict(dict):
             self[keys] = default
             return default
 
-    def __contains__(self, keys):
-        value = None
-        value_included = False
-        if not isinstance(keys, tuple):
-            keys = (keys,)
-        elif len(keys) > self.order + 1:
-            keys, value = keys[:-1], keys[-1]
-            value_included = True
-        subdict = self
-        for key in keys:
-            if not dict.__contains__(subdict, key):
-                return False
-            else:
-                subdict = dict.__getitem__(subdict, key)
-        if value_included:
-            return value == subdict
-        else:
-            return True
-
     def get(self, *keys, default=None):
         return self[keys] if keys in self else default
 
     def items(self):
-        if self.order <= 0:
-            return [(*self.superkeys, key, value) for key, value in dict.items(self)]
-        else:
-            return reduce(list.__add__,
-                    [[]] + [value.items() for key, value in dict.items(self)])
+        stack = [(self, tuple())]
+        while stack:
+            this, superkeys = stack.pop()
+            for key, value in dict.items(this):
+                keys = (*superkeys, key)
+                if len(keys) == self.order + 1:
+                    yield (*keys, value)
+                else:
+                    stack.append((dict.__getitem__(this, key), keys))
 
     def keys(self):
-        if self.order <= 0:
-            return [(*self.superkeys, key) for key in dict.keys(self)]
-        else:
-            return reduce(list.__add__,
-                          [[]] + [value.keys() for key, value in dict.items(self)])
+        stack = [(self, tuple())]
+        while stack:
+            this, superkeys = stack.pop()
+            for key, value in dict.items(this):
+                keys = (*superkeys, key)
+                if len(keys) == self.order + 1:
+                    yield keys
+                else:
+                    stack.append((dict.__getitem__(this, key), keys))
 
     def reversed(self):
-        return reversed(self.keys())
+        return reversed(list(self.keys()))
 
     def values(self):
-        if self.order <= 0:
-            return list(dict.values(self))
-        else:
-            return reduce(list.__add__, [value.values() for value in dict.values(self)])
+        stack = [(self, 0)]
+        while stack:
+            this, superkeys = stack.pop()
+            for key, value in dict.items(this):
+                keys = superkeys + 1
+                if keys == self.order + 1:
+                    yield value
+                else:
+                    stack.append((dict.__getitem__(this, key), keys))
 
     def copy(self):
         c = Hidict(self.order)
-        for item in self.items():
-            c[item[:-1]] = item[-1]
+        c.update(self.items())
         return c
 
+    def _generate_subdict(self, key):
+        return Hidict(len(self.superkeys), None, self.superkeys)
 
 if __name__ == '__main__':
     print(HidictSpec.verify(Hidict))
