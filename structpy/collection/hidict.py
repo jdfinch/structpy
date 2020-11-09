@@ -52,7 +52,7 @@ class Hidict(dict):
             for i, key in enumerate(keys):
                 if key not in d:
                     superkeys = keys[:i+1]
-                    dict.__setitem__(d, key, self._generate_subdict(key))
+                    dict.__setitem__(d, key, self._generate_subdict(self.order - len(superkeys), superkeys))
                 d = dict.__getitem__(d, key)
             dict.__setitem__(d, keyprime, value)
         else:
@@ -60,7 +60,7 @@ class Hidict(dict):
             for i, key in enumerate(keys):
                 if key not in d:
                     superkeys = keys[:i+1]
-                    dict.__setitem__(d, key, self._generate_subdict(key))
+                    dict.__setitem__(d, key, self._generate_subdict(self.order - len(superkeys), superkeys))
                 d = dict.__getitem__(d, key)
             stack = [(d, value, keys)]
             while stack:
@@ -68,7 +68,7 @@ class Hidict(dict):
                 for key, value in dict.items(other):
                     keys = (*superkeys, key)
                     if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(key))
+                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
                     if len(keys) == self.order:
                         dict.update(dict.__getitem__(this, key), value)
                     else:
@@ -82,7 +82,7 @@ class Hidict(dict):
                 for key, value in dict.items(other):
                     keys = (*superkeys, key)
                     if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(key))
+                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
                     if len(keys) == self.order:
                         dict.update(dict.__getitem__(this, key), value)
                     else:
@@ -135,7 +135,7 @@ class Hidict(dict):
             for key, value in dict.items(this):
                 keys = (*superkeys, key)
                 if len(keys) == self.order + 1:
-                    yield (*keys, value)
+                    yield (*self.superkeys, *keys, value)
                 else:
                     stack.append((dict.__getitem__(this, key), keys))
 
@@ -146,7 +146,7 @@ class Hidict(dict):
             for key, value in dict.items(this):
                 keys = (*superkeys, key)
                 if len(keys) == self.order + 1:
-                    yield keys
+                    yield (*self.superkeys, *keys)
                 else:
                     stack.append((dict.__getitem__(this, key), keys))
 
@@ -169,8 +169,8 @@ class Hidict(dict):
         c.update(self.items())
         return c
 
-    def _generate_subdict(self, key):
-        return Hidict(len(self.superkeys), None, self.superkeys)
+    def _generate_subdict(self, order, superkeys):
+        return Hidict(order, None, superkeys)
 
 if __name__ == '__main__':
     print(HidictSpec.verify(Hidict))

@@ -34,10 +34,12 @@ class EnforcerHidictSpec:
             def __init__(self):
                 self.value = 0
             def add_function(self, items):
+                items = list(items)
                 for _ in items:
                     self.value += 1
                 return items
             def remove_function(self, items):
+                items = list(items)
                 for _ in items:
                     self.value -= 1
                 return items
@@ -95,7 +97,7 @@ class EnforcerHidictSpec:
         del hidict['Bob', 'likes', 'little']
         assert 'little' not in hidict['Bob', 'likes']
         del hidict['Bob', 'dislikes']
-        assert hidict['Bob', 'dislikes'] == {}
+        assert 'dislikes' not in hidict['Bob']
         assert other.value == 4
 
     def contains(hidict, keys):
@@ -120,7 +122,7 @@ class EnforcerHidictSpec:
 
         Length of the tuples is `order+2`.
         """
-        items = hidict.items()
+        items = set(hidict.items())
         assert ('Mary', 'likes', 'lot', 'Bob') in items
         assert ('Mary', 'likes', 'little', 'Sue') in items
         assert ('Bob', 'likes', 'lot', 'Mary') in items
