@@ -100,7 +100,7 @@ class HidirSpec:
         assert ('Mary', 'likes', 'lot') in hidir
         assert ('Mary', 'likes') in hidir
         assert ('Marvin', 'likes') not in hidir
-        assert ('Mary', 'likes', 'lot', {'Bob', 'Joe', 'Rick'}) in hidir
+        assert ('Mary', 'likes', 'lot', 'Rick') in hidir
 
     def items(hidir):
         """
@@ -109,7 +109,8 @@ class HidirSpec:
         Length of the tuples is `order+2`.
         """
         items = list(hidir.items())
-        assert ('Mary', 'likes', 'lot', {'Bob', 'Joe', 'Rick'}) in items
-        assert ('Mary', 'likes', 'little', {'Sue'}) in items
-        assert ('Bob', 'likes', 'lot', {'Mary'}) in items
-        assert not ('Bob', 'likes', 'lot', {'Mary', 'Joe'}) in items
+        assert ('Mary', 'likes', 'lot', 'Bob') in items
+        assert ('Mary', 'likes', 'lot', 'Rick') in items
+        assert ('Mary', 'likes', 'little', 'Sue') in items
+        assert ('Bob', 'likes', 'lot', 'Mary') in items
+        assert ('Bob', 'likes', 'lot', 'Rick') not in items

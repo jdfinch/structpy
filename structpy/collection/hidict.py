@@ -5,6 +5,9 @@ from structpy.collection.hidict_spec import HidictSpec
 @implementation(HidictSpec)
 class Hidict(dict):
 
+    def _generate_subdict(self, order, superkeys):
+        return Hidict(order, None, superkeys)
+
     def __init__(self, order, dict_like=None, superkeys=tuple()):
         dict.__init__(self)
         assert order >= 0
@@ -169,8 +172,6 @@ class Hidict(dict):
         c.update(self.items())
         return c
 
-    def _generate_subdict(self, order, superkeys):
-        return Hidict(order, None, superkeys)
 
 if __name__ == '__main__':
     print(HidictSpec.verify(Hidict))
