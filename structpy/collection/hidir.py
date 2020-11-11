@@ -42,7 +42,7 @@ class Hidir(Hidict):
 
     def __setitem__(self, keys, values):
         valueset = self._generate_valueset((*self.superkeys, *keys))
-        valueset.update(values)
+        set.update(valueset, values)
         Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):

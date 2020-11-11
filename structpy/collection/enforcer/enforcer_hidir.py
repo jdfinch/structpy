@@ -22,6 +22,12 @@ class EnforcerValueSet(EnforcerSet):
         hidir_items = self._hidir_remove_function([(*self.superkeys, item) for item in items])
         return [item[-1] for item in hidir_items] if hidir_items is not None else None
 
+    def __str__(self):
+        return '{' + ', '.join(["'" + x + "'" for x in self]) + '}'
+
+    def __repr__(self):
+        return str(self)
+
 
 @implementation(EnforcerHidirSpec)
 class EnforcerHidir(Hidir):
