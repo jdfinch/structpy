@@ -2,10 +2,7 @@
 from structpy import implementation
 from structpy.collection.enforcer.enforcer_hidict_spec import EnforcerHidictSpec
 
-from structpy.collection.enforcer.enforcer_dict import EnforcerDict
 from structpy.collection.hidict import Hidict
-
-from functools import reduce
 
 
 @implementation(EnforcerHidictSpec)

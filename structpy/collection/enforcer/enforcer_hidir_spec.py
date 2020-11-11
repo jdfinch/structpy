@@ -47,21 +47,29 @@ class EnforcerHidirSpec:
         global other
         other = EntryCount()
 
-        hidir = EnforcerHidir(2,
-            {
-                'Mary': {
-                    'likes': {'lot': 'Bob', 'little': 'Sue'},
-                    'dislikes': {'lot': 'Randy'}
-                },
-                'Bob': {
-                    'likes': {'lot': 'Mary'},
-                    'dislikes': {'lot': 'Sue', 'medium': 'Joe'}
-                }
+        hidir = EnforcerHidir(2, {
+            'Mary': {
+              'likes': {
+                  'lot': {'Bob', 'Joe'},
+                  'little': {'Sue'}
+              },
+              'dislikes': {
+                  'lot': {'Randy', 'Phil'}
+              }
             },
+            'Bob': {
+              'likes': {
+                  'lot': {'Mary'}
+              },
+              'dislikes': {
+                  'lot': {'Sue'},
+                  'medium': {'Joe'}
+              }
+            }},
             add_function=other.add_function,
             remove_function=other.remove_function
         )
-        assert other.value == 6
+        assert other.value == 8
         return hidir
 
     def getitem(hidir, keys):
@@ -70,10 +78,10 @@ class EnforcerHidirSpec:
 
         Providing less than `order+1` keys will return a subdirectory object.
         """
-        assert hidir['Mary', 'likes', 'lot'] == 'Bob'
+        assert hidir['Mary', 'likes', 'lot'] == {'Bob', 'Joe'}
         keys = ('Mary', 'likes', 'little')
-        assert hidir[keys] == 'Sue'
-        assert hidir['Mary', 'dislikes'] == {'lot': 'Randy'}
+        assert hidir[keys] == {'Sue'}
+        assert hidir['Mary', 'dislikes'] == {'lot': {'Randy', 'Phil'}}
 
     def setitem(hidir, keys, value):
         """
@@ -81,11 +89,16 @@ class EnforcerHidirSpec:
 
         `keys` should be a tuple of keys with length `order+1`.
         """
-        hidir['Bob', 'likes', 'little'] = 'George'
-        assert hidir['Bob', 'likes', 'little'] == 'George'
-        hidir['Bob', 'dislikes']['lot'] = 'Sam'
-        assert hidir['Bob', 'dislikes', 'lot'] == 'Sam'
-        assert other.value == 7
+        hidir['Bob', 'likes', 'little'] = ['George']
+        assert hidir['Bob', 'likes', 'little'] == {'George'}
+        hidir['Bob', 'dislikes', 'lot'] = ['Sam', 'Phil']
+        assert hidir['Bob', 'dislikes', 'lot'] == {'Sam', 'Phil'}
+
+        # can also add items to a Hidir value set
+        hidir['Mary', 'likes', 'lot'].add('Rick')
+        assert hidir['Mary', 'likes', 'lot'] == {'Bob', 'Joe', 'Rick'}
+
+        assert other.value == 11
 
     def delitem(hidir, keys):
         """
@@ -95,10 +108,10 @@ class EnforcerHidirSpec:
         will be cleared.
         """
         del hidir['Bob', 'likes', 'little']
-        assert 'little' not in hidir['Bob', 'likes']
+        assert ('Bob', 'likes', 'little') not in hidir
         del hidir['Bob', 'dislikes']
-        assert 'dislikes' not in hidir['Bob']
-        assert other.value == 4
+        assert ('Bob', 'dislikes') not in hidir
+        assert other.value == 7
 
     def contains(hidir, keys):
         """
@@ -114,7 +127,8 @@ class EnforcerHidirSpec:
         assert ('Mary', 'likes', 'lot') in hidir
         assert ('Mary', 'likes') in hidir
         assert ('Marvin', 'likes') not in hidir
-        assert ('Mary', 'likes', 'lot', 'Bob') in hidir
+        assert ('Mary', 'likes', 'lot', 'Rick') in hidir
+        assert ('Mary', 'likes', 'lot', 'Joe') in hidir
 
     def items(hidir):
         """
@@ -122,11 +136,12 @@ class EnforcerHidirSpec:
 
         Length of the tuples is `order+2`.
         """
-        items = set(hidir.items())
+        items = list(hidir.items())
         assert ('Mary', 'likes', 'lot', 'Bob') in items
+        assert ('Mary', 'likes', 'lot', 'Rick') in items
         assert ('Mary', 'likes', 'little', 'Sue') in items
         assert ('Bob', 'likes', 'lot', 'Mary') in items
-        assert not ('Bob', 'likes', 'little', 'Joe') in items
+        assert ('Bob', 'likes', 'lot', 'Rick') not in items
 
 
 

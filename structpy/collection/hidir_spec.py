@@ -101,6 +101,7 @@ class HidirSpec:
         assert ('Mary', 'likes') in hidir
         assert ('Marvin', 'likes') not in hidir
         assert ('Mary', 'likes', 'lot', 'Rick') in hidir
+        assert ('Mary', 'likes', 'lot', 'Joe') in hidir
 
     def items(hidir):
         """

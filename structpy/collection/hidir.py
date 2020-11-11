@@ -64,7 +64,10 @@ class Hidir(Hidict):
                         stack.append((dict.__getitem__(this, key), values, keys))
         else:
             for item in other:
-                Hidict.__setitem__(self, item[:-1],  set(item[-1]))
+                keys, value = item[:-1], item[-1]
+                if not Hidict.__contains__(self, keys):
+                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, keys)))
+                set.add(Hidict.__getitem__(self, keys), value)
 
     def values(self):
         return chain(Hidict.values(self))
