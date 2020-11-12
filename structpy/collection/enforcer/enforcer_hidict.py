@@ -21,28 +21,54 @@ class EnforcerHidict(Hidict):
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        if keys not in self:
-            items = self.add_function([(*self.superkeys, *keys,value)])
-            if items is not None:
-                items = [item[len(self.superkeys):] for item in items]
-                Hidict.update(self, items)
+        if len(keys) == self.order + 1:
+            if keys not in self:
+                items = self.add_function([(*self.superkeys, *keys,value)])
+                if items is not None:
+                    items = [item[len(self.superkeys):] for item in items]
+                    Hidict.update(self, items)
+                else:
+                    Hidict.__setitem__(self, keys, value)
             else:
-                Hidict.__setitem__(self, keys, value)
+                original_value = self[keys]
+                items = self.remove_function([(*self.superkeys, *keys, original_value)])
+                if items is not None:
+                    items = [item[len(self.superkeys):] for item in items]
+                    for item in items:
+                        Hidict.__delitem__(self, item[:-1])
+                else:
+                    Hidict.__delitem__(self, keys)
+                items = self.add_function([(*self.superkeys, *keys, value)])
+                if items is not None:
+                    items = [item[len(self.superkeys):] for item in items]
+                    Hidict.update(self, items)
+                else:
+                    Hidict.__setitem__(self, keys, value)
         else:
-            original_value = self[keys]
-            items = self.remove_function([(*self.superkeys, *keys, original_value)])
-            if items is not None:
-                items = [item[len(self.superkeys):] for item in items]
-                for item in items:
-                    Hidict.__delitem__(self, item[:-1])
-            else:
-                Hidict.__delitem__(self, keys)
-            items = self.add_function([(*self.superkeys, *keys, value)])
-            if items is not None:
-                items = [item[len(self.superkeys):] for item in items]
-                Hidict.update(self, items)
-            else:
-                Hidict.__setitem__(self, keys, value)
+            d = self
+            for i, key in enumerate(keys):
+                if key not in d:
+                    superkeys = keys[:i + 1]
+                    dict.__setitem__(d, key,
+                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
+                d = dict.__getitem__(d, key)
+            stack = [(d, value, keys)]
+            while stack:
+                this, other, superkeys = stack.pop()
+                if len(superkeys) == self.order:
+                    to_add = self.add_function([(*self.superkeys, *superkeys, k) for k, v in dict.items(other)])
+                    if to_add is None:
+                        dict.update(this, other)
+                    else:
+                        items = [(*self.superkeys, *superkeys, *item[len(self.superkeys):])
+                                 for item in dict.items(other)]
+                        Hidict.update(self, items)
+                else:
+                    for key, value in dict.items(other):
+                        keys = (*superkeys, key)
+                        if keys not in this:
+                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
+                        stack.append((dict.__getitem__(this, key), value, keys))
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):
