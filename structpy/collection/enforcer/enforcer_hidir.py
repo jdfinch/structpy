@@ -72,6 +72,8 @@ class EnforcerHidir(Hidir):
                 else:
                     Hidir.__setitem__(self, keys, values)
         else:
+            if keys in self:
+                del self[keys]
             d = self
             for i, key in enumerate(keys):
                 if key not in d:

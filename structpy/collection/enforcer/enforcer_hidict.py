@@ -45,6 +45,8 @@ class EnforcerHidict(Hidict):
                 else:
                     Hidict.__setitem__(self, keys, value)
         else:
+            if keys in self:
+                del self[keys]
             d = self
             for i, key in enumerate(keys):
                 if key not in d:

@@ -60,6 +60,8 @@ class Hidict(dict):
                 d = dict.__getitem__(d, key)
             dict.__setitem__(d, keyprime, value)
         else:
+            if keys in self:
+                del self[keys]
             d = self
             for i, key in enumerate(keys):
                 if key not in d:
