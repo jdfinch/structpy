@@ -45,7 +45,7 @@ class MapSpec:
     def getitem(map, item):
         &#34;&#34;&#34;
         Get a reference to the elements in the codomain associated
-        with domain element item.
+        with domain element keys.
         &#34;&#34;&#34;
         assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
         assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
@@ -66,7 +66,7 @@ class MapSpec:
         map[&#39;star wars&#39;].update([&#39;daisy&#39;])
         assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
 
-        # Adding an item can be done via getitem subscript as well.
+        # Adding an keys can be done via getitem subscript as well.
         map[&#39;captain america&#39;]
         assert map[&#39;captain america&#39;] == set()
         assert &#39;captain america&#39; in map
@@ -137,7 +137,7 @@ class MapSpec:
     def getitem(map, item):
         &#34;&#34;&#34;
         Get a reference to the elements in the codomain associated
-        with domain element item.
+        with domain element keys.
         &#34;&#34;&#34;
         assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
         assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
@@ -158,7 +158,7 @@ class MapSpec:
         map[&#39;star wars&#39;].update([&#39;daisy&#39;])
         assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
 
-        # Adding an item can be done via getitem subscript as well.
+        # Adding an keys can be done via getitem subscript as well.
         map[&#39;captain america&#39;]
         assert map[&#39;captain america&#39;] == set()
         assert &#39;captain america&#39; in map
@@ -241,7 +241,7 @@ def MAP(Map, mapping=None):
 </code></dt>
 <dd>
 <div class="desc"><p>Get a reference to the elements in the codomain associated
-with domain element item.</p></div>
+with domain element keys.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -249,7 +249,7 @@ with domain element item.</p></div>
 <pre><code class="python">def getitem(map, item):
     &#34;&#34;&#34;
     Get a reference to the elements in the codomain associated
-    with domain element item.
+    with domain element keys.
     &#34;&#34;&#34;
     assert map[&#39;avengers&#39;] == {&#39;scarlett&#39;, &#39;chris&#39;}
     assert map[&#39;star wars&#39;] == {&#39;adam&#39;}
@@ -283,7 +283,7 @@ a direct reference to the provided values object.</p></div>
     map[&#39;star wars&#39;].update([&#39;daisy&#39;])
     assert map[&#39;star wars&#39;] == {&#39;adam&#39;, &#39;daisy&#39;}
 
-    # Adding an item can be done via getitem subscript as well.
+    # Adding an keys can be done via getitem subscript as well.
     map[&#39;captain america&#39;]
     assert map[&#39;captain america&#39;] == set()
     assert &#39;captain america&#39; in map</code></pre>

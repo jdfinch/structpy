@@ -40,6 +40,18 @@ hidict entry.</p>
 is specified, allowing flexibility in lookup patterns where multiple
 keys are associated with a value.
 <br>
+<br>
+<br></p>
+<h3 id="hidir"><a href="hidir.html">Hidir</a></h3>
+<p>Implementation of <code><a title="structpy.collection.hidir_spec.HidirSpec" href="hidir_spec.html#structpy.collection.hidir_spec.HidirSpec">HidirSpec</a></code>
+<br></p>
+<p>Hierarchical directory.</p>
+<p>For an order-N hidir, N+1 ordered keys are mapped to a set of values
+in each hidir entry.</p>
+<p>Hidir supports access patterns where only part of the key sequence
+is specified, allowing flexibility in lookup patterns where multiple
+keys are associated with a value set.
+<br>
 <br></p>
 <details class="source">
 <summary>
@@ -51,10 +63,12 @@ Homogeneous collections of elements.
 
 from structpy.collection.enforcer import EnforcerSet as Set
 from structpy.collection.hidict import Hidict
+from structpy.collection.hidir import Hidir
 
 __all__ = [
     &#39;Set&#39;,
-    &#39;Hidict&#39;
+    &#39;Hidict&#39;,
+    &#39;Hidir&#39;
 ]</code></pre>
 </details>
 </section>
@@ -76,6 +90,14 @@ over, where each value is derived from an update of the previous one …</p></di
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="structpy.collection.hidict_spec" href="hidict_spec.html">hidict_spec</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.hidir" href="hidir.html">hidir</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.hidir_spec" href="hidir_spec.html">hidir_spec</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -102,6 +124,7 @@ over, where each value is derived from an update of the previous one …</p></di
 <ul>
 <li><a href="#set">Set</a></li>
 <li><a href="#hidict">Hidict</a></li>
+<li><a href="#hidir">Hidir</a></li>
 </ul>
 </div>
 <ul id="index">
@@ -116,6 +139,8 @@ over, where each value is derived from an update of the previous one …</p></di
 <li><code><a title="structpy.collection.enumerable" href="enumerable/index.html">enumerable</a></code></li>
 <li><code><a title="structpy.collection.hidict" href="hidict.html">hidict</a></code></li>
 <li><code><a title="structpy.collection.hidict_spec" href="hidict_spec.html">hidict_spec</a></code></li>
+<li><code><a title="structpy.collection.hidir" href="hidir.html">hidir</a></code></li>
+<li><code><a title="structpy.collection.hidir_spec" href="hidir_spec.html">hidir_spec</a></code></li>
 <li><code><a title="structpy.collection.set" href="set.html">set</a></code></li>
 <li><code><a title="structpy.collection.set_spec" href="set_spec.html">set_spec</a></code></li>
 </ul>

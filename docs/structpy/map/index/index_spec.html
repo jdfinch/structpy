@@ -68,7 +68,7 @@ class IndexSpec:
         assert 4 in index
         assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-        # Adding an item can be done via subscript as well.
+        # Adding an keys can be done via subscript as well.
         index[5]
         assert 5 in index
         assert index[5] == set()
@@ -189,7 +189,7 @@ class IndexSpec:
         assert 4 in index
         assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-        # Adding an item can be done via subscript as well.
+        # Adding an keys can be done via subscript as well.
         index[5]
         assert 5 in index
         assert index[5] == set()
@@ -328,7 +328,7 @@ a direct reference to the provided values object.</p></div>
     assert 4 in index
     assert index[4] == {&#39;four&#39;, &#39;cuatro&#39;, &#39;net&#39;}
 
-    # Adding an item can be done via subscript as well.
+    # Adding an keys can be done via subscript as well.
     index[5]
     assert 5 in index
     assert index[5] == set()

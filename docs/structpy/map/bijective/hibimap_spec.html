@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.map.function.function_spec API documentation</title>
+<title>structpy.map.bijective.hibimap_spec API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,82 +17,68 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.map.function.function_spec</code></h1>
+<h1 class="title">Module <code>structpy.map.bijective.hibimap_spec</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from structpy import specification
-# import structpy.map.index.index_spec as indexspec
+<pre><code class="python">from structpy.language import specification
 
 
 @specification
-class FunctionSpec:
+class HibimapSpec:
     &#34;&#34;&#34;
-    Many-to-one mapping between elements in a domain to elements in a codomain.
+    Hierarchical bijective mapping between finite domain and codomain.
     &#34;&#34;&#34;
 
     @specification.init
-    def FUNCTION(Function, mapping=None):
-        function = Function({
-            &#39;one&#39;: 1,
-            &#39;two&#39;: 2,
-            &#39;uno&#39;: 1
+    def HIBIMAP(Hibimap, order, mapping=None):
+        return Hibimap(2, {
+            1: {
+                &#39;english&#39;: {&#39;abbr&#39;: &#39;o&#39;, &#39;full&#39;: &#39;one&#39;},
+                &#39;spanish&#39;: {&#39;abbr&#39;: &#39;u&#39;, &#39;full&#39;: &#39;uno&#39;}
+            },
+            2: {
+                &#39;english&#39;: {&#39;abbr&#39;: &#39;t&#39;}
+            }
         })
-        return function
 
-    def getitem(function, item):
+    def getitem(hibimap, item):
         &#34;&#34;&#34;
         Get the value in the domain associated with a domain keys.
         &#34;&#34;&#34;
-        assert function[&#39;one&#39;] == 1
-        assert function[&#39;two&#39;] == 2
+        assert hibimap[1, &#39;english&#39;, &#39;full&#39;] == &#39;one&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;abbr&#39;] == &#39;t&#39;
 
-    def setitem(function, key, value):
+    def setitem(hibimap, key, value):
         &#34;&#34;&#34;
         Add a keys pair that co-map.
+
+        The first keys is added to the domain.
+        The second keys is added to the domain.
         &#34;&#34;&#34;
-        function[&#39;dos&#39;] = 2
-        assert function[&#39;dos&#39;] == 2
+        hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;222&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;222&#39;
 
         # overwrite key-value pair
-        function[&#39;dos&#39;] = 3
-        assert function[&#39;dos&#39;] == 3
+        hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
 
-    def delitem(function, element):
-        &#34;&#34;&#34;
-        Remove an keys pair from the function by key (domain element).
-        &#34;&#34;&#34;
-        del function[&#39;two&#39;]
-        assert &#39;two&#39; not in function
+        # many-to-one mappings not allowed, resulting in overwrite
+        hibimap[3, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+        assert hibimap[3, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
+        assert (2, &#39;english&#39;, &#39;full&#39;) not in hibimap
 
-    def reverse(function):
+    def reverse(hibimap):
         &#34;&#34;&#34;
-        Reverses a `Function` into an `Index` representation.
+        Returns a view of the bimap that swaps
+        the domain and codomain for reverse mapping.
         &#34;&#34;&#34;
-        idx = function.reverse()
-        assert &#39;one&#39; in idx[1]
-        assert &#39;uno&#39; in idx[1]
-        assert &#39;dos&#39; in idx[3]
-        del idx[3]
-        assert &#39;dos&#39; not in function
-
-    # @specification.satisfies(indexspec.IndexSpec.INDEX)
-    # def REVERSE(Function):
-    #     &#34;&#34;&#34;
-    #     Returns a index (one-to-many mapping) representing
-    #     a function with domain and codomain swapped.
-    #     &#34;&#34;&#34;
-    #     return Function({
-    #         &#39;one&#39;: 1,
-    #         &#39;hana&#39;: 1,
-    #         &#39;uno&#39;: 1,
-    #         &#39;dos&#39;: 2,
-    #         &#39;two&#39;: 2,
-    #         &#39;three&#39;: 3
-    #     }).reverse()</code></pre>
+        r = hibimap.reverse()
+        assert r[&#39;three&#39;] == (3, &#39;english&#39;, &#39;full&#39;)
+        assert r[&#39;o&#39;] == (1, &#39;english&#39;, &#39;abbr&#39;)</code></pre>
 </details>
 </section>
 <section>
@@ -104,68 +90,70 @@ class FunctionSpec:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.map.function.function_spec.FunctionSpec"><code class="flex name class">
-<span>class <span class="ident">FunctionSpec</span></span>
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec"><code class="flex name class">
+<span>class <span class="ident">HibimapSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Many-to-one mapping between elements in a domain to elements in a codomain.</p></div>
+<div class="desc"><p>Hierarchical bijective mapping between finite domain and codomain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class FunctionSpec:
+<pre><code class="python">class HibimapSpec:
     &#34;&#34;&#34;
-    Many-to-one mapping between elements in a domain to elements in a codomain.
+    Hierarchical bijective mapping between finite domain and codomain.
     &#34;&#34;&#34;
 
     @specification.init
-    def FUNCTION(Function, mapping=None):
-        function = Function({
-            &#39;one&#39;: 1,
-            &#39;two&#39;: 2,
-            &#39;uno&#39;: 1
+    def HIBIMAP(Hibimap, order, mapping=None):
+        return Hibimap(2, {
+            1: {
+                &#39;english&#39;: {&#39;abbr&#39;: &#39;o&#39;, &#39;full&#39;: &#39;one&#39;},
+                &#39;spanish&#39;: {&#39;abbr&#39;: &#39;u&#39;, &#39;full&#39;: &#39;uno&#39;}
+            },
+            2: {
+                &#39;english&#39;: {&#39;abbr&#39;: &#39;t&#39;}
+            }
         })
-        return function
 
-    def getitem(function, item):
+    def getitem(hibimap, item):
         &#34;&#34;&#34;
         Get the value in the domain associated with a domain keys.
         &#34;&#34;&#34;
-        assert function[&#39;one&#39;] == 1
-        assert function[&#39;two&#39;] == 2
+        assert hibimap[1, &#39;english&#39;, &#39;full&#39;] == &#39;one&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;abbr&#39;] == &#39;t&#39;
 
-    def setitem(function, key, value):
+    def setitem(hibimap, key, value):
         &#34;&#34;&#34;
         Add a keys pair that co-map.
+
+        The first keys is added to the domain.
+        The second keys is added to the domain.
         &#34;&#34;&#34;
-        function[&#39;dos&#39;] = 2
-        assert function[&#39;dos&#39;] == 2
+        hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;222&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;222&#39;
 
         # overwrite key-value pair
-        function[&#39;dos&#39;] = 3
-        assert function[&#39;dos&#39;] == 3
+        hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+        assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
 
-    def delitem(function, element):
-        &#34;&#34;&#34;
-        Remove an keys pair from the function by key (domain element).
-        &#34;&#34;&#34;
-        del function[&#39;two&#39;]
-        assert &#39;two&#39; not in function
+        # many-to-one mappings not allowed, resulting in overwrite
+        hibimap[3, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+        assert hibimap[3, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
+        assert (2, &#39;english&#39;, &#39;full&#39;) not in hibimap
 
-    def reverse(function):
+    def reverse(hibimap):
         &#34;&#34;&#34;
-        Reverses a `Function` into an `Index` representation.
+        Returns a view of the bimap that swaps
+        the domain and codomain for reverse mapping.
         &#34;&#34;&#34;
-        idx = function.reverse()
-        assert &#39;one&#39; in idx[1]
-        assert &#39;uno&#39; in idx[1]
-        assert &#39;dos&#39; in idx[3]
-        del idx[3]
-        assert &#39;dos&#39; not in function</code></pre>
+        r = hibimap.reverse()
+        assert r[&#39;three&#39;] == (3, &#39;english&#39;, &#39;full&#39;)
+        assert r[&#39;o&#39;] == (1, &#39;english&#39;, &#39;abbr&#39;)</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
-<dt id="structpy.map.function.function_spec.FunctionSpec.verify"><code class="name flex">
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec.verify"><code class="name flex">
 <span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
 </code></dt>
 <dd>
@@ -187,8 +175,8 @@ class FunctionSpec:
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.map.function.function_spec.FunctionSpec.FUNCTION"><code class="name flex">
-<span>def <span class="ident">FUNCTION</span></span>(<span>Function, mapping=None)</span>
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec.HIBIMAP"><code class="name flex">
+<span>def <span class="ident">HIBIMAP</span></span>(<span>Hibimap, order, mapping=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -197,17 +185,20 @@ class FunctionSpec:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@specification.init
-def FUNCTION(Function, mapping=None):
-    function = Function({
-        &#39;one&#39;: 1,
-        &#39;two&#39;: 2,
-        &#39;uno&#39;: 1
-    })
-    return function</code></pre>
+def HIBIMAP(Hibimap, order, mapping=None):
+    return Hibimap(2, {
+        1: {
+            &#39;english&#39;: {&#39;abbr&#39;: &#39;o&#39;, &#39;full&#39;: &#39;one&#39;},
+            &#39;spanish&#39;: {&#39;abbr&#39;: &#39;u&#39;, &#39;full&#39;: &#39;uno&#39;}
+        },
+        2: {
+            &#39;english&#39;: {&#39;abbr&#39;: &#39;t&#39;}
+        }
+    })</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.function.function_spec.FunctionSpec.getitem"><code class="name flex">
-<span>def <span class="ident">getitem</span></span>(<span>function, item)</span>
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec.getitem"><code class="name flex">
+<span>def <span class="ident">getitem</span></span>(<span>hibimap, item)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Get the value in the domain associated with a domain keys.</p></div>
@@ -215,71 +206,63 @@ def FUNCTION(Function, mapping=None):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getitem(function, item):
+<pre><code class="python">def getitem(hibimap, item):
     &#34;&#34;&#34;
     Get the value in the domain associated with a domain keys.
     &#34;&#34;&#34;
-    assert function[&#39;one&#39;] == 1
-    assert function[&#39;two&#39;] == 2</code></pre>
+    assert hibimap[1, &#39;english&#39;, &#39;full&#39;] == &#39;one&#39;
+    assert hibimap[2, &#39;english&#39;, &#39;abbr&#39;] == &#39;t&#39;</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.function.function_spec.FunctionSpec.setitem"><code class="name flex">
-<span>def <span class="ident">setitem</span></span>(<span>function, key, value)</span>
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec.setitem"><code class="name flex">
+<span>def <span class="ident">setitem</span></span>(<span>hibimap, key, value)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Add a keys pair that co-map.</p></div>
+<div class="desc"><p>Add a keys pair that co-map.</p>
+<p>The first keys is added to the domain.
+The second keys is added to the domain.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def setitem(function, key, value):
+<pre><code class="python">def setitem(hibimap, key, value):
     &#34;&#34;&#34;
     Add a keys pair that co-map.
+
+    The first keys is added to the domain.
+    The second keys is added to the domain.
     &#34;&#34;&#34;
-    function[&#39;dos&#39;] = 2
-    assert function[&#39;dos&#39;] == 2
+    hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;222&#39;
+    assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;222&#39;
 
     # overwrite key-value pair
-    function[&#39;dos&#39;] = 3
-    assert function[&#39;dos&#39;] == 3</code></pre>
+    hibimap[2, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+    assert hibimap[2, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
+
+    # many-to-one mappings not allowed, resulting in overwrite
+    hibimap[3, &#39;english&#39;, &#39;full&#39;] = &#39;three&#39;
+    assert hibimap[3, &#39;english&#39;, &#39;full&#39;] == &#39;three&#39;
+    assert (2, &#39;english&#39;, &#39;full&#39;) not in hibimap</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.function.function_spec.FunctionSpec.delitem"><code class="name flex">
-<span>def <span class="ident">delitem</span></span>(<span>function, element)</span>
+<dt id="structpy.map.bijective.hibimap_spec.HibimapSpec.reverse"><code class="name flex">
+<span>def <span class="ident">reverse</span></span>(<span>hibimap)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Remove an keys pair from the function by key (domain element).</p></div>
+<div class="desc"><p>Returns a view of the bimap that swaps
+the domain and codomain for reverse mapping.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delitem(function, element):
+<pre><code class="python">def reverse(hibimap):
     &#34;&#34;&#34;
-    Remove an keys pair from the function by key (domain element).
+    Returns a view of the bimap that swaps
+    the domain and codomain for reverse mapping.
     &#34;&#34;&#34;
-    del function[&#39;two&#39;]
-    assert &#39;two&#39; not in function</code></pre>
-</details>
-</dd>
-<dt id="structpy.map.function.function_spec.FunctionSpec.reverse"><code class="name flex">
-<span>def <span class="ident">reverse</span></span>(<span>function)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Reverses a <code>Function</code> into an <code>Index</code> representation.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def reverse(function):
-    &#34;&#34;&#34;
-    Reverses a `Function` into an `Index` representation.
-    &#34;&#34;&#34;
-    idx = function.reverse()
-    assert &#39;one&#39; in idx[1]
-    assert &#39;uno&#39; in idx[1]
-    assert &#39;dos&#39; in idx[3]
-    del idx[3]
-    assert &#39;dos&#39; not in function</code></pre>
+    r = hibimap.reverse()
+    assert r[&#39;three&#39;] == (3, &#39;english&#39;, &#39;full&#39;)
+    assert r[&#39;o&#39;] == (1, &#39;english&#39;, &#39;abbr&#39;)</code></pre>
 </details>
 </dd>
 </dl>
@@ -295,20 +278,19 @@ def FUNCTION(Function, mapping=None):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.map.function" href="index.html">function</a></code></li>
+<li><code><a title="structpy.map.bijective" href="index.html">bijective</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.map.function.function_spec.FunctionSpec" href="#structpy.map.function.function_spec.FunctionSpec">FunctionSpec</a></code></h4>
-<ul class="two-column">
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.verify" href="#structpy.map.function.function_spec.FunctionSpec.verify">verify</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.FUNCTION" href="#structpy.map.function.function_spec.FunctionSpec.FUNCTION">FUNCTION</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.getitem" href="#structpy.map.function.function_spec.FunctionSpec.getitem">getitem</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.setitem" href="#structpy.map.function.function_spec.FunctionSpec.setitem">setitem</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.delitem" href="#structpy.map.function.function_spec.FunctionSpec.delitem">delitem</a></code></li>
-<li><code><a title="structpy.map.function.function_spec.FunctionSpec.reverse" href="#structpy.map.function.function_spec.FunctionSpec.reverse">reverse</a></code></li>
+<h4><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec" href="#structpy.map.bijective.hibimap_spec.HibimapSpec">HibimapSpec</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec.verify" href="#structpy.map.bijective.hibimap_spec.HibimapSpec.verify">verify</a></code></li>
+<li><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec.HIBIMAP" href="#structpy.map.bijective.hibimap_spec.HibimapSpec.HIBIMAP">HIBIMAP</a></code></li>
+<li><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec.getitem" href="#structpy.map.bijective.hibimap_spec.HibimapSpec.getitem">getitem</a></code></li>
+<li><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec.setitem" href="#structpy.map.bijective.hibimap_spec.HibimapSpec.setitem">setitem</a></code></li>
+<li><code><a title="structpy.map.bijective.hibimap_spec.HibimapSpec.reverse" href="#structpy.map.bijective.hibimap_spec.HibimapSpec.reverse">reverse</a></code></li>
 </ul>
 </li>
 </ul>

@@ -44,7 +44,7 @@ class HidictSpec:
     def HIDICT_SPEC(Hidict, order, dict_like=None):
         &#34;&#34;&#34;
         Create a hierarchical dictionary from the dictionary structure
-        passed in to `dict_like`.
+        passed in to `other`.
 
         `order` represents the number of intermediate keys to look up a
         value, e.g. an order-2 `Hidict` would have items of the form
@@ -93,9 +93,9 @@ class HidictSpec:
         will be cleared.
         &#34;&#34;&#34;
         del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-        assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidict
         del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-        assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;] == {}
+        assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidict
 
     def contains(hidict, keys):
         &#34;&#34;&#34;
@@ -119,7 +119,7 @@ class HidictSpec:
 
         Length of the tuples is `order+2`.
         &#34;&#34;&#34;
-        items = hidict.items()
+        items = list(hidict.items())
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items
@@ -165,7 +165,7 @@ keys are associated with a value.</p></div>
     def HIDICT_SPEC(Hidict, order, dict_like=None):
         &#34;&#34;&#34;
         Create a hierarchical dictionary from the dictionary structure
-        passed in to `dict_like`.
+        passed in to `other`.
 
         `order` represents the number of intermediate keys to look up a
         value, e.g. an order-2 `Hidict` would have items of the form
@@ -214,9 +214,9 @@ keys are associated with a value.</p></div>
         will be cleared.
         &#34;&#34;&#34;
         del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-        assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidict
         del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-        assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;] == {}
+        assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidict
 
     def contains(hidict, keys):
         &#34;&#34;&#34;
@@ -240,7 +240,7 @@ keys are associated with a value.</p></div>
 
         Length of the tuples is `order+2`.
         &#34;&#34;&#34;
-        items = hidict.items()
+        items = list(hidict.items())
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items
@@ -275,7 +275,7 @@ keys are associated with a value.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>Create a hierarchical dictionary from the dictionary structure
-passed in to <code>dict_like</code>.</p>
+passed in to <code>other</code>.</p>
 <p><code>order</code> represents the number of intermediate keys to look up a
 value, e.g. an order-2 <code>Hidict</code> would have items of the form
 <code>(key1, key2, key3, value)</code>. An order-0 Hidict is equivalent to
@@ -288,7 +288,7 @@ a python <code>dict</code>.</p></div>
 def HIDICT_SPEC(Hidict, order, dict_like=None):
     &#34;&#34;&#34;
     Create a hierarchical dictionary from the dictionary structure
-    passed in to `dict_like`.
+    passed in to `other`.
 
     `order` represents the number of intermediate keys to look up a
     value, e.g. an order-2 `Hidict` would have items of the form
@@ -371,9 +371,9 @@ will be cleared.</p></div>
     will be cleared.
     &#34;&#34;&#34;
     del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-    assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
+    assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidict
     del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-    assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;] == {}</code></pre>
+    assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidict</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.hidict_spec.HidictSpec.contains"><code class="name flex">
@@ -422,7 +422,7 @@ to check for a specific key sequence and value pairing.</p></div>
 
     Length of the tuples is `order+2`.
     &#34;&#34;&#34;
-    items = hidict.items()
+    items = list(hidict.items())
     assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
     assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
     assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items

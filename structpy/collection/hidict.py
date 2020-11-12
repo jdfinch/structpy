@@ -55,7 +55,8 @@ class Hidict(dict):
             for i, key in enumerate(keys):
                 if key not in d:
                     superkeys = keys[:i+1]
-                    dict.__setitem__(d, key, self._generate_subdict(self.order - len(superkeys), superkeys))
+                    dict.__setitem__(d, key,
+                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
                 d = dict.__getitem__(d, key)
             dict.__setitem__(d, keyprime, value)
         else:
@@ -63,18 +64,19 @@ class Hidict(dict):
             for i, key in enumerate(keys):
                 if key not in d:
                     superkeys = keys[:i+1]
-                    dict.__setitem__(d, key, self._generate_subdict(self.order - len(superkeys), superkeys))
+                    dict.__setitem__(d, key,
+                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
                 d = dict.__getitem__(d, key)
             stack = [(d, value, keys)]
             while stack:
                 this, other, superkeys = stack.pop()
-                for key, value in dict.items(other):
-                    keys = (*superkeys, key)
-                    if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                    if len(keys) == self.order:
-                        dict.update(dict.__getitem__(this, key), value)
-                    else:
+                if len(superkeys) == self.order:
+                    dict.update(this, other)
+                else:
+                    for key, value in dict.items(other):
+                        keys = (*superkeys, key)
+                        if keys not in this:
+                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
                         stack.append((dict.__getitem__(this, key), value, keys))
 
     def update(self, other):

@@ -41,13 +41,16 @@ class EnforcerDictSpec:
         &#34;&#34;&#34;
         Build a dictionary with enforcement hooks.
 
-        `add_function(added)` is a function that is called whenever a new
+        `add_function(added)` is a function that is called whenever a new (or replacement)
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
-        as an argument.
+        as an argument. The return of `add_function(added)` should be an `iterable&lt;tuple&lt;key, value&gt;&gt;`,
+        which represent the entries that will actually be added to the `enforcer_dict` object.
 
         `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
-        `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
+        `iterable&lt;tuple&lt;key, value&gt;&gt;` as an argument. The return of `remove_function(removed)` should
+        be an `iterable&lt;tuple&lt;key, value&gt;&gt;` which represents the entries that will actually be removed
+        from the `enforcer_dict` object.
         &#34;&#34;&#34;
         class Other:
             def __init__(self):
@@ -177,13 +180,16 @@ whenever items are added/overwritten or removed/overwritten.</p></div>
         &#34;&#34;&#34;
         Build a dictionary with enforcement hooks.
 
-        `add_function(added)` is a function that is called whenever a new
+        `add_function(added)` is a function that is called whenever a new (or replacement)
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
-        as an argument.
+        as an argument. The return of `add_function(added)` should be an `iterable&lt;tuple&lt;key, value&gt;&gt;`,
+        which represent the entries that will actually be added to the `enforcer_dict` object.
 
         `remove_function(removed)` is a function that is called whenever a key:value pair
         is removed  (including those overwritten by new value), and it should expect `removed` to be
-        `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
+        `iterable&lt;tuple&lt;key, value&gt;&gt;` as an argument. The return of `remove_function(removed)` should
+        be an `iterable&lt;tuple&lt;key, value&gt;&gt;` which represents the entries that will actually be removed
+        from the `enforcer_dict` object.
         &#34;&#34;&#34;
         class Other:
             def __init__(self):
@@ -311,13 +317,16 @@ whenever items are added/overwritten or removed/overwritten.</p></div>
 </code></dt>
 <dd>
 <div class="desc"><p>Build a dictionary with enforcement hooks.</p>
-<p><code>add_function(added)</code> is a function that is called whenever a new
+<p><code>add_function(added)</code> is a function that is called whenever a new (or replacement)
 key:value pair is added, and it should expect <code>added</code> to be a <code>iterable&lt;tuple&lt;key, value&gt;&gt;</code>
-as an argument.</p>
+as an argument. The return of <code>add_function(added)</code> should be an <code>iterable&lt;tuple&lt;key, value&gt;&gt;</code>,
+which represent the entries that will actually be added to the <code>enforcer_dict</code> object.</p>
 <p><code>remove_function(removed)</code> is a function that is called whenever a key:value pair
 is removed
 (including those overwritten by new value), and it should expect <code>removed</code> to be
-<code>iterable&lt;tuple&lt;key:value&gt;&gt;</code> as an argument.</p></div>
+<code>iterable&lt;tuple&lt;key, value&gt;&gt;</code> as an argument. The return of <code>remove_function(removed)</code> should
+be an <code>iterable&lt;tuple&lt;key, value&gt;&gt;</code> which represents the entries that will actually be removed
+from the <code>enforcer_dict</code> object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -327,13 +336,16 @@ def ENFORCER_DICT(EnforcerDict, dict_like=None, add_function=None, remove_functi
     &#34;&#34;&#34;
     Build a dictionary with enforcement hooks.
 
-    `add_function(added)` is a function that is called whenever a new
+    `add_function(added)` is a function that is called whenever a new (or replacement)
     key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key, value&gt;&gt;`
-    as an argument.
+    as an argument. The return of `add_function(added)` should be an `iterable&lt;tuple&lt;key, value&gt;&gt;`,
+    which represent the entries that will actually be added to the `enforcer_dict` object.
 
     `remove_function(removed)` is a function that is called whenever a key:value pair
     is removed  (including those overwritten by new value), and it should expect `removed` to be
-    `iterable&lt;tuple&lt;key:value&gt;&gt;` as an argument.
+    `iterable&lt;tuple&lt;key, value&gt;&gt;` as an argument. The return of `remove_function(removed)` should
+    be an `iterable&lt;tuple&lt;key, value&gt;&gt;` which represents the entries that will actually be removed
+    from the `enforcer_dict` object.
     &#34;&#34;&#34;
     class Other:
         def __init__(self):

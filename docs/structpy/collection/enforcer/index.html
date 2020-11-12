@@ -38,6 +38,26 @@ to enforce data consistency whenever the collection is updated.</p>
 <p>An extension of python <code>dict</code> with enforcment hooks that call functions
 whenever items are added/overwritten or removed/overwritten.
 <br>
+<br>
+<br></p>
+<h3 id="enforcerhidict"><a href="enforcer_hidict.html">EnforcerHidict</a></h3>
+<p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec" href="enforcer_hidict_spec.html#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec">EnforcerHidictSpec</a></code>
+<br></p>
+<p>Hierarchical dictionary.</p>
+<p>An extension of python <code>dict</code> allowing N hierarchically-ordered key types
+to be used to organize and access a set of values. Contains enforcement
+hooks that call functions whenever items are added/overwritten/removed.
+<br>
+<br>
+<br></p>
+<h3 id="enforcerhidir"><a href="enforcer_hidir.html">EnforcerHidir</a></h3>
+<p>Implementation of <code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec" href="enforcer_hidir_spec.html#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec">EnforcerHidirSpec</a></code>
+<br></p>
+<p>Hierarchical directory.</p>
+<p>An extension of python <code>dict</code> allowing N hierarchically-ordered key types
+to be used to organize and access a set of values. Contains enforcement
+hooks that call functions whenever items are added/overwritten/removed.
+<br>
 <br></p>
 <details class="source">
 <summary>
@@ -50,10 +70,14 @@ to enforce data consistency whenever the collection is updated.
 
 from structpy.collection.enforcer.enforcer_set import EnforcerSet
 from structpy.collection.enforcer.enforcer_dict import EnforcerDict
+from structpy.collection.enforcer.enforcer_hidict import EnforcerHidict
+from structpy.collection.enforcer.enforcer_hidir import EnforcerHidir
 
 __all__ = [
     &#39;EnforcerSet&#39;,
-    &#39;EnforcerDict&#39;
+    &#39;EnforcerDict&#39;,
+    &#39;EnforcerHidict&#39;,
+    &#39;EnforcerHidir&#39;
 ]</code></pre>
 </details>
 </section>
@@ -73,6 +97,14 @@ __all__ = [
 <div class="desc"></div>
 </dd>
 <dt><code class="name"><a title="structpy.collection.enforcer.enforcer_hidict_spec" href="enforcer_hidict_spec.html">enforcer_hidict_spec</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_hidir" href="enforcer_hidir.html">enforcer_hidir</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt><code class="name"><a title="structpy.collection.enforcer.enforcer_hidir_spec" href="enforcer_hidir_spec.html">enforcer_hidir_spec</a></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -99,6 +131,8 @@ __all__ = [
 <ul>
 <li><a href="#enforcerset">EnforcerSet</a></li>
 <li><a href="#enforcerdict">EnforcerDict</a></li>
+<li><a href="#enforcerhidict">EnforcerHidict</a></li>
+<li><a href="#enforcerhidir">EnforcerHidir</a></li>
 </ul>
 </div>
 <ul id="index">
@@ -113,6 +147,8 @@ __all__ = [
 <li><code><a title="structpy.collection.enforcer.enforcer_dict_spec" href="enforcer_dict_spec.html">enforcer_dict_spec</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict" href="enforcer_hidict.html">enforcer_hidict</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec" href="enforcer_hidict_spec.html">enforcer_hidict_spec</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir" href="enforcer_hidir.html">enforcer_hidir</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec" href="enforcer_hidir_spec.html">enforcer_hidir_spec</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set" href="enforcer_set.html">enforcer_set</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_set_spec" href="enforcer_set_spec.html">enforcer_set_spec</a></code></li>
 </ul>

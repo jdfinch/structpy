@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.collection.enforcer.enforcer_hidict_spec API documentation</title>
+<title>structpy.collection.enforcer.enforcer_hidir_spec API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.collection.enforcer.enforcer_hidict_spec</code></h1>
+<h1 class="title">Module <code>structpy.collection.enforcer.enforcer_hidir_spec</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -30,9 +30,9 @@
 other = None
 
 @specification
-class EnforcerHidictSpec:
+class EnforcerHidirSpec:
     &#34;&#34;&#34;
-    Hierarchical dictionary.
+    Hierarchical directory.
 
     An extension of python `dict` allowing N hierarchically-ordered key types
     to be used to organize and access a set of values. Contains enforcement
@@ -40,9 +40,9 @@ class EnforcerHidictSpec:
     &#34;&#34;&#34;
 
     @specification.init
-    def ENFORCER_HIDICT(EnforcerHidict, dict_like=None, add_function=None, remove_function=None, order=0):
+    def ENFORCER_HIDIR(EnforcerHidir, dict_like=None, add_function=None, remove_function=None, order=0):
         &#34;&#34;&#34;
-        Build a hierarchical dictionary.
+        Build a hierarchical directory.
 
         `add_function(added)` is a function that is called whenever a new (or replacement)
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key1, key2, ..., value&gt;&gt;`
@@ -72,86 +72,101 @@ class EnforcerHidictSpec:
         global other
         other = EntryCount()
 
-        hidict = EnforcerHidict(2,
-            {
-                &#39;Mary&#39;: {
-                    &#39;likes&#39;: {&#39;lot&#39;: &#39;Bob&#39;, &#39;little&#39;: &#39;Sue&#39;},
-                    &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Randy&#39;}
-                },
-                &#39;Bob&#39;: {
-                    &#39;likes&#39;: {&#39;lot&#39;: &#39;Mary&#39;},
-                    &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Sue&#39;, &#39;medium&#39;: &#39;Joe&#39;}
-                }
+        hidir = EnforcerHidir(2, {
+            &#39;Mary&#39;: {
+              &#39;likes&#39;: {
+                  &#39;lot&#39;: {&#39;Bob&#39;, &#39;Joe&#39;},
+                  &#39;little&#39;: {&#39;Sue&#39;}
+              },
+              &#39;dislikes&#39;: {
+                  &#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}
+              }
             },
+            &#39;Bob&#39;: {
+              &#39;likes&#39;: {
+                  &#39;lot&#39;: {&#39;Mary&#39;}
+              },
+              &#39;dislikes&#39;: {
+                  &#39;lot&#39;: {&#39;Sue&#39;},
+                  &#39;medium&#39;: {&#39;Joe&#39;}
+              }
+            }},
             add_function=other.add_function,
             remove_function=other.remove_function
         )
-        assert other.value == 6
-        return hidict
+        assert other.value == 8
+        return hidir
 
-    def getitem(hidict, keys):
+    def getitem(hidir, keys):
         &#34;&#34;&#34;
-        Use `hidict[key1, key2, ...]` to access hidict entries.
+        Use `hidir[key1, key2, ...]` to access hidir entries.
 
-        Providing less than `order+1` keys will return a subdictionary object.
+        Providing less than `order+1` keys will return a subdirectory object.
         &#34;&#34;&#34;
-        assert hidict[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == &#39;Bob&#39;
+        assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;}
         keys = (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;)
-        assert hidict[keys] == &#39;Sue&#39;
-        assert hidict[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: &#39;Randy&#39;}
+        assert hidir[keys] == {&#39;Sue&#39;}
+        assert hidir[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}}
 
-    def setitem(hidict, keys, value):
+    def setitem(hidir, keys, value):
         &#34;&#34;&#34;
-        Use `hidict[key1, key2, ...] = value` to reassign or add entries to the hidict.
+        Use `hidir[key1, key2, ...] = value` to reassign or add entries to the hidir.
 
         `keys` should be a tuple of keys with length `order+1`.
         &#34;&#34;&#34;
-        hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = &#39;George&#39;
-        assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
-        hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
-        assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-        assert other.value == 7
+        hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = [&#39;George&#39;]
+        assert hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == {&#39;George&#39;}
+        hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] = [&#39;Sam&#39;, &#39;Phil&#39;]
+        assert hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == {&#39;Sam&#39;, &#39;Phil&#39;}
 
-    def delitem(hidict, keys):
+        # can also add items to a Hidir value set
+        hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
+        assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
+
+        assert other.value == 11
+
+    def delitem(hidir, keys):
         &#34;&#34;&#34;
-        `del hidict[key1, key2, ...]` will delete an entry from hidict.
+        `del hidir[key1, key2, ...]` will delete an entry from hidir.
 
-        If less than `order-1` keys are provided, the specified intermediate dictionary
+        If less than `order-1` keys are provided, the specified intermediate directory
         will be cleared.
         &#34;&#34;&#34;
-        del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-        assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
-        del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-        assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-        assert other.value == 4
+        del hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
+        del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
+        assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
+        assert other.value == 7
 
-    def contains(hidict, keys):
+    def contains(hidir, keys):
         &#34;&#34;&#34;
-        `(key1, key2, ...) in hidict` will return whether the provided keys are found in
-        the hidict.
+        `(key1, key2, ...) in hidir` will return whether the provided keys are found in
+        the hidir.
 
         Checking the membership of a key sequence of length less than `order+1` is valid.
 
-        Additionally, membership check `(key1, key2, ..., value) in hidict` can be used
+        Additionally, membership check `(key1, key2, ..., value) in hidir` can be used
         to check for a specific key sequence and value pairing.
         &#34;&#34;&#34;
-        assert &#39;Mary&#39; in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;) in hidict
-        assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in hidict
+        assert &#39;Mary&#39; in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;) in hidir
+        assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Joe&#39;) in hidir
 
-    def items(hidict):
+    def items(hidir):
         &#34;&#34;&#34;
-        Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidict.
+        Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidir.
 
         Length of the tuples is `order+2`.
         &#34;&#34;&#34;
-        items = set(hidict.items())
+        items = list(hidir.items())
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in items
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items
-        assert not (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Joe&#39;) in items</code></pre>
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) not in items</code></pre>
 </details>
 </section>
 <section>
@@ -163,11 +178,11 @@ class EnforcerHidictSpec:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec"><code class="flex name class">
-<span>class <span class="ident">EnforcerHidictSpec</span></span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec"><code class="flex name class">
+<span>class <span class="ident">EnforcerHidirSpec</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Hierarchical dictionary.</p>
+<div class="desc"><p>Hierarchical directory.</p>
 <p>An extension of python <code>dict</code> allowing N hierarchically-ordered key types
 to be used to organize and access a set of values. Contains enforcement
 hooks that call functions whenever items are added/overwritten/removed.</p></div>
@@ -175,9 +190,9 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class EnforcerHidictSpec:
+<pre><code class="python">class EnforcerHidirSpec:
     &#34;&#34;&#34;
-    Hierarchical dictionary.
+    Hierarchical directory.
 
     An extension of python `dict` allowing N hierarchically-ordered key types
     to be used to organize and access a set of values. Contains enforcement
@@ -185,9 +200,9 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
     &#34;&#34;&#34;
 
     @specification.init
-    def ENFORCER_HIDICT(EnforcerHidict, dict_like=None, add_function=None, remove_function=None, order=0):
+    def ENFORCER_HIDIR(EnforcerHidir, dict_like=None, add_function=None, remove_function=None, order=0):
         &#34;&#34;&#34;
-        Build a hierarchical dictionary.
+        Build a hierarchical directory.
 
         `add_function(added)` is a function that is called whenever a new (or replacement)
         key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key1, key2, ..., value&gt;&gt;`
@@ -217,90 +232,105 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
         global other
         other = EntryCount()
 
-        hidict = EnforcerHidict(2,
-            {
-                &#39;Mary&#39;: {
-                    &#39;likes&#39;: {&#39;lot&#39;: &#39;Bob&#39;, &#39;little&#39;: &#39;Sue&#39;},
-                    &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Randy&#39;}
-                },
-                &#39;Bob&#39;: {
-                    &#39;likes&#39;: {&#39;lot&#39;: &#39;Mary&#39;},
-                    &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Sue&#39;, &#39;medium&#39;: &#39;Joe&#39;}
-                }
+        hidir = EnforcerHidir(2, {
+            &#39;Mary&#39;: {
+              &#39;likes&#39;: {
+                  &#39;lot&#39;: {&#39;Bob&#39;, &#39;Joe&#39;},
+                  &#39;little&#39;: {&#39;Sue&#39;}
+              },
+              &#39;dislikes&#39;: {
+                  &#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}
+              }
             },
+            &#39;Bob&#39;: {
+              &#39;likes&#39;: {
+                  &#39;lot&#39;: {&#39;Mary&#39;}
+              },
+              &#39;dislikes&#39;: {
+                  &#39;lot&#39;: {&#39;Sue&#39;},
+                  &#39;medium&#39;: {&#39;Joe&#39;}
+              }
+            }},
             add_function=other.add_function,
             remove_function=other.remove_function
         )
-        assert other.value == 6
-        return hidict
+        assert other.value == 8
+        return hidir
 
-    def getitem(hidict, keys):
+    def getitem(hidir, keys):
         &#34;&#34;&#34;
-        Use `hidict[key1, key2, ...]` to access hidict entries.
+        Use `hidir[key1, key2, ...]` to access hidir entries.
 
-        Providing less than `order+1` keys will return a subdictionary object.
+        Providing less than `order+1` keys will return a subdirectory object.
         &#34;&#34;&#34;
-        assert hidict[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == &#39;Bob&#39;
+        assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;}
         keys = (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;)
-        assert hidict[keys] == &#39;Sue&#39;
-        assert hidict[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: &#39;Randy&#39;}
+        assert hidir[keys] == {&#39;Sue&#39;}
+        assert hidir[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}}
 
-    def setitem(hidict, keys, value):
+    def setitem(hidir, keys, value):
         &#34;&#34;&#34;
-        Use `hidict[key1, key2, ...] = value` to reassign or add entries to the hidict.
+        Use `hidir[key1, key2, ...] = value` to reassign or add entries to the hidir.
 
         `keys` should be a tuple of keys with length `order+1`.
         &#34;&#34;&#34;
-        hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = &#39;George&#39;
-        assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
-        hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
-        assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-        assert other.value == 7
+        hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = [&#39;George&#39;]
+        assert hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == {&#39;George&#39;}
+        hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] = [&#39;Sam&#39;, &#39;Phil&#39;]
+        assert hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == {&#39;Sam&#39;, &#39;Phil&#39;}
 
-    def delitem(hidict, keys):
+        # can also add items to a Hidir value set
+        hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
+        assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
+
+        assert other.value == 11
+
+    def delitem(hidir, keys):
         &#34;&#34;&#34;
-        `del hidict[key1, key2, ...]` will delete an entry from hidict.
+        `del hidir[key1, key2, ...]` will delete an entry from hidir.
 
-        If less than `order-1` keys are provided, the specified intermediate dictionary
+        If less than `order-1` keys are provided, the specified intermediate directory
         will be cleared.
         &#34;&#34;&#34;
-        del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-        assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
-        del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-        assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-        assert other.value == 4
+        del hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
+        del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
+        assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
+        assert other.value == 7
 
-    def contains(hidict, keys):
+    def contains(hidir, keys):
         &#34;&#34;&#34;
-        `(key1, key2, ...) in hidict` will return whether the provided keys are found in
-        the hidict.
+        `(key1, key2, ...) in hidir` will return whether the provided keys are found in
+        the hidir.
 
         Checking the membership of a key sequence of length less than `order+1` is valid.
 
-        Additionally, membership check `(key1, key2, ..., value) in hidict` can be used
+        Additionally, membership check `(key1, key2, ..., value) in hidir` can be used
         to check for a specific key sequence and value pairing.
         &#34;&#34;&#34;
-        assert &#39;Mary&#39; in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;) in hidict
-        assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidict
-        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in hidict
+        assert &#39;Mary&#39; in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;) in hidir
+        assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in hidir
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Joe&#39;) in hidir
 
-    def items(hidict):
+    def items(hidir):
         &#34;&#34;&#34;
-        Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidict.
+        Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidir.
 
         Length of the tuples is `order+2`.
         &#34;&#34;&#34;
-        items = set(hidict.items())
+        items = list(hidir.items())
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
+        assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in items
         assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items
-        assert not (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Joe&#39;) in items</code></pre>
+        assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) not in items</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.verify"><code class="name flex">
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.verify"><code class="name flex">
 <span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
 </code></dt>
 <dd>
@@ -322,11 +352,11 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.ENFORCER_HIDICT"><code class="name flex">
-<span>def <span class="ident">ENFORCER_HIDICT</span></span>(<span>EnforcerHidict, dict_like=None, add_function=None, remove_function=None, order=0)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.ENFORCER_HIDIR"><code class="name flex">
+<span>def <span class="ident">ENFORCER_HIDIR</span></span>(<span>EnforcerHidir, dict_like=None, add_function=None, remove_function=None, order=0)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Build a hierarchical dictionary.</p>
+<div class="desc"><p>Build a hierarchical directory.</p>
 <p><code>add_function(added)</code> is a function that is called whenever a new (or replacement)
 key:value pair is added, and it should expect <code>added</code> to be a <code>iterable&lt;tuple&lt;key1, key2, ..., value&gt;&gt;</code>
 as an argument. The return of <code>add_function(added)</code> should be an <code>iterable&lt;tuple&lt;key1, key2, ..., value&gt;&gt;</code>,
@@ -342,9 +372,9 @@ actually be removed from the <code>enforcer_dict</code> object.</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@specification.init
-def ENFORCER_HIDICT(EnforcerHidict, dict_like=None, add_function=None, remove_function=None, order=0):
+def ENFORCER_HIDIR(EnforcerHidir, dict_like=None, add_function=None, remove_function=None, order=0):
     &#34;&#34;&#34;
-    Build a hierarchical dictionary.
+    Build a hierarchical directory.
 
     `add_function(added)` is a function that is called whenever a new (or replacement)
     key:value pair is added, and it should expect `added` to be a `iterable&lt;tuple&lt;key1, key2, ..., value&gt;&gt;`
@@ -374,145 +404,160 @@ def ENFORCER_HIDICT(EnforcerHidict, dict_like=None, add_function=None, remove_fu
     global other
     other = EntryCount()
 
-    hidict = EnforcerHidict(2,
-        {
-            &#39;Mary&#39;: {
-                &#39;likes&#39;: {&#39;lot&#39;: &#39;Bob&#39;, &#39;little&#39;: &#39;Sue&#39;},
-                &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Randy&#39;}
-            },
-            &#39;Bob&#39;: {
-                &#39;likes&#39;: {&#39;lot&#39;: &#39;Mary&#39;},
-                &#39;dislikes&#39;: {&#39;lot&#39;: &#39;Sue&#39;, &#39;medium&#39;: &#39;Joe&#39;}
-            }
+    hidir = EnforcerHidir(2, {
+        &#39;Mary&#39;: {
+          &#39;likes&#39;: {
+              &#39;lot&#39;: {&#39;Bob&#39;, &#39;Joe&#39;},
+              &#39;little&#39;: {&#39;Sue&#39;}
+          },
+          &#39;dislikes&#39;: {
+              &#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}
+          }
         },
+        &#39;Bob&#39;: {
+          &#39;likes&#39;: {
+              &#39;lot&#39;: {&#39;Mary&#39;}
+          },
+          &#39;dislikes&#39;: {
+              &#39;lot&#39;: {&#39;Sue&#39;},
+              &#39;medium&#39;: {&#39;Joe&#39;}
+          }
+        }},
         add_function=other.add_function,
         remove_function=other.remove_function
     )
-    assert other.value == 6
-    return hidict</code></pre>
+    assert other.value == 8
+    return hidir</code></pre>
 </details>
 </dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.getitem"><code class="name flex">
-<span>def <span class="ident">getitem</span></span>(<span>hidict, keys)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.getitem"><code class="name flex">
+<span>def <span class="ident">getitem</span></span>(<span>hidir, keys)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Use <code>hidict[key1, key2, &hellip;]</code> to access hidict entries.</p>
-<p>Providing less than <code>order+1</code> keys will return a subdictionary object.</p></div>
+<div class="desc"><p>Use <code>hidir[key1, key2, &hellip;]</code> to access hidir entries.</p>
+<p>Providing less than <code>order+1</code> keys will return a subdirectory object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def getitem(hidict, keys):
+<pre><code class="python">def getitem(hidir, keys):
     &#34;&#34;&#34;
-    Use `hidict[key1, key2, ...]` to access hidict entries.
+    Use `hidir[key1, key2, ...]` to access hidir entries.
 
-    Providing less than `order+1` keys will return a subdictionary object.
+    Providing less than `order+1` keys will return a subdirectory object.
     &#34;&#34;&#34;
-    assert hidict[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == &#39;Bob&#39;
+    assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;}
     keys = (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;)
-    assert hidict[keys] == &#39;Sue&#39;
-    assert hidict[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: &#39;Randy&#39;}</code></pre>
+    assert hidir[keys] == {&#39;Sue&#39;}
+    assert hidir[&#39;Mary&#39;, &#39;dislikes&#39;] == {&#39;lot&#39;: {&#39;Randy&#39;, &#39;Phil&#39;}}</code></pre>
 </details>
 </dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.setitem"><code class="name flex">
-<span>def <span class="ident">setitem</span></span>(<span>hidict, keys, value)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.setitem"><code class="name flex">
+<span>def <span class="ident">setitem</span></span>(<span>hidir, keys, value)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Use <code>hidict[key1, key2, ...] = value</code> to reassign or add entries to the hidict.</p>
+<div class="desc"><p>Use <code>hidir[key1, key2, ...] = value</code> to reassign or add entries to the hidir.</p>
 <p><code>keys</code> should be a tuple of keys with length <code>order+1</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def setitem(hidict, keys, value):
+<pre><code class="python">def setitem(hidir, keys, value):
     &#34;&#34;&#34;
-    Use `hidict[key1, key2, ...] = value` to reassign or add entries to the hidict.
+    Use `hidir[key1, key2, ...] = value` to reassign or add entries to the hidir.
 
     `keys` should be a tuple of keys with length `order+1`.
     &#34;&#34;&#34;
-    hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = &#39;George&#39;
-    assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
-    hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
-    assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-    assert other.value == 7</code></pre>
+    hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] = [&#39;George&#39;]
+    assert hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == {&#39;George&#39;}
+    hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] = [&#39;Sam&#39;, &#39;Phil&#39;]
+    assert hidir[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == {&#39;Sam&#39;, &#39;Phil&#39;}
+
+    # can also add items to a Hidir value set
+    hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
+    assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
+
+    assert other.value == 11</code></pre>
 </details>
 </dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.delitem"><code class="name flex">
-<span>def <span class="ident">delitem</span></span>(<span>hidict, keys)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.delitem"><code class="name flex">
+<span>def <span class="ident">delitem</span></span>(<span>hidir, keys)</span>
 </code></dt>
 <dd>
-<div class="desc"><p><code>del hidict[key1, key2, &hellip;]</code> will delete an entry from hidict.</p>
-<p>If less than <code>order-1</code> keys are provided, the specified intermediate dictionary
+<div class="desc"><p><code>del hidir[key1, key2, &hellip;]</code> will delete an entry from hidir.</p>
+<p>If less than <code>order-1</code> keys are provided, the specified intermediate directory
 will be cleared.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def delitem(hidict, keys):
+<pre><code class="python">def delitem(hidir, keys):
     &#34;&#34;&#34;
-    `del hidict[key1, key2, ...]` will delete an entry from hidict.
+    `del hidir[key1, key2, ...]` will delete an entry from hidir.
 
-    If less than `order-1` keys are provided, the specified intermediate dictionary
+    If less than `order-1` keys are provided, the specified intermediate directory
     will be cleared.
     &#34;&#34;&#34;
-    del hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
-    assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
-    del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
-    assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-    assert other.value == 4</code></pre>
+    del hidir[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;]
+    assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
+    del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
+    assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
+    assert other.value == 7</code></pre>
 </details>
 </dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.contains"><code class="name flex">
-<span>def <span class="ident">contains</span></span>(<span>hidict, keys)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.contains"><code class="name flex">
+<span>def <span class="ident">contains</span></span>(<span>hidir, keys)</span>
 </code></dt>
 <dd>
-<div class="desc"><p><code>(key1, key2, &hellip;) in hidict</code> will return whether the provided keys are found in
-the hidict.</p>
+<div class="desc"><p><code>(key1, key2, &hellip;) in hidir</code> will return whether the provided keys are found in
+the hidir.</p>
 <p>Checking the membership of a key sequence of length less than <code>order+1</code> is valid.</p>
-<p>Additionally, membership check <code>(key1, key2, &hellip;, value) in hidict</code> can be used
+<p>Additionally, membership check <code>(key1, key2, &hellip;, value) in hidir</code> can be used
 to check for a specific key sequence and value pairing.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def contains(hidict, keys):
+<pre><code class="python">def contains(hidir, keys):
     &#34;&#34;&#34;
-    `(key1, key2, ...) in hidict` will return whether the provided keys are found in
-    the hidict.
+    `(key1, key2, ...) in hidir` will return whether the provided keys are found in
+    the hidir.
 
     Checking the membership of a key sequence of length less than `order+1` is valid.
 
-    Additionally, membership check `(key1, key2, ..., value) in hidict` can be used
+    Additionally, membership check `(key1, key2, ..., value) in hidir` can be used
     to check for a specific key sequence and value pairing.
     &#34;&#34;&#34;
-    assert &#39;Mary&#39; in hidict
-    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidict
-    assert (&#39;Mary&#39;, &#39;likes&#39;) in hidict
-    assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidict
-    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in hidict</code></pre>
+    assert &#39;Mary&#39; in hidir
+    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;) in hidir
+    assert (&#39;Mary&#39;, &#39;likes&#39;) in hidir
+    assert (&#39;Marvin&#39;, &#39;likes&#39;) not in hidir
+    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in hidir
+    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Joe&#39;) in hidir</code></pre>
 </details>
 </dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.items"><code class="name flex">
-<span>def <span class="ident">items</span></span>(<span>hidict)</span>
+<dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.items"><code class="name flex">
+<span>def <span class="ident">items</span></span>(<span>hidir)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Gets a list of <code>(key1, key2, &hellip;, keyN, value)</code> tuple entries in the hidict.</p>
+<div class="desc"><p>Gets a list of <code>(key1, key2, &hellip;, keyN, value)</code> tuple entries in the hidir.</p>
 <p>Length of the tuples is <code>order+2</code>.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def items(hidict):
+<pre><code class="python">def items(hidir):
     &#34;&#34;&#34;
-    Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidict.
+    Gets a list of `(key1, key2, ..., keyN, value)` tuple entries in the hidir.
 
     Length of the tuples is `order+2`.
     &#34;&#34;&#34;
-    items = set(hidict.items())
+    items = list(hidir.items())
     assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Bob&#39;) in items
+    assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) in items
     assert (&#39;Mary&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Sue&#39;) in items
     assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Mary&#39;) in items
-    assert not (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;, &#39;Joe&#39;) in items</code></pre>
+    assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;lot&#39;, &#39;Rick&#39;) not in items</code></pre>
 </details>
 </dd>
 </dl>
@@ -534,15 +579,15 @@ to check for a specific key sequence and value pairing.</p></div>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec">EnforcerHidictSpec</a></code></h4>
+<h4><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec">EnforcerHidirSpec</a></code></h4>
 <ul class="two-column">
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.verify" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.verify">verify</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.ENFORCER_HIDICT" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.ENFORCER_HIDICT">ENFORCER_HIDICT</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.getitem" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.getitem">getitem</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.setitem" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.setitem">setitem</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.delitem" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.delitem">delitem</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.contains" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.contains">contains</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.items" href="#structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.items">items</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.verify" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.verify">verify</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.ENFORCER_HIDIR" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.ENFORCER_HIDIR">ENFORCER_HIDIR</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.getitem" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.getitem">getitem</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.setitem" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.setitem">setitem</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.delitem" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.delitem">delitem</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.contains" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.contains">contains</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.items" href="#structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.items">items</a></code></li>
 </ul>
 </li>
 </ul>

@@ -41,9 +41,12 @@ class Hidir(Hidict):
             raise KeyError(keys, self)
 
     def __setitem__(self, keys, values):
-        valueset = self._generate_valueset((*self.superkeys, *keys))
-        set.update(valueset, values)
-        Hidict.__setitem__(self, keys, valueset)
+        if len(keys) < self.order + 1:
+            Hidict.__setitem__(self, keys, values)
+        else:
+            valueset = self._generate_valueset((*self.superkeys, *keys))
+            set.update(valueset, values)
+            Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):
         if isinstance(other, dict):
