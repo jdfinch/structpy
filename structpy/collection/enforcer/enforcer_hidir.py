@@ -5,6 +5,8 @@ from structpy.collection.enforcer.enforcer_hidir_spec import EnforcerHidirSpec
 from structpy.collection.hidir import Hidir
 from structpy.collection.enforcer import EnforcerSet
 
+from collections.abc import Hashable
+
 
 class EnforcerValueSet(EnforcerSet):
 
@@ -48,60 +50,29 @@ class EnforcerHidir(Hidir):
     def __setitem__(self, keys, values):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        if len(keys) == self.order + 1:
-            if keys not in self:
-                items = self.add_function([(*self.superkeys, *keys, value) for value in values])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidir.update(self, items)
-                else:
-                    Hidir.__setitem__(self, keys, values)
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
+        if keys not in self:
+            items = self.add_function([(*self.superkeys, *keys, value) for value in values])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidir.update(self, items)
             else:
-                original_values = self[keys]
-                items = self.remove_function([(*self.superkeys, *keys, ov) for ov in original_values])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    for item in items:
-                        Hidir.__delitem__(self, item[:-1])
-                else:
-                    Hidir.__delitem__(self, keys)
-                items = self.add_function([(*self.superkeys, *keys, value) for value in values])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidir.update(self, items)
-                else:
-                    Hidir.__setitem__(self, keys, values)
+                Hidir.__setitem__(self, keys, values)
         else:
-            if keys in self:
-                del self[keys]
-            d = self
-            for i, key in enumerate(keys):
-                if key not in d:
-                    superkeys = keys[:i + 1]
-                    dict.__setitem__(d, key,
-                                     self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
-                d = dict.__getitem__(d, key)
-            stack = [(d, values, keys)]
-            while stack:
-                this, other, superkeys = stack.pop()
-                if len(superkeys) == self.order:
-                    to_add = []
-                    for k, v in dict.items(other):
-                        to_add.extend([(*self.superkeys, *superkeys, k, x[len(self.superkeys):]) for x in v])
-                    to_add = self.add_function(to_add)
-                    if to_add is None:
-                        dict.update(this, other)
-                    else:
-                        items = []
-                        for k, v in dict.items(other):
-                            items.extend([(*self.superkeys, *superkeys, k, x[len(self.superkeys):]) for x in v])
-                        Hidir.update(self, items)
-                else:
-                    for key, value in dict.items(other):
-                        keys = (*superkeys, key)
-                        if keys not in this:
-                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                        stack.append((dict.__getitem__(this, key), value, keys))
+            original_values = self[keys]
+            items = self.remove_function([(*self.superkeys, *keys, ov) for ov in original_values])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                for item in items:
+                    Hidir.__delitem__(self, item[:-1])
+            else:
+                Hidir.__delitem__(self, keys)
+            items = self.add_function([(*self.superkeys, *keys, value) for value in values])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidir.update(self, items)
+            else:
+                Hidir.__setitem__(self, keys, values)
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):

@@ -115,9 +115,6 @@ class HifunctionSpec:
                 'dislike': {
                     'lot': {'Mary'}
                 }
-            },
-            'Chris': {
-                'like': {}
             }
         }
         assert idx == cmp

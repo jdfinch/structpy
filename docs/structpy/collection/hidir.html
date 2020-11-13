@@ -67,9 +67,12 @@ class Hidir(Hidict):
             raise KeyError(keys, self)
 
     def __setitem__(self, keys, values):
-        valueset = self._generate_valueset((*self.superkeys, *keys))
-        set.update(valueset, values)
-        Hidict.__setitem__(self, keys, valueset)
+        if len(keys) &lt; self.order + 1:
+            Hidict.__setitem__(self, keys, values)
+        else:
+            valueset = self._generate_valueset((*self.superkeys, *keys))
+            set.update(valueset, values)
+            Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):
         if isinstance(other, dict):
@@ -92,7 +95,7 @@ class Hidir(Hidict):
             for item in other:
                 keys, value = item[:-1], item[-1]
                 if not Hidict.__contains__(self, keys):
-                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, keys)))
+                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
                 set.add(Hidict.__getitem__(self, keys), value)
 
     def values(self):
@@ -179,9 +182,12 @@ keys are associated with a value set.
             raise KeyError(keys, self)
 
     def __setitem__(self, keys, values):
-        valueset = self._generate_valueset((*self.superkeys, *keys))
-        set.update(valueset, values)
-        Hidict.__setitem__(self, keys, valueset)
+        if len(keys) &lt; self.order + 1:
+            Hidict.__setitem__(self, keys, values)
+        else:
+            valueset = self._generate_valueset((*self.superkeys, *keys))
+            set.update(valueset, values)
+            Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):
         if isinstance(other, dict):
@@ -204,7 +210,7 @@ keys are associated with a value set.
             for item in other:
                 keys, value = item[:-1], item[-1]
                 if not Hidict.__contains__(self, keys):
-                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, keys)))
+                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
                 set.add(Hidict.__getitem__(self, keys), value)
 
     def values(self):
@@ -270,7 +276,7 @@ If E …</p></div>
         for item in other:
             keys, value = item[:-1], item[-1]
             if not Hidict.__contains__(self, keys):
-                Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, keys)))
+                Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
             set.add(Hidict.__getitem__(self, keys), value)</code></pre>
 </details>
 </dd>

@@ -9,11 +9,15 @@ from structpy.map.index.index import Index
 from structpy.map.function.function import Function
 
 from structpy.map.himap import Himap
+from structpy.map.index.hiindex import Hiindex
+from structpy.map.function.hifunction import Hifunction
 
 __all__ = [
     'Map',
     'Bimap',
     'Index',
     'Function',
-    'Himap'
+    'Himap',
+    'Hiindex',
+    'Hifunction'
 ]

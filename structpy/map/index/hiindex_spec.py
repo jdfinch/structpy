@@ -60,8 +60,7 @@ class HiindexSpec:
         Remove an element from the hiindex domain.
         """
         del hiindex['Joe', 'dislike']
-        assert 'dislike' not in hiindex['Joe']
-        assert hiindex['Joe'] == {}
+        assert 'Joe' not in hiindex
 
     def update(hiindex, mapping):
         """
@@ -111,8 +110,7 @@ class HiindexSpec:
                 'like': {
                     'lot': 'Steve',
                     'little': 'Steve'
-                },
-                'dislike': {}
+                }
             },
             'Jon': {
                 'like': {
@@ -123,8 +121,7 @@ class HiindexSpec:
                 'like': {
                     'lot': 'Carl',
                     'little': 'Carl'
-                },
-                'dislike': {}
+                }
             },
             'Mark': {
                 'like': {

@@ -119,7 +119,7 @@ class HifunctionSpec:
         Reverses a `Hifunction` into an `Index` representation.
         &#34;&#34;&#34;
         idx = hifunction.reverse()
-        assert idx == {
+        cmp = {
             &#39;Steve&#39;: {
                 &#39;like&#39;: {
                     &#39;lot&#39;: {&#39;Mary&#39;, &#39;Sue&#39;}
@@ -128,6 +128,9 @@ class HifunctionSpec:
             &#39;Carl&#39;: {
                 &#39;like&#39;: {
                     &#39;little&#39;: {&#39;Mary&#39;}
+                },
+                &#39;dislike&#39;: {
+                    &#39;little&#39;: {&#39;Sue&#39;}
                 }
             },
             &#39;Joe&#39;: {
@@ -137,8 +140,12 @@ class HifunctionSpec:
                 &#39;dislike&#39;: {
                     &#39;lot&#39;: {&#39;Mary&#39;}
                 }
+            },
+            &#39;Chris&#39;: {
+                &#39;like&#39;: {}
             }
         }
+        assert idx == cmp
 
     # @specification.satisfies(indexspec.IndexSpec.INDEX)
     # def REVERSE(Hifunction):
@@ -264,7 +271,7 @@ class HifunctionSpec:
         Reverses a `Hifunction` into an `Index` representation.
         &#34;&#34;&#34;
         idx = hifunction.reverse()
-        assert idx == {
+        cmp = {
             &#39;Steve&#39;: {
                 &#39;like&#39;: {
                     &#39;lot&#39;: {&#39;Mary&#39;, &#39;Sue&#39;}
@@ -273,6 +280,9 @@ class HifunctionSpec:
             &#39;Carl&#39;: {
                 &#39;like&#39;: {
                     &#39;little&#39;: {&#39;Mary&#39;}
+                },
+                &#39;dislike&#39;: {
+                    &#39;little&#39;: {&#39;Sue&#39;}
                 }
             },
             &#39;Joe&#39;: {
@@ -282,8 +292,12 @@ class HifunctionSpec:
                 &#39;dislike&#39;: {
                     &#39;lot&#39;: {&#39;Mary&#39;}
                 }
+            },
+            &#39;Chris&#39;: {
+                &#39;like&#39;: {}
             }
-        }</code></pre>
+        }
+        assert idx == cmp</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -453,7 +467,7 @@ def HIFUNCTION(Hifunction, mapping=None):
     Reverses a `Hifunction` into an `Index` representation.
     &#34;&#34;&#34;
     idx = hifunction.reverse()
-    assert idx == {
+    cmp = {
         &#39;Steve&#39;: {
             &#39;like&#39;: {
                 &#39;lot&#39;: {&#39;Mary&#39;, &#39;Sue&#39;}
@@ -462,6 +476,9 @@ def HIFUNCTION(Hifunction, mapping=None):
         &#39;Carl&#39;: {
             &#39;like&#39;: {
                 &#39;little&#39;: {&#39;Mary&#39;}
+            },
+            &#39;dislike&#39;: {
+                &#39;little&#39;: {&#39;Sue&#39;}
             }
         },
         &#39;Joe&#39;: {
@@ -471,8 +488,12 @@ def HIFUNCTION(Hifunction, mapping=None):
             &#39;dislike&#39;: {
                 &#39;lot&#39;: {&#39;Mary&#39;}
             }
+        },
+        &#39;Chris&#39;: {
+            &#39;like&#39;: {}
         }
-    }</code></pre>
+    }
+    assert idx == cmp</code></pre>
 </details>
 </dd>
 </dl>

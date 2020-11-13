@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.8.1" />
-<title>structpy.map.himap API documentation</title>
+<title>structpy.map.function.hifunction API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>structpy.map.himap</code></h1>
+<h1 class="title">Module <code>structpy.map.function.hifunction</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -25,23 +25,25 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from structpy import implementation
-from structpy.map.himap_spec import HimapSpec
+from structpy.map.function.hifunction_spec import HifunctionSpec
 
-from structpy.collection.enforcer import EnforcerHidir
-from structpy.collection import Hidir
+import structpy.map.index.hiindex as hiindex
+
+from structpy.collection.enforcer import EnforcerHidict
+from structpy.collection import Hidict, Hidir
 
 
-@implementation(HimapSpec)
-class Himap(EnforcerHidir):
+@implementation(HifunctionSpec)
+class Hifunction(EnforcerHidict):
 
     def __init__(self, order, mapping=None):
-        if isinstance(mapping, Himap) and not hasattr(mapping, &#39;codomain&#39;):
+        if isinstance(mapping, hiindex.Hiindex) and not hasattr(mapping, &#39;codomain&#39;):
             self.codomain = mapping
-            EnforcerHidir.__init__(self, order,
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
         else:
-            self.codomain = Himap(order, self)
-            EnforcerHidir.__init__(self, order,
+            self.codomain = hiindex.Hiindex(order, self)
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
             if mapping is not None:
                 self.update(mapping)
@@ -67,7 +69,7 @@ class Himap(EnforcerHidir):
 
 
 if __name__ == &#39;__main__&#39;:
-    print(HimapSpec.verify(Himap))</code></pre>
+    print(HifunctionSpec.verify(Hifunction))</code></pre>
 </details>
 </section>
 <section>
@@ -79,30 +81,30 @@ if __name__ == &#39;__main__&#39;:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.map.himap.Himap"><code class="flex name class">
-<span>class <span class="ident">Himap</span></span>
+<dt id="structpy.map.function.hifunction.Hifunction"><code class="flex name class">
+<span>class <span class="ident">Hifunction</span></span>
 <span>(</span><span>order, mapping=None)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Implementation of <code><a title="structpy.map.himap_spec.HimapSpec" href="himap_spec.html#structpy.map.himap_spec.HimapSpec">HimapSpec</a></code>
+<div class="desc"><p>Implementation of <code><a title="structpy.map.function.hifunction_spec.HifunctionSpec" href="hifunction_spec.html#structpy.map.function.hifunction_spec.HifunctionSpec">HifunctionSpec</a></code>
 <br></p>
-<pre><code>Finite many-to-many mapping between a domain and domain.
+<pre><code>Many-to-one hierarchichal mapping between elements in a domain to elements in a codomain.
 &lt;br&gt;
 </code></pre></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Himap(EnforcerHidir):
+<pre><code class="python">class Hifunction(EnforcerHidict):
 
     def __init__(self, order, mapping=None):
-        if isinstance(mapping, Himap) and not hasattr(mapping, &#39;codomain&#39;):
+        if isinstance(mapping, hiindex.Hiindex) and not hasattr(mapping, &#39;codomain&#39;):
             self.codomain = mapping
-            EnforcerHidir.__init__(self, order,
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
         else:
-            self.codomain = Himap(order, self)
-            EnforcerHidir.__init__(self, order,
+            self.codomain = hiindex.Hiindex(order, self)
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
             if mapping is not None:
                 self.update(mapping)
@@ -128,14 +130,13 @@ if __name__ == &#39;__main__&#39;:
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></li>
-<li><a title="structpy.collection.hidir.Hidir" href="../collection/hidir.html#structpy.collection.hidir.Hidir">Hidir</a></li>
-<li><a title="structpy.collection.hidict.Hidict" href="../collection/hidict.html#structpy.collection.hidict.Hidict">Hidict</a></li>
+<li><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></li>
+<li><a title="structpy.collection.hidict.Hidict" href="../../collection/hidict.html#structpy.collection.hidict.Hidict">Hidict</a></li>
 <li>builtins.dict</li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.map.himap.Himap.reverse"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.reverse"><code class="name flex">
 <span>def <span class="ident">reverse</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -148,56 +149,56 @@ if __name__ == &#39;__main__&#39;:
     return self.codomain</code></pre>
 </details>
 </dd>
-<dt id="structpy.map.himap.Himap.clear"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.clear"><code class="name flex">
 <span>def <span class="ident">clear</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.clear" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.clear">clear</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.clear" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.clear">clear</a></code>
 </p>
 <div class="desc inherited"><p>D.clear() -&gt; None.
 Remove all items from D.</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.pop"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.pop"><code class="name flex">
 <span>def <span class="ident">pop</span></span>(<span>self, keys, default=None)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.pop" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.pop">pop</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop">pop</a></code>
 </p>
 <div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
 If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.popitem"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.popitem"><code class="name flex">
 <span>def <span class="ident">popitem</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.popitem" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.popitem">popitem</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.popitem" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.popitem">popitem</a></code>
 </p>
 <div class="desc inherited"><p>D.popitem() -&gt; (k, v), remove and return some (key, value) pair as a
 2-tuple; but raise KeyError if D is empty.</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.setdefault"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.setdefault"><code class="name flex">
 <span>def <span class="ident">setdefault</span></span>(<span>self, keys, default=None)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.setdefault" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.setdefault">setdefault</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.setdefault" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.setdefault">setdefault</a></code>
 </p>
 <div class="desc inherited"><p>Insert key with a value of default if key is not in the dictionary …</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.update"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.update"><code class="name flex">
 <span>def <span class="ident">update</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.update" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.update">update</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.update" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.update">update</a></code>
 </p>
 <div class="desc inherited"><p>D.update([E, ]**F) -&gt; None.
 Update D from dict/iterable E and F.
@@ -205,53 +206,53 @@ If E is present and has a .keys() method, then does:
 for k in E: D[k] = E[k]
 If E …</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.values"><code class="name flex">
-<span>def <span class="ident">values</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<p class="inheritance">
-<em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.values" href="../collection/hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.values">values</a></code>
-</p>
-<div class="desc inherited"><p>D.values() -&gt; an object providing a view on D's values</p></div>
-</dd>
-<dt id="structpy.map.himap.Himap.items"><code class="name flex">
-<span>def <span class="ident">items</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<p class="inheritance">
-<em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.items" href="../collection/hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.items">items</a></code>
-</p>
-<div class="desc inherited"><p>D.items() -&gt; a set-like object providing a view on D's items</p></div>
-</dd>
-<dt id="structpy.map.himap.Himap.get"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, *keys, default=None)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.get" href="../collection/hidict.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.get">get</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.get" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.get">get</a></code>
 </p>
 <div class="desc inherited"><p>Return the value for key if key is in the dictionary, else default.</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.keys"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.items"><code class="name flex">
+<span>def <span class="ident">items</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.items" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.items">items</a></code>
+</p>
+<div class="desc inherited"><p>D.items() -&gt; a set-like object providing a view on D's items</p></div>
+</dd>
+<dt id="structpy.map.function.hifunction.Hifunction.keys"><code class="name flex">
 <span>def <span class="ident">keys</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.keys" href="../collection/hidict.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.keys">keys</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.keys" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.keys">keys</a></code>
 </p>
 <div class="desc inherited"><p>D.keys() -&gt; a set-like object providing a view on D's keys</p></div>
 </dd>
-<dt id="structpy.map.himap.Himap.copy"><code class="name flex">
+<dt id="structpy.map.function.hifunction.Hifunction.values"><code class="name flex">
+<span>def <span class="ident">values</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.values" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.values">values</a></code>
+</p>
+<div class="desc inherited"><p>D.values() -&gt; an object providing a view on D's values</p></div>
+</dd>
+<dt id="structpy.map.function.hifunction.Hifunction.copy"><code class="name flex">
 <span>def <span class="ident">copy</span></span>(<span>self)</span>
 </code></dt>
 <dd>
 <p class="inheritance">
 <em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir" href="../collection/enforcer/enforcer_hidir.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir">EnforcerHidir</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.copy" href="../collection/hidict.html#structpy.collection.enforcer.enforcer_hidir.EnforcerHidir.copy">copy</a></code>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.copy" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.copy">copy</a></code>
 </p>
 <div class="desc inherited"><p>D.copy() -&gt; a shallow copy of D</p></div>
 </dd>
@@ -268,25 +269,25 @@ If E …</p></div>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="structpy.map" href="index.html">map</a></code></li>
+<li><code><a title="structpy.map.function" href="index.html">function</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.map.himap.Himap" href="#structpy.map.himap.Himap">Himap</a></code></h4>
+<h4><code><a title="structpy.map.function.hifunction.Hifunction" href="#structpy.map.function.hifunction.Hifunction">Hifunction</a></code></h4>
 <ul class="two-column">
-<li><code><a title="structpy.map.himap.Himap.reverse" href="#structpy.map.himap.Himap.reverse">reverse</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.clear" href="../collection/enforcer/enforcer_hidir.html#structpy.map.himap.Himap.clear">clear</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.pop" href="../collection/enforcer/enforcer_hidir.html#structpy.map.himap.Himap.pop">pop</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.popitem" href="../collection/enforcer/enforcer_hidir.html#structpy.map.himap.Himap.popitem">popitem</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.setdefault" href="../collection/enforcer/enforcer_hidir.html#structpy.map.himap.Himap.setdefault">setdefault</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.update" href="../collection/enforcer/enforcer_hidir.html#structpy.map.himap.Himap.update">update</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.values" href="../collection/hidir.html#structpy.map.himap.Himap.values">values</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.items" href="../collection/hidir.html#structpy.map.himap.Himap.items">items</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.get" href="../collection/hidict.html#structpy.map.himap.Himap.get">get</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.keys" href="../collection/hidict.html#structpy.map.himap.Himap.keys">keys</a></code></li>
-<li><code><a title="structpy.map.himap.Himap.copy" href="../collection/hidict.html#structpy.map.himap.Himap.copy">copy</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.reverse" href="#structpy.map.function.hifunction.Hifunction.reverse">reverse</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.clear" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.clear">clear</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.pop" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.pop">pop</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.popitem" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.popitem">popitem</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.setdefault" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.setdefault">setdefault</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.update" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.update">update</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.get" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.get">get</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.items" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.items">items</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.keys" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.keys">keys</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.values" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.values">values</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.copy" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.copy">copy</a></code></li>
 </ul>
 </li>
 </ul>

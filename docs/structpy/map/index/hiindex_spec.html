@@ -76,7 +76,7 @@ class HiindexSpec:
         assert hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;little&#39;] == {&#39;Jon&#39;, &#39;Sue&#39;}
 
         # Many-to-one consistency enforced when adding
-        hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;].add(&#39;Mary&#39;)
+        hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] = {&#39;Mary&#39;}
         assert hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] == {&#39;Mary&#39;}
         assert &#39;Mary&#39; not in hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;lot&#39;]
 
@@ -131,12 +131,13 @@ class HiindexSpec:
         Reverse an hiindex into a `Function` representation.
         &#34;&#34;&#34;
         f = hiindex.reverse()
-        assert f == {
+        comparison = {
             &#39;Sue&#39;: {
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Steve&#39;,
                     &#39;little&#39;: &#39;Steve&#39;
-                }
+                },
+                &#39;dislike&#39;: {}
             },
             &#39;Jon&#39;: {
                 &#39;like&#39;: {
@@ -147,7 +148,8 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Carl&#39;,
                     &#39;little&#39;: &#39;Carl&#39;
-                }
+                },
+                &#39;dislike&#39;: {}
             },
             &#39;Mark&#39;: {
                 &#39;like&#39;: {
@@ -156,12 +158,12 @@ class HiindexSpec:
             },
             &#39;Rob&#39;: {
                 &#39;like&#39;: {
-                    &#39;little&#39;: {
+                    &#39;little&#39;:
                         &#39;Steve&#39;
-                    }
                 }
             }
         }
+        assert f == comparison
 
 
     # @specification.satisfies(functionspec.FunctionSpec.FUNCTION)
@@ -244,7 +246,7 @@ class HiindexSpec:
         assert hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;little&#39;] == {&#39;Jon&#39;, &#39;Sue&#39;}
 
         # Many-to-one consistency enforced when adding
-        hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;].add(&#39;Mary&#39;)
+        hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] = {&#39;Mary&#39;}
         assert hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] == {&#39;Mary&#39;}
         assert &#39;Mary&#39; not in hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;lot&#39;]
 
@@ -299,12 +301,13 @@ class HiindexSpec:
         Reverse an hiindex into a `Function` representation.
         &#34;&#34;&#34;
         f = hiindex.reverse()
-        assert f == {
+        comparison = {
             &#39;Sue&#39;: {
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Steve&#39;,
                     &#39;little&#39;: &#39;Steve&#39;
-                }
+                },
+                &#39;dislike&#39;: {}
             },
             &#39;Jon&#39;: {
                 &#39;like&#39;: {
@@ -315,7 +318,8 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Carl&#39;,
                     &#39;little&#39;: &#39;Carl&#39;
-                }
+                },
+                &#39;dislike&#39;: {}
             },
             &#39;Mark&#39;: {
                 &#39;like&#39;: {
@@ -324,12 +328,12 @@ class HiindexSpec:
             },
             &#39;Rob&#39;: {
                 &#39;like&#39;: {
-                    &#39;little&#39;: {
+                    &#39;little&#39;:
                         &#39;Steve&#39;
-                    }
                 }
             }
-        }</code></pre>
+        }
+        assert f == comparison</code></pre>
 </details>
 <h3>Static methods</h3>
 <dl>
@@ -430,7 +434,7 @@ a direct reference to the provided values object.</p></div>
     assert hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;little&#39;] == {&#39;Jon&#39;, &#39;Sue&#39;}
 
     # Many-to-one consistency enforced when adding
-    hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;].add(&#39;Mary&#39;)
+    hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] = {&#39;Mary&#39;}
     assert hiindex[&#39;Carl&#39;, &#39;like&#39;, &#39;lot&#39;] == {&#39;Mary&#39;}
     assert &#39;Mary&#39; not in hiindex[&#39;Steve&#39;, &#39;like&#39;, &#39;lot&#39;]</code></pre>
 </details>
@@ -516,12 +520,13 @@ a direct reference to the provided values object.</p></div>
     Reverse an hiindex into a `Function` representation.
     &#34;&#34;&#34;
     f = hiindex.reverse()
-    assert f == {
+    comparison = {
         &#39;Sue&#39;: {
             &#39;like&#39;: {
                 &#39;lot&#39;: &#39;Steve&#39;,
                 &#39;little&#39;: &#39;Steve&#39;
-            }
+            },
+            &#39;dislike&#39;: {}
         },
         &#39;Jon&#39;: {
             &#39;like&#39;: {
@@ -532,7 +537,8 @@ a direct reference to the provided values object.</p></div>
             &#39;like&#39;: {
                 &#39;lot&#39;: &#39;Carl&#39;,
                 &#39;little&#39;: &#39;Carl&#39;
-            }
+            },
+            &#39;dislike&#39;: {}
         },
         &#39;Mark&#39;: {
             &#39;like&#39;: {
@@ -541,12 +547,12 @@ a direct reference to the provided values object.</p></div>
         },
         &#39;Rob&#39;: {
             &#39;like&#39;: {
-                &#39;little&#39;: {
+                &#39;little&#39;:
                     &#39;Steve&#39;
-                }
             }
         }
-    }</code></pre>
+    }
+    assert f == comparison</code></pre>
 </details>
 </dd>
 </dl>

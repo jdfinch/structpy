@@ -25,11 +25,10 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from structpy import specification
-import pytest
 
 
 @specification
-class LabeledDigraph:
+class LabeledDigraphSpec:
     &#34;&#34;&#34;
     Directed Graph with a single label per edge.
 
@@ -114,22 +113,57 @@ class LabeledDigraph:
         &#34;&#34;&#34;
         assert set(digraph.neighbors(&#39;Mary&#39;)) == {&#39;John&#39;, &#39;Peter&#39;}
 
+    def out_edges(digraph, source, label=None):
+        &#34;&#34;&#34;
+        Return an iterable over all out-edges of `source`.
+
+        Providing a label filters the results based on edge label.
+        &#34;&#34;&#34;
+        assert set(digraph.out_edges(&#39;Peter&#39;)) == {
+            (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+        }
+
+    def in_edges(digraph, target, label=None):
+        &#34;&#34;&#34;
+        Return an iterable over all in-edges of `target`.
+
+        Providing a label filters the results based on edge label.
+        &#34;&#34;&#34;
+        assert set(digraph.in_edges(&#39;Mary&#39;)) == {(&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;)}
+
     def nodes(digraph):
         &#34;&#34;&#34;
         Return an iterable over all nodes in the digraph.
         &#34;&#34;&#34;
         assert set(digraph.nodes()) == {&#39;Mary&#39;, &#39;John&#39;, &#39;Rob&#39;, &#39;Peter&#39;, &#39;Sarah&#39;}
 
-    def edges(digraph):
+    def edges(digraph, node=None, label=None):
         &#34;&#34;&#34;
         Return an iterable over all edges in the digraph, each edge represented by a
-        `tuple&lt;source, target, edge_label&gt;`
+        `tuple&lt;source, target, edge_label&gt;`.
+
+        If a `node` is provide, only provides edges neighboring that node.
+
+        Providing a label filters results by edge label.
         &#34;&#34;&#34;
         assert set(digraph.edges()) == {
                 (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
                 (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
                 (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
                 (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+        }
+
+        assert set(digraph.edges(&#39;Mary&#39;)) == {
+            (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+            (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;)
+        }
+
+        assert set(digraph.edges(label=&#39;likes&#39;)) == {
+            (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+            (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
         }
 
     def add(digraph, node, target=None, label=None):
@@ -201,8 +235,8 @@ class LabeledDigraph:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph"><code class="flex name class">
-<span>class <span class="ident">LabeledDigraph</span></span>
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec"><code class="flex name class">
+<span>class <span class="ident">LabeledDigraphSpec</span></span>
 </code></dt>
 <dd>
 <div class="desc"><p>Directed Graph with a single label per edge.</p>
@@ -213,7 +247,7 @@ Edge labels are not unique, but nodes are.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class LabeledDigraph:
+<pre><code class="python">class LabeledDigraphSpec:
     &#34;&#34;&#34;
     Directed Graph with a single label per edge.
 
@@ -298,22 +332,57 @@ Edge labels are not unique, but nodes are.</p>
         &#34;&#34;&#34;
         assert set(digraph.neighbors(&#39;Mary&#39;)) == {&#39;John&#39;, &#39;Peter&#39;}
 
+    def out_edges(digraph, source, label=None):
+        &#34;&#34;&#34;
+        Return an iterable over all out-edges of `source`.
+
+        Providing a label filters the results based on edge label.
+        &#34;&#34;&#34;
+        assert set(digraph.out_edges(&#39;Peter&#39;)) == {
+            (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+        }
+
+    def in_edges(digraph, target, label=None):
+        &#34;&#34;&#34;
+        Return an iterable over all in-edges of `target`.
+
+        Providing a label filters the results based on edge label.
+        &#34;&#34;&#34;
+        assert set(digraph.in_edges(&#39;Mary&#39;)) == {(&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;)}
+
     def nodes(digraph):
         &#34;&#34;&#34;
         Return an iterable over all nodes in the digraph.
         &#34;&#34;&#34;
         assert set(digraph.nodes()) == {&#39;Mary&#39;, &#39;John&#39;, &#39;Rob&#39;, &#39;Peter&#39;, &#39;Sarah&#39;}
 
-    def edges(digraph):
+    def edges(digraph, node=None, label=None):
         &#34;&#34;&#34;
         Return an iterable over all edges in the digraph, each edge represented by a
-        `tuple&lt;source, target, edge_label&gt;`
+        `tuple&lt;source, target, edge_label&gt;`.
+
+        If a `node` is provide, only provides edges neighboring that node.
+
+        Providing a label filters results by edge label.
         &#34;&#34;&#34;
         assert set(digraph.edges()) == {
                 (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
                 (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
                 (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
                 (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+        }
+
+        assert set(digraph.edges(&#39;Mary&#39;)) == {
+            (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+            (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;)
+        }
+
+        assert set(digraph.edges(label=&#39;likes&#39;)) == {
+            (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+            (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+            (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
         }
 
     def add(digraph, node, target=None, label=None):
@@ -377,7 +446,7 @@ Edge labels are not unique, but nodes are.</p>
 </details>
 <h3>Static methods</h3>
 <dl>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.verify"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.verify"><code class="name flex">
 <span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
 </code></dt>
 <dd>
@@ -399,7 +468,7 @@ Edge labels are not unique, but nodes are.</p>
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.LABELED_DIGRAPH"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.LABELED_DIGRAPH"><code class="name flex">
 <span>def <span class="ident">LABELED_DIGRAPH</span></span>(<span>Digraph, edges=None, nodes=None)</span>
 </code></dt>
 <dd>
@@ -426,7 +495,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     return digraph</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.has"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.has"><code class="name flex">
 <span>def <span class="ident">has</span></span>(<span>digraph, node, target=None, label=None)</span>
 </code></dt>
 <dd>
@@ -464,7 +533,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert not digraph.has(&#39;George&#39;)</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.target"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.target"><code class="name flex">
 <span>def <span class="ident">target</span></span>(<span>digraph, source, label)</span>
 </code></dt>
 <dd>
@@ -480,7 +549,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert digraph.target(&#39;Mary&#39;, &#39;likes&#39;) == &#39;Peter&#39;</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.source"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.source"><code class="name flex">
 <span>def <span class="ident">source</span></span>(<span>digraph, target, label)</span>
 </code></dt>
 <dd>
@@ -496,7 +565,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert digraph.source(&#39;Peter&#39;, &#39;likes&#39;) == &#39;Mary&#39;</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.targets"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.targets"><code class="name flex">
 <span>def <span class="ident">targets</span></span>(<span>digraph, source, label=None)</span>
 </code></dt>
 <dd>
@@ -515,7 +584,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert set(digraph.targets(&#39;Peter&#39;)) == {&#39;John&#39;, &#39;Sarah&#39;}</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.sources"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.sources"><code class="name flex">
 <span>def <span class="ident">sources</span></span>(<span>digraph, target, label=None)</span>
 </code></dt>
 <dd>
@@ -534,7 +603,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert set(digraph.sources(&#39;Mary&#39;)) == {&#39;John&#39;}</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.neighbors"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.neighbors"><code class="name flex">
 <span>def <span class="ident">neighbors</span></span>(<span>digraph, node, label=None)</span>
 </code></dt>
 <dd>
@@ -553,7 +622,48 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert set(digraph.neighbors(&#39;Mary&#39;)) == {&#39;John&#39;, &#39;Peter&#39;}</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.nodes"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.out_edges"><code class="name flex">
+<span>def <span class="ident">out_edges</span></span>(<span>digraph, source, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return an iterable over all out-edges of <code>source</code>.</p>
+<p>Providing a label filters the results based on edge label.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def out_edges(digraph, source, label=None):
+    &#34;&#34;&#34;
+    Return an iterable over all out-edges of `source`.
+
+    Providing a label filters the results based on edge label.
+    &#34;&#34;&#34;
+    assert set(digraph.out_edges(&#39;Peter&#39;)) == {
+        (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+        (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+    }</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.in_edges"><code class="name flex">
+<span>def <span class="ident">in_edges</span></span>(<span>digraph, target, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Return an iterable over all in-edges of <code>target</code>.</p>
+<p>Providing a label filters the results based on edge label.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def in_edges(digraph, target, label=None):
+    &#34;&#34;&#34;
+    Return an iterable over all in-edges of `target`.
+
+    Providing a label filters the results based on edge label.
+    &#34;&#34;&#34;
+    assert set(digraph.in_edges(&#39;Mary&#39;)) == {(&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;)}</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.nodes"><code class="name flex">
 <span>def <span class="ident">nodes</span></span>(<span>digraph)</span>
 </code></dt>
 <dd>
@@ -569,30 +679,48 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert set(digraph.nodes()) == {&#39;Mary&#39;, &#39;John&#39;, &#39;Rob&#39;, &#39;Peter&#39;, &#39;Sarah&#39;}</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.edges"><code class="name flex">
-<span>def <span class="ident">edges</span></span>(<span>digraph)</span>
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.edges"><code class="name flex">
+<span>def <span class="ident">edges</span></span>(<span>digraph, node=None, label=None)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Return an iterable over all edges in the digraph, each edge represented by a
-<code>tuple&lt;source, target, edge_label&gt;</code></p></div>
+<code>tuple&lt;source, target, edge_label&gt;</code>.</p>
+<p>If a <code>node</code> is provide, only provides edges neighboring that node.</p>
+<p>Providing a label filters results by edge label.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def edges(digraph):
+<pre><code class="python">def edges(digraph, node=None, label=None):
     &#34;&#34;&#34;
     Return an iterable over all edges in the digraph, each edge represented by a
-    `tuple&lt;source, target, edge_label&gt;`
+    `tuple&lt;source, target, edge_label&gt;`.
+
+    If a `node` is provide, only provides edges neighboring that node.
+
+    Providing a label filters results by edge label.
     &#34;&#34;&#34;
     assert set(digraph.edges()) == {
             (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
             (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
             (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
             (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
+    }
+
+    assert set(digraph.edges(&#39;Mary&#39;)) == {
+        (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+        (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;)
+    }
+
+    assert set(digraph.edges(label=&#39;likes&#39;)) == {
+        (&#39;John&#39;, &#39;Mary&#39;, &#39;likes&#39;),
+        (&#39;Mary&#39;, &#39;Peter&#39;, &#39;likes&#39;),
+        (&#39;Peter&#39;, &#39;John&#39;, &#39;likes&#39;),
+        (&#39;Peter&#39;, &#39;Sarah&#39;, &#39;likes&#39;)
     }</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.add"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.add"><code class="name flex">
 <span>def <span class="ident">add</span></span>(<span>digraph, node, target=None, label=None)</span>
 </code></dt>
 <dd>
@@ -626,7 +754,7 @@ def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
     assert digraph.has(&#39;John&#39;, &#39;Mary&#39;, &#39;dislikes&#39;)</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.remove"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.remove"><code class="name flex">
 <span>def <span class="ident">remove</span></span>(<span>digraph, node, target=None, label=None)</span>
 </code></dt>
 <dd>
@@ -659,7 +787,7 @@ of the source <code>node</code>.</p>
     assert not digraph.has(&#39;John&#39;, &#39;Mary&#39;)</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.set"><code class="name flex">
+<dt id="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.set"><code class="name flex">
 <span>def <span class="ident">set</span></span>(<span>digraph, node, target, new_label=None)</span>
 </code></dt>
 <dd>
@@ -707,21 +835,23 @@ of the source <code>node</code>.</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph">LabeledDigraph</a></code></h4>
+<h4><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec">LabeledDigraphSpec</a></code></h4>
 <ul class="two-column">
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.verify" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.verify">verify</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.LABELED_DIGRAPH" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.LABELED_DIGRAPH">LABELED_DIGRAPH</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.has" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.has">has</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.target" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.target">target</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.source" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.source">source</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.targets" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.targets">targets</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.sources" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.sources">sources</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.neighbors" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.neighbors">neighbors</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.nodes" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.nodes">nodes</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.edges" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.edges">edges</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.add" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.add">add</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.remove" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.remove">remove</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.set" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraph.set">set</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.verify" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.verify">verify</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.LABELED_DIGRAPH" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.LABELED_DIGRAPH">LABELED_DIGRAPH</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.has" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.has">has</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.target" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.target">target</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.source" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.source">source</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.targets" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.targets">targets</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.sources" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.sources">sources</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.neighbors" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.neighbors">neighbors</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.out_edges" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.out_edges">out_edges</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.in_edges" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.in_edges">in_edges</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.nodes" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.nodes">nodes</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.edges" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.edges">edges</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.add" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.add">add</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.remove" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.remove">remove</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.set" href="#structpy.graph.directed.labeled.labeled_digraph_spec.LabeledDigraphSpec.set">set</a></code></li>
 </ul>
 </li>
 </ul>

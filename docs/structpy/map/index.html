@@ -48,6 +48,27 @@
 <br></p>
 <p>Many-to-one mapping between elements in a domain to elements in a codomain.
 <br>
+<br>
+<br></p>
+<h3 id="himap"><a href="himap.html">Himap</a></h3>
+<p>Implementation of <code><a title="structpy.map.himap_spec.HimapSpec" href="himap_spec.html#structpy.map.himap_spec.HimapSpec">HimapSpec</a></code>
+<br></p>
+<p>Finite many-to-many mapping between a domain and domain.
+<br>
+<br>
+<br></p>
+<h3 id="hiindex"><a href="index/hiindex.html">Hiindex</a></h3>
+<p>Implementation of <code><a title="structpy.map.index.hiindex_spec.HiindexSpec" href="index/hiindex_spec.html#structpy.map.index.hiindex_spec.HiindexSpec">HiindexSpec</a></code>
+<br></p>
+<p>Finite one-to-many hierarchichal mapping between a domain and codomain.
+<br>
+<br>
+<br></p>
+<h3 id="hifunction"><a href="function/hifunction.html">Hifunction</a></h3>
+<p>Implementation of <code><a title="structpy.map.function.hifunction_spec.HifunctionSpec" href="function/hifunction_spec.html#structpy.map.function.hifunction_spec.HifunctionSpec">HifunctionSpec</a></code>
+<br></p>
+<p>Many-to-one hierarchichal mapping between elements in a domain to elements in a codomain.
+<br>
 <br></p>
 <details class="source">
 <summary>
@@ -62,11 +83,18 @@ from structpy.map.bijective.bimap import Bimap
 from structpy.map.index.index import Index
 from structpy.map.function.function import Function
 
+from structpy.map.himap import Himap
+from structpy.map.index.hiindex import Hiindex
+from structpy.map.function.hifunction import Hifunction
+
 __all__ = [
     &#39;Map&#39;,
     &#39;Bimap&#39;,
     &#39;Index&#39;,
-    &#39;Function&#39;
+    &#39;Function&#39;,
+    &#39;Himap&#39;,
+    &#39;Hiindex&#39;,
+    &#39;Hifunction&#39;
 ]</code></pre>
 </details>
 </section>
@@ -119,6 +147,9 @@ i.e. the mapping is one-to-one and onto …</p></div>
 <li><a href="#bimap">Bimap</a></li>
 <li><a href="#index">Index</a></li>
 <li><a href="#function">Function</a></li>
+<li><a href="#himap">Himap</a></li>
+<li><a href="#hiindex">Hiindex</a></li>
+<li><a href="#hifunction">Hifunction</a></li>
 </ul>
 </div>
 <ul id="index">

@@ -60,10 +60,6 @@ class HidictSpec:
         hidict['Bob', 'dislikes', 'lot'] = 'Sam'
         assert hidict['Bob', 'dislikes', 'lot'] == 'Sam'
 
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidict['Bob', 'loves'] = {'medium': 'George', 'lot': 'Phil'}
-        assert hidict['Bob', 'loves', 'medium'] == 'George'
-
     def delitem(hidict, keys):
         """
         `del hidict[key1, key2, ...]` will delete an entry from hidict.
@@ -75,8 +71,6 @@ class HidictSpec:
         assert ('Bob', 'likes', 'little') not in hidict
         del hidict['Bob', 'dislikes']
         assert ('Bob', 'dislikes') not in hidict
-        del hidict['Bob', 'loves']
-        assert ('Bob', 'loves') not in hidict
 
     def contains(hidict, keys):
         """

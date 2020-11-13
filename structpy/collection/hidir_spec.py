@@ -74,9 +74,6 @@ class HidirSpec:
         hidir['Mary', 'likes', 'lot'].add('Rick')
         assert hidir['Mary', 'likes', 'lot'] == {'Bob', 'Joe', 'Rick'}
 
-        # Can update a subdict by specifying a key prefix
-        hidir['Mary', 'loves'] = {'lot': {'Steve'}, 'little': {'Todd', 'Cassie'}}
-
     def delitem(hidir, keys):
         """
         `del hidir[key1, key2, ...]` will delete an entry from hidir.
@@ -88,8 +85,6 @@ class HidirSpec:
         assert ('Bob', 'likes', 'little') not in hidir
         del hidir['Bob', 'dislikes']
         assert ('Bob', 'dislikes') not in hidir
-        del hidir['Mary', 'loves']
-        assert ('Mary', 'loves') not in hidir
 
     def contains(hidir, keys):
         """

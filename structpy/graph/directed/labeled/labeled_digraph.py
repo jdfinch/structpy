@@ -3,14 +3,14 @@
 from structpy import implementation
 from structpy.graph.directed.labeled.labeled_digraph_spec import LabeledDigraphSpec
 
-from structpy.map import Himap
+from structpy.map import Himap, Hifunction
 
 
 @implementation(LabeledDigraphSpec)
 class LabeledDigraph:
 
     def __init__(self, edges=None, nodes=None):
-        self.edges = Himap(1)
+        self.edges = Hifunction(1)
         self.nodes = Himap(1)
         if nodes is not None:
             for node in nodes:
@@ -28,10 +28,8 @@ class LabeledDigraph:
                 self.edges[node] = {}
             if not label in self.nodes[node]:
                 self.nodes[node, label] = {}
-            if not target in self.edges[node]:
-                self.edges[node, target] = {}
             self.nodes[node, label].add(target)
-            self.edges[node, target].add(label)
+            self.edges[node, target] = label
 
     def has(self, node, target=None, label=None):
         if target is None and label is None:
@@ -43,6 +41,9 @@ class LabeledDigraph:
         else:
             return node in self.nodes and target in self.edges[node] and \
                    self.edges[node, target] == label
+
+    def target(self, source, label):
+        pass
 
 
 if __name__ == '__main__':

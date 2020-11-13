@@ -98,11 +98,7 @@ class EnforcerHidirSpec:
         hidir['Mary', 'likes', 'lot'].add('Rick')
         assert hidir['Mary', 'likes', 'lot'] == {'Bob', 'Joe', 'Rick'}
 
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidir['Bob', 'loves'] = {'medium': {'George', 'Phil'}}
-        assert hidir['Bob', 'loves', 'medium'] == {'George', 'Phil'}
-
-        assert other.value == 13
+        assert other.value == 11
 
     def delitem(hidir, keys):
         """
@@ -115,8 +111,6 @@ class EnforcerHidirSpec:
         assert ('Bob', 'likes', 'little') not in hidir
         del hidir['Bob', 'dislikes']
         assert ('Bob', 'dislikes') not in hidir
-        del hidir['Bob', 'loves']
-        assert ('Bob', 'loves') not in hidir
         assert other.value == 7
 
     def contains(hidir, keys):

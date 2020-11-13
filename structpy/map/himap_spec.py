@@ -119,9 +119,6 @@ class HimapSpec:
         for reverse mapping.
         """
         r = himap.reverse()
-        print('\n', 'R:\n')
-        for item in r.items():
-            print(item)
         comparison = {
             'Jim': {
                 'like': {
@@ -165,8 +162,4 @@ class HimapSpec:
                 }
             }
         }
-        print('R:')
-        print(r)
-        print('Comparison:')
-        print(comparison)
         assert r == comparison

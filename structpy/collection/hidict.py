@@ -1,6 +1,8 @@
 from structpy import implementation
 from structpy.collection.hidict_spec import HidictSpec
 
+from collections.abc import Hashable
+
 
 @implementation(HidictSpec)
 class Hidict(dict):
@@ -48,55 +50,31 @@ class Hidict(dict):
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        assert len(keys) <= self.order + 1
-        if len(keys) == self.order + 1:
-            keys, keyprime = keys[:-1], keys[-1]
-            d = self
-            for i, key in enumerate(keys):
-                if key not in d:
-                    superkeys = keys[:i+1]
-                    dict.__setitem__(d, key,
-                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
-                d = dict.__getitem__(d, key)
-            dict.__setitem__(d, keyprime, value)
-        else:
-            if keys in self:
-                del self[keys]
-            d = self
-            for i, key in enumerate(keys):
-                if key not in d:
-                    superkeys = keys[:i+1]
-                    dict.__setitem__(d, key,
-                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
-                d = dict.__getitem__(d, key)
-            stack = [(d, value, keys)]
-            while stack:
-                this, other, superkeys = stack.pop()
-                if len(superkeys) == self.order:
-                    dict.update(this, other)
-                else:
-                    for key, value in dict.items(other):
-                        keys = (*superkeys, key)
-                        if keys not in this:
-                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                        stack.append((dict.__getitem__(this, key), value, keys))
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
+        keys, keyprime = keys[:-1], keys[-1]
+        d = self
+        for i, key in enumerate(keys):
+            if key not in d:
+                superkeys = keys[:i+1]
+                dict.__setitem__(d, key,
+                    self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
+            d = dict.__getitem__(d, key)
+        dict.__setitem__(d, keyprime, value)
 
     def update(self, other):
         if isinstance(other, dict):
-            stack = [(self, other, tuple())]
+            items = []
+            stack = [(other, tuple())]
             while stack:
-                this, other, superkeys = stack.pop()
-                for key, value in dict.items(other):
-                    keys = (*superkeys, key)
-                    if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                    if len(keys) == self.order:
-                        dict.update(dict.__getitem__(this, key), value)
-                    else:
-                        stack.append((dict.__getitem__(this, key), value, keys))
-        else:
-            for item in other:
-                Hidict.__setitem__(self, item[:-1],  item[-1])
+                other, superkeys = stack.pop()
+                if len(superkeys) == self.order:
+                    items.extend([(*superkeys, key, value) for key, value in dict.items(other)])
+                else:
+                    for key, value in dict.items(other):
+                        stack.append((value, (*superkeys, key)))
+            other = items
+        for item in other:
+            Hidict.__setitem__(self, item[:-1],  item[-1])
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):
@@ -104,9 +82,16 @@ class Hidict(dict):
         assert len(keys) <= self.order + 1
         keys, keyprime = keys[:-1], keys[-1]
         value = self
+        trail = []
         for key in keys:
+            trail.append((value, key))
             value = dict.__getitem__(value, key)
         dict.__delitem__(value, keyprime)
+        for d, key in trail[::-1]:
+            if not dict.__getitem__(d, key):
+                dict.__delitem__(d, key)
+            else:
+                break
 
     def pop(self, *keys, default=None):
         if keys not in self:
