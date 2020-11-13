@@ -51,7 +51,7 @@ class HiindexSpec:
         assert hiindex['Steve', 'like', 'little'] == {'Jon', 'Sue'}
 
         # Many-to-one consistency enforced when adding
-        hiindex['Carl', 'like', 'lot'].add('Mary')
+        hiindex['Carl', 'like', 'lot'] = {'Mary'}
         assert hiindex['Carl', 'like', 'lot'] == {'Mary'}
         assert 'Mary' not in hiindex['Steve', 'like', 'lot']
 
@@ -106,12 +106,13 @@ class HiindexSpec:
         Reverse an hiindex into a `Function` representation.
         """
         f = hiindex.reverse()
-        assert f == {
+        comparison = {
             'Sue': {
                 'like': {
                     'lot': 'Steve',
                     'little': 'Steve'
-                }
+                },
+                'dislike': {}
             },
             'Jon': {
                 'like': {
@@ -122,7 +123,8 @@ class HiindexSpec:
                 'like': {
                     'lot': 'Carl',
                     'little': 'Carl'
-                }
+                },
+                'dislike': {}
             },
             'Mark': {
                 'like': {
@@ -131,12 +133,12 @@ class HiindexSpec:
             },
             'Rob': {
                 'like': {
-                    'little': {
+                    'little':
                         'Steve'
-                    }
                 }
             }
         }
+        assert f == comparison
 
 
     # @specification.satisfies(functionspec.FunctionSpec.FUNCTION)

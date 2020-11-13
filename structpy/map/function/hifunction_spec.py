@@ -94,7 +94,7 @@ class HifunctionSpec:
         Reverses a `Hifunction` into an `Index` representation.
         """
         idx = hifunction.reverse()
-        assert idx == {
+        cmp = {
             'Steve': {
                 'like': {
                     'lot': {'Mary', 'Sue'}
@@ -103,6 +103,9 @@ class HifunctionSpec:
             'Carl': {
                 'like': {
                     'little': {'Mary'}
+                },
+                'dislike': {
+                    'little': {'Sue'}
                 }
             },
             'Joe': {
@@ -112,8 +115,12 @@ class HifunctionSpec:
                 'dislike': {
                     'lot': {'Mary'}
                 }
+            },
+            'Chris': {
+                'like': {}
             }
         }
+        assert idx == cmp
 
     # @specification.satisfies(indexspec.IndexSpec.INDEX)
     # def REVERSE(Hifunction):

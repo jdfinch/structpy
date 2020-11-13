@@ -104,16 +104,9 @@ class Hidict(dict):
         assert len(keys) <= self.order + 1
         keys, keyprime = keys[:-1], keys[-1]
         value = self
-        trail = []
         for key in keys:
-            trail.append((value, key))
             value = dict.__getitem__(value, key)
         dict.__delitem__(value, keyprime)
-        for d, key in trail[::-1]:
-            if not dict.__getitem__(d, key):
-                dict.__delitem__(d, key)
-            else:
-                break
 
     def pop(self, *keys, default=None):
         if keys not in self:

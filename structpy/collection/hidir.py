@@ -69,7 +69,7 @@ class Hidir(Hidict):
             for item in other:
                 keys, value = item[:-1], item[-1]
                 if not Hidict.__contains__(self, keys):
-                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, keys)))
+                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
                 set.add(Hidict.__getitem__(self, keys), value)
 
     def values(self):

@@ -140,6 +140,10 @@ class B:
         assert 4 in struct
         assert 1 not in struct
 
-if __name__ == '__main__':
+@implementation(B)
+class MyList(list):
+    pass
 
+if __name__ == '__main__':
+    ml = MyList([1, 2, 3])
     print(B.verify(list))

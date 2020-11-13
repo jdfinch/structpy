@@ -1,22 +1,24 @@
 
 from structpy import implementation
-from structpy.map.himap_spec import HimapSpec
+from structpy.map.function.hifunction_spec import HifunctionSpec
 
-from structpy.collection.enforcer import EnforcerHidir
-from structpy.collection import Hidir
+import structpy.map.index.hiindex as hiindex
+
+from structpy.collection.enforcer import EnforcerHidict
+from structpy.collection import Hidict, Hidir
 
 
-@implementation(HimapSpec)
-class Himap(EnforcerHidir):
+@implementation(HifunctionSpec)
+class Hifunction(EnforcerHidict):
 
     def __init__(self, order, mapping=None):
-        if isinstance(mapping, Himap) and not hasattr(mapping, 'codomain'):
+        if isinstance(mapping, hiindex.Hiindex) and not hasattr(mapping, 'codomain'):
             self.codomain = mapping
-            EnforcerHidir.__init__(self, order,
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
         else:
-            self.codomain = Himap(order, self)
-            EnforcerHidir.__init__(self, order,
+            self.codomain = hiindex.Hiindex(order, self)
+            EnforcerHidict.__init__(self, order,
                 add_function=self._add_function, remove_function=self._remove_function)
             if mapping is not None:
                 self.update(mapping)
@@ -42,4 +44,4 @@ class Himap(EnforcerHidir):
 
 
 if __name__ == '__main__':
-    print(HimapSpec.verify(Himap))
+    print(HifunctionSpec.verify(Hifunction))

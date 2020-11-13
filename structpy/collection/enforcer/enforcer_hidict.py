@@ -154,7 +154,8 @@ class EnforcerHidict(Hidict):
                         stack.append(((*superkeys, k), v))
         else:
             items = other
-        items_to_remove = [item for item in items if item[:-1] in self]
+        items_to_remove = [(*item[:-1], Hidict.__getitem__(self, item[:-1]))
+                           for item in items if item[:-1] in self]
         items_to_add = items
         items_to_remove_mod = self.remove_function([(*self.superkeys, *item) for item in items_to_remove])
         items_to_add_mod = self.add_function([(*self.superkeys, *item) for item in items_to_add])
