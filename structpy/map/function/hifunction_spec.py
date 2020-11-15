@@ -6,7 +6,7 @@ from structpy import specification
 @specification
 class HifunctionSpec:
     """
-    Many-to-one hierarchichal mapping between elements in a domain to elements in a codomain.
+    Many-to-one hierarchical mapping between elements in a domain to elements in a codomain.
     """
 
     @specification.init

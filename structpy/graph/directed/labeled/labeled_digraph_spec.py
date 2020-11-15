@@ -17,8 +17,8 @@ class LabeledDigraphSpec:
     def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
         """
         Construct a labeled digraph. Optionally, pass an
-        `iterable<tuple<target, target, label>>` of edges and an
-        `iterabele<node>` of nodes to initialize the graph.
+        `iterable<tuple<source, target, label>>` of edges and an
+        `iterable<node>` of nodes to initialize the graph.
         """
         digraph = Digraph([
             ('John', 'Mary', 'likes'),
@@ -181,9 +181,9 @@ class LabeledDigraphSpec:
         digraph.set('Peter', 'Pete')
         assert not digraph.has('Peter')
         assert digraph.has('Pete')
-        assert digraph.has('Sarah', 'Pete', 'likes')
+        assert digraph.has('Pete', 'Sarah', 'likes')
 
-        digraph.set('Sarah', 'Pete', 'dislikes')
-        assert not digraph.has('Sarah', 'Pete', 'likes')
-        assert digraph.has('Sarah', 'Pete', 'dislikes')
+        digraph.set('Pete', 'Sarah', 'dislikes')
+        assert not digraph.has('Pete', 'Sarah', 'likes')
+        assert digraph.has('Pete', 'Sarah', 'dislikes')
 
