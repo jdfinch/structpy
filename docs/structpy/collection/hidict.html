@@ -27,6 +27,8 @@
 <pre><code class="python">from structpy import implementation
 from structpy.collection.hidict_spec import HidictSpec
 
+from collections.abc import Hashable
+
 
 @implementation(HidictSpec)
 class Hidict(dict):
@@ -74,7 +76,7 @@ class Hidict(dict):
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        assert len(keys) == self.order + 1 and [hash(key) for key in keys]
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
         keys, keyprime = keys[:-1], keys[-1]
         d = self
         for i, key in enumerate(keys):
@@ -258,7 +260,7 @@ keys are associated with a value.
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        assert len(keys) == self.order + 1 and [hash(key) for key in keys]
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
         keys, keyprime = keys[:-1], keys[-1]
         d = self
         for i, key in enumerate(keys):

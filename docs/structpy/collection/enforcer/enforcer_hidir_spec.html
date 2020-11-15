@@ -123,11 +123,7 @@ class EnforcerHidirSpec:
         hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
         assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
 
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidir[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: {&#39;George&#39;, &#39;Phil&#39;}}
-        assert hidir[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == {&#39;George&#39;, &#39;Phil&#39;}
-
-        assert other.value == 13
+        assert other.value == 11
 
     def delitem(hidir, keys):
         &#34;&#34;&#34;
@@ -140,8 +136,6 @@ class EnforcerHidirSpec:
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
         del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
         assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
-        del hidir[&#39;Bob&#39;, &#39;loves&#39;]
-        assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidir
         assert other.value == 7
 
     def contains(hidir, keys):
@@ -289,11 +283,7 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
         hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
         assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
 
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidir[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: {&#39;George&#39;, &#39;Phil&#39;}}
-        assert hidir[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == {&#39;George&#39;, &#39;Phil&#39;}
-
-        assert other.value == 13
+        assert other.value == 11
 
     def delitem(hidir, keys):
         &#34;&#34;&#34;
@@ -306,8 +296,6 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
         assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
         del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
         assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
-        del hidir[&#39;Bob&#39;, &#39;loves&#39;]
-        assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidir
         assert other.value == 7
 
     def contains(hidir, keys):
@@ -489,11 +477,7 @@ def ENFORCER_HIDIR(EnforcerHidir, dict_like=None, add_function=None, remove_func
     hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;].add(&#39;Rick&#39;)
     assert hidir[&#39;Mary&#39;, &#39;likes&#39;, &#39;lot&#39;] == {&#39;Bob&#39;, &#39;Joe&#39;, &#39;Rick&#39;}
 
-    # Can assign a partial key sequence to a dict-like to add/update a subdict
-    hidir[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: {&#39;George&#39;, &#39;Phil&#39;}}
-    assert hidir[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == {&#39;George&#39;, &#39;Phil&#39;}
-
-    assert other.value == 13</code></pre>
+    assert other.value == 11</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_hidir_spec.EnforcerHidirSpec.delitem"><code class="name flex">
@@ -518,8 +502,6 @@ will be cleared.</p></div>
     assert (&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;) not in hidir
     del hidir[&#39;Bob&#39;, &#39;dislikes&#39;]
     assert (&#39;Bob&#39;, &#39;dislikes&#39;) not in hidir
-    del hidir[&#39;Bob&#39;, &#39;loves&#39;]
-    assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidir
     assert other.value == 7</code></pre>
 </details>
 </dd>

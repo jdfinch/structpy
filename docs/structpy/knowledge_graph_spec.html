@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.1" />
+<title>structpy.knowledge_graph_spec API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>structpy.knowledge_graph_spec</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from structpy import specification
+
+
+@specification
+class KnowledgeGraph:
+    &#34;&#34;&#34;
+    Data structure for creating, editing, and querying a Knowledge Graph as part of the
+    2020-2021 dialogue approach used in the socialbot Emora.
+
+    Nodes in the knowledge graph are accessed by a string identifier, which is provided
+    by the user upon adding the node (although some nodes are automatically generated and
+    assigned an integer ID).
+    &#34;&#34;&#34;
+
+    def KNOWLEDGE_GRAPH(KnowledgeGraph, file_name=None):
+        &#34;&#34;&#34;
+        Create a `KnowledgeGraph` object.
+
+        Providing a `file_name` will load a .json file from a previous `knowledge_graph.save` operation.
+        &#34;&#34;&#34;
+        knowledge_graph = KnowledgeGraph(&#39;knowledge_graph.json&#39;)
+        return knowledge_graph
+
+    def add_entity_type(kg, entity_type, supertypes):
+        &#34;&#34;&#34;
+        Add a concept to the KG that cannot be interpreted as a predicate.
+
+        `entity_type` is the id of the added concept.
+
+        `supertypes` should be a list of `entity_type`&#39;s types (a single string can
+        be provdided in the case of a single type relationship).
+        &#34;&#34;&#34;
+        kg.add_entity_type(&#39;dog&#39;, &#39;canine&#39;)
+
+    def add_predicate_type(kg, predicate_type, supertypes, arg0_types, arg1_types=None):
+        &#34;&#34;&#34;
+        Add a concept to the KG that is interpretable as a predicate.
+
+        `predicate_type` is the id of the added concept.
+
+        `supertypes` should be a list of `predicate_type`&#39;s types (a single string can
+        be provdided in the case of a single type relationship).
+
+        `arg0_types` represents the type(s) of the predicate&#39;s first argument.
+
+        `arg1_types` (optionally) represents the type(s) of the predicate&#39;s second argument.
+        &#34;&#34;&#34;
+        kg.add_predicate_type(&#39;buy&#39;, [&#39;event&#39;, &#39;economic_transaction&#39;], &#39;person&#39;, &#39;purchasable&#39;)
+        kg.add_predicate_type(&#39;leadership_role&#39;, &#39;social_role&#39;, &#39;agent_group&#39;, &#39;agent&#39;)
+
+    def add_property(kg, type_, property_dict):
+        &#34;&#34;&#34;
+        Add a set of properties to a concept in the kg.
+
+        `type_` represents the type node that the properties are added to (should not be an instance).
+
+        `property_dict` is a json-like dictionary describing the property attachments being added (see example).
+        &#34;&#34;&#34;
+        kg.add_property(&#39;buy&#39;, {
+            &#39;use&#39;: &#39;currency&#39;,
+            &#39;source&#39;: &#39;vendor&#39;
+        })
+
+    def add_entity_instance(kg, supertypes, properties, entity_instance=None):
+        &#34;&#34;&#34;
+        Add an entity instance.
+
+        `entity_instance` is the instance&#39;s identifier (optional).
+
+        `supertypes` are the type(s) of `entity_instance`.
+
+        `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+        If all supertype properties are not satisfied, this method raises a `ValueError`.
+        &#34;&#34;&#34;
+        pass
+
+    def add_predicate_instance(kg, supertypes, properties):
+        &#34;&#34;&#34;
+        Add an predicate instance.
+
+        `supertypes` are the type(s) of `predicate_instance`.
+
+        `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+        If all supertype properties are not satisfied, this method raises a `ValueError`.
+
+        `properties` should contain appropriate `arg0` and `arg1` entries to satisfy the argument
+        structure of all the predicate&#39;s supertypes.
+        &#34;&#34;&#34;
+        pass
+
+    def add_conditions(kg, type_, conditions):
+        &#34;&#34;&#34;
+        Add conditions that can be satisfied to infer a type relationship between some instance and a type.
+
+        `type_` is the type-to-infer.
+
+        `conditions` is a property dictionary representing the set of conditions that must be satisfied.
+        Note that for predicate type inference, argument type satisfaction must hold by default.
+        &#34;&#34;&#34;
+        pass
+
+    def add_implication_rule(kg, conditions, properties):
+        &#34;&#34;&#34;
+        Add an unnamed type with satisfaction conditions and a set of properties serving as a postcondition.
+
+        `conditions` is a json-like property dictionary representing conditions.
+
+        `properties` is a json-like property dictionary representing inferred knowledge.
+        &#34;&#34;&#34;
+        pass
+
+    def properties(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def types(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def subtypes(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def instances(kg, type_):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def implication_rules(kg, type_):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def save(kg, json_filename):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph"><code class="flex name class">
+<span>class <span class="ident">KnowledgeGraph</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data structure for creating, editing, and querying a Knowledge Graph as part of the
+2020-2021 dialogue approach used in the socialbot Emora.</p>
+<p>Nodes in the knowledge graph are accessed by a string identifier, which is provided
+by the user upon adding the node (although some nodes are automatically generated and
+assigned an integer ID).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class KnowledgeGraph:
+    &#34;&#34;&#34;
+    Data structure for creating, editing, and querying a Knowledge Graph as part of the
+    2020-2021 dialogue approach used in the socialbot Emora.
+
+    Nodes in the knowledge graph are accessed by a string identifier, which is provided
+    by the user upon adding the node (although some nodes are automatically generated and
+    assigned an integer ID).
+    &#34;&#34;&#34;
+
+    def KNOWLEDGE_GRAPH(KnowledgeGraph, file_name=None):
+        &#34;&#34;&#34;
+        Create a `KnowledgeGraph` object.
+
+        Providing a `file_name` will load a .json file from a previous `knowledge_graph.save` operation.
+        &#34;&#34;&#34;
+        knowledge_graph = KnowledgeGraph(&#39;knowledge_graph.json&#39;)
+        return knowledge_graph
+
+    def add_entity_type(kg, entity_type, supertypes):
+        &#34;&#34;&#34;
+        Add a concept to the KG that cannot be interpreted as a predicate.
+
+        `entity_type` is the id of the added concept.
+
+        `supertypes` should be a list of `entity_type`&#39;s types (a single string can
+        be provdided in the case of a single type relationship).
+        &#34;&#34;&#34;
+        kg.add_entity_type(&#39;dog&#39;, &#39;canine&#39;)
+
+    def add_predicate_type(kg, predicate_type, supertypes, arg0_types, arg1_types=None):
+        &#34;&#34;&#34;
+        Add a concept to the KG that is interpretable as a predicate.
+
+        `predicate_type` is the id of the added concept.
+
+        `supertypes` should be a list of `predicate_type`&#39;s types (a single string can
+        be provdided in the case of a single type relationship).
+
+        `arg0_types` represents the type(s) of the predicate&#39;s first argument.
+
+        `arg1_types` (optionally) represents the type(s) of the predicate&#39;s second argument.
+        &#34;&#34;&#34;
+        kg.add_predicate_type(&#39;buy&#39;, [&#39;event&#39;, &#39;economic_transaction&#39;], &#39;person&#39;, &#39;purchasable&#39;)
+        kg.add_predicate_type(&#39;leadership_role&#39;, &#39;social_role&#39;, &#39;agent_group&#39;, &#39;agent&#39;)
+
+    def add_property(kg, type_, property_dict):
+        &#34;&#34;&#34;
+        Add a set of properties to a concept in the kg.
+
+        `type_` represents the type node that the properties are added to (should not be an instance).
+
+        `property_dict` is a json-like dictionary describing the property attachments being added (see example).
+        &#34;&#34;&#34;
+        kg.add_property(&#39;buy&#39;, {
+            &#39;use&#39;: &#39;currency&#39;,
+            &#39;source&#39;: &#39;vendor&#39;
+        })
+
+    def add_entity_instance(kg, supertypes, properties, entity_instance=None):
+        &#34;&#34;&#34;
+        Add an entity instance.
+
+        `entity_instance` is the instance&#39;s identifier (optional).
+
+        `supertypes` are the type(s) of `entity_instance`.
+
+        `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+        If all supertype properties are not satisfied, this method raises a `ValueError`.
+        &#34;&#34;&#34;
+        pass
+
+    def add_predicate_instance(kg, supertypes, properties):
+        &#34;&#34;&#34;
+        Add an predicate instance.
+
+        `supertypes` are the type(s) of `predicate_instance`.
+
+        `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+        If all supertype properties are not satisfied, this method raises a `ValueError`.
+
+        `properties` should contain appropriate `arg0` and `arg1` entries to satisfy the argument
+        structure of all the predicate&#39;s supertypes.
+        &#34;&#34;&#34;
+        pass
+
+    def add_conditions(kg, type_, conditions):
+        &#34;&#34;&#34;
+        Add conditions that can be satisfied to infer a type relationship between some instance and a type.
+
+        `type_` is the type-to-infer.
+
+        `conditions` is a property dictionary representing the set of conditions that must be satisfied.
+        Note that for predicate type inference, argument type satisfaction must hold by default.
+        &#34;&#34;&#34;
+        pass
+
+    def add_implication_rule(kg, conditions, properties):
+        &#34;&#34;&#34;
+        Add an unnamed type with satisfaction conditions and a set of properties serving as a postcondition.
+
+        `conditions` is a json-like property dictionary representing conditions.
+
+        `properties` is a json-like property dictionary representing inferred knowledge.
+        &#34;&#34;&#34;
+        pass
+
+    def properties(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def types(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def subtypes(kg, concept):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def instances(kg, type_):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def implication_rules(kg, type_):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass
+
+    def save(kg, json_filename):
+        &#34;&#34;&#34;
+
+        &#34;&#34;&#34;
+        pass</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.verify"><code class="name flex">
+<span>def <span class="ident">verify</span></span>(<span>implementation=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def verify(spec, implementation=None):
+    if implementation is None:
+        results = ResultList()
+        for implementation in spec.__implementations__:
+            results += spec.__units__.test(implementation)
+        return results
+    else:
+        return spec.__units__.test(implementation)</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.KNOWLEDGE_GRAPH"><code class="name flex">
+<span>def <span class="ident">KNOWLEDGE_GRAPH</span></span>(<span>KnowledgeGraph, file_name=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Create a <code><a title="structpy.knowledge_graph_spec.KnowledgeGraph" href="#structpy.knowledge_graph_spec.KnowledgeGraph">KnowledgeGraph</a></code> object.</p>
+<p>Providing a <code>file_name</code> will load a .json file from a previous <code>knowledge_graph.save</code> operation.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def KNOWLEDGE_GRAPH(KnowledgeGraph, file_name=None):
+    &#34;&#34;&#34;
+    Create a `KnowledgeGraph` object.
+
+    Providing a `file_name` will load a .json file from a previous `knowledge_graph.save` operation.
+    &#34;&#34;&#34;
+    knowledge_graph = KnowledgeGraph(&#39;knowledge_graph.json&#39;)
+    return knowledge_graph</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_type"><code class="name flex">
+<span>def <span class="ident">add_entity_type</span></span>(<span>kg, entity_type, supertypes)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add a concept to the KG that cannot be interpreted as a predicate.</p>
+<p><code>entity_type</code> is the id of the added concept.</p>
+<p><code>supertypes</code> should be a list of <code>entity_type</code>'s types (a single string can
+be provdided in the case of a single type relationship).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_entity_type(kg, entity_type, supertypes):
+    &#34;&#34;&#34;
+    Add a concept to the KG that cannot be interpreted as a predicate.
+
+    `entity_type` is the id of the added concept.
+
+    `supertypes` should be a list of `entity_type`&#39;s types (a single string can
+    be provdided in the case of a single type relationship).
+    &#34;&#34;&#34;
+    kg.add_entity_type(&#39;dog&#39;, &#39;canine&#39;)</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_type"><code class="name flex">
+<span>def <span class="ident">add_predicate_type</span></span>(<span>kg, predicate_type, supertypes, arg0_types, arg1_types=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add a concept to the KG that is interpretable as a predicate.</p>
+<p><code>predicate_type</code> is the id of the added concept.</p>
+<p><code>supertypes</code> should be a list of <code>predicate_type</code>'s types (a single string can
+be provdided in the case of a single type relationship).</p>
+<p><code>arg0_types</code> represents the type(s) of the predicate's first argument.</p>
+<p><code>arg1_types</code> (optionally) represents the type(s) of the predicate's second argument.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_predicate_type(kg, predicate_type, supertypes, arg0_types, arg1_types=None):
+    &#34;&#34;&#34;
+    Add a concept to the KG that is interpretable as a predicate.
+
+    `predicate_type` is the id of the added concept.
+
+    `supertypes` should be a list of `predicate_type`&#39;s types (a single string can
+    be provdided in the case of a single type relationship).
+
+    `arg0_types` represents the type(s) of the predicate&#39;s first argument.
+
+    `arg1_types` (optionally) represents the type(s) of the predicate&#39;s second argument.
+    &#34;&#34;&#34;
+    kg.add_predicate_type(&#39;buy&#39;, [&#39;event&#39;, &#39;economic_transaction&#39;], &#39;person&#39;, &#39;purchasable&#39;)
+    kg.add_predicate_type(&#39;leadership_role&#39;, &#39;social_role&#39;, &#39;agent_group&#39;, &#39;agent&#39;)</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_property"><code class="name flex">
+<span>def <span class="ident">add_property</span></span>(<span>kg, type_, property_dict)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add a set of properties to a concept in the kg.</p>
+<p><code>type_</code> represents the type node that the properties are added to (should not be an instance).</p>
+<p><code>property_dict</code> is a json-like dictionary describing the property attachments being added (see example).</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_property(kg, type_, property_dict):
+    &#34;&#34;&#34;
+    Add a set of properties to a concept in the kg.
+
+    `type_` represents the type node that the properties are added to (should not be an instance).
+
+    `property_dict` is a json-like dictionary describing the property attachments being added (see example).
+    &#34;&#34;&#34;
+    kg.add_property(&#39;buy&#39;, {
+        &#39;use&#39;: &#39;currency&#39;,
+        &#39;source&#39;: &#39;vendor&#39;
+    })</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_instance"><code class="name flex">
+<span>def <span class="ident">add_entity_instance</span></span>(<span>kg, supertypes, properties, entity_instance=None)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add an entity instance.</p>
+<p><code>entity_instance</code> is the instance's identifier (optional).</p>
+<p><code>supertypes</code> are the type(s) of <code>entity_instance</code>.</p>
+<p><code>properties</code> is a json-like properties dictionary satisfying all <code>supertypes</code> properties.
+If all supertype properties are not satisfied, this method raises a <code>ValueError</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_entity_instance(kg, supertypes, properties, entity_instance=None):
+    &#34;&#34;&#34;
+    Add an entity instance.
+
+    `entity_instance` is the instance&#39;s identifier (optional).
+
+    `supertypes` are the type(s) of `entity_instance`.
+
+    `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+    If all supertype properties are not satisfied, this method raises a `ValueError`.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_instance"><code class="name flex">
+<span>def <span class="ident">add_predicate_instance</span></span>(<span>kg, supertypes, properties)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add an predicate instance.</p>
+<p><code>supertypes</code> are the type(s) of <code>predicate_instance</code>.</p>
+<p><code>properties</code> is a json-like properties dictionary satisfying all <code>supertypes</code> properties.
+If all supertype properties are not satisfied, this method raises a <code>ValueError</code>.</p>
+<p><code>properties</code> should contain appropriate <code>arg0</code> and <code>arg1</code> entries to satisfy the argument
+structure of all the predicate's supertypes.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_predicate_instance(kg, supertypes, properties):
+    &#34;&#34;&#34;
+    Add an predicate instance.
+
+    `supertypes` are the type(s) of `predicate_instance`.
+
+    `properties` is a json-like properties dictionary satisfying all `supertypes` properties.
+    If all supertype properties are not satisfied, this method raises a `ValueError`.
+
+    `properties` should contain appropriate `arg0` and `arg1` entries to satisfy the argument
+    structure of all the predicate&#39;s supertypes.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_conditions"><code class="name flex">
+<span>def <span class="ident">add_conditions</span></span>(<span>kg, type_, conditions)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add conditions that can be satisfied to infer a type relationship between some instance and a type.</p>
+<p><code>type_</code> is the type-to-infer.</p>
+<p><code>conditions</code> is a property dictionary representing the set of conditions that must be satisfied.
+Note that for predicate type inference, argument type satisfaction must hold by default.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_conditions(kg, type_, conditions):
+    &#34;&#34;&#34;
+    Add conditions that can be satisfied to infer a type relationship between some instance and a type.
+
+    `type_` is the type-to-infer.
+
+    `conditions` is a property dictionary representing the set of conditions that must be satisfied.
+    Note that for predicate type inference, argument type satisfaction must hold by default.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.add_implication_rule"><code class="name flex">
+<span>def <span class="ident">add_implication_rule</span></span>(<span>kg, conditions, properties)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Add an unnamed type with satisfaction conditions and a set of properties serving as a postcondition.</p>
+<p><code>conditions</code> is a json-like property dictionary representing conditions.</p>
+<p><code>properties</code> is a json-like property dictionary representing inferred knowledge.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def add_implication_rule(kg, conditions, properties):
+    &#34;&#34;&#34;
+    Add an unnamed type with satisfaction conditions and a set of properties serving as a postcondition.
+
+    `conditions` is a json-like property dictionary representing conditions.
+
+    `properties` is a json-like property dictionary representing inferred knowledge.
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.properties"><code class="name flex">
+<span>def <span class="ident">properties</span></span>(<span>kg, concept)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def properties(kg, concept):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.types"><code class="name flex">
+<span>def <span class="ident">types</span></span>(<span>kg, concept)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def types(kg, concept):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.subtypes"><code class="name flex">
+<span>def <span class="ident">subtypes</span></span>(<span>kg, concept)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def subtypes(kg, concept):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.instances"><code class="name flex">
+<span>def <span class="ident">instances</span></span>(<span>kg, type_)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def instances(kg, type_):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.implication_rules"><code class="name flex">
+<span>def <span class="ident">implication_rules</span></span>(<span>kg, type_)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def implication_rules(kg, type_):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+<dt id="structpy.knowledge_graph_spec.KnowledgeGraph.save"><code class="name flex">
+<span>def <span class="ident">save</span></span>(<span>kg, json_filename)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def save(kg, json_filename):
+    &#34;&#34;&#34;
+
+    &#34;&#34;&#34;
+    pass</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="structpy" href="index.html">structpy</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph" href="#structpy.knowledge_graph_spec.KnowledgeGraph">KnowledgeGraph</a></code></h4>
+<ul class="">
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.verify" href="#structpy.knowledge_graph_spec.KnowledgeGraph.verify">verify</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.KNOWLEDGE_GRAPH" href="#structpy.knowledge_graph_spec.KnowledgeGraph.KNOWLEDGE_GRAPH">KNOWLEDGE_GRAPH</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_type" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_type">add_entity_type</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_type" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_type">add_predicate_type</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_property" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_property">add_property</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_instance" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_entity_instance">add_entity_instance</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_instance" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_predicate_instance">add_predicate_instance</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_conditions" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_conditions">add_conditions</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.add_implication_rule" href="#structpy.knowledge_graph_spec.KnowledgeGraph.add_implication_rule">add_implication_rule</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.properties" href="#structpy.knowledge_graph_spec.KnowledgeGraph.properties">properties</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.types" href="#structpy.knowledge_graph_spec.KnowledgeGraph.types">types</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.subtypes" href="#structpy.knowledge_graph_spec.KnowledgeGraph.subtypes">subtypes</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.instances" href="#structpy.knowledge_graph_spec.KnowledgeGraph.instances">instances</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.implication_rules" href="#structpy.knowledge_graph_spec.KnowledgeGraph.implication_rules">implication_rules</a></code></li>
+<li><code><a title="structpy.knowledge_graph_spec.KnowledgeGraph.save" href="#structpy.knowledge_graph_spec.KnowledgeGraph.save">save</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.1</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

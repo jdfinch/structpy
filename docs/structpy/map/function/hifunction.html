@@ -160,17 +160,6 @@ if __name__ == &#39;__main__&#39;:
 <div class="desc inherited"><p>D.clear() -&gt; None.
 Remove all items from D.</p></div>
 </dd>
-<dt id="structpy.map.function.hifunction.Hifunction.pop"><code class="name flex">
-<span>def <span class="ident">pop</span></span>(<span>self, keys, default=None)</span>
-</code></dt>
-<dd>
-<p class="inheritance">
-<em>Inherited from:</em>
-<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop">pop</a></code>
-</p>
-<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
-If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
-</dd>
 <dt id="structpy.map.function.hifunction.Hifunction.popitem"><code class="name flex">
 <span>def <span class="ident">popitem</span></span>(<span>self)</span>
 </code></dt>
@@ -205,6 +194,17 @@ Update D from dict/iterable E and F.
 If E is present and has a .keys() method, then does:
 for k in E: D[k] = E[k]
 If E …</p></div>
+</dd>
+<dt id="structpy.map.function.hifunction.Hifunction.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self, *keys, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="../../collection/enforcer/enforcer_hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code>.<code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop" href="../../collection/hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop">pop</a></code>
+</p>
+<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
+If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
 </dd>
 <dt id="structpy.map.function.hifunction.Hifunction.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, *keys, default=None)</span>
@@ -279,10 +279,10 @@ If E …</p></div>
 <ul class="two-column">
 <li><code><a title="structpy.map.function.hifunction.Hifunction.reverse" href="#structpy.map.function.hifunction.Hifunction.reverse">reverse</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.clear" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.clear">clear</a></code></li>
-<li><code><a title="structpy.map.function.hifunction.Hifunction.pop" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.pop">pop</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.popitem" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.popitem">popitem</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.setdefault" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.setdefault">setdefault</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.update" href="../../collection/enforcer/enforcer_hidict.html#structpy.map.function.hifunction.Hifunction.update">update</a></code></li>
+<li><code><a title="structpy.map.function.hifunction.Hifunction.pop" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.pop">pop</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.get" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.get">get</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.items" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.items">items</a></code></li>
 <li><code><a title="structpy.map.function.hifunction.Hifunction.keys" href="../../collection/hidict.html#structpy.map.function.hifunction.Hifunction.keys">keys</a></code></li>

@@ -29,6 +29,7 @@ from structpy.collection.enforcer.enforcer_hidict_spec import EnforcerHidictSpec
 
 from structpy.collection.hidict import Hidict
 
+from collections.abc import Hashable
 
 @implementation(EnforcerHidictSpec)
 class EnforcerHidict(Hidict):
@@ -46,56 +47,30 @@ class EnforcerHidict(Hidict):
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        if len(keys) == self.order + 1:
-            if keys not in self:
-                items = self.add_function([(*self.superkeys, *keys,value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidict.update(self, items)
-                else:
-                    Hidict.__setitem__(self, keys, value)
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
+        if keys not in self:
+            items = self.add_function([(*self.superkeys, *keys, value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidict.update(self, items)
             else:
-                original_value = self[keys]
-                items = self.remove_function([(*self.superkeys, *keys, original_value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    for item in items:
-                        Hidict.__delitem__(self, item[:-1])
-                else:
-                    Hidict.__delitem__(self, keys)
-                items = self.add_function([(*self.superkeys, *keys, value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidict.update(self, items)
-                else:
-                    Hidict.__setitem__(self, keys, value)
+                Hidict.__setitem__(self, keys, value)
         else:
-            if keys in self:
-                del self[keys]
-            d = self
-            for i, key in enumerate(keys):
-                if key not in d:
-                    superkeys = keys[:i + 1]
-                    dict.__setitem__(d, key,
-                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
-                d = dict.__getitem__(d, key)
-            stack = [(d, value, keys)]
-            while stack:
-                this, other, superkeys = stack.pop()
-                if len(superkeys) == self.order:
-                    to_add = self.add_function([(*self.superkeys, *superkeys, k) for k, v in dict.items(other)])
-                    if to_add is None:
-                        dict.update(this, other)
-                    else:
-                        items = [(*self.superkeys, *superkeys, *item[len(self.superkeys):])
-                                 for item in dict.items(other)]
-                        Hidict.update(self, items)
-                else:
-                    for key, value in dict.items(other):
-                        keys = (*superkeys, key)
-                        if keys not in this:
-                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                        stack.append((dict.__getitem__(this, key), value, keys))
+            original_value = self[keys]
+            items = self.remove_function([(*self.superkeys, *keys, original_value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                for item in items:
+                    Hidict.__delitem__(self, item[:-1])
+            else:
+                Hidict.__delitem__(self, keys)
+            items = self.add_function([(*self.superkeys, *keys, value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidict.update(self, items)
+            else:
+                Hidict.__setitem__(self, keys, value)
+
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):
@@ -129,21 +104,6 @@ class EnforcerHidict(Hidict):
                 Hidict.__delitem__(self, item[:-1])
         else:
             Hidict.clear(self)
-
-    def pop(self, keys, default=None):
-        if not isinstance(keys, tuple):
-            keys = (keys,)
-        if keys not in self and default is not None:
-            return default
-        value = self[keys]
-        items = self.remove_function([(*self.superkeys, *keys,value)])
-        if items is not None:
-            items = [item[len(self.superkeys):] for item in items]
-            for item in items:
-                Hidict.__delitem__(self, item[:-1])
-        else:
-            Hidict.__delitem__(self, keys)
-        return value
 
     def popitem(self):
         item = Hidict.popitem(self)
@@ -244,56 +204,30 @@ hooks that call functions whenever items are added/overwritten/removed.
     def __setitem__(self, keys, value):
         if not isinstance(keys, tuple):
             keys = (keys,)
-        if len(keys) == self.order + 1:
-            if keys not in self:
-                items = self.add_function([(*self.superkeys, *keys,value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidict.update(self, items)
-                else:
-                    Hidict.__setitem__(self, keys, value)
+        assert len(keys) == self.order + 1 and all([isinstance(key, Hashable) for key in keys])
+        if keys not in self:
+            items = self.add_function([(*self.superkeys, *keys, value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidict.update(self, items)
             else:
-                original_value = self[keys]
-                items = self.remove_function([(*self.superkeys, *keys, original_value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    for item in items:
-                        Hidict.__delitem__(self, item[:-1])
-                else:
-                    Hidict.__delitem__(self, keys)
-                items = self.add_function([(*self.superkeys, *keys, value)])
-                if items is not None:
-                    items = [item[len(self.superkeys):] for item in items]
-                    Hidict.update(self, items)
-                else:
-                    Hidict.__setitem__(self, keys, value)
+                Hidict.__setitem__(self, keys, value)
         else:
-            if keys in self:
-                del self[keys]
-            d = self
-            for i, key in enumerate(keys):
-                if key not in d:
-                    superkeys = keys[:i + 1]
-                    dict.__setitem__(d, key,
-                        self._generate_subdict(self.order - i - 1, (*self.superkeys, *superkeys)))
-                d = dict.__getitem__(d, key)
-            stack = [(d, value, keys)]
-            while stack:
-                this, other, superkeys = stack.pop()
-                if len(superkeys) == self.order:
-                    to_add = self.add_function([(*self.superkeys, *superkeys, k) for k, v in dict.items(other)])
-                    if to_add is None:
-                        dict.update(this, other)
-                    else:
-                        items = [(*self.superkeys, *superkeys, *item[len(self.superkeys):])
-                                 for item in dict.items(other)]
-                        Hidict.update(self, items)
-                else:
-                    for key, value in dict.items(other):
-                        keys = (*superkeys, key)
-                        if keys not in this:
-                            dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                        stack.append((dict.__getitem__(this, key), value, keys))
+            original_value = self[keys]
+            items = self.remove_function([(*self.superkeys, *keys, original_value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                for item in items:
+                    Hidict.__delitem__(self, item[:-1])
+            else:
+                Hidict.__delitem__(self, keys)
+            items = self.add_function([(*self.superkeys, *keys, value)])
+            if items is not None:
+                items = [item[len(self.superkeys):] for item in items]
+                Hidict.update(self, items)
+            else:
+                Hidict.__setitem__(self, keys, value)
+
 
     def __delitem__(self, keys):
         if not isinstance(keys, tuple):
@@ -327,21 +261,6 @@ hooks that call functions whenever items are added/overwritten/removed.
                 Hidict.__delitem__(self, item[:-1])
         else:
             Hidict.clear(self)
-
-    def pop(self, keys, default=None):
-        if not isinstance(keys, tuple):
-            keys = (keys,)
-        if keys not in self and default is not None:
-            return default
-        value = self[keys]
-        items = self.remove_function([(*self.superkeys, *keys,value)])
-        if items is not None:
-            items = [item[len(self.superkeys):] for item in items]
-            for item in items:
-                Hidict.__delitem__(self, item[:-1])
-        else:
-            Hidict.__delitem__(self, keys)
-        return value
 
     def popitem(self):
         item = Hidict.popitem(self)
@@ -425,36 +344,6 @@ Remove all items from D.</p></div>
             Hidict.__delitem__(self, item[:-1])
     else:
         Hidict.clear(self)</code></pre>
-</details>
-</dd>
-<dt id="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop"><code class="name flex">
-<span>def <span class="ident">pop</span></span>(<span>self, keys, default=None)</span>
-</code></dt>
-<dd>
-<p class="inheritance">
-<em>Inherited from:</em>
-<code><a title="structpy.collection.hidict.Hidict" href="../hidict.html#structpy.collection.hidict.Hidict">Hidict</a></code>.<code><a title="structpy.collection.hidict.Hidict.pop" href="../hidict.html#structpy.collection.hidict.Hidict.pop">pop</a></code>
-</p>
-<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
-If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def pop(self, keys, default=None):
-    if not isinstance(keys, tuple):
-        keys = (keys,)
-    if keys not in self and default is not None:
-        return default
-    value = self[keys]
-    items = self.remove_function([(*self.superkeys, *keys,value)])
-    if items is not None:
-        items = [item[len(self.superkeys):] for item in items]
-        for item in items:
-            Hidict.__delitem__(self, item[:-1])
-    else:
-        Hidict.__delitem__(self, keys)
-    return value</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.popitem"><code class="name flex">
@@ -556,6 +445,17 @@ If E …</p></div>
         Hidict.update(self, items_to_add)</code></pre>
 </details>
 </dd>
+<dt id="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop"><code class="name flex">
+<span>def <span class="ident">pop</span></span>(<span>self, *keys, default=None)</span>
+</code></dt>
+<dd>
+<p class="inheritance">
+<em>Inherited from:</em>
+<code><a title="structpy.collection.hidict.Hidict" href="../hidict.html#structpy.collection.hidict.Hidict">Hidict</a></code>.<code><a title="structpy.collection.hidict.Hidict.pop" href="../hidict.html#structpy.collection.hidict.Hidict.pop">pop</a></code>
+</p>
+<div class="desc inherited"><p>D.pop(k[,d]) -&gt; v, remove specified key and return the corresponding value.
+If key is not found, d is returned if given, otherwise KeyError is raised</p></div>
+</dd>
 <dt id="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.get"><code class="name flex">
 <span>def <span class="ident">get</span></span>(<span>self, *keys, default=None)</span>
 </code></dt>
@@ -628,10 +528,10 @@ If E …</p></div>
 <h4><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict">EnforcerHidict</a></code></h4>
 <ul class="two-column">
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.clear" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.clear">clear</a></code></li>
-<li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop">pop</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.popitem" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.popitem">popitem</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.setdefault" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.setdefault">setdefault</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.update" href="#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.update">update</a></code></li>
+<li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop" href="../hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.pop">pop</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.get" href="../hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.get">get</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.items" href="../hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.items">items</a></code></li>
 <li><code><a title="structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.keys" href="../hidict.html#structpy.collection.enforcer.enforcer_hidict.EnforcerHidict.keys">keys</a></code></li>

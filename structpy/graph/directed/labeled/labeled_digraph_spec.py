@@ -17,7 +17,7 @@ class LabeledDigraphSpec:
     def LABELED_DIGRAPH(Digraph, edges=None, nodes=None):
         """
         Construct a labeled digraph. Optionally, pass an
-        `iterable<tuple<source, target, label>>` of edges and an
+        `iterable<tuple<target, target, label>>` of edges and an
         `iterabele<node>` of nodes to initialize the graph.
         """
         digraph = Digraph([
@@ -38,7 +38,7 @@ class LabeledDigraphSpec:
 
         Specifying `node` and `label` tests whether `node` has an out-edge with `label`.
 
-        Three parameters tests for `source-target-label` edge membership.
+        Three parameters tests for `target-target-label` edge membership.
         """
         assert digraph.has('John')
         assert digraph.has('Rob')
@@ -52,25 +52,13 @@ class LabeledDigraphSpec:
         assert not digraph.has('Sarah', 'Peter', 'likes')
         assert not digraph.has('George')
 
-    def target(digraph, source, label):
-        """
-        Get a target given a source and label.
-        """
-        assert digraph.target('Mary', 'likes') == 'Peter'
-
-    def source(digraph, target, label):
-        """
-        Get the source of an edge given a target and label.
-        """
-        assert digraph.source('Peter', 'likes') == 'Mary'
-
     def targets(digraph, source, label=None):
         """
-        Get all of the targets along out-edges of a given source.
+        Get all of the _targets along out-edges of a given target.
 
         Providing a label filters the results based on edge label.
         """
-        assert set(digraph.targets('Peter')) == {'John', 'Sarah'}
+        assert digraph.targets('Peter') == {'John', 'Sarah'}
 
     def sources(digraph, target, label=None):
         """
@@ -78,7 +66,7 @@ class LabeledDigraphSpec:
 
         Providing a label filters the results based on edge label.
         """
-        assert set(digraph.sources('Mary')) == {'John'}
+        assert digraph.sources('Mary') == {'John'}
 
     def neighbors(digraph, node, label=None):
         """
@@ -90,14 +78,13 @@ class LabeledDigraphSpec:
 
     def out_edges(digraph, source, label=None):
         """
-        Return an iterable over all out-edges of `source`.
+        Return an iterable over all out-edges of `target`.
 
         Providing a label filters the results based on edge label.
         """
-        assert set(digraph.out_edges('Peter')) == {
-            ('Peter', 'John', 'likes'),
-            ('Peter', 'Sarah', 'likes')
-        }
+        oe = digraph.out_edges('Peter')
+        cmp = {('Peter', 'John', 'likes'), ('Peter', 'Sarah', 'likes')}
+        assert oe == cmp
 
     def in_edges(digraph, target, label=None):
         """
@@ -105,18 +92,18 @@ class LabeledDigraphSpec:
 
         Providing a label filters the results based on edge label.
         """
-        assert set(digraph.in_edges('Mary')) == {('John', 'Mary', 'likes')}
+        assert digraph.in_edges('Mary') == {('John', 'Mary', 'likes')}
 
     def nodes(digraph):
         """
         Return an iterable over all nodes in the digraph.
         """
-        assert set(digraph.nodes()) == {'Mary', 'John', 'Rob', 'Peter', 'Sarah'}
+        assert digraph.nodes() == {'Mary', 'John', 'Rob', 'Peter', 'Sarah'}
 
     def edges(digraph, node=None, label=None):
         """
         Return an iterable over all edges in the digraph, each edge represented by a
-        `tuple<source, target, edge_label>`.
+        `tuple<target, target, edge_label>`.
 
         If a `node` is provide, only provides edges neighboring that node.
 
@@ -163,12 +150,12 @@ class LabeledDigraphSpec:
         assert not digraph.has('John', 'Mary', 'likes')
         assert digraph.has('John', 'Mary', 'dislikes')
 
-    def remove(digraph, node, target=None, label=None):
+    def remove(digraph, node, target=None):
         """
         Remove a node or edge.
 
-        Edge removal can be specified by specifying the `label` or `target`
-        of the source `node`.
+        Edge removal can be specified by specifying the `target`
+        of the out-edge of `node`.
 
         Removing a node removes all connected in- and out-edges.
         """
@@ -180,7 +167,7 @@ class LabeledDigraphSpec:
         digraph.remove('Mary', 'George')
         assert not digraph.has('Mary', 'George')
 
-        digraph.remove('John', label='dislikes')
+        digraph.remove('John', 'Mary')
         assert not digraph.has('John', 'Mary')
 
     def set(digraph, node, target, new_label=None):

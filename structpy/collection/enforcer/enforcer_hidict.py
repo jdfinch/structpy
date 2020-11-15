@@ -80,21 +80,6 @@ class EnforcerHidict(Hidict):
         else:
             Hidict.clear(self)
 
-    def pop(self, keys, default=None):
-        if not isinstance(keys, tuple):
-            keys = (keys,)
-        if keys not in self and default is not None:
-            return default
-        value = self[keys]
-        items = self.remove_function([(*self.superkeys, *keys,value)])
-        if items is not None:
-            items = [item[len(self.superkeys):] for item in items]
-            for item in items:
-                Hidict.__delitem__(self, item[:-1])
-        else:
-            Hidict.__delitem__(self, keys)
-        return value
-
     def popitem(self):
         item = Hidict.popitem(self)
         items = self.remove_function([item])

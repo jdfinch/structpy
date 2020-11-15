@@ -7,10 +7,10 @@
     list_class_variables_in_index = True
     sort_identifiers = False
     show_type_annotations = False
-    # Show collapsed source code block next to each keys.
+    # Show collapsed target code block next to each keys.
     # Disabling this can improve rendering speed of large modules.
     show_source_code = True
-    # If Set, format links to objects in online source code repository
+    # If Set, format links to objects in online target code repository
     # according to this template. Supported keywords for interpolation
     # are: commit, path, start_line, end_line.
     #git_link_template = 'https://github.com/USER/PROJECT/blob/{commit}/{path}#L{start_line}-L{end_line}'
@@ -21,7 +21,7 @@
     # A prefix to use for every HTML hyperlink in the generated documentation.
     # No prefix results in all links being relative.
     link_prefix = ''
-    # Enable syntax highlighting for code/source blocks by including Highlight.js
+    # Enable syntax highlighting for code/target blocks by including Highlight.js
     syntax_highlighting = True
     # Set the style keyword such as 'atom-one-light' or 'github-gist'
     #     Options: https://github.com/highlightjs/highlight.js/tree/master/src/styles

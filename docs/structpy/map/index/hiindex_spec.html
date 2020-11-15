@@ -85,8 +85,7 @@ class HiindexSpec:
         Remove an element from the hiindex domain.
         &#34;&#34;&#34;
         del hiindex[&#39;Joe&#39;, &#39;dislike&#39;]
-        assert &#39;dislike&#39; not in hiindex[&#39;Joe&#39;]
-        assert hiindex[&#39;Joe&#39;] == {}
+        assert &#39;Joe&#39; not in hiindex
 
     def update(hiindex, mapping):
         &#34;&#34;&#34;
@@ -136,8 +135,7 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Steve&#39;,
                     &#39;little&#39;: &#39;Steve&#39;
-                },
-                &#39;dislike&#39;: {}
+                }
             },
             &#39;Jon&#39;: {
                 &#39;like&#39;: {
@@ -148,8 +146,7 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Carl&#39;,
                     &#39;little&#39;: &#39;Carl&#39;
-                },
-                &#39;dislike&#39;: {}
+                }
             },
             &#39;Mark&#39;: {
                 &#39;like&#39;: {
@@ -255,8 +252,7 @@ class HiindexSpec:
         Remove an element from the hiindex domain.
         &#34;&#34;&#34;
         del hiindex[&#39;Joe&#39;, &#39;dislike&#39;]
-        assert &#39;dislike&#39; not in hiindex[&#39;Joe&#39;]
-        assert hiindex[&#39;Joe&#39;] == {}
+        assert &#39;Joe&#39; not in hiindex
 
     def update(hiindex, mapping):
         &#34;&#34;&#34;
@@ -306,8 +302,7 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Steve&#39;,
                     &#39;little&#39;: &#39;Steve&#39;
-                },
-                &#39;dislike&#39;: {}
+                }
             },
             &#39;Jon&#39;: {
                 &#39;like&#39;: {
@@ -318,8 +313,7 @@ class HiindexSpec:
                 &#39;like&#39;: {
                     &#39;lot&#39;: &#39;Carl&#39;,
                     &#39;little&#39;: &#39;Carl&#39;
-                },
-                &#39;dislike&#39;: {}
+                }
             },
             &#39;Mark&#39;: {
                 &#39;like&#39;: {
@@ -453,8 +447,7 @@ a direct reference to the provided values object.</p></div>
     Remove an element from the hiindex domain.
     &#34;&#34;&#34;
     del hiindex[&#39;Joe&#39;, &#39;dislike&#39;]
-    assert &#39;dislike&#39; not in hiindex[&#39;Joe&#39;]
-    assert hiindex[&#39;Joe&#39;] == {}</code></pre>
+    assert &#39;Joe&#39; not in hiindex</code></pre>
 </details>
 </dd>
 <dt id="structpy.map.index.hiindex_spec.HiindexSpec.update"><code class="name flex">
@@ -525,8 +518,7 @@ a direct reference to the provided values object.</p></div>
             &#39;like&#39;: {
                 &#39;lot&#39;: &#39;Steve&#39;,
                 &#39;little&#39;: &#39;Steve&#39;
-            },
-            &#39;dislike&#39;: {}
+            }
         },
         &#39;Jon&#39;: {
             &#39;like&#39;: {
@@ -537,8 +529,7 @@ a direct reference to the provided values object.</p></div>
             &#39;like&#39;: {
                 &#39;lot&#39;: &#39;Carl&#39;,
                 &#39;little&#39;: &#39;Carl&#39;
-            },
-            &#39;dislike&#39;: {}
+            }
         },
         &#39;Mark&#39;: {
             &#39;like&#39;: {

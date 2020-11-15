@@ -107,23 +107,6 @@ class EnforcerHidir(Hidir):
         else:
             Hidir.clear(self)
 
-    def pop(self, keys, default=None):
-        if not isinstance(keys, tuple):
-            keys = (keys,)
-        if keys not in self and default is not None:
-            return default
-        values = self[keys]
-        value = set.pop(values)
-        set.add(values, value)
-        items = self.remove_function([(*self.superkeys, *keys, value)])
-        if items is not None:
-            items = [item[len(self.superkeys):] for item in items]
-            for item in items:
-                Hidir.__delitem__(self, item[:-1])
-        else:
-            Hidir.__delitem__(self, keys)
-        return value
-
     def popitem(self):
         keys = list(self.keys())[-1]
         values = self[keys]

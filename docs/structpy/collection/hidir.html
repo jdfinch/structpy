@@ -29,6 +29,7 @@ from structpy.collection.hidir_spec import HidirSpec
 
 from structpy.collection.hidict import Hidict
 from itertools import chain
+from collections.abc import Hashable
 
 
 @implementation(HidirSpec)
@@ -67,39 +68,35 @@ class Hidir(Hidict):
             raise KeyError(keys, self)
 
     def __setitem__(self, keys, values):
-        if len(keys) &lt; self.order + 1:
-            Hidict.__setitem__(self, keys, values)
-        else:
-            valueset = self._generate_valueset((*self.superkeys, *keys))
-            set.update(valueset, values)
-            Hidict.__setitem__(self, keys, valueset)
+        valueset = self._generate_valueset((*self.superkeys, *keys))
+        set.update(valueset, values)
+        Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):
         if isinstance(other, dict):
-            stack = [(self, other, tuple())]
+            items = []
+            stack = [(other, tuple())]
             while stack:
-                this, other, superkeys = stack.pop()
-                for key, values in dict.items(other):
-                    keys = (*superkeys, key)
-                    if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                    if len(keys) == self.order:
-                        dict_updating = dict.__getitem__(this, key)
-                        for k, v in values.items():
-                            valueset = self._generate_valueset((*keys, k))
-                            valueset.update(v)
-                            dict.__setitem__(dict_updating, k, valueset)
-                    else:
-                        stack.append((dict.__getitem__(this, key), values, keys))
-        else:
-            for item in other:
-                keys, value = item[:-1], item[-1]
-                if not Hidict.__contains__(self, keys):
-                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
+                other, superkeys = stack.pop()
+                if len(superkeys) == self.order:
+                    for key, value in dict.items(other):
+                        items.extend([(*superkeys, key, v) for v in value])
+                else:
+                    for key, value in dict.items(other):
+                        stack.append((value, (*superkeys, key)))
+            other = items
+        for item in other:
+            assert all([isinstance(x, Hashable) for x in item])
+            keys, value = item[:-1], item[-1]
+            if Hidict.__contains__(self, keys):
                 set.add(Hidict.__getitem__(self, keys), value)
+            else:
+                valueset = self._generate_valueset((*self.superkeys, *keys))
+                set.add(valueset, value)
+                Hidict.__setitem__(self, keys, valueset)
 
     def values(self):
-        return chain(Hidict.values(self))
+        return chain(*Hidict.values(self))
 
     def items(self):
         stack = [(self, tuple())]
@@ -182,39 +179,35 @@ keys are associated with a value set.
             raise KeyError(keys, self)
 
     def __setitem__(self, keys, values):
-        if len(keys) &lt; self.order + 1:
-            Hidict.__setitem__(self, keys, values)
-        else:
-            valueset = self._generate_valueset((*self.superkeys, *keys))
-            set.update(valueset, values)
-            Hidict.__setitem__(self, keys, valueset)
+        valueset = self._generate_valueset((*self.superkeys, *keys))
+        set.update(valueset, values)
+        Hidict.__setitem__(self, keys, valueset)
 
     def update(self, other):
         if isinstance(other, dict):
-            stack = [(self, other, tuple())]
+            items = []
+            stack = [(other, tuple())]
             while stack:
-                this, other, superkeys = stack.pop()
-                for key, values in dict.items(other):
-                    keys = (*superkeys, key)
-                    if key not in this:
-                        dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                    if len(keys) == self.order:
-                        dict_updating = dict.__getitem__(this, key)
-                        for k, v in values.items():
-                            valueset = self._generate_valueset((*keys, k))
-                            valueset.update(v)
-                            dict.__setitem__(dict_updating, k, valueset)
-                    else:
-                        stack.append((dict.__getitem__(this, key), values, keys))
-        else:
-            for item in other:
-                keys, value = item[:-1], item[-1]
-                if not Hidict.__contains__(self, keys):
-                    Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
+                other, superkeys = stack.pop()
+                if len(superkeys) == self.order:
+                    for key, value in dict.items(other):
+                        items.extend([(*superkeys, key, v) for v in value])
+                else:
+                    for key, value in dict.items(other):
+                        stack.append((value, (*superkeys, key)))
+            other = items
+        for item in other:
+            assert all([isinstance(x, Hashable) for x in item])
+            keys, value = item[:-1], item[-1]
+            if Hidict.__contains__(self, keys):
                 set.add(Hidict.__getitem__(self, keys), value)
+            else:
+                valueset = self._generate_valueset((*self.superkeys, *keys))
+                set.add(valueset, value)
+                Hidict.__setitem__(self, keys, valueset)
 
     def values(self):
-        return chain(Hidict.values(self))
+        return chain(*Hidict.values(self))
 
     def items(self):
         stack = [(self, tuple())]
@@ -257,27 +250,26 @@ If E …</p></div>
 </summary>
 <pre><code class="python">def update(self, other):
     if isinstance(other, dict):
-        stack = [(self, other, tuple())]
+        items = []
+        stack = [(other, tuple())]
         while stack:
-            this, other, superkeys = stack.pop()
-            for key, values in dict.items(other):
-                keys = (*superkeys, key)
-                if key not in this:
-                    dict.__setitem__(this, key, self._generate_subdict(self.order - len(keys), keys))
-                if len(keys) == self.order:
-                    dict_updating = dict.__getitem__(this, key)
-                    for k, v in values.items():
-                        valueset = self._generate_valueset((*keys, k))
-                        valueset.update(v)
-                        dict.__setitem__(dict_updating, k, valueset)
-                else:
-                    stack.append((dict.__getitem__(this, key), values, keys))
-    else:
-        for item in other:
-            keys, value = item[:-1], item[-1]
-            if not Hidict.__contains__(self, keys):
-                Hidict.__setitem__(self, keys, self._generate_valueset((*self.superkeys, *keys)))
-            set.add(Hidict.__getitem__(self, keys), value)</code></pre>
+            other, superkeys = stack.pop()
+            if len(superkeys) == self.order:
+                for key, value in dict.items(other):
+                    items.extend([(*superkeys, key, v) for v in value])
+            else:
+                for key, value in dict.items(other):
+                    stack.append((value, (*superkeys, key)))
+        other = items
+    for item in other:
+        assert all([isinstance(x, Hashable) for x in item])
+        keys, value = item[:-1], item[-1]
+        if Hidict.__contains__(self, keys):
+            set.add(Hidict.__getitem__(self, keys), value)
+        else:
+            valueset = self._generate_valueset((*self.superkeys, *keys))
+            set.add(valueset, value)
+            Hidict.__setitem__(self, keys, valueset)</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.hidir.Hidir.values"><code class="name flex">
@@ -294,7 +286,7 @@ If E …</p></div>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def values(self):
-    return chain(Hidict.values(self))</code></pre>
+    return chain(*Hidict.values(self))</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.hidir.Hidir.items"><code class="name flex">

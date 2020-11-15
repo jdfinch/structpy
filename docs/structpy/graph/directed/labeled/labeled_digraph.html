@@ -29,13 +29,16 @@ from structpy.graph.directed.labeled.labeled_digraph_spec import LabeledDigraphS
 
 from structpy.map import Himap, Hifunction
 
+from itertools import chain
+
 
 @implementation(LabeledDigraphSpec)
 class LabeledDigraph:
 
     def __init__(self, edges=None, nodes=None):
-        self.edges = Hifunction(1)
-        self.nodes = Himap(1)
+        self._labels = Hifunction(1)
+        self._targets = Himap(1)
+        self._nodes = set()
         if nodes is not None:
             for node in nodes:
                 self.add(node)
@@ -44,30 +47,92 @@ class LabeledDigraph:
                 self.add(source, target, label)
 
     def add(self, node, target=None, label=None):
+        self._nodes.add(node)
+        if target is not None:
+            self._nodes.add(target)
+            if (node, label) in self._targets:
+                self._targets[node, label].add(target)
+            else:
+                self._targets[node, label] = [target]
+            self._labels[node, target] = label
+
+    def remove(self, node, target=None):
         if target is None:
-            self.nodes[node] = {}
+            for source in self.sources(node):
+                self.remove(source, node)
+            for target in self.targets(node):
+                self.remove(node, target)
+            self._nodes.remove(node)
+            self._targets.pop(node, default=0)
+            self._labels.pop(node, default=0)
+            self._targets.codomain.pop(node, default=0)
+            self._labels.codomain.pop(node, default=0)
         else:
-            if not node in self.nodes:
-                self.nodes[node] = {}
-                self.edges[node] = {}
-            if not label in self.nodes[node]:
-                self.nodes[node, label] = {}
-            self.nodes[node, label].add(target)
-            self.edges[node, target] = label
+            label = self._labels[node, target]
+            del self._labels[node, target]
+            self._targets[node, label].remove(target)
+            if not self._targets[node, label]:
+                del self._targets[node, label]
 
     def has(self, node, target=None, label=None):
         if target is None and label is None:
-            return node in self.nodes
+            return node in self._nodes
         elif label is None:
-            return node in self.edges and target in self.edges[node]
+            return node in self._nodes and target in self._labels[node]
         elif target is None:
-            return node in self.nodes and label in self.nodes[node]
+            return node in self._nodes and label in self._targets[node]
         else:
-            return node in self.nodes and target in self.edges[node] and \
-                   self.edges[node, target] == label
+            return node in self._nodes and (node, target) in self._labels and \
+                   self._labels[node, target] == label
 
-    def target(self, source, label):
-        pass
+    def targets(self, source, label=None):
+        if label is None:
+            return set(self._targets[source].values()) if source in self._targets else set()
+        else:
+            return set(self._targets.get(source, label, default=tuple())) \
+                if (source, label) in self._targets else set()
+
+    def sources(self, target, label=None):
+        if label is None:
+            return set(self._targets.codomain[target].values()) \
+                if target in self._targets.codomain else set()
+        else:
+            return set(self._targets.codomain.get(target, label, default=tuple())) \
+                if (target, label) in self._targets.codomain else set()
+
+    def neighbors(self, node, label=None):
+        return self.sources(node, label) | self.targets(node, label)
+
+    def out_edges(self, source, label=None):
+        if label is None:
+            return set([(s, t, l) for s, l, t in self._targets[source].items()]) \
+                if source in self._targets else set()
+        else:
+            return set([(source, target, label) for target in
+                        self._targets.get(source, label, default=tuple())]) \
+                if (source, label) in self._targets else set()
+
+    def in_edges(self, target, label=None):
+        if label is None:
+            return set([(s, t, l) for t, l, s in self._targets.codomain[target].items()]) \
+                if target in self._targets.codomain else set()
+        else:
+            return set([(source, target, label) for source in
+                        self._targets.codomain.get(target, label, default=tuple())]) \
+                if (target, label) in self._targets.codomain else set()
+
+    def nodes(self):
+        return set(self._nodes)
+
+    def edges(self, node=None, label=None):
+        if node is None and label is None:
+            return set(self._labels.items())
+        elif label is None:
+            return self.in_edges(node) | self.out_edges(node)
+        elif node is None:
+            return set([(s, t, l) for l, t, s in self._labels.codomain.items()])
+        else:
+            return self.in_edges(node, label) | self.out_edges(node, label)
 
 
 if __name__ == &#39;__main__&#39;:
@@ -96,8 +161,9 @@ if __name__ == &#39;__main__&#39;:
 <pre><code class="python">class LabeledDigraph:
 
     def __init__(self, edges=None, nodes=None):
-        self.edges = Hifunction(1)
-        self.nodes = Himap(1)
+        self._labels = Hifunction(1)
+        self._targets = Himap(1)
+        self._nodes = set()
         if nodes is not None:
             for node in nodes:
                 self.add(node)
@@ -106,30 +172,92 @@ if __name__ == &#39;__main__&#39;:
                 self.add(source, target, label)
 
     def add(self, node, target=None, label=None):
+        self._nodes.add(node)
+        if target is not None:
+            self._nodes.add(target)
+            if (node, label) in self._targets:
+                self._targets[node, label].add(target)
+            else:
+                self._targets[node, label] = [target]
+            self._labels[node, target] = label
+
+    def remove(self, node, target=None):
         if target is None:
-            self.nodes[node] = {}
+            for source in self.sources(node):
+                self.remove(source, node)
+            for target in self.targets(node):
+                self.remove(node, target)
+            self._nodes.remove(node)
+            self._targets.pop(node, default=0)
+            self._labels.pop(node, default=0)
+            self._targets.codomain.pop(node, default=0)
+            self._labels.codomain.pop(node, default=0)
         else:
-            if not node in self.nodes:
-                self.nodes[node] = {}
-                self.edges[node] = {}
-            if not label in self.nodes[node]:
-                self.nodes[node, label] = {}
-            self.nodes[node, label].add(target)
-            self.edges[node, target] = label
+            label = self._labels[node, target]
+            del self._labels[node, target]
+            self._targets[node, label].remove(target)
+            if not self._targets[node, label]:
+                del self._targets[node, label]
 
     def has(self, node, target=None, label=None):
         if target is None and label is None:
-            return node in self.nodes
+            return node in self._nodes
         elif label is None:
-            return node in self.edges and target in self.edges[node]
+            return node in self._nodes and target in self._labels[node]
         elif target is None:
-            return node in self.nodes and label in self.nodes[node]
+            return node in self._nodes and label in self._targets[node]
         else:
-            return node in self.nodes and target in self.edges[node] and \
-                   self.edges[node, target] == label
+            return node in self._nodes and (node, target) in self._labels and \
+                   self._labels[node, target] == label
 
-    def target(self, source, label):
-        pass</code></pre>
+    def targets(self, source, label=None):
+        if label is None:
+            return set(self._targets[source].values()) if source in self._targets else set()
+        else:
+            return set(self._targets.get(source, label, default=tuple())) \
+                if (source, label) in self._targets else set()
+
+    def sources(self, target, label=None):
+        if label is None:
+            return set(self._targets.codomain[target].values()) \
+                if target in self._targets.codomain else set()
+        else:
+            return set(self._targets.codomain.get(target, label, default=tuple())) \
+                if (target, label) in self._targets.codomain else set()
+
+    def neighbors(self, node, label=None):
+        return self.sources(node, label) | self.targets(node, label)
+
+    def out_edges(self, source, label=None):
+        if label is None:
+            return set([(s, t, l) for s, l, t in self._targets[source].items()]) \
+                if source in self._targets else set()
+        else:
+            return set([(source, target, label) for target in
+                        self._targets.get(source, label, default=tuple())]) \
+                if (source, label) in self._targets else set()
+
+    def in_edges(self, target, label=None):
+        if label is None:
+            return set([(s, t, l) for t, l, s in self._targets.codomain[target].items()]) \
+                if target in self._targets.codomain else set()
+        else:
+            return set([(source, target, label) for source in
+                        self._targets.codomain.get(target, label, default=tuple())]) \
+                if (target, label) in self._targets.codomain else set()
+
+    def nodes(self):
+        return set(self._nodes)
+
+    def edges(self, node=None, label=None):
+        if node is None and label is None:
+            return set(self._labels.items())
+        elif label is None:
+            return self.in_edges(node) | self.out_edges(node)
+        elif node is None:
+            return set([(s, t, l) for l, t, s in self._labels.codomain.items()])
+        else:
+            return self.in_edges(node, label) | self.out_edges(node, label)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -143,16 +271,42 @@ if __name__ == &#39;__main__&#39;:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def add(self, node, target=None, label=None):
+    self._nodes.add(node)
+    if target is not None:
+        self._nodes.add(target)
+        if (node, label) in self._targets:
+            self._targets[node, label].add(target)
+        else:
+            self._targets[node, label] = [target]
+        self._labels[node, target] = label</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.remove"><code class="name flex">
+<span>def <span class="ident">remove</span></span>(<span>self, node, target=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def remove(self, node, target=None):
     if target is None:
-        self.nodes[node] = {}
+        for source in self.sources(node):
+            self.remove(source, node)
+        for target in self.targets(node):
+            self.remove(node, target)
+        self._nodes.remove(node)
+        self._targets.pop(node, default=0)
+        self._labels.pop(node, default=0)
+        self._targets.codomain.pop(node, default=0)
+        self._labels.codomain.pop(node, default=0)
     else:
-        if not node in self.nodes:
-            self.nodes[node] = {}
-            self.edges[node] = {}
-        if not label in self.nodes[node]:
-            self.nodes[node, label] = {}
-        self.nodes[node, label].add(target)
-        self.edges[node, target] = label</code></pre>
+        label = self._labels[node, target]
+        del self._labels[node, target]
+        self._targets[node, label].remove(target)
+        if not self._targets[node, label]:
+            del self._targets[node, label]</code></pre>
 </details>
 </dd>
 <dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.has"><code class="name flex">
@@ -166,18 +320,18 @@ if __name__ == &#39;__main__&#39;:
 </summary>
 <pre><code class="python">def has(self, node, target=None, label=None):
     if target is None and label is None:
-        return node in self.nodes
+        return node in self._nodes
     elif label is None:
-        return node in self.edges and target in self.edges[node]
+        return node in self._nodes and target in self._labels[node]
     elif target is None:
-        return node in self.nodes and label in self.nodes[node]
+        return node in self._nodes and label in self._targets[node]
     else:
-        return node in self.nodes and target in self.edges[node] and \
-               self.edges[node, target] == label</code></pre>
+        return node in self._nodes and (node, target) in self._labels and \
+               self._labels[node, target] == label</code></pre>
 </details>
 </dd>
-<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.target"><code class="name flex">
-<span>def <span class="ident">target</span></span>(<span>self, source, label)</span>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.targets"><code class="name flex">
+<span>def <span class="ident">targets</span></span>(<span>self, source, label=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -185,8 +339,114 @@ if __name__ == &#39;__main__&#39;:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def target(self, source, label):
-    pass</code></pre>
+<pre><code class="python">def targets(self, source, label=None):
+    if label is None:
+        return set(self._targets[source].values()) if source in self._targets else set()
+    else:
+        return set(self._targets.get(source, label, default=tuple())) \
+            if (source, label) in self._targets else set()</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.sources"><code class="name flex">
+<span>def <span class="ident">sources</span></span>(<span>self, target, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sources(self, target, label=None):
+    if label is None:
+        return set(self._targets.codomain[target].values()) \
+            if target in self._targets.codomain else set()
+    else:
+        return set(self._targets.codomain.get(target, label, default=tuple())) \
+            if (target, label) in self._targets.codomain else set()</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.neighbors"><code class="name flex">
+<span>def <span class="ident">neighbors</span></span>(<span>self, node, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def neighbors(self, node, label=None):
+    return self.sources(node, label) | self.targets(node, label)</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.out_edges"><code class="name flex">
+<span>def <span class="ident">out_edges</span></span>(<span>self, source, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def out_edges(self, source, label=None):
+    if label is None:
+        return set([(s, t, l) for s, l, t in self._targets[source].items()]) \
+            if source in self._targets else set()
+    else:
+        return set([(source, target, label) for target in
+                    self._targets.get(source, label, default=tuple())]) \
+            if (source, label) in self._targets else set()</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.in_edges"><code class="name flex">
+<span>def <span class="ident">in_edges</span></span>(<span>self, target, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def in_edges(self, target, label=None):
+    if label is None:
+        return set([(s, t, l) for t, l, s in self._targets.codomain[target].items()]) \
+            if target in self._targets.codomain else set()
+    else:
+        return set([(source, target, label) for source in
+                    self._targets.codomain.get(target, label, default=tuple())]) \
+            if (target, label) in self._targets.codomain else set()</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.nodes"><code class="name flex">
+<span>def <span class="ident">nodes</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def nodes(self):
+    return set(self._nodes)</code></pre>
+</details>
+</dd>
+<dt id="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.edges"><code class="name flex">
+<span>def <span class="ident">edges</span></span>(<span>self, node=None, label=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def edges(self, node=None, label=None):
+    if node is None and label is None:
+        return set(self._labels.items())
+    elif label is None:
+        return self.in_edges(node) | self.out_edges(node)
+    elif node is None:
+        return set([(s, t, l) for l, t, s in self._labels.codomain.items()])
+    else:
+        return self.in_edges(node, label) | self.out_edges(node, label)</code></pre>
 </details>
 </dd>
 </dl>
@@ -209,10 +469,17 @@ if __name__ == &#39;__main__&#39;:
 <ul>
 <li>
 <h4><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph">LabeledDigraph</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.add" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.add">add</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.remove" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.remove">remove</a></code></li>
 <li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.has" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.has">has</a></code></li>
-<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.target" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.target">target</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.targets" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.targets">targets</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.sources" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.sources">sources</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.neighbors" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.neighbors">neighbors</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.out_edges" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.out_edges">out_edges</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.in_edges" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.in_edges">in_edges</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.nodes" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.nodes">nodes</a></code></li>
+<li><code><a title="structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.edges" href="#structpy.graph.directed.labeled.labeled_digraph.LabeledDigraph.edges">edges</a></code></li>
 </ul>
 </li>
 </ul>

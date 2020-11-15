@@ -70,7 +70,7 @@ class Hidir(Hidict):
                 Hidict.__setitem__(self, keys, valueset)
 
     def values(self):
-        return chain(Hidict.values(self))
+        return chain(*Hidict.values(self))
 
     def items(self):
         stack = [(self, tuple())]

@@ -110,12 +110,7 @@ class EnforcerHidictSpec:
         assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
         hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
         assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidict[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: &#39;George&#39;, &#39;lot&#39;: &#39;Phil&#39;}
-        assert hidict[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == &#39;George&#39;
-
-        assert other.value == 9
+        assert other.value == 7
 
     def delitem(hidict, keys):
         &#34;&#34;&#34;
@@ -128,8 +123,6 @@ class EnforcerHidictSpec:
         assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
         del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
         assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-        del hidict[&#39;Bob&#39;, &#39;loves&#39;]
-        assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidict
         assert other.value == 4
 
     def contains(hidict, keys):
@@ -262,12 +255,7 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
         assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
         hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
         assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-
-        # Can assign a partial key sequence to a dict-like to add/update a subdict
-        hidict[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: &#39;George&#39;, &#39;lot&#39;: &#39;Phil&#39;}
-        assert hidict[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == &#39;George&#39;
-
-        assert other.value == 9
+        assert other.value == 7
 
     def delitem(hidict, keys):
         &#34;&#34;&#34;
@@ -280,8 +268,6 @@ hooks that call functions whenever items are added/overwritten/removed.</p></div
         assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
         del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
         assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-        del hidict[&#39;Bob&#39;, &#39;loves&#39;]
-        assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidict
         assert other.value == 4
 
     def contains(hidict, keys):
@@ -448,12 +434,7 @@ def ENFORCER_HIDICT(EnforcerHidict, dict_like=None, add_function=None, remove_fu
     assert hidict[&#39;Bob&#39;, &#39;likes&#39;, &#39;little&#39;] == &#39;George&#39;
     hidict[&#39;Bob&#39;, &#39;dislikes&#39;][&#39;lot&#39;] = &#39;Sam&#39;
     assert hidict[&#39;Bob&#39;, &#39;dislikes&#39;, &#39;lot&#39;] == &#39;Sam&#39;
-
-    # Can assign a partial key sequence to a dict-like to add/update a subdict
-    hidict[&#39;Bob&#39;, &#39;loves&#39;] = {&#39;medium&#39;: &#39;George&#39;, &#39;lot&#39;: &#39;Phil&#39;}
-    assert hidict[&#39;Bob&#39;, &#39;loves&#39;, &#39;medium&#39;] == &#39;George&#39;
-
-    assert other.value == 9</code></pre>
+    assert other.value == 7</code></pre>
 </details>
 </dd>
 <dt id="structpy.collection.enforcer.enforcer_hidict_spec.EnforcerHidictSpec.delitem"><code class="name flex">
@@ -478,8 +459,6 @@ will be cleared.</p></div>
     assert &#39;little&#39; not in hidict[&#39;Bob&#39;, &#39;likes&#39;]
     del hidict[&#39;Bob&#39;, &#39;dislikes&#39;]
     assert &#39;dislikes&#39; not in hidict[&#39;Bob&#39;]
-    del hidict[&#39;Bob&#39;, &#39;loves&#39;]
-    assert (&#39;Bob&#39;, &#39;loves&#39;) not in hidict
     assert other.value == 4</code></pre>
 </details>
 </dd>
