@@ -1,4 +1,4 @@
-from structpy.graph.directed.labeled.labeled_digraph_networkx import LabeledDigraphNX
+from structpy.graph.directed.labeled.multilabeled_digraph_networkx import LabeledDigraphNX
 from structpy.map.bijective.bimap import Bimap
 
 class ConceptGraph:
@@ -36,11 +36,11 @@ class ConceptGraph:
         self.predicate_map[(source, target, label)] = predicate_id
         return predicate_id
 
-    def remove(self, node, target=None):
+    def remove(self, node, target=None, label=None):
         """
         Remove a node or edge.
 
-        Edge removal can be specified by specifying the `target`
+        Edge removal can be specified by specifying the `target` and 'label'
         of the out-edge of `node`.
 
         Removing a node removes all connected in- and out-edges.
@@ -53,12 +53,67 @@ class ConceptGraph:
             self.graph.remove(node)
         else:
             for edge, edge_id in edges:
-                if edge[0] == node and edge[1] == target:
+                if edge[0] == node and edge[1] == target and edge[2] == label:
                     del self.predicate_map[edge]
-            self.graph.remove(node, target)
+            self.graph.remove(node, target, label)
 
-    def nodes(self):
-        pass
+    def subject(self, predicate_instance):
+        return self.predicate_map.reverse()[predicate_instance][0]
+
+    def object(self, predicate_instance):
+        return self.predicate_map.reverse()[predicate_instance][1]
+
+    def type(self, predicate_instance):
+        return self.predicate_map.reverse()[predicate_instance][2]
+
+    def predicates(self, node, predicate_type=None):
+        edges = self.graph.out_edges(node, predicate_type)
+        edges.update(self.graph.in_edges(node, predicate_type))
+        return edges
+
+    def predicates_of_subject(self, node, predicate_type=None):
+        return self.graph.out_edges(node, predicate_type)
+
+    def predicates_of_object(self, node, predicate_type=None):
+        return self.graph.in_edges(node, predicate_type)
+
+    def predicate(self, subject, type, object):
+        return self.predicate_map[(subject, object, type)]
+
+    def neighbors(self, node, predicate_type=None):
+        nodes = self.graph.targets(node, predicate_type)
+        nodes.update(self.graph.sources(node, predicate_type))
+        return nodes
+
+    def subject_neighbors(self, node, predicate_type=None):
+        """
+        Get all nodes which have a subject relation in a predicate with the object node
+        :param node: the object
+        :param predicate_type:
+        :return:
+        """
+        return self.graph.sources(node, predicate_type)
+
+    def object_neighbors(self, node, predicate_type=None):
+        """
+        Get all nodes which have an object relation in a predicate with the subject node
+        :param node: the subject
+        :param predicate_type:
+        :return:
+        """
+        return self.graph.targets(node, predicate_type)
+
+    def concepts(self):
+        """
+        Get all nodes (subject, object, predicate type, and predicate instance)
+        """
+        nodes = set()
+        for (source, target, label), predicate_inst in self.predicate_map.items():
+            nodes.update({source, target, label, predicate_inst})
+        return nodes
+
+    def predicates_between(self, node1, node2):
+        return self.graph.edges(node1).intersection(self.graph.edges(node2))
 
 if __name__ == '__main__':
     cg = ConceptGraph([
@@ -78,6 +133,22 @@ if __name__ == '__main__':
     assert cg.predicate_map[('Peter', 'Mary', 'hates')] == 'new_id'
     assert cg.predicate_map.reverse()['new_id'] == ('Peter', 'Mary', 'hates')
 
+    assert cg.predicates('Mary') == {('John', 'Mary', 'likes'),
+                                     ('Mary', 'Peter', 'likes'),
+                                     ('Peter', 'Mary', 'hates')}
+
+    assert cg.predicates('Mary', 'likes') == {('John', 'Mary', 'likes'),
+                                                ('Mary', 'Peter', 'likes')}
+
+    assert cg.predicates_of_subject('Mary', 'likes') == {('Mary', 'Peter', 'likes')}
+    assert cg.predicates_of_object('Mary', 'likes') == {('John', 'Mary', 'likes')}
+
+    assert cg.subject_neighbors('Mary') == {'John', 'Peter'}
+    assert cg.object_neighbors('Mary') == {'Peter'}
+
+    assert cg.predicates_between('Mary', 'Peter') == {('Mary', 'Peter', 'likes'),
+                                                      ('Peter', 'Mary', 'hates')}
+
     cg.remove('Mary')
     assert not cg.graph.has('Mary')
     assert cg.graph.has('John')
@@ -89,7 +160,7 @@ if __name__ == '__main__':
     assert ('Mary', 'Peter', 'likes') not in cg.predicate_map
     assert ('Peter', 'Mary', 'hates') not in cg.predicate_map
 
-    cg.remove('Peter', 'John')
+    cg.remove('Peter', 'John', 'likes')
     assert cg.graph.has('Peter')
     assert cg.graph.has('John')
     assert not cg.graph.has('Peter', 'John', 'likes')
@@ -100,7 +171,19 @@ if __name__ == '__main__':
     cg = ConceptGraph()
     in0 = cg.add_predicate('i', 'movie', 'likes')
     in1 = cg.add_predicate('acting', 'good', 'was')
+    assert cg.concepts() == {'i', 'movie', 'likes', 'i-movie-likes',
+                             'acting', 'good', 'was', 'acting-good-was'}
     in2 = cg.add_predicate(in0, in1, 'because', 'nested_pred')
     in3 = cg.add_predicate('you', 'nested_pred', 'hate')
 
-    assert
+    assert cg.subject('nested_pred') == 'i-movie-likes'
+    assert cg.object('nested_pred') == 'acting-good-was'
+    assert cg.type('nested_pred') == 'because'
+
+    assert cg.predicate('i', 'likes', 'movie') == 'i-movie-likes'
+
+    # Test multi-edges between same node
+    # Test predicates between
+    # Convert these tests to Concept Graph specification
+
+    test = 2
