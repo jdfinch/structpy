@@ -182,8 +182,17 @@ if __name__ == '__main__':
 
     assert cg.predicate('i', 'likes', 'movie') == 'i-movie-likes'
 
-    # Test multi-edges between same node
-    # Test predicates between
-    # Convert these tests to Concept Graph specification
-
     test = 2
+
+    cg = ConceptGraph()
+    cg.add_predicate('i', 'smart', 'am')
+    cg.add_predicate('i', 'smart', 'value')
+    cg.add_predicate('i', 'happy', 'am')
+    cg.add_predicate('i', 'happy', 'want')
+
+    assert cg.graph.has('i', 'happy', 'am')
+    assert cg.graph.has('i', 'happy', 'want')
+
+    test = cg.predicates_between('i', 'happy')
+    assert cg.predicates_between('i', 'happy') == {('i', 'happy', 'am'),
+                                                   ('i', 'happy', 'want')}
