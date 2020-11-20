@@ -1,9 +1,7 @@
 
 import os, sys
-from types import ModuleType
-from inspect import isclass, isfunction
 import pkgutil
-from importlib import import_module, invalidate_caches
+from importlib import import_module
 
 import structpy
 
