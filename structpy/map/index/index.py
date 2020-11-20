@@ -47,7 +47,8 @@ class Index(EnforcerDict):
             self.codomain = dict_like
         else:
             self.codomain = function.Function(self)
-            self.update(dict_like)
+            if dict_like is not None:
+                self.update(dict_like)
 
     def _add_function(self, items):
         for key, values in items:

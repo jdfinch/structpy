@@ -1,22 +1,23 @@
 
 import networkx as nx
-from structpy.graph.directed.labeled.multilabeled_digraph_spec import MultiLabeledDigraphSpec
+from structpy.graph.directed.labeled.multilabeled_parallel_digraph_spec import MultiLabeledParallelDigraphSpec
 
 
-class LabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
+class MultiLabeledParallelDigraphNX(nx.MultiDiGraph, MultiLabeledParallelDigraphSpec):
 
     def __init__(self, edges=None, nodes=None):
-        super(LabeledDigraphNX, self).__init__()
-        if edges is not None:
+        super(MultiLabeledParallelDigraphNX, self).__init__()
+        if nodes is not None:
             self.add_nodes_from(nodes)
-            for source, target, label in edges:
-                self.add(source, target, label)
+        if edges is not None:
+            for source, target, label, id in edges:
+                self.add(source, target, label, id)
 
-    def add(self, node, target=None, label=None):
+    def add(self, node, target=None, label=None, id=None):
         self.add_node(node)
         if target is not None and label is not None:
             self.add_node(target)
-            self.add_edge(node, target, edge=label, key=label)
+            self.add_edge(node, target, edge=label, key=id)
         elif (target is not None and label is None) or (target is None and label is not None):
             raise Exception('Both target and label must be specified, if one is')
 
@@ -29,6 +30,9 @@ class LabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
             return len(self.out_edges(node, label)) > 0
         else:
             return (node, target, label) in self.out_edges(node)
+
+    def get_edges_with_label(self, source, target, label):
+        return [(source, target, val_dict['edge']) for _,val_dict in self[source][target].items()]
 
     def nodes(self):
         return set(super().nodes())
@@ -60,22 +64,26 @@ class LabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
             return neighbors
 
     def out_edges(self, source, label=None):
-        if label is None:
+        if source in self:
             out_edges = super().out_edges(source, data=True)
-            return set([(source, target, data['edge']) for source, target, data in out_edges])
+            if label is None:
+                return set([(source, target, data['edge']) for source, target, data in out_edges])
+            else:
+                return set([(source, target, data['edge']) for source, target, data in out_edges
+                            if data['edge']==label])
         else:
-            out_edges = super().out_edges(source, data=True)
-            return set([(source, target, data['edge']) for source, target, data in out_edges
-                        if data['edge']==label])
+            return set()
 
     def in_edges(self, target, label=None):
-        if label is None:
+        if target in self:
             in_edges = super().in_edges(target, data=True)
-            return set([(source, target, data['edge']) for source, target, data in in_edges])
+            if label is None:
+                return set([(source, target, data['edge']) for source, target, data in in_edges])
+            else:
+                return set([(source, target, data['edge']) for source, target, data in in_edges
+                            if data['edge']==label])
         else:
-            in_edges = super().in_edges(target, data=True)
-            return set([(source, target, data['edge']) for source, target, data in in_edges
-                        if data['edge']==label])
+            return set()
 
     def edges(self, node=None, label=None):
         if node is None and label is None:
@@ -91,15 +99,18 @@ class LabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
             edges.update(self.out_edges(node, label))
             return edges
 
-    def remove(self, node, target=None, label=None):
+    def remove(self, node, target=None, label=None, id=None):
         if target is None and label is None:
             self.remove_node(node)
-        elif target is not None and label is not None:
-            test = self.get_edge_data(node, target)
-            self.remove_edge(node, target, key=label)
+        elif target is not None and label is not None and id is not None:
+            self.remove_edge(node, target, key=id)
         elif label is None:
-            self.get_edge_data(node, target)
             raise Exception('edge label must be specified')
+        elif id is None:
+            test = self.get_edge_data(node, target)
+            to_remove = set([id for id, edge_dict in test.items() if edge_dict['edge']==label])
+            for id in to_remove:
+                self.remove_edge(node, target, id)
 
     def set(self, node, target, old_label=None, new_label=None):
         if old_label is None and new_label is None:
@@ -116,4 +127,4 @@ class LabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
 
 
 if __name__ == '__main__':
-    print(MultiLabeledDigraphSpec.verify(LabeledDigraphNX))
+    print(MultiLabeledParallelDigraphSpec.verify(MultiLabeledParallelDigraphNX))

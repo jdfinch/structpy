@@ -48,7 +48,8 @@ class Map(EnforcerDict):
                 self[key] = values
         else:
             self.codomain = Map(self)
-            self.update(dict_like)
+            if dict_like is not None:
+                self.update(dict_like)
 
     def _add_function(self, items):
         for key, values in items:

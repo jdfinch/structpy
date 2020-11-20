@@ -31,7 +31,7 @@ class Hiindex(EnforcerHidir):
             keys, value = (item[-1], *item[1:-1]), item[0]
             if Hidict.__contains__(self.codomain, keys):
                 replaced = self.codomain[keys]
-                self[(replaced, *item[1:-1])].remove(item[-1])
+                self[(replaced, *item[1:-1])].remove_bipredicate(item[-1])
             Hidict.__setitem__(self.codomain, keys, value)
 
     def _remove_function(self, items):

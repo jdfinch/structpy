@@ -46,7 +46,7 @@ class LabeledDigraph:
         else:
             label = self._labels[node, target]
             del self._labels[node, target]
-            self._targets[node, label].remove(target)
+            self._targets[node, label].remove_bipredicate(target)
             if not self._targets[node, label]:
                 del self._targets[node, label]
 
