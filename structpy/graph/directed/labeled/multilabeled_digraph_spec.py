@@ -5,7 +5,7 @@ from structpy import specification
 @specification
 class MultiLabeledDigraphSpec:
     """
-    Directed Graph with a single label per edge.
+    Directed Graph with multiple labels per edge.
 
     Nodes and edge labels can be any hashable object.
     Edge labels are not unique, but nodes are.
