@@ -4,12 +4,12 @@ from structpy.graph.directed.labeled.multilabeled_parallel_digraph_spec import M
 
 
 @implementation(MultiLabeledParallelDigraphSpec)
-class MultiLabeledParallelDigraphNX(nx.MultiDiGraph):
+class MultiLabeledParallelDigraphNX:
 
     def __init__(self, edges=None, nodes=None):
-        super(MultiLabeledParallelDigraphNX, self).__init__()
+        self._nx = nx.MultiDiGraph()
         if nodes is not None:
-            self.add_nodes_from(nodes)
+            self._nx.add_nodes_from(nodes)
         if edges is not None:
             for source, target, label, id in edges:
                 self.add(source, target, label, id)
@@ -22,8 +22,8 @@ class MultiLabeledParallelDigraphNX(nx.MultiDiGraph):
         elif (target is not None and label is None) or (target is None and label is not None):
             raise Exception('Both target and label must be specified, if one is')
 
-    def has(self, node, target=None, label=None):
-        if target is None and label is None:
+    def has(self, node=None, target=None, label=None, edge_id=None):
+        if target is None and label is None and edge_id is None:
             return node in self
         elif label is None:
             return target in self[node]
@@ -31,9 +31,6 @@ class MultiLabeledParallelDigraphNX(nx.MultiDiGraph):
             return len(self.out_edges(node, label)) > 0
         else:
             return (node, target, label) in self.out_edges(node)
-
-    def get_edges_with_label(self, source, target, label):
-        return [(source, target, val_dict['edge']) for _,val_dict in self[source][target].items()]
 
     def nodes(self):
         return set(super().nodes())

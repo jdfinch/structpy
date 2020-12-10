@@ -7,8 +7,10 @@ class MultiLabeledParallelDigraphSpec:
     """
     Directed Graph with multiple labels per edge.
     Unlike MultiLabeledDigraph, multiple edges of the same (s, t, l)
-    signature are allowed, because each edge has a unique id, giving
-    each edge a 4-tuple signature (s, t, l, id).
+    signature are allowed, because each edge has a unique id.
+
+    Thus edges are identified by their id or a (s, t, l, id) tuple
+    instead of by a (s, t, l) tuple.
 
     Nodes and edge labels can be any hashable object.
     Edge labels are not unique, but nodes are.
@@ -31,7 +33,7 @@ class MultiLabeledParallelDigraphSpec:
         ], ['Rob'])
         return digraph
 
-    def has(digraph, node, target=None, label=None):
+    def has(digraph, node=None, target=None, label=None, edge_id=None):
         """
         Test membership of a node or edge.
 
@@ -42,6 +44,11 @@ class MultiLabeledParallelDigraphSpec:
         Specifying `node` and `label` tests whether `node` has an out-edge with `label`.
 
         Three parameters tests for `target-target-label` edge membership.
+
+        Specifying `edge_id` tests whether there is an edge with that id.
+
+        Specifying `edge_id` with `node`, `target`, or `label` (or any combination)
+        tests whether an edge with that id exists with signature `(node, target, label)`.
         """
         assert digraph.has('John')
         assert digraph.has('Rob')
@@ -55,13 +62,16 @@ class MultiLabeledParallelDigraphSpec:
         assert not digraph.has('Sarah', 'Peter', 'likes')
         assert not digraph.has('George')
 
+        assert digraph.has(edge_id='jml')
+        assert not digraph.has(edge_id='ood')
+
     def targets(digraph, source, label=None):
         """
         Get all of the _targets along out-edges of a given target.
 
         Providing a label filters the results based on edge label.
         """
-        assert digraph.targets('Peter') == {'John', 'Sarah'}
+        assert set(digraph.targets('Peter')) == {'John', 'Sarah'}
 
     def sources(digraph, target, label=None):
         """
@@ -69,7 +79,13 @@ class MultiLabeledParallelDigraphSpec:
 
         Providing a label filters the results based on edge label.
         """
-        assert digraph.sources('Mary') == {'John'}
+        assert set(digraph.sources('Mary')) == {'John'}
+
+    def labels(digraph, source=None, target=None):
+        """
+        Get the edge labels associated with a (source, target) pair.
+        """
+        assert set(digraph.labels('John', 'Mary')) == {'likes'}
 
     def neighbors(digraph, node, label=None):
         """
@@ -85,8 +101,8 @@ class MultiLabeledParallelDigraphSpec:
 
         Providing a label filters the results based on edge label.
         """
-        oe = digraph.out_edges('Peter')
-        cmp = {('Peter', 'John', 'likes'), ('Peter', 'Sarah', 'likes')}
+        oe = set(digraph.out_edges('Peter'))
+        cmp = {('Peter', 'John', 'likes', 'pjl'), ('Peter', 'Sarah', 'likes', 'psl')}
         assert oe == cmp
 
     def in_edges(digraph, target, label=None):
@@ -95,7 +111,31 @@ class MultiLabeledParallelDigraphSpec:
 
         Providing a label filters the results based on edge label.
         """
-        assert digraph.in_edges('Mary') == {('John', 'Mary', 'likes')}
+        assert set(digraph.in_edges('Mary')) == {('John', 'Mary', 'likes', 'jml')}
+
+    def source(digraph, edge_id):
+        """
+        Get the source of a specific edge by edge id.
+        """
+        assert digraph.source('jml') == 'John'
+
+    def target(digraph, edge_id):
+        """
+        Get the target of a specific edge by edge id.
+        """
+        assert digraph.target('jml') == 'Mary'
+
+    def label(digraph, edge_id):
+        """
+        Get the label of a specific edge by edge id.
+        """
+        assert digraph.label('jml') == 'likes'
+
+    def signature(digraph, edge_id):
+        """
+        Get the source, target, and label of an edge as a tuple.
+        """
+        assert digraph.signature('jml') == ('John', 'Mary', 'likes')
 
     def nodes(digraph):
         """
@@ -113,36 +153,39 @@ class MultiLabeledParallelDigraphSpec:
         Providing a label filters results by edge label.
         """
         assert set(digraph.edges()) == {
-                ('John', 'Mary', 'likes'),
-                ('Mary', 'Peter', 'likes'),
-                ('Peter', 'John', 'likes'),
-                ('Peter', 'Sarah', 'likes')
+                ('John', 'Mary', 'likes', 'jml'),
+                ('Mary', 'Peter', 'likes', 'mpl'),
+                ('Peter', 'John', 'likes', 'pjl'),
+                ('Peter', 'Sarah', 'likes', 'psl')
         }
 
         assert set(digraph.edges('Mary')) == {
-            ('John', 'Mary', 'likes'),
-            ('Mary', 'Peter', 'likes')
+            ('John', 'Mary', 'likes', 'jml'),
+            ('Mary', 'Peter', 'likes', 'mpl')
         }
 
         assert set(digraph.edges(label='likes')) == {
-            ('John', 'Mary', 'likes'),
-            ('Mary', 'Peter', 'likes'),
-            ('Peter', 'John', 'likes'),
-            ('Peter', 'Sarah', 'likes')
+            ('John', 'Mary', 'likes', 'jml'),
+            ('Mary', 'Peter', 'likes', 'mpl'),
+            ('Peter', 'John', 'likes', 'pjl'),
+            ('Peter', 'Sarah', 'likes', 'psl')
         }
 
-    def add(digraph, node, target=None, label=None, id=None):
+    def add(digraph, node, target=None, label=None, edge_id=None):
         """
         Add a node or edge.
 
         One parameter adds a node.
 
         Four parameters adds an edge.
+
+        Adding an edge without an id specified will automatically
+        generate an id for that edge.
         """
         digraph.add('George')
         assert digraph.has('George')
 
-        digraph.add('George', 'Rick', 'dislikes', 'grd')
+        digraph.add('George', 'Rick', 'dislikes')
         assert digraph.has('George', 'Rick', 'dislikes')
 
         digraph.add('Mary', 'George', 'None', 'mgn')
@@ -156,56 +199,53 @@ class MultiLabeledParallelDigraphSpec:
         # More than one source,target,edge is allowed of the same signature
         digraph.add('John','store','go','jsg1')
         digraph.add('John', 'store', 'go', 'jsg2')
-        assert digraph.has('John', 'store', 'go')
+        assert digraph.has('John', 'store', 'go', 'jsg1')
+        assert digraph.has('John', 'store', 'go', 'jsg2')
 
-    def get_edges_with_label(digraph, source, target, label):
-        """
-        Gets all edges that match source,target,label signature
-        """
-        edges = digraph.get_edges_with_label('John','store','go')
-        assert len(edges) == 2
-
-    def remove(digraph, node, target=None, label=None, id=None):
+    def remove(digraph, node=None, target=None, label=None, edge_id=None):
         """
         Remove a node or edge.
 
-        Specific edge removal can be specified by specifying the `target`, 'label', and 'id'
-        of the out-edge of `node`.
+        If only `node` is specified, removes that node and all connected edges.
 
-        If 'id' is not specified, all out-edges from 'node' to 'target' of 'label' are
-        removed.
+        If `node` and `target` are specified, all out-edges from 'node' to 'target'.
 
-        Removing a node removes all connected in- and out-edges.
+        If `node`, `target`, and `label` are specified, removes all edges from `node`
+        to `target` with `label`.
+
+        If only `edge_id` is specified (or a `(s, t, l, id)` signature), removes a single edge.
         """
         digraph.remove('Rick')
         assert not digraph.has('Rick')
         assert not digraph.has('George', 'Rick', 'dislikes')
         assert digraph.has('George')
 
-        digraph.remove('Mary', 'George', 'None', 'mgn')
+        digraph.remove(edge_id='mgn')
         assert not digraph.has('Mary', 'George', 'None')
 
-        digraph.remove('John', 'Mary', 'likes', 'jml')
+        digraph.remove('John', 'Mary', 'likes')
         assert not digraph.has('John', 'Mary', 'likes')
         assert digraph.has('John', 'Mary', 'dislikes')
 
-        digraph.remove('John', 'store', 'go')
-        assert not digraph.has('John', 'store', 'go')
+        digraph.remove('John', 'store')
+        assert not digraph.has('John', 'store')
 
-    def set(digraph, node, target, old_label=None, new_label=None):
+    def set(digraph, old, new):
         """
         Replaces a node or an edge label.
 
-        Two arguments replaces `node` with `target`, where all edges are preserved.
-
-        Four arguments replaces the edge 'old_label' from `node` to `target` with `new_label`.
+        Two arguments replaces node `old` with node `new`, where all edges are preserved.
         """
-        digraph.set('Peter', 'Pete')
+        digraph.replace('Peter', 'Pete')
         assert not digraph.has('Peter')
         assert digraph.has('Pete')
         assert digraph.has('Pete', 'Sarah', 'likes')
 
-        digraph.set('Pete', 'Sarah', 'likes', 'dislikes')
-        assert not digraph.has('Pete', 'Sarah', 'likes')
-        assert digraph.has('Pete', 'Sarah', 'dislikes')
+    def set_label(digraph, label, edge_id=None):
+        """
+        Replaces the edge label of edge with id `edge_id` with `label`.
+        """
+        digraph.set('dislikes', 'psl')
+        assert not digraph.has('Pete', 'Sarah', 'likes', 'psl')
+        assert digraph.has('Pete', 'Sarah', 'dislikes', 'psl')
 
