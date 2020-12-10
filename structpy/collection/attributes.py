@@ -1,5 +1,5 @@
 from structpy import implementation
-from structpy.language.attributes_spec import AttributesSpec
+from structpy.collection.attributes_spec import AttributesSpec
 
 @implementation(AttributesSpec)
 class Attributes:

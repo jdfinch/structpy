@@ -1,8 +1,12 @@
+
+from structpy import implementation
+
 import networkx as nx
 from structpy.graph.directed.labeled.multilabeled_digraph_spec import MultiLabeledDigraphSpec
 
 
-class MultiLabeledDigraphNX(nx.MultiDiGraph, MultiLabeledDigraphSpec):
+@implementation(MultiLabeledDigraphSpec)
+class MultiLabeledDigraphNX(nx.MultiDiGraph):
 
     def __init__(self, edges=None, nodes=None):
         super(MultiLabeledDigraphNX, self).__init__()

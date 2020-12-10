@@ -1,9 +1,10 @@
-
+from structpy import implementation
 import networkx as nx
 from structpy.graph.directed.labeled.multilabeled_parallel_digraph_spec import MultiLabeledParallelDigraphSpec
 
 
-class MultiLabeledParallelDigraphNX(nx.MultiDiGraph, MultiLabeledParallelDigraphSpec):
+@implementation(MultiLabeledParallelDigraphSpec)
+class MultiLabeledParallelDigraphNX(nx.MultiDiGraph):
 
     def __init__(self, edges=None, nodes=None):
         super(MultiLabeledParallelDigraphNX, self).__init__()
