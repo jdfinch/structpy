@@ -232,11 +232,9 @@ class MultiLabeledParallelDigraphSpec:
 
     def set(digraph, old, new):
         """
-        Replaces a node or an edge label.
-
-        Two arguments replaces node `old` with node `new`, where all edges are preserved.
+        Replaces a node.
         """
-        digraph.replace('Peter', 'Pete')
+        digraph.set('Peter', 'Pete')
         assert not digraph.has('Peter')
         assert digraph.has('Pete')
         assert digraph.has('Pete', 'Sarah', 'likes')
@@ -245,7 +243,7 @@ class MultiLabeledParallelDigraphSpec:
         """
         Replaces the edge label of edge with id `edge_id` with `label`.
         """
-        digraph.set('dislikes', 'psl')
+        digraph.set_label('dislikes', 'psl')
         assert not digraph.has('Pete', 'Sarah', 'likes', 'psl')
         assert digraph.has('Pete', 'Sarah', 'dislikes', 'psl')
 
