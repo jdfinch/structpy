@@ -42,8 +42,8 @@ class MultiLabeledDigraphDataSpec:
         Get the attributes associated with a node or edge as an
         `Attributes` object.
         """
-        assert digraph.attributes('John')() == {'b': 2}
-        assert digraph.attributes('John', 'Mary', 'likes')() == {'a': 1}
+        assert digraph.attributes('John').b == 2
+        assert digraph.attributes('John', 'Mary', 'likes')['a'] == 1
 
 
 
