@@ -54,11 +54,17 @@ class MultiLabeledParallelDigraphNX(nx.MultiDiGraph):
 
     def sources(self, target, label=None):
         if label is None:
-            in_edges = super().in_edges(target)
-            return set([source for source, target in in_edges])
+            if target in self.nodes():
+                in_edges = super().in_edges(target)
+                return set([source for source, target in in_edges])
+            else:
+                return set()
         else:
-            in_edges = super().in_edges(target, data=True)
-            return set([source for source, target, data in in_edges if data['edge']==label])
+            if target in self.nodes():
+                in_edges = super().in_edges(target, data=True)
+                return set([source for source, target, data in in_edges if data['edge']==label])
+            else:
+                return set()
 
     def neighbors(self, node, label=None):
         if label is None:
