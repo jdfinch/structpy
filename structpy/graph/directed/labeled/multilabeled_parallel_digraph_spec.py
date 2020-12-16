@@ -5,7 +5,10 @@ from structpy import specification
 @specification
 class MultiLabeledParallelDigraphSpec:
     """
-    Directed Graph with a single label per edge.
+    Directed Graph with multiple labels per edge.
+    Unlike MultiLabeledDigraph, multiple edges of the same (s, t, l)
+    signature are allowed, because each edge has a unique id, giving
+    each edge a 4-tuple signature (s, t, l, id).
 
     Nodes and edge labels can be any hashable object.
     Edge labels are not unique, but nodes are.
@@ -17,7 +20,7 @@ class MultiLabeledParallelDigraphSpec:
     def MULTILABELED_PARALLEL_DIGRAPH(Digraph, edges=None, nodes=None):
         """
         Construct a labeled digraph. Optionally, pass an
-        `iterable<tuple<source, target, label>>` of edges and an
+        `iterable<tuple<source, target, label, id>>` of edges and an
         `iterable<node>` of nodes to initialize the graph.
         """
         digraph = Digraph([
