@@ -39,11 +39,17 @@ class MultiLabeledParallelDigraphNX(nx.MultiDiGraph, MultiLabeledParallelDigraph
 
     def targets(self, source, label=None):
         if label is None:
-            out_edges = super().out_edges(source)
-            return set([target for source, target in out_edges])
+            if source in self.nodes():
+                out_edges = super().out_edges(source)
+                return set([target for source, target in out_edges])
+            else:
+                return set()
         else:
-            out_edges = super().out_edges(source, data=True)
-            return set([target for source, target, data in out_edges if data['edge']==label])
+            if source in self.nodes():
+                out_edges = super().out_edges(source, data=True)
+                return set([target for source, target, data in out_edges if data['edge']==label])
+            else:
+                return set()
 
     def sources(self, target, label=None):
         if label is None:
