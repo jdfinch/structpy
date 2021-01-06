@@ -1,6 +1,6 @@
 
 
-from structpy.language.specification.colors import colors
+from structpy.language.printer.colors import colors
 
 
 class Result:

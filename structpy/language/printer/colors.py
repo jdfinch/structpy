@@ -6,7 +6,7 @@ class colors:
     '''Colors class:reset all colors with colors.reset; two
     sub classes fg for foreground
     and bg for background; use as colors.subclass.colorname.
-    i.e. colors.fg.red or colors.bg.greenalso, the generic bold, disable,
+    i.e. colors.fg.red or colors.bg.green. Also, the generic bold, disable,
     underline, reverse, strike through,
     and invisible work with the main class i.e. colors.bold'''
     reset='\033[0m'
@@ -46,4 +46,5 @@ class colors:
 if __name__ == '__main__':
     print(colors.fg.black, 'Hello world.')
     print(colors.fg.green, 'Hello world.')
+    print(colors.fg.red, 'Hello world.')
     print(colors.fg.black, 'Hello world.')

@@ -121,17 +121,17 @@ class MultiLabeledParallelDigraphNX:
             return {(s, t, l, i) for s, t, l, i in self.out_edges(node, label=label)
                     if t == target}
 
-    def add(self, node, target=None, label=None, id=None):
+    def add(self, node, target=None, label=None, edge_id=None):
         self._nx.add_node(node)
         if target is not None and label is not None:
             self._nx.add_node(target)
-            if id is None:
-                id = MultiLabeledParallelDigraphNX.get_id()
-            if id in self._edges:
-                raise KeyError('Edge edge_id {} already exists.'.format(id))
-            self._nx.add_edge(node, target, label=label, key=id)
-            self._edges[id] = (node, target, label)
-            return id
+            if edge_id is None:
+                edge_id = MultiLabeledParallelDigraphNX.get_id()
+            if edge_id in self._edges:
+                raise KeyError('Edge edge_id {} already exists.'.format(edge_id))
+            self._nx.add_edge(node, target, label=label, key=edge_id)
+            self._edges[edge_id] = (node, target, label)
+            return edge_id
         elif (target is not None and label is None) or (target is None and label is not None):
             raise Exception('Both target and label must be specified to add an edge.')
 
