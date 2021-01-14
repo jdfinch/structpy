@@ -37,13 +37,13 @@ class MultiLabeledDigraphDataSpec:
         })
         return digraph
 
-    def attributes(digraph, node, target=None, label=None):
+    def data(digraph, node, target=None, label=None):
         """
         Get the attributes associated with a node or edge as an
         `Attributes` object.
         """
-        assert digraph.attributes('John').b == 2
-        assert digraph.attributes('John', 'Mary', 'likes')['a'] == 1
+        assert digraph.data('John').b == 2
+        assert digraph.data('John', 'Mary', 'likes')['a'] == 1
 
 
 

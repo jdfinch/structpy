@@ -20,7 +20,7 @@ class MultiLabeledDigraphDataNX(MultiLabeledDigraphNX):
             for k, v in nodes.items():
                 self.node_data[k]().update(v)
 
-    def attributes(self, node, target=None, label=None):
+    def data(self, node, target=None, label=None):
         if label is None:
             return self.node_data[node]
         else:
