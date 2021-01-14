@@ -10,8 +10,10 @@ class MultiLabeledDigraphNX(nx.MultiDiGraph):
 
     def __init__(self, edges=None, nodes=None):
         super(MultiLabeledDigraphNX, self).__init__()
+        if nodes is not None:
+            for node in nodes:
+                self.add(node)
         if edges is not None:
-            self.add_nodes_from(nodes)
             for source, target, label in edges:
                 self.add(source, target, label)
 
