@@ -1,7 +1,8 @@
 
+from structpy.language.printer.printer_spec import PrinterSpec
+
 import sys
-from structpy.language.printer.colors import colors
-from collections import deque
+
 
 class Printer:
 
@@ -23,6 +24,12 @@ class Printer:
         lightblue='\033[94m'
         pink='\033[95m'
         lightcyan='\033[96m'
+
+        def __init__(self, r, g, b):
+            self.rgb = (r, g, b)
+        def __str__(self):
+            r, g, b = self.rgb
+            return f'\033[38;2;{r};{g};{b}m'
 
     foreground_colors = {
         'black': fg.black,
@@ -57,6 +64,12 @@ class Printer:
         purple='\033[45m'
         cyan='\033[46m'
         gray='\033[47m'
+
+        def __init__(self, r, g, b):
+            self.rgb = (r, g, b)
+        def __str__(self):
+            r, g, b = self.rgb
+            return f'\033[48;2;{r};{g};{b}m'
 
     background_colors = {
         'black': bg.black,
@@ -94,59 +107,103 @@ class Printer:
         'invisible': op.invisible,
     }
 
-    _options = set(options.values())
+    _options = {
+        op.reset: 'reset',
+        op.bold: 'bold',
+        op.disable: 'disable',
+        op.underline: 'underline',
+        op.reverse: 'reverse',
+        op.strikethrough: 'strike',
+        op.invisible: 'invisible'
+    }
 
-    def __init__(self, indent=0, color=colors.fg.black, end='\n', file=sys.stdout, indent_size=None):
-        self.settings = PrinterSettings(indent, color, end, file, indent_size)
+    def __init__(self, *args, **kwargs):
+        self.settings = PrinterSettings(*args, **kwargs)
 
-    def set(self, *settings, bg=None):
-        for setting in settings:
-            if isinstance(setting, int):
-                pass
+    def set(self, *args, **kwargs):
+        self.settings.update(*args, **kwargs)
 
-    def mode(self, *settings, bg=None):
-        return PrinterMode(self, *settings, bg=bg)
+    def mode(self, *args, **kwargs):
+        return PrinterMode(self, *args, **kwargs)
 
     def __call__(self, *args, **kwargs):
-        if self.settings.color is not None:
-            print(self.settings.color, end='')
-        if 'end' not in kwargs:
-            kwargs['end'] = self.settings.end
-        print(*args, **kwargs)
-        print(Printer.op.reset, end='')
+        sep = kwargs.get('sep', ' ')
+        end = kwargs.get('end', '\n')
+        file = kwargs.get('file', sys.stdout)
+        flush = kwargs.get('flush', False)
+        message = sep.join((str(arg) for arg in args)) + end
+        settings = self.settings.copy(**kwargs)
+        prefix = ''.join((str(o) for o in (
+            settings['fg'],
+            settings['bg'],
+            settings['bold'],
+            settings['disable'],
+            settings['underline'],
+            settings['reverse'],
+            settings['strike'],
+            settings['invisible']
+        )))
+        suffix = self.op.reset if prefix else ''
+        indent = ' ' * (settings['indent'] if settings['indent'] else 0)
+        printed = prefix + indent + message + suffix
+        if isinstance(file, list):
+            file.append(printed)
+        elif file is not None:
+            print(printed, end='', file=file, flush=flush)
+        return printed
 
 
 class PrinterSettings:
 
-    def __init__(self, indent=0, color=colors.fg.black, end='\n', file=sys.stdout, indent_size=None):
-        self.file = file
-        self.indent = indent
-        if isinstance(indent_size, int):
-            indent_size = Printer._indent_size
-        self.indent_size = indent_size
-        self.color = color
-        self.end = end
+    def __init__(self, *args, **kwargs):
+        self.settings = {}
+        self.update(*args, **kwargs)
 
-    def update(self, *settings, bg=None):
-        pass
+    def update(self, *args, **kwargs):
+        kwargs = {**self._args_to_settings(*args), **kwargs}
+        self.settings.update(kwargs)
 
-    def copy(self, *settings, bg=None):
+    def copy(self, *args, **kwargs):
         c = PrinterSettings()
-        c.update(*settings, bg=bg)
+        c.settings.update(self.settings)
+        c.update(*args, **kwargs)
         return c
+
+    def _args_to_settings(self, *args, **kwargs):
+        settings = {}
+        for arg in args:
+            if arg in Printer.foreground_colors:
+                settings['fg'] = Printer.foreground_colors[arg]
+            elif arg in Printer._foreground_colors:
+                settings['fg'] = arg
+            elif arg in Printer.options:
+                settings[Printer._options[Printer.options[arg]]] = Printer.options[arg]
+            elif isinstance(arg, int):
+                settings['indent'] = self.settings.get('indent', 0) + arg
+            elif arg == 'i' or arg == 'indent':
+                settings['indent'] = self.settings.get('indent', 0) + Printer._indent_size
+            elif isinstance(arg, tuple) and len(arg) == 3:
+                settings['fg'] = Printer.fg(*arg)
+            elif 'un' == arg[:2] and arg[:2] in Printer.options:
+                settings[Printer._options[Printer.options[arg[:2]]]] = None
+        return settings
+
+    def __getitem__(self, key):
+        item = self.settings.get(key, '')
+        return item if item else ''
 
 
 class PrinterMode:
 
-    def __init__(self, printer, new_settings):
+    def __init__(self, printer, *args, **kwargs):
         self.printer = printer
         self.old_settings = printer.settings
-        self.new_settings = self.old_settings.copy(new_settings)
+        self.new_settings = self.old_settings.copy(*args, **kwargs)
 
     def __enter__(self):
         self.printer.settings = self.new_settings
 
-    def __exit__(self):
+    def __exit__(self, *_, **__):
         self.printer.settings = self.old_settings
 
     def __call__(self, *args, **kwargs):
@@ -156,5 +213,4 @@ class PrinterMode:
 
 
 if __name__ == '__main__':
-
-    print = Printer()
+    print(PrinterSpec.verify(Printer))

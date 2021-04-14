@@ -23,7 +23,7 @@ class PrinterSpec:
 
         printer('Hello world')
 
-    def mode(printer):
+    def mode(printer, *args, **kwargs):
         """
 
         """
@@ -32,17 +32,22 @@ class PrinterSpec:
 
         with printer.mode('red'):
             printer('Problems!')
-        with printer.mode(printer.colors.blue):
+        with printer.mode(printer.fg.blue, 'i'):
             printer('Good!')
+            printer('It works!')
+            with printer.mode(2, (255, 100, 200)):
+                printer('Even more indent!')
+            printer('Back to 4.')
         with printer.mode('red', 'bold'):
             printer('Boom.')
 
-
-    def set(printer):
+    def set(printer, *args, **kwargs):
         printer.set('bold')
         printer('Bolded!')
         printer.set('blue')
-        printer('Bolded blue!')
+        printer('Bolded', end=' ')
+        printer.set(bold=False)
+        printer('blue!')
 
 
 
