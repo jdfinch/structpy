@@ -1,7 +1,10 @@
 
 from structpy.language.printer.printer_spec import PrinterSpec
-
+from structpy.utilities import Symbol, fill
 import sys
+
+
+default = Symbol()
 
 
 class Printer:
@@ -126,13 +129,23 @@ class Printer:
     def mode(self, *args, **kwargs):
         return PrinterMode(self, *args, **kwargs)
 
+    def write(self, s):
+        file = self.settings.settings.get('file', sys.stdout)
+        if file is None or isinstance(file, list):
+            return self(s, end='')
+        else:
+            with self.mode('buf'):
+                return self(s)
+
+    def flush(self):
+        pass
+
     def __call__(self, *args, **kwargs):
-        sep = kwargs.get('sep', ' ')
-        end = kwargs.get('end', '\n')
-        file = kwargs.get('file', sys.stdout)
-        flush = kwargs.get('flush', False)
-        message = sep.join((str(arg) for arg in args)) + end
         settings = self.settings.copy(**kwargs)
+        sep = settings.settings.get('sep', ' ')
+        end = settings.settings.get('end', '\n')
+        file = settings.settings.get('file', sys.stdout)
+        flush = settings.settings.get('flush', False)
         prefix = ''.join((str(o) for o in (
             settings['fg'],
             settings['bg'],
@@ -145,23 +158,42 @@ class Printer:
         )))
         suffix = self.op.reset if prefix else ''
         indent = ' ' * (settings['indent'] if settings['indent'] else 0)
-        printed = prefix + indent + message + suffix
+        message = sep.join((str(arg) for arg in args)) + end
+        rstripped = message.rstrip()
+        imessage = rstripped.replace('\n', '\n'+indent) + message[len(rstripped):]
+        printed = prefix + indent + imessage + suffix
         if isinstance(file, list):
             file.append(printed)
         elif file is not None:
-            print(printed, end='', file=file, flush=flush)
+            _print(printed, end='', file=file, flush=flush)
+        else:
+            self.settings.settings['buffer'].append(printed)
         return printed
+
+    @property
+    def buffer(self):
+        return self.settings.settings['buffer']
+
+    def buffered(self):
+        return ''.join(self.settings.settings['buffer'])
+
+    @property
+    def indent(self):
+        return self.mode('indent')
 
 
 class PrinterSettings:
 
     def __init__(self, *args, **kwargs):
-        self.settings = {}
+        self.settings = {'buffer': []}
         self.update(*args, **kwargs)
 
     def update(self, *args, **kwargs):
-        kwargs = {**self._args_to_settings(*args), **kwargs}
-        self.settings.update(kwargs)
+        settings = self._args_to_settings(*args, **kwargs)
+        self.settings.update(settings)
+
+    def fill(self, other):
+        fill(self.settings, other, default=default)
 
     def copy(self, *args, **kwargs):
         c = PrinterSettings()
@@ -186,6 +218,11 @@ class PrinterSettings:
                 settings['fg'] = Printer.fg(*arg)
             elif 'un' == arg[:2] and arg[:2] in Printer.options:
                 settings[Printer._options[Printer.options[arg[:2]]]] = None
+            elif isinstance(arg, str) and arg.startswith('buf'):
+                settings['file'] = None
+        for kw, arg in kwargs.items():
+            if arg is not default:
+                settings[kw] = arg
         return settings
 
     def __getitem__(self, key):
@@ -208,8 +245,12 @@ class PrinterMode:
 
     def __call__(self, *args, **kwargs):
         self.__enter__()
-        self.printer(*args, **kwargs)
+        result = self.printer(*args, **kwargs)
         self.__exit__()
+        return result
+
+_print = print
+print = Printer()
 
 
 if __name__ == '__main__':
