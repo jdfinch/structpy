@@ -1,6 +1,6 @@
 
 from structpy.language.spec import spec_spec as s
-from structpy.language.spec.spec import Verifier
+from structpy.language.spec.spec import spec
 
 if __name__ == '__main__':
 
@@ -17,6 +17,5 @@ if __name__ == '__main__':
             return sum([self.a, self.b, x, y])
 
 
-    v = Verifier()
-    v.collect(s)
-    v.verify(s, MyClass)
+    spec.collect(s)
+    spec.verify(s, MyClass)

@@ -1,53 +1,49 @@
 
-from structpy import specification
+from structpy import spec
 
 
-@specification
-class PrinterSpec:
+def __init__(Printer):
     """
 
     """
+    printer = Printer()
+    return printer
 
-    @specification.init
-    def PRINTER(Printer):
-        """
+def call(printer):
+    """
 
-        """
-        printer = Printer()
-        return printer
+    """
+    printer('Hello world')
 
-    def call(printer):
-        """
+def mode(printer, *args, **kwargs):
+    """
 
-        """
+    """
+    printer.mode('green')('Check.', end=' ')
+    printer('Check.')
 
-        printer('Hello world')
+    with printer.mode('red'):
+        printer('Problems!')
+    with printer.mode(printer.fg.blue, 'i'):
+        printer('Good!')
+        printer('It works!')
+        with printer.mode(2, (255, 100, 200)):
+            printer('Even more indent!')
+        printer('Back to 4.')
+    with printer.mode('red', 'bold'):
+        printer('Boom.')
 
-    def mode(printer, *args, **kwargs):
-        """
+def set(printer, *args, **kwargs):
+    printer.set('bold')
+    printer('Bolded!')
+    printer.set('blue')
+    printer('Bolded', end=' ')
+    printer.set(bold=False)
+    printer('blue!')
 
-        """
-        printer.mode('green')('Check.', end=' ')
-        printer('Check.')
 
-        with printer.mode('red'):
-            printer('Problems!')
-        with printer.mode(printer.fg.blue, 'i'):
-            printer('Good!')
-            printer('It works!')
-            with printer.mode(2, (255, 100, 200)):
-                printer('Even more indent!')
-            printer('Back to 4.')
-        with printer.mode('red', 'bold'):
-            printer('Boom.')
-
-    def set(printer, *args, **kwargs):
-        printer.set('bold')
-        printer('Bolded!')
-        printer.set('blue')
-        printer('Bolded', end=' ')
-        printer.set(bold=False)
-        printer('blue!')
-
+if __name__ == '__main__':
+    from structpy.language.printer.printer import Printer
+    spec.verify(Printer)
 
 

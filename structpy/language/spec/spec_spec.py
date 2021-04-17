@@ -14,6 +14,7 @@ def __init__(MyClass, a, b):
     Here's how you initialize a MyClass.
     """
     my_object = MyClass(2, 4)
+    print(my_object)
     return my_object
 
 def z_method(my_object, x, y):
@@ -26,9 +27,15 @@ def my_method(my_object, c):
     """
     my_value = my_object.my_method(4)
     print(my_value)
-    assert False
+    with spec.raises(AssertionError('1')):
+        assert False
+
+def anothertest(Mycl):
+    print('Another test!')
+    return Mycl(0, 0)
 
 def zz_methodszz(my_object, a, b, c):
+    p(my_object)
     p('Something else:')
     with p.mode('indent'):
         p('...')
@@ -38,10 +45,5 @@ def zz_methodszz(my_object, a, b, c):
 def other_test():
     p('Hello')
     with p.indent:
-        p('...\n...\n...')
         p.mode('blue')('...\n\n...\n')
-        p('...')
-        with p.indent:
-            p('.....')
-        p.mode('green')('...')
     p('done.')

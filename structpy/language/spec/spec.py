@@ -2,19 +2,16 @@
 from inspect import getmembers, isfunction, getmodule, signature
 from structpy.language.printer.printer import Printer
 import sys, traceback
+from structpy.utilities import catches
 
 
 class Verifier:
 
     def __init__(self):
-        self.expected_errors = [None]
+        self.expected_error = None
         self.specs = {}
-        self.report = []
+        self.success = True
         self.log = Printer()
-
-    @property
-    def expected_error(self):
-        return self.expected_errors[-1]
 
     def collect(self, spec):
         units = []
@@ -29,17 +26,21 @@ class Verifier:
             else:
                 units[-1].append(unit)
         self.specs[spec] = units
+        return units
 
-    def verify(self, spec, cls, tags=None, verbosity=1):
+    def verify(self, *types, spec=None, tags=None, verbosity=1):
         """
         Verify a specification defined by the module `spec`.
         """
-        unitchains = self.specs.get(spec, [])
-        for units in unitchains:
-            constructor = units[0]
-            obj = self.execute(constructor, cls)
-            for unit in units[1:]:
-                self.execute(unit, obj)
+        if spec is None:
+            spec = sys.modules['__main__']
+        unitchains = self.specs.get(spec, self.collect(spec))
+        for cls in types:
+            for units in unitchains:
+                constructor = units[0]
+                obj = self.execute(constructor, cls)
+                for unit in units[1:]:
+                    self.execute(unit, obj)
 
     def execute(self, unit, arg=None):
         args = [None for _ in signature(unit).parameters.keys()]
@@ -48,16 +49,18 @@ class Verifier:
         report = []
         stdout = sys.stdout
         sys.stdout = self.log
+        self.success = True
         try:
             with self.log.mode(file=report):
                 result = unit(*args)
-                success = self.expected_error is None
+                self.success = True
         except Exception as e:
             result = None
-            success = isinstance(e, type(self.expected_error))
-            report.append(self.log.mode('red', file=[])(traceback.format_exc()))
+            if not self.success:
+                report.append(self.log.mode('red', file=[])(traceback.format_exc()))
         sys.stdout = stdout
-        with self.log.mode('green' if success else 'red'):
+        self.expected_error = None
+        with self.log.mode('green' if self.success else 'red'):
             self.log(unit.__name__)
         with self.log.mode(4):
             self.log(''.join(report))
@@ -69,11 +72,29 @@ class Verifier:
             def __init__(self, error_type):
                 self.error = error_type
             def __enter__(self):
-                verifier.expected_errors.append(self)
+                verifier.expected_error = self.error
                 return self
             def __exit__(self, exc_type, exc_val, exc_tb):
-                verifier.expected_errors.pop()
+                if (exc_val is None and verifier.expected_error is not None) or \
+                        not catches(verifier.expected_error, exc_val):
+                    verifier.success = False
+                    raise WrongException(verifier.expected_error, exc_val)
+                verifier.expected_error = None
         return ErrorExpectation(error)
+
+
+class WrongException(Exception):
+
+    def __init__(self, expected, actual):
+        self.expected = expected
+        self.actual = actual
+        Exception.__init__(self)
+
+    def __str__(self):
+        return f'Expected exception {self.expected} but {self.actual} raised.'
+
+    def __repr__(self):
+        return str(self)
 
 
 spec = Verifier()

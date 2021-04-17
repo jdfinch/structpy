@@ -1,5 +1,4 @@
 
-from structpy.language.printer.printer_spec import PrinterSpec
 from structpy.utilities import Symbol, fill
 import sys
 
@@ -251,7 +250,3 @@ class PrinterMode:
 
 _print = print
 print = Printer()
-
-
-if __name__ == '__main__':
-    print(PrinterSpec.verify(Printer))

@@ -1,10 +1,9 @@
 
 
-from structpy.language.specification import specification, implementation
+from structpy.language.spec.spec import spec
 from structpy.language.interface_implementation import I
 
 __all__ = [
-    'specification',
-    'implementation',
+    'spec',
     'I'
 ]

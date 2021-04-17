@@ -1,7 +1,4 @@
 
-from structpy.language.specification.specification import implementation
-from structpy.language.interface_spec import InterfaceSpec
-
 from types import MethodType
 from functools import partial
 
@@ -28,7 +25,7 @@ def CreateInterface(obj, **interface_functions):
     i.__dict__.update(interface_functions)
     return i
 
-@implementation(InterfaceSpec)
+
 class I:
 
     def __init__(self, obj, **interface_functions):
@@ -609,6 +606,3 @@ class I:
                   '    except AttributeError:\n' + \
                   '        return')
     '''
-
-if __name__ == '__main__':
-    print(InterfaceSpec.verify(I))
