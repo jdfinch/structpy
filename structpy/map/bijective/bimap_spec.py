@@ -1,5 +1,5 @@
 
-from structpy.language import specification
+from structpy.system import specification
 
 
 @specification

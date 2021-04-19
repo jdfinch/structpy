@@ -43,7 +43,7 @@ def set(printer, *args, **kwargs):
 
 
 if __name__ == '__main__':
-    from structpy.language.printer.printer import Printer
+    from structpy.system.printer import Printer
     spec.verify(Printer)
 
 

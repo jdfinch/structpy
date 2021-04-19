@@ -1,6 +1,5 @@
 
-from structpy.language import spec
-from structpy.language import I
+from structpy.system import spec
 
 __all__ = [
     'spec'

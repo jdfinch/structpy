@@ -165,7 +165,7 @@ class Printer:
             file.append(printed)
         elif file is not None:
             _print(printed, end='', file=file, flush=flush)
-        else:
+        elif file and isinstance(file, str) and 'buffer'.startswith(file):
             self.settings.settings['buffer'].append(printed)
         return printed
 
@@ -211,7 +211,7 @@ class PrinterSettings:
                 settings[Printer._options[Printer.options[arg]]] = Printer.options[arg]
             elif isinstance(arg, int):
                 settings['indent'] = self.settings.get('indent', 0) + arg
-            elif arg == 'i' or arg == 'indent':
+            elif arg and isinstance(arg, str) and 'indent'.startswith(arg):
                 settings['indent'] = self.settings.get('indent', 0) + Printer._indent_size
             elif isinstance(arg, tuple) and len(arg) == 3:
                 settings['fg'] = Printer.fg(*arg)

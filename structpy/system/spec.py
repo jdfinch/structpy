@@ -1,7 +1,7 @@
 
-from inspect import getmembers, isfunction, getmodule, signature
-from structpy.language.printer.printer import Printer
+from inspect import getmembers, isfunction, signature
 import sys, traceback
+from structpy.system.printer import Printer
 from structpy.utilities import catches
 
 
@@ -21,7 +21,7 @@ class Verifier:
         )
         for name, unit in functions:
             params = list(signature(unit).parameters.keys())
-            if params and params[0][0].isupper():
+            if not params or params[0][0].isupper():
                 units.append([unit])
             else:
                 units[-1].append(unit)
@@ -34,6 +34,8 @@ class Verifier:
         """
         if spec is None:
             spec = sys.modules['__main__']
+        if not types:
+            types = [None]
         unitchains = self.specs.get(spec, self.collect(spec))
         for cls in types:
             for units in unitchains:

@@ -1,6 +1,6 @@
 
-from structpy.language.spec.spec import spec
-from structpy.language.printer.printer import print as p
+from structpy.system.spec import spec
+from structpy.system.printer import print as p
 
 """
 Here is MyClass.
@@ -47,3 +47,20 @@ def other_test():
     with p.indent:
         p.mode('blue')('...\n\n...\n')
     p('done.')
+
+
+if __name__ == '__main__':
+
+    class MyClass:
+
+        def __init__(self, a, b):
+            self.a = a
+            self.b = b
+
+        def my_method(self, c):
+            return self.a + self.b + 2
+
+        def z_method(self, x, y):
+            return sum([self.a, self.b, x, y])
+
+    spec.verify(MyClass)
