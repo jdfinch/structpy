@@ -38,7 +38,7 @@ def has_item(map, key=default, value=default, *keys):
     assert map.has_item('baseball_bat', 'Cosa', 'spanish', 'uncommon')
     assert map.has_item('baseball_bat', 'Cosa', 'spanish')
 
-def has(map, *seq, value=default):
+def has(map, *chain, value=default):
     assert map.has('bat')
     assert map.has('bat', 'Bat')
     assert map.has('baseball_bat', 'spanish', 'common')
@@ -94,22 +94,22 @@ def items(map, *keys):
         ('baseball_bat', 'Bate'), ('baseball_bat', 'Raqueta'), ('baseball_bat', 'Cosa')
     }
 
-def item_chains(map, key=default, value=default, *keys):
-    assert set(map.item_chains()) == {
+def chains(map, key=default, value=default, *keys):
+    assert set(map.chains()) == {
         ('bat', 'Bat'), ('bat', 'Flying Mammal'),
         ('baseball_bat', 'Bat'), ('baseball_bat', 'Baseball Bat'),
         ('baseball_bat', 'spanish', 'common', 'Bate'),
         ('baseball_bat', 'spanish', 'uncommon', 'Raqueta'),
         ('baseball_bat', 'spanish', 'uncommon', 'Cosa')
     }
-    assert set(map.item_chains(keys=('baseball_bat', 'spanish', 'uncommon'))) == {
+    assert set(map.chains(keys=('baseball_bat', 'spanish', 'uncommon'))) == {
         ('baseball_bat', 'spanish', 'uncommon', 'Raqueta'),
         ('baseball_bat', 'spanish', 'uncommon', 'Cosa')
     }
-    assert set(map.item_chains('baseball_bat', 'Bate')) == {
+    assert set(map.chains('baseball_bat', 'Bate')) == {
         ('baseball_bat', 'spanish', 'common', 'Bate')
     }
-    assert set(map.item_chains(value='Bat')) == {
+    assert set(map.chains(value='Bat')) == {
         ('bat', 'Bat'),
         ('baseball_bat', 'Bat')
     }
@@ -120,14 +120,18 @@ def len_items(map):
 def len_values(map):
     assert map.len_values() == 7
 
-def add(map, key, value, *keys):
-    map.add('cat', 'Cat')
+def add_item(map, key, value, *keys):
+    map.add_item('cat', 'Cat')
     assert map('cat') == {'Cat'}
-    map.add('cat', 'Kitty')
+    map.add_item('cat', 'Kitty')
     assert map('cat') == {'Cat', 'Kitty'}
-    map.add('cat', 'Kitten', 'young')
+    map.add_item('cat', 'Kitten', 'young')
     assert map('cat') == {'Cat', 'Kitty', 'Kitten'}
     assert map('cat', 'young') == {'Kitten'}
+
+def add(map, *chain):
+    map.add('cat', 'old', 'Old Cat')
+    assert map.has('cat', 'old', 'Old Cat')
 
 def map(map, key, values, *keys):
     assert map.map('dog', ['Dog']) == {'Dog'}
@@ -171,7 +175,7 @@ def remove(map, *keys, value=default):
     try: map.remove('dog'); assert False
     except KeyError: pass
 
-def discard_item(map, key, value, *keys):               # todo- fix weird sigs. Allow add and remove item from .items()
+def discard_item(map, key, value, *keys):
     assert not map.has_item('lizard', 'Dragon')
     map.discard_item('lizard', 'Dragon')
     map.discard_item('lizard', 'Lizard')
@@ -200,7 +204,7 @@ def __delitem__(map, key):
     assert 'snake' not in map
     with spec.raises(KeyError): del map['snake']
 
-def replace(map, old_item,  new_value=default, new_item=default):
+def replace(map, old_item, new_value=default, new_item=default):
     map.replace(('bat', 'Flying Mammal'), 'fm')
     assert not map.has_item('bat', 'Flying Mammal')
     assert map.has_item('bat', 'fm')
@@ -208,32 +212,38 @@ def replace(map, old_item,  new_value=default, new_item=default):
     assert not map.has_item('bat', 'fm')
     assert map.has('bat', 'x', 'FM')
 
-def pop(map, key=default, value=default, *keys):
+def pop_item(map, key=default, value=default, *keys):
     assert len(map('baseball_bat', 'spanish', 'uncommon')) == 2
-    assert map.pop('baseball_bat', 'spanish', 'uncommon') in {
+    assert map.pop_item('baseball_bat', 'spanish', 'uncommon') in {
         ('baseball_bat', 'spanish', 'uncommon', 'Cosa'),
         ('baseball_bat', 'spanish', 'uncommon', 'Raqueta')
     }
     assert len(map('baseball_bat', 'spanish', 'uncommon')) == 1
     assert len(map('baseball_bat', 'spanish')) == 2
-    assert map.pop('baseball_bat', 'spanish') in {
+    assert map.pop_item('baseball_bat', 'spanish') in {
         ('baseball_bat', 'spanish', 'uncommon', 'Cosa'),
         ('baseball_bat', 'spanish', 'uncommon', 'Raqueta'),
         ('baseball_bat', 'spanish', 'common', 'Bate')
     }
-    assert map.pop('baseball_bat', 'spanish') in {
+    assert map.pop_item('baseball_bat', 'spanish') in {
         ('baseball_bat', 'spanish', 'uncommon', 'Cosa'),
         ('baseball_bat', 'spanish', 'uncommon', 'Raqueta'),
         ('baseball_bat', 'spanish', 'common', 'Bate')
     }
     assert not map.has('baseball_bat', 'spanish')
-    assert map.pop() in {
+    assert map.pop_item() in {
         ('bat', 'Bat'),
         ('bat', 'x', 'FM'),
         ('baseball_bat', 'Bat'),
         ('baseball_bat', 'Baseball Bat')
     }
     assert map.len_items() == 3
+
+def pop(map, *keys, value=default):
+    assert map.len_items == 3
+    map.pop()
+    map.pop()
+    assert map.len_items() == 1
 
 
 if __name__ == '__main__':
