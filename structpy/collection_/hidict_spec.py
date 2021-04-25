@@ -1,16 +1,12 @@
 
 """
 Hierarchical dictionary.
-
-
 """
+
 from structpy import spec
 
 
 def __init__():
-    """
-
-    """
     hidict = ({
         'john': {}
     })

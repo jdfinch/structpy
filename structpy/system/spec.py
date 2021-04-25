@@ -3,6 +3,7 @@ from inspect import getmembers, isfunction, signature
 import sys, traceback
 from structpy.system.printer import Printer
 from structpy.utilities import catches
+from copy import deepcopy
 
 
 class Verifier:
@@ -42,7 +43,7 @@ class Verifier:
                 constructor = units[0]
                 obj = self.execute(constructor, cls)
                 for unit in units[1:]:
-                    self.execute(unit, obj)
+                    self.execute(unit, deepcopy(obj))
 
     def execute(self, unit, arg=None):
         args = [None for _ in signature(unit).parameters.keys()]
@@ -51,7 +52,7 @@ class Verifier:
         report = []
         stdout = sys.stdout
         sys.stdout = self.log
-        self.success = True
+        self.success = False
         try:
             with self.log.mode(file=report):
                 result = unit(*args)

@@ -27,8 +27,9 @@ def my_method(my_object, c):
     """
     my_value = my_object.my_method(4)
     print(my_value)
-    with spec.raises(AssertionError('1')):
-        assert False
+
+def my_second_method(my_object):
+    print(my_object.my_method(0))
 
 def anothertest(Mycl):
     print('Another test!')
@@ -58,7 +59,9 @@ if __name__ == '__main__':
             self.b = b
 
         def my_method(self, c):
-            return self.a + self.b + 2
+            self.a += c
+            self.b += c
+            return self.a + self.b
 
         def z_method(self, x, y):
             return sum([self.a, self.b, x, y])
