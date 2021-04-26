@@ -48,8 +48,9 @@ def len_items(map):
     assert map.len_items() == 4
 
 def keys(map, value=default):
-    assert set(map.keys()) == {'fast', 'slow'}
+    assert set(map.keys()) == {'fast', 'air'}
     assert map.keys('jet') == {'fast', 'air'}
+    assert map.keys('car') == {'fast'}
 
 def values(map, key=default):
     assert set(map.values()) == {'jet', 'car', 'balloon'}
@@ -67,10 +68,18 @@ def add(map, key, value):
     assert map['space'] == {'rocket'}
 
 def update(map, key, values):
-    map.update('space', ['starship', 'planet'])
-    assert map['space'] == {'rocket', 'starship', 'planet'}
+    map.update('fast', ['starship'])
+    assert map['fast'] == {'starship', 'car', 'jet'}
     map.update('ocean', ['submarine', 'ship'])
     assert map['ocean'] == {'submarine', 'ship'}
+
+def map(map, mapping):
+    map.map({
+        'fast': {'starship'},
+        'slow': {'tank', 'balloon'}
+    })
+    assert map['fast'] == {'car', 'jet', 'starship'}
+    assert map['slow'] == {'tank', 'balloon'}
 
 def remove(map, key, value=default):
     map.remove('air', 'balloon')
@@ -98,3 +107,9 @@ def pop(map, key=default):
     assert len(map['air']) == 1
     assert map.pop('air') in {('air', 'jet'), ('air', 'balloon')}
     assert 'air' not in map
+
+
+from structpy.map_.map import Map
+
+if __name__ == '__main__':
+    spec.verify(Map)
