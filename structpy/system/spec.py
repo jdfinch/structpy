@@ -1,49 +1,58 @@
 
-from inspect import getmembers, isfunction, signature
+from inspect import getmembers, isfunction, signature, getmodule
 import sys, traceback
-from structpy.system.printer import Printer
-from structpy.utilities import catches
 from copy import deepcopy
+from structpy.system.printer import Printer
 
 
 class Verifier:
 
     def __init__(self):
-        self.expected_error = None
-        self.specs = {}
-        self.success = True
+        self.specs = {}         # {module: {constructor: [unit]}}
         self.log = Printer()
 
     def collect(self, spec):
-        units = []
+        if spec in self.specs:
+            return self.specs[spec]
+        else:
+            self.specs[spec] = {}
         functions = sorted(
             getmembers(spec, isfunction),
             key=lambda x:x[1].__code__.co_firstlineno
         )
+        constructor = None
         for name, unit in functions:
             params = list(signature(unit).parameters.keys())
-            if not params or params[0][0].isupper():
-                units.append([unit])
+            if hasattr(unit, 'satisfies'):
+                other = unit.satisfies
+                othermod = getmodule(other)
+                unitchain = self.specs.setdefault(othermod, self.collect(othermod))[other]
+                self.specs[spec][unit] = unitchain
+            if not params or isconstructor(unit):
+                if isconstructor(unit):
+                    constructor = unit
+                self.specs[spec].setdefault(unit, [])
             else:
-                units[-1].append(unit)
-        self.specs[spec] = units
-        return units
+                self.specs[spec][constructor].append(unit)
+        return self.specs[spec]
 
-    def verify(self, *types, spec=None, tags=None, verbosity=1):
+    def verify(self, types=None, spec=None, tags=None, verbosity=1):
         """
         Verify a specification defined by the module `spec`.
         """
+        if not isinstance(types, list):
+            types = [types]
         if spec is None:
             spec = sys.modules['__main__']
-        if not types:
-            types = [None]
-        unitchains = self.specs.get(spec, self.collect(spec))
         for cls in types:
-            for units in unitchains:
-                constructor = units[0]
-                obj = self.execute(constructor, cls)
-                for unit in units[1:]:
-                    self.execute(unit, deepcopy(obj))
+            results = []
+            for constructor, units in self.specs.get(spec, self.collect(spec)).items():
+                obj, success, report = self.execute(constructor, cls)
+                results.append([(constructor, success, report)])
+                for unit in units:
+                    _, success, report = self.execute(unit, deepcopy(obj))
+                    results[-1].append((unit, success, report))
+            self.log(''.join(self.report(cls, results)))
 
     def execute(self, unit, arg=None):
         args = [None for _ in signature(unit).parameters.keys()]
@@ -52,52 +61,58 @@ class Verifier:
         report = []
         stdout = sys.stdout
         sys.stdout = self.log
-        self.success = False
         try:
             with self.log.mode(file=report):
                 result = unit(*args)
-                self.success = True
-        except Exception as e:
+            success = True
+        except Exception:
             result = None
-            if not self.success:
-                report.append(self.log.mode('red', file=[])(traceback.format_exc()))
+            tbmode = self.log.mode('red', file=None)
+            report.append(tbmode(traceback.format_exc().strip()))
+            success = False
         sys.stdout = stdout
-        self.expected_error = None
-        with self.log.mode('green' if self.success else 'red'):
-            self.log(unit.__name__)
-        with self.log.mode(4):
-            self.log(''.join(report))
-        return result
+        report = ''.join(report)
+        return result, success, report
 
-    def raises(self, error):
-        verifier = self
-        class ErrorExpectation:
-            def __init__(self, error_type):
-                self.error = error_type
-            def __enter__(self):
-                verifier.expected_error = self.error
-                return self
-            def __exit__(self, exc_type, exc_val, exc_tb):
-                if (exc_val is None and verifier.expected_error is not None) or \
-                        not catches(verifier.expected_error, exc_val):
-                    verifier.success = False
-                    raise WrongException(verifier.expected_error, exc_val)
-                verifier.expected_error = None
-        return ErrorExpectation(error)
+    def report(self, cls, results):
+        reports = []
+        with self.log.mode(file=None):
+            successes = 0
+            total = 0
+            for resultchain in results:
+                for unit, success, report in resultchain:
+                    if success: successes += 1
+                    total += 1
+                    with self.log.mode('green' if success else 'red', 4):
+                        reports.append(self.log.mode('bold')(displayname(unit)))
+                        if report.strip():
+                            with self.log.mode(4):
+                                reports.append(self.log(report))
+            with self.log.mode('green' if successes == total else 'red'):
+                reports.append(self.log.mode('bold', end='  ')(cls.__name__))
+                reports.append(self.log(f'{successes}/{total}'))
+        return reports
+
+    class satisfies:
+        def __init__(self, spec_referent):
+            self.spec_referent = spec_referent
+        def __call__(self, spec_function):
+            spec_function.satisfies = self.spec_referent
+            return spec_function
 
 
-class WrongException(Exception):
+def isconstructor(unit):
+    params = list(signature(unit).parameters.keys())
+    return params and params[0][0].isupper()
 
-    def __init__(self, expected, actual):
-        self.expected = expected
-        self.actual = actual
-        Exception.__init__(self)
+def isattribute(unit):
+    return unit.__name__.startswith('o__')
 
-    def __str__(self):
-        return f'Expected exception {self.expected} but {self.actual} raised.'
-
-    def __repr__(self):
-        return str(self)
+def displayname(unit):
+    if isattribute(unit):
+        return '.' + unit.__name__[3:]
+    else:
+        return unit.__name__
 
 
 spec = Verifier()
