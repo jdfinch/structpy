@@ -81,20 +81,24 @@ def map(map, mapping):
     assert map['fast'] == {'car', 'jet', 'starship'}
     assert map['slow'] == {'tank', 'balloon'}
 
-def remove(map, key, value=default):
+def remove(map, key=default, value=default):
     map.remove('air', 'balloon')
     assert map['air'] == {'jet'}
     map.remove('air')
     assert 'air' not in map
     try: map.remove('air')
     except KeyError: pass
+    map.remove(value='car')
+    assert not map.has('fast', 'car')
 
-def discard(map, key, value=default):
+def discard(map, key=default, value=default):
     map.discard('air', 'balloon')
     assert map['air'] == {'jet'}
     map.discard('air')
     assert 'air' not in map
     map.discard('air')
+    map.discard(value='car')
+    assert not map.has('fast', 'car')
 
 def __delitem__(map, key):
     del map['fast']
