@@ -112,7 +112,7 @@ def pop(map, key=default):
     assert map.pop('air') in {('air', 'jet'), ('air', 'balloon')}
     assert 'air' not in map
 
-@spec.satisfies(__init__)
+@spec.eq(__init__)
 def o__reverse(Map):
     map = Map({
         'car': {'fast'},

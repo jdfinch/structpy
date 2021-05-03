@@ -2,6 +2,7 @@
 from inspect import getmembers, isfunction, signature, getmodule
 import sys, traceback
 from copy import deepcopy
+from dataclasses import dataclass, field
 from structpy.system.printer import Printer
 
 
@@ -93,7 +94,7 @@ class Verifier:
                 reports.append(self.log(f'{successes}/{total}'))
         return reports
 
-    class satisfies:
+    class eq:
         def __init__(self, spec_referent):
             self.spec_referent = spec_referent
         def __call__(self, spec_function):
@@ -116,3 +117,9 @@ def displayname(unit):
 
 
 spec = Verifier()
+
+
+if __name__ == '__main__':
+
+    myunit = UnitTest()
+    print(myunit)
