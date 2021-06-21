@@ -8,7 +8,7 @@
     sort_identifiers = False
     show_type_annotations = False
     # Show collapsed target code block next to each keys.
-    # Disabling this can improve rendering speed of large modules.
+    # Disabling this can improve rendering speed of large specs.
     show_source_code = True
     # If Set, format links to objects in online target code repository
     # according to this template. Supported keywords for interpolation

@@ -1,6 +1,4 @@
 
-from structpy import spec
-
 
 def __init__(Printer):
     """
@@ -40,10 +38,5 @@ def set(printer, *args, **kwargs):
     printer('Bolded', end=' ')
     printer.set(bold=False)
     printer('blue!')
-
-
-if __name__ == '__main__':
-    from structpy.system.printer import Printer
-    spec.verify(Printer)
 
 

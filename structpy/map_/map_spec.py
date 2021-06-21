@@ -2,7 +2,7 @@
 Mapping of elements between a domain and codomain.
 """
 
-from structpy import spec
+import structpy.system.specification as spec
 from structpy.system import default
 
 
@@ -112,7 +112,7 @@ def pop(map, key=default):
     assert map.pop('air') in {('air', 'jet'), ('air', 'balloon')}
     assert 'air' not in map
 
-@spec.eq(__init__)
+@spec.satisfies(__init__)
 def o__reverse(Map):
     map = Map({
         'car': {'fast'},
@@ -120,9 +120,3 @@ def o__reverse(Map):
         'balloon': {'air'}
     })
     return map.reverse
-
-
-from structpy.map_.map import Map
-
-if __name__ == '__main__':
-    spec.verify(Map)

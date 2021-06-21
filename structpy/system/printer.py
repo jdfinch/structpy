@@ -145,6 +145,7 @@ class Printer:
         end = settings.settings.get('end', '\n')
         file = settings.settings.get('file', sys.stdout)
         flush = settings.settings.get('flush', False)
+        styled = settings.settings.get('styled', True)
         prefix = ''.join((str(o) for o in (
             settings['fg'],
             settings['bg'],
@@ -154,7 +155,7 @@ class Printer:
             settings['reverse'],
             settings['strike'],
             settings['invisible']
-        )))
+        ))) if styled else ''
         suffix = self.op.reset if prefix else ''
         indent = ' ' * (settings['indent'] if settings['indent'] else 0)
         message = sep.join((str(arg) for arg in args)) + end
@@ -168,6 +169,9 @@ class Printer:
         elif file and isinstance(file, str) and 'buffer'.startswith(file):
             self.settings.settings['buffer'].append(printed)
         return printed
+
+    def capturing(self, capture_stdout=True, capture_stderr=False):
+        return Capture(self, capture_stdout, capture_stderr)
 
     @property
     def buffer(self):
@@ -247,6 +251,30 @@ class PrinterMode:
         result = self.printer(*args, **kwargs)
         self.__exit__()
         return result
+
+
+class Capture:
+
+    def __init__(self, file, capture_stdout=True, capture_stderr=False):
+        self.file = file
+        self.cap_stdout = capture_stdout
+        self.cap_stderr = capture_stderr
+        self.stdout = None
+        self.stderr = None
+
+    def __enter__(self):
+        if self.cap_stderr:
+            self.stderr = sys.stderr
+            sys.stderr = self.file
+        if self.cap_stdout:
+            self.stdout = sys.stdout
+            sys.stdout = self.file
+
+    def __exit__(self, *_, **__):
+        if self.cap_stderr:
+            sys.stderr = self.stderr
+        if self.cap_stdout:
+            sys.stdout = self.stdout
 
 _print = print
 print = Printer()
