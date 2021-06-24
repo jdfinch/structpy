@@ -25,11 +25,11 @@ def import_submodules(package, recursive=True):
 
 def verify(*implementations):
     """
-    Return and print a Report describing whether given implementations
+    Return and print a Report describing whether given _implementations
     meet their corresponding specifications.
 
-    implementations: implementations decorated with @spec.implements
-                     OR modules, in which case implementations are
+    _implementations: _implementations decorated with @spec.implements
+                     OR modules, in which case _implementations are
                      automatically discovered
     """
     imps, specs = collect(*implementations)
@@ -37,7 +37,7 @@ def verify(*implementations):
 
 def collect(*implementations):
     """
-    Collect a group of implementations and their corresponding
+    Collect a group of _implementations and their corresponding
     specifications.
     """
     if not implementations:

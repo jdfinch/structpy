@@ -1,51 +1,40 @@
 
-from inspect import getmodule
+from time import time
+from inspect import signature
 
-import structpy.system.specification.spec as specification
+from structpy.system.defaulted import Defaulted
 
 
-class Unit:
+class Unit(Defaulted):
 
-    units = {}
+    defaults = {
+        'init': False,
+        'tags': set,
+        'satisfies': False,
+        'property': False
+    }
 
-    def __new__(cls, f, spec=None, init=None, tags=None, satisfies=None, property=None, subunits=None):
-        if f in Unit.units:
-            unit = Unit.units[f]
-            if spec is not None:
-                unit.spec = spec
-            if init is not None:
-                unit.init = init
-            if tags:
-                unit.tags.update(tags)
-            if satisfies is not None:
-                unit.satisfies = satisfies
-            if property is not None:
-                unit.property = property
-            if subunits:
-                unit.subunits.extend(subunits)
-        else:
-            if property is None:
-                property = False
-            if init is None:
-                init = False
-            return super(Unit, cls).__new__(cls, f, init, spec, tags, satisfies, property, subunits)
+    def __init__(self, f, spec=None, init=None, tags=None, satisfies=None, property=None, under=None):
+        self.f = f
+        self.sig = signature(self.f)
+        self.spec = spec
+        self.init = init
+        self.tags = tags
+        self.satisfies = satisfies
+        self.property = property
+        self.under = under
 
-    def __init__(self, f, init=False, spec=None, tags=None, satisfies=None, property=False, subunits=None):
-        if f in Unit.units:
-            return
-        else:
-            self.f = f
-            self.spec = specification.Spec(getmodule(self.f) if spec is None else spec)
-            self.init = init
-            self.tags = set() if not tags else set(tags)
-            self.satisfies = satisfies
-            self.property = property
-            self.subunits = [] if not subunits else list(subunits)
-            self.spec = spec
-            Unit.units[self.f] = self
-
-    def verify(self, implementation=None):
-        raise NotImplementedError
+    def verify(self, *args, **kwargs):
+        ti = None
+        try:
+            binding = self.sig.bind_partial(*args, **kwargs)
+            binding.apply_defaults()
+            fullbinding = {**{k: None for k in self.sig.parameters}, **binding.arguments}
+            ti = time()
+            result = self.f(**fullbinding)
+            return True, result, ti or (time() - ti)
+        except Exception:
+            return False, None, ti or (time() - ti)
 
 
 def unit(*tags, init=None, satisfies=None, property=None):

@@ -6,14 +6,18 @@ class Defaulted:
     default = None
 
     def __setattr__(self, key, value):
-        if value == self.default:
-            if not hasattr(self, key):
-                if key in self.defaults:
-                    defaultvalue = self.defaults[key]
+        if key in self.defaults:
+            defaultvalue = self.defaults[key]
+            if value == self.default:
+                if not hasattr(self, key):
                     if callable(defaultvalue):
                         self.__dict__[key] = defaultvalue()
                     else:
                         self.__dict__[key] = defaultvalue
+            elif callable(defaultvalue):
+                self.__dict__[key] = defaultvalue(value)
+            else:
+                self.__dict__[key] = value
         else:
             self.__dict__[key] = value
 
@@ -40,7 +44,7 @@ if __name__ == '__main__':
             return f'{self.bar}-{self.bat}-{self.baz}'
 
 
-    foo = Foo(bat='hello')
+    foo = Foo(bar='hello')
     print(foo)
-    foo.update(9)
+    foo.update([1, 2, 3])
     print(foo)
