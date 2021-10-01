@@ -3,7 +3,7 @@
 Collection of items that can be enumerated.
 """
 
-from structpy import spec
+import structpy.system.specification.specification as spec
 
 
 @spec.init
@@ -56,4 +56,5 @@ def test(data_structure, params):
 @spec.satisfies(__init__)
 def another_way(Iterable):
     return Iterable()
+
 

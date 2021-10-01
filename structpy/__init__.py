@@ -1,6 +1,6 @@
 
-from structpy.system import spec
+from structpy.system import specxxx
 
 __all__ = [
-    'spec'
+    'specxxx.py'
 ]

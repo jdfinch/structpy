@@ -2,7 +2,7 @@
 
 """
 
-from structpy import spec
+from structpy import specxxx
 
 
 def __init__(Graph):

@@ -1,6 +1,16 @@
 
 
 class Transformation:
+    """
+    Superclass that creates conditional-singletons.
+
+    Instantiating a Tranformation will return a pre-existing object
+    if the first argument passed to the constructor is not None and
+    the constructor has already been invoked with that first arg.
+
+    This allows inheritors to guarantee a one-to-one relationship
+    between instantiated objects and objects passed into the constructor.
+    """
 
     _transformed = {}
 

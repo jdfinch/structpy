@@ -1,8 +1,10 @@
 
 from time import time
 from inspect import signature
+from traceback import format_exc
 
 from structpy.system.defaulted import Defaulted
+from structpy.system.printer import Printer
 
 
 class Unit(Defaulted):
@@ -25,16 +27,22 @@ class Unit(Defaulted):
         self.under = under
 
     def verify(self, *args, **kwargs):
-        ti = None
-        try:
-            binding = self.sig.bind_partial(*args, **kwargs)
-            binding.apply_defaults()
-            fullbinding = {**{k: None for k in self.sig.parameters}, **binding.arguments}
-            ti = time()
-            result = self.f(**fullbinding)
-            return True, result, ti or (time() - ti)
-        except Exception:
-            return False, None, ti or (time() - ti)
+        capture = Printer(file=None)
+        with capture.capturing():
+            ti = None
+            try:
+                binding = self.sig.bind_partial(*args, **kwargs)
+                binding.apply_defaults()
+                fullbinding = {**{k: None for k in self.sig.parameters}, **binding.arguments}
+                ti = time()
+                result = self.f(**fullbinding)
+                tf = time()
+                results = True, result, tf - ti, capture.buffered(), None
+            except Exception:
+                tf = time()
+                results = False, None, tf - ti, capture.buffered(), format_exc(64)
+        return results
+
 
 
 def unit(*tags, init=None, satisfies=None, property=None):

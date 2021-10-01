@@ -2,7 +2,7 @@
 
 """
 
-from structpy import spec
+from structpy import specxxx
 from structpy.system import default
 
 

@@ -1,78 +1,118 @@
 
+
+import sys
+import importlib
+import pkgutil
 from inspect import getmembers, isfunction, ismodule
 
-from structpy.system.transformation import Transformation
-from structpy.system.specification.unit import Unit
+pythonproperty = property
+
+from structpy.system.specification.spec import Spec
+from structpy.system.specification.report import Report
+from structpy.system.specification.unit import *
 
 
-class Spec(Transformation):
+implementations = {}
+specifications = {}
 
-    def __init__(self, module=None, units=None):
-        self._units = {}
-        self._subunits = {}
-        self._implementations = []
-        self._module = module
-        if module:
-            self.add(module)
-        if units:
-            self.add(units)
+def verify(*implementations_or_specs):
+    """
+    Return and print a Report describing whether given implementations
+    meet their corresponding specifications.
 
-    def add(self, units, init=None):
-        if isfunction(units):
-            units = [units]
-        elif ismodule(units):
-            lineno = lambda x: x[1].__code__.co_firstlineno
-            units = list(zip(*sorted(getmembers(units, isfunction), key=lineno)))[1]
-        elif isinstance(units, Spec):
-            units = list(units._units)
+    implementations_or_specs: implementations decorated with @spec.implements
+                     OR modules/Specs, in which case implementations are
+                     automatically discovered
+    """
+    imps, specs = collect(*implementations_or_specs)
+    raise NotImplementedError
+
+def collect(*implementations_or_specs):
+    """
+    Collect a group of implementations.
+
+    implementations_or_specs: implementations decorated with @spec.implements
+                     OR modules/Specs, in which case implementations are
+                     automatically discovered
+
+    returns: set of implementations
+    """
+    if not implementations_or_specs:
+        implementations_or_specs = [sys.modules['__main__']]
+    imps = []
+    specs = []
+    for implementation in implementations_or_specs:
+        if implementation in implements.map:
+            imps.append(implementation)
+        elif ismodule(implementation) or isinstance(implementation, str):
+            modules = import_submodules(implementation)
+            for name, module in modules.values():
+                if module in Spec.specs:
+                    specs.append(Spec.specs[module])
+                elif 'spec.py' in name:
+                    specs.append(Spec(module))
         else:
-            units = list(units)
-        for unit in units:
-            if not isinstance(unit, Unit):
-                unit = Unit(unit, self)
-            if unit.init and not unit.under:
-                init = unit
-            else:
-                if unit.under:
-                    self._subunits[unit.under].append(unit)
-                if init:
-                    self._units[init].append(unit)
-            self._units[unit] = []
-            self._subunits[unit] = []
-            if unit.satisfies:
-                spec = unit.satisfies.spec
-                if not spec:
-                    spec = Spec(unit.satisfies.f.__module__)
-                self.add(spec, init=init)
-
-    def units(self):
-        result = []
-        visited = set()
-        for initunit, chain in self._units:
-            for unit in [initunit] + chain:
-                if unit not in visited:
-                    visited.add(unit)
-                    result.append(unit)
-                    superunits = list(self._subunits[unit])
-                    while superunits:
-                        superunit = superunits.pop()
-                        if superunit not in visited:
-                            visited.add(superunit)
-                            result.append(superunit)
-                            superunits.extend(self._subunits[superunit])
-        return result
-
-    def __iter__(self):
-        return iter(self.units())
-
-    def verify(self, *implementations):
-        for implementation in implementations or self._implementations or [tuple()]:
-            base_init = implementation
-            init = None
-            for unit in self:
-                unit.verify(*base_init)
+            raise ValueError(f'Unknown implementation {implementation}')
+    specs = [spec for spec in specs
+             if not any([spec in implements.map[imp] for imp in imps])]
+    return imps, specs
 
 
-    @property
-    def name(self):
-        return self._module.__name__
+class implements:
+    """
+    Decorator marking some python object, class, module, or function
+    as an implementation of some specification(s).
+
+    Decorated implementations are registered as implementations of the
+    provided specifications.
+    """
+
+    def __init__(self, *specs):
+        self.specs = set(specs)
+
+    def __call__(self, obj):
+        implementations.setdefault(obj, set()).update(self.specs)
+        for spec in self.specs:
+            specifications.setdefault(spec, set()).add(obj)
+        return obj
+    
+
+def import_submodules(package, recursive=True):
+    if isinstance(package, str):
+        package = importlib.import_module(package)
+    results = {}
+    for loader, name, is_pkg in pkgutil.walk_packages(package.__path__):
+        full_name = package.__name__ + '.' + name
+        results[full_name] = importlib.import_module(full_name)
+        if recursive and is_pkg:
+            results.update(import_submodules(full_name))
+    return results
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

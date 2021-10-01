@@ -3,7 +3,7 @@
 Hierarchical dictionary.
 """
 
-from structpy import spec
+from structpy import specxxx
 
 
 def __init__():
@@ -13,4 +13,4 @@ def __init__():
 
 
 if __name__ == '__main__':
-    spec.verify()
+    specxxx.verify()

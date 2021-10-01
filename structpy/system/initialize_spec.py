@@ -1,5 +1,5 @@
 
-from structpy import spec
+from structpy import specxxx
 from structpy.system.initialize import initialize
 
 
@@ -20,4 +20,4 @@ def auto_params(initialize):
 
 
 if __name__ == '__main__':
-    spec.verify(initialize)
+    specxxx.verify(initialize)
