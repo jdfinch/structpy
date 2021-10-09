@@ -1,10 +1,6 @@
 
 from inspect import getmembers, isfunction
 
-
-
-
-
 def callall(f):
     f()
     lineno = lambda x: x[1].__code__.co_firstlineno
