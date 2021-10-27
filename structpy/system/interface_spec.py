@@ -18,7 +18,7 @@ class InterfaceSpec:
     @specification.init
     def I(I, obj):
         """
-        Create an interface using `I(_object, **attributes)` notation.
+        Create an interface using `I(singleton, **attributes)` notation.
         """
         obj = [1, 2, 3]
         interface = I(

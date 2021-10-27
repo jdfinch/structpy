@@ -1,5 +1,6 @@
 
-class dclass:
+
+class Dclass:
 
     def __init__(self, *args, **kwargs):
         self(*args, **kwargs)
@@ -16,6 +17,9 @@ class dclass:
     def __getattribute__(self, item):
         return object.__getattribute__(self, item)
 
+    def __getattr__(self, item):
+        return None
+
     def __getitem__(self, item):
         return getattr(self, item)
 
@@ -23,7 +27,7 @@ class dclass:
         return setattr(self, key, value)
 
     def __iter__(self):
-        return iter(self.__dict__.items())
+        return iter(self.__dict__.values())
 
     def __contains__(self, item):
         return item in self.__dict__
@@ -32,14 +36,18 @@ class dclass:
         return len(self.__dict__)
 
     def __or__(self, other):
-        return dclass(**self.__dict__).__ior__(other)
+        return Dclass(**self.__dict__).__ior__(other)
 
     def __ior__(self, other):
         self(**other.__dict__)
         return self
 
+    @property
+    def __name__(self):
+        return self.__class__.__name__
+
     def __str__(self):
-        name = self.__class__.__name__
+        name = self.__name__
         itemstring = ', '.join((f'{k}={v}' for k, v in self.__dict__.items()))
         return f'{name}({itemstring})'
 
@@ -47,16 +55,20 @@ class dclass:
         return str(self)
 
 
+def dclass(name):
+    return Dclass(__name__=name)
+
+
 if __name__ == '__main__':
 
-    class Foo(dclass):
+    class Foo(Dclass):
 
         def __init__(self, d, *args, **kwargs):
             self.a = -1
             self.b = -2
             self.c = -3
             self.d = d
-            dclass.__init__(self, *args, **kwargs)
+            Dclass.__init__(self, *args, **kwargs)
 
 
     f = Foo(4, 1, c=3, e=5)
@@ -71,5 +83,5 @@ if __name__ == '__main__':
     print(g)
     f |= g
     print(f)
-    for k, v in f:
-        print(k, v)
+    for v in f:
+        print(v)

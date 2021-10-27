@@ -170,8 +170,8 @@ class Printer:
             self.settings.settings['buffer'].append(printed)
         return printed
 
-    def capturing(self, capture_stdout=True, capture_stderr=False):
-        return Capture(self, capture_stdout, capture_stderr)
+    def capturing(self, stdout=True, stderr=False):
+        return Capture(self, stdout, stderr)
 
     @property
     def buffer(self):

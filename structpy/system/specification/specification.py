@@ -9,7 +9,7 @@ pythonproperty = property
 
 from structpy.system.specification.spec import Spec
 from structpy.system.specification.report import Report
-from structpy.system.specification.unit import *
+from structpy.system.specification.unit_test import *
 
 
 implementations = {}
@@ -75,7 +75,7 @@ class implements:
         for spec in self.specs:
             specifications.setdefault(spec, set()).add(obj)
         return obj
-    
+
 
 def import_submodules(package, recursive=True):
     if isinstance(package, str):

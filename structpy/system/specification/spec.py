@@ -1,12 +1,12 @@
 
 from inspect import getmembers, isfunction, ismodule
 
-from structpy.system.transformation import Transformation
-from structpy.system.specification.unit import Unit
-from structpy.system.specification.report import Report
+from structpy.system.conditional_singleton import ConditionalSingleton
+from structpy.system.dclass import dclass
+from structpy.system.specification.unit_test import UnitTest
 
 
-class Spec(Transformation):
+class Spec(ConditionalSingleton):
     """
     Spec is a Tranformation of a python module (or list of functions)
     into a documented test suite.
@@ -19,8 +19,7 @@ class Spec(Transformation):
 
         units (list<function>)
         """
-        self._units = {}
-        self._subunits = {}
+        self._units = []
         self._implementations = []
         self._module = module
         if module:
@@ -32,9 +31,9 @@ class Spec(Transformation):
         """
         Add tests to the Spec.
 
-        units (list<(function, Unit)>, python module, function, Unit)
+        units (list<(function, UnitTest)>, python module, function, UnitTest)
 
-        init (Unit) an init function constructing objects to be passed to all
+        init (UnitTest) an init function constructing objects to be passed to all
         tests in units at test time.
         """
         if isfunction(units):
@@ -47,8 +46,8 @@ class Spec(Transformation):
         else:
             units = list(units)
         for unit in units:
-            if not isinstance(unit, Unit):
-                unit = Unit(unit, self)
+            if not isinstance(unit, UnitTest):
+                unit = UnitTest(unit, self)
             if unit.init and not unit.under:
                 init = unit
             else:
@@ -66,7 +65,7 @@ class Spec(Transformation):
 
     def units(self):
         """
-        return (list<Unit>) in test-order.
+        return (list<UnitTest>) in test-order.
         """
         result = []
         visited = set()
@@ -110,3 +109,4 @@ class Spec(Transformation):
     @property
     def name(self):
         return self._module.__name__
+
