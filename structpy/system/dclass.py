@@ -48,7 +48,10 @@ class Dclass:
 
     def __str__(self):
         name = self.__name__
-        itemstring = ', '.join((f'{k}={v}' for k, v in self.__dict__.items()))
+        itemstring = ', '.join((
+            f'{k}={v}' for k, v in self.__dict__.items()
+            if not k.startswith('_')
+        ))
         return f'{name}({itemstring})'
 
     def __repr__(self):

@@ -17,18 +17,26 @@ class UnitTest(Dclass):
     def __init__(self, f, **attrs):
         if isinstance(f, UnitTest):
             self.function = f.function
-            Dclass.__init__(**f())
+            Dclass.__init__(self, **f())
         else:
             self.function = f
         self.bound_function = partial(self.function)
         Dclass.__init__(self, **attrs)
 
     def bind(self, *args, **kwargs):
-        self.bound_function = partial(self.function, *args, **kwargs)
-        return self
+        return self._bind(partial(self.function, *args, **kwargs))
+
+    def _bind(self, bound_function):
+        context = BoundUnitTestContext(self, bound_function)
+        self.bound_function = bound_function
+        return context
+
+    def try_bind_default(self, *args, **kwargs):
+        f = self._try_bind(self.function, *args, **kwargs)
+        return self._bind(self._bind_default(f))
 
     def try_bind(self, *args, **kwargs):
-        self.bound_function = self._try_bind(self.function, *args, **kwargs)
+        return self._bind(self._try_bind(self.function, *args, **kwargs))
 
     def _try_bind(self, f, *args, **kwargs):
         params = signature(f).parameters
@@ -82,8 +90,7 @@ class UnitTest(Dclass):
             result = None
             ti = time()
             try:
-                f = self._try_bind(self.bound_function, *args, **kwargs)
-                f = self._bind_default(f)
+                f = partial(self.bound_function, *args, **kwargs)
                 bound_args = f.args
                 bound_kwargs = f.keywords
                 ti = time()
@@ -109,6 +116,22 @@ class UnitTest(Dclass):
     @property
     def name(self):
         return self.function.__name__
+
+
+class BoundUnitTestContext(UnitTest):
+
+    def __init__(self, unit, bound_function):
+        UnitTest.__init__(self, unit)
+        self._unit = unit
+        self._old_bound_function = unit.bound_function
+        self.bound_function = bound_function
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._unit.bound_function = self._old_bound_function
+        self.bound_function = self._old_bound_function
 
 
 class Result(Dclass):
@@ -142,6 +165,8 @@ if __name__ == '__main__':
         assert len(x) == len(e)
 
     my_unit_test = UnitTest(my_test)
-    my_result = my_unit_test.run(list, {1, 2, 3}, x=3)
+    my_unit_test = my_unit_test.try_bind_default(list, {1, 2, 3}, x=2)
+    my_result = my_unit_test.run()
+    print(my_unit_test)
     pprint.pprint(my_result())
 
