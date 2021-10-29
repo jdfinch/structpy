@@ -1,112 +1,133 @@
 
-from inspect import getmembers, isfunction, ismodule
+from inspect import signature, Parameter, ismodule, getmembers, isfunction, getmodule
+from copy import deepcopy
 
-from structpy.system.conditional_singleton import ConditionalSingleton
-from structpy.system.dclass import dclass
 from structpy.system.specification.unit_test import UnitTest
+from structpy.system.dclass import Dclass
 
 
-class Spec(ConditionalSingleton):
-    """
-    Spec is a Tranformation of a python module (or list of functions)
-    into a documented test suite.
+class TestCollection:
     """
 
-    def __init__(self, module=None, units=None):
-        """
-        module (python module) Returns previously constructed Spec if the
-        module has already been transformed into a Spec object.
+    """
 
-        units (list<function>)
-        """
-        self._units = []
-        self._implementations = []
-        self._module = module
-        if module:
-            self.add(module)
-        if units:
-            self.add(units)
+    def __init__(self, *units):
+        self._units = {}
+        self._tree = {}
+        self.implementations = None
+        self.add_spec(*units)
 
-    def add(self, units, init=None):
-        """
-        Add tests to the Spec.
-
-        units (list<(function, UnitTest)>, python module, function, UnitTest)
-
-        init (UnitTest) an init function constructing objects to be passed to all
-        tests in units at test time.
-        """
-        if isfunction(units):
-            units = [units]
-        elif ismodule(units):
-            lineno = lambda x: x[1].__code__.co_firstlineno
-            units = list(zip(*sorted(getmembers(units, isfunction), key=lineno)))[1]
-        elif isinstance(units, Spec):
-            units = list(units._units)
-        else:
-            units = list(units)
-        for unit in units:
-            if not isinstance(unit, UnitTest):
-                unit = UnitTest(unit, self)
-            if unit.init and not unit.under:
-                init = unit
+    def add_spec(self, *units, parent=None):
+        for unit_ in units:
+            if ismodule(unit_):
+                self._add_module(unit_)
             else:
-                if unit.under:
-                    self._subunits[unit.under].append(unit)
-                if init:
-                    self._units[init].append(unit)
-            self._units[unit] = []
-            self._subunits[unit] = []
-            if unit.satisfies:
-                spec = unit.satisfies.spec
-                if not spec:
-                    spec = Spec(unit.satisfies.f.__module__)
-                self.add(spec, init=init)
+                self._add_unit(unit_, parent)
 
-    def units(self):
-        """
-        return (list<UnitTest>) in test-order.
-        """
-        result = []
-        visited = set()
-        for initunit, chain in self._units:
-            for unit in [initunit] + chain:
-                if unit not in visited:
-                    visited.add(unit)
-                    result.append(unit)
-                    superunits = list(self._subunits[unit])
-                    while superunits:
-                        superunit = superunits.pop()
-                        if superunit not in visited:
-                            visited.add(superunit)
-                            result.append(superunit)
-                            superunits.extend(self._subunits[superunit])
-        return result
+    def _add_module(self, module, parent=None):
+        is_module_unit = (
+            lambda x: isinstance(x, UnitTest) or (
+                      isfunction(x)
+                      and getmodule(x) is module
+                      and not (hasattr(x, 'helper') and x.helper))
+        )
+        units = getmembers(module, is_module_unit)
+        parents = [parent, None]
+        for unit in units:
+            hidden = False
+            name = unit.name if isinstance(unit, UnitTest) else unit.__name__
+            if name.startswith('__') and name.endswith('__'):
+                level = 0
+            else:
+                level = len(name) - len(name.lstrip('_'))
+                hidden = level == 1
+            if level == len(parents):
+                parents.append(unit)
+                unit = self._add_unit(unit, parents[-2])
+                unit.hidden = hidden
+            elif level < len(parents):
+                parents = parents[:max(level, 2)]
+                unit = self._add_unit(unit, parents[-2])
+                unit.hidden = unit
+
+    def _add_unit(self, unit, parent=None):
+        if not isinstance(unit, UnitTest):
+            unit = UnitTest(unit)
+            self._units[unit] = unit
+        parent_unit = self._units.get(parent, parent)
+        self._tree.setdefault(parent_unit, []).append(unit)
+        return unit
+
+    def add_imp(self, implementation):
+        if self.implementations is None:
+            self.implementations = []
+        self.implementations.append(implementation)
+
+    def verify(self, implementation=None):
+        if implementation is not None:
+            return self._verify(implementation)
+        elif self.implementations is not None:
+            return [self._verify(imp) for imp in self.implementations]
+        else:
+            return self._verify()
+
+    def _verify(self, implementation=None):
+        results = []
+        factory_param = [None]
+        instance = [None]
+        delevel = object()
+        stack = list(reversed(self._tree.get(None, [])))
+        while stack:
+            u = stack.pop()
+            if u is delevel:
+                del instance[-1]
+                continue
+            children = self._tree.get(u, [])
+            if children:
+                instance_copy = [deepcopy(instance[-1])]
+            else:
+                instance_copy = []
+            params = [
+                p.name for p in signature(u.bound_function).parameters.values()
+                if p.kind not in {Parameter.VAR_KEYWORD, Parameter.KEYWORD_ONLY}
+            ]
+            if implementation is not None and params:
+                implementation_param = params[0]
+                if implementation_param == factory_param[0] or instance[-1] is None:
+                    if factory_param[0] is None:
+                        factory_param[0] = implementation_param
+                    result = u.run(implementation)
+                    instance[-1] = result.result
+                else:
+                    result = u.run(instance[-1])
+            else:
+                result = u.run()
+            result.level = len(instance) - 1
+            results.append(result)
+            if instance_copy:
+                instance.append(instance_copy[0])
+            stack.append(delevel)
+            stack.extend(reversed(children))
+        return results
+
+
+class Report(Dclass):
+
+    def __init__(self, results, **kwargs):
+        self.results = tuple(results)
+        Dclass.__init__(self, **kwargs)
+        self.successful = tuple((r for r in results if r.success))
+        self.failed = tuple((r for r in results if not r.success))
 
     def __iter__(self):
-        return iter(self.units())
+        return iter(self.results)
 
-    def verify(self, *implementations, report=None):
-        report = report or Report()
-        implementations = implementations or self._implementations or [None]
-        for implementation in implementations:
-            init = None
-            num = None
-            for unit in self:
-                if unit.init and implementation is not None:
-                    success, init, time, msg, err_msg = unit.verify(implementation)
-                    num = unit.init
-                elif init is None or implementation is None:
-                    success, _, time, msg, err_msg = unit.verify()
-                else:
-                    if isinstance(num, int) and num > 1:
-                        success, _, time, msg, err_msg = unit.verify(*init)
-                    else:
-                        success, _, time, msg, err_msg = unit.verify(init)
-                report.add_result(implementation, self, unit, success, time, msg, err_msg)
-        return report
+    def __len__(self):
+        return len(self.results)
 
-    @property
-    def name(self):
-        return self._module.__name__
+    def __getitem__(self, item):
+        return self.results[item]
+
+    def __str__(self):
+        return f'Report({", ".join((str(r) for r in self))})'
 
