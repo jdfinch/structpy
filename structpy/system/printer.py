@@ -1,9 +1,18 @@
 
-from structpy.utilities import Symbol, fill
 import sys
 
+from structpy.system.dclass import Dclass
 
-default = Symbol()
+pythonprint = print
+default = object()
+
+
+__all__ = [
+    'Printer',
+    'print',
+    'pythonprint',
+    'Capture'
+]
 
 
 class Printer:
@@ -29,6 +38,7 @@ class Printer:
 
         def __init__(self, r, g, b):
             self.rgb = (r, g, b)
+
         def __str__(self):
             r, g, b = self.rgb
             return f'\033[38;2;{r};{g};{b}m'
@@ -69,6 +79,7 @@ class Printer:
 
         def __init__(self, r, g, b):
             self.rgb = (r, g, b)
+
         def __str__(self):
             r, g, b = self.rgb
             return f'\033[48;2;{r};{g};{b}m'
@@ -90,191 +101,272 @@ class Printer:
     _background_colors = set(background_colors.values())
 
     class op:
-        reset = '\033[0m'
         bold = '\033[01m'
         disable = '\033[02m'
         underline = '\033[04m'
         reverse = '\033[07m'
-        strikethrough = '\033[09m'
+        strike = '\033[09m'
         invisible = '\033[08m'
 
     options = {
-        'reset': op.reset,
         'bold': op.bold,
         'disable': op.disable,
         'underline': op.underline,
         'reverse': op.reverse,
-        'strike': op.strikethrough,
-        'strikethrough': op.strikethrough,
+        'strike': op.strike,
         'invisible': op.invisible,
     }
 
     _options = {
-        op.reset: 'reset',
         op.bold: 'bold',
         op.disable: 'disable',
         op.underline: 'underline',
         op.reverse: 'reverse',
-        op.strikethrough: 'strike',
+        op.strike: 'strike',
         op.invisible: 'invisible'
     }
+
+    reset = '\033[0m'
+
 
     def __init__(self, *args, **kwargs):
         self.settings = PrinterSettings(*args, **kwargs)
 
     def set(self, *args, **kwargs):
-        self.settings.update(*args, **kwargs)
+        self.settings.set(*args, **kwargs)
 
     def mode(self, *args, **kwargs):
         return PrinterMode(self, *args, **kwargs)
 
-    def write(self, s):
-        file = self.settings.settings.get('file', sys.stdout)
-        if file is None or isinstance(file, list):
-            return self(s, end='')
+    def __call__(self, *args, **kwargs):
+        settings = self.settings.copy(**kwargs)
+        if settings.record and not isinstance(settings.record, list):
+            settings.record = []
+            self.settings.record = settings.record
+        if settings.styled:
+            prefix = f'{str(settings.fg) if settings.fg else ""}'               \
+                     f'{str(settings.bg) if settings.bg else ""}'               \
+                     f'{Printer.op.bold if settings.bold else ""}'              \
+                     f'{Printer.op.disable if settings.disable else ""}'        \
+                     f'{Printer.op.underline if settings.underline else ""}'    \
+                     f'{Printer.op.reverse if settings.reverse else ""}'        \
+                     f'{Printer.op.strike if settings.strike else ""}'          \
+                     f'{Printer.op.invisible if settings.invisible else ""}'
         else:
-            with self.mode('buf'):
-                return self(s)
+            prefix = ''
+        suffix = Printer.reset if prefix else ''
+        message = settings.sep.join((str(arg) for arg in args)) + settings.end
+        indent = ' ' * settings.indent
+        stripped_message = message.rstrip()
+        rstripped = message[len(stripped_message):]
+        message = stripped_message.replace('\n', '\n' + indent)
+        padding = indent if self.settings._prev_out.endswith('\n') else ''
+        printed = prefix + padding + message + suffix + rstripped
+        if isinstance(settings.record, list):
+            settings.record.append(printed)
+        if settings.file is not None:
+            pythonprint(printed, end='', file=settings.file, flush=settings.flush)
+        self.settings._prev_out = printed
+        return printed
+
+    def write(self, s):
+        self(s, end='')
 
     def flush(self):
         pass
 
-    def __call__(self, *args, **kwargs):
-        settings = self.settings.copy(**kwargs)
-        sep = settings.settings.get('sep', ' ')
-        end = settings.settings.get('end', '\n')
-        file = settings.settings.get('file', sys.stdout)
-        flush = settings.settings.get('flush', False)
-        styled = settings.settings.get('styled', True)
-        prefix = ''.join((str(o) for o in (
-            settings['fg'],
-            settings['bg'],
-            settings['bold'],
-            settings['disable'],
-            settings['underline'],
-            settings['reverse'],
-            settings['strike'],
-            settings['invisible']
-        ))) if styled else ''
-        suffix = self.op.reset if prefix else ''
-        indent = ' ' * (settings['indent'] if settings['indent'] else 0)
-        message = sep.join((str(arg) for arg in args)) + end
-        rstripped = message.rstrip()
-        imessage = rstripped.replace('\n', '\n'+indent) + message[len(rstripped):]
-        printed = prefix + indent + imessage + suffix
-        if isinstance(file, list):
-            file.append(printed)
-        elif file is not None:
-            _print(printed, end='', file=file, flush=flush)
-        elif file and isinstance(file, str) and 'buffer'.startswith(file):
-            self.settings.settings['buffer'].append(printed)
-        return printed
+    def capturing_stdin(self, silence=False, **kwargs):
+        return Capture(self, capture_stdin=True, record=True,
+                       file=(None if silence else self.settings.file), **kwargs)
 
-    def capturing(self, stdout=True, stderr=False):
-        return Capture(self, stdout, stderr)
+    def capturing_stdout(self, silence=False, **kwargs):
+        return Capture(self, capture_stdout=True, record=True,
+                       file=(None if silence else self.settings.file), **kwargs)
+
+    def capturing_stderr(self, silence=False, **kwargs):
+        return Capture(self, capture_stderr=True, record=True,
+                       file=(None if silence else self.settings.file), **kwargs)
 
     @property
-    def buffer(self):
-        return self.settings.settings['buffer']
-
-    def buffered(self):
-        return ''.join(self.settings.settings['buffer'])
+    def records(self):
+        return self.settings.record
 
     @property
-    def indent(self):
-        return self.mode('indent')
+    def record(self):
+        return ''.join(self.settings.record)
 
 
-class PrinterSettings:
+class PrinterSettings(Dclass):
 
     def __init__(self, *args, **kwargs):
-        self.settings = {'buffer': []}
-        self.update(*args, **kwargs)
+        self.fg = None
+        self.bg = None
+        self.indent = 0
+        self.bold = False
+        self.disable = False
+        self.underline = False
+        self.reverse = False
+        self.strike = False
+        self.invisible = False
+        self.sep = ' '
+        self.end = '\n'
+        self.flush = False
+        self.styled = True
+        self.file = sys.stdout
+        self.record = None
+        self.capture = False
+        self._prev_out = '\n'
+        Dclass.__init__(self)
+        if len(args) == 1 and isinstance(args[0], (PrinterSettings, Printer)):
+            if isinstance(args[0], Printer):
+                other = args[0].settings
+            else:
+                other = args[0]
+            self(**other())
+        else:
+            self.set(*args, **kwargs)
 
-    def update(self, *args, **kwargs):
-        settings = self._args_to_settings(*args, **kwargs)
-        self.settings.update(settings)
-
-    def fill(self, other):
-        fill(self.settings, other, default=default)
+    def set(self, *args, **kwargs):
+        for arg in args:
+            if arg in Printer.foreground_colors:
+                self.fg = Printer.foreground_colors[arg]
+            elif arg in Printer._foreground_colors or isinstance(arg, Printer.fg):
+                self.fg = arg
+            elif arg in Printer._background_colors or isinstance(arg, Printer.bg):
+                self.bg = arg
+            elif arg in Printer.options:
+                self[arg] = True
+            elif arg in Printer._options:
+                arg = Printer._options[arg]
+                self[arg] = True
+            elif isinstance(arg, str) and arg.startswith('un') and arg[2:] in Printer.options:
+                self[arg[2:]] = False
+            elif isinstance(arg, int):
+                self.indent = arg
+            elif isinstance(arg, str) and arg and 'indent'.startswith(arg):
+                self.indent += Printer._indent_size
+            elif isinstance(arg, tuple) and len(arg) == 3:
+                self.fg = Printer.fg(*arg)
+        for kw, arg in kwargs.items():
+            if arg is not default and (kw in self() or kw in {'op', 'ops'}):
+                if kw == 'fg' and arg in Printer.foreground_colors:
+                    arg = Printer.foreground_colors[arg]
+                elif kw == 'bg' and arg in Printer.background_colors:
+                    arg = Printer.background_colors[arg]
+                elif kw == 'op' and arg in Printer.options:
+                    kw = arg
+                    arg = True
+                elif kw == 'ops' and isinstance(arg, (set, list, tuple)):
+                    for a in arg:
+                        if a in Printer.options:
+                            kw = a
+                            arg = True
+                            self[kw] = arg
+                    continue
+                elif kw in {'op', 'ops'} and arg is None:
+                    for op in Printer.options:
+                        self[op] = False
+                    continue
+                elif 'indent'.startswith(kw):
+                    kw = 'indent'
+                    if not isinstance(arg, (int, float)):
+                        if arg:
+                            arg = self.indent + Printer._indent_size
+                        else:
+                            arg = 0
+                    else:
+                        arg = int(arg)
+                self[kw] = arg
 
     def copy(self, *args, **kwargs):
         c = PrinterSettings()
-        c.settings.update(self.settings)
-        c.update(*args, **kwargs)
+        c(**self())
+        c.set(*args, **kwargs)
         return c
 
-    def _args_to_settings(self, *args, **kwargs):
-        settings = {}
-        for arg in args:
-            if arg in Printer.foreground_colors:
-                settings['fg'] = Printer.foreground_colors[arg]
-            elif arg in Printer._foreground_colors:
-                settings['fg'] = arg
-            elif arg in Printer.options:
-                settings[Printer._options[Printer.options[arg]]] = Printer.options[arg]
-            elif isinstance(arg, int):
-                settings['indent'] = self.settings.get('indent', 0) + arg
-            elif arg and isinstance(arg, str) and 'indent'.startswith(arg):
-                settings['indent'] = self.settings.get('indent', 0) + Printer._indent_size
-            elif isinstance(arg, tuple) and len(arg) == 3:
-                settings['fg'] = Printer.fg(*arg)
-            elif 'un' == arg[:2] and arg[:2] in Printer.options:
-                settings[Printer._options[Printer.options[arg[:2]]]] = None
-            elif isinstance(arg, str) and arg.startswith('buf'):
-                settings['file'] = None
-        for kw, arg in kwargs.items():
-            if arg is not default:
-                settings[kw] = arg
-        return settings
 
-    def __getitem__(self, key):
-        item = self.settings.get(key, '')
-        return item if item else ''
-
-
-class PrinterMode:
+class PrinterMode(Printer):
 
     def __init__(self, printer, *args, **kwargs):
-        self.printer = printer
         self.old_settings = printer.settings
-        self.new_settings = self.old_settings.copy(*args, **kwargs)
+        self.printer = printer
+        Printer.__init__(self)
+        self.settings = printer.settings.copy(*args, **kwargs)
 
     def __enter__(self):
-        self.printer.settings = self.new_settings
+        self.printer.settings = self.settings
+        return self
 
     def __exit__(self, *_, **__):
         self.printer.settings = self.old_settings
 
-    def __call__(self, *args, **kwargs):
-        self.__enter__()
-        result = self.printer(*args, **kwargs)
-        self.__exit__()
-        return result
-
 
 class Capture:
 
-    def __init__(self, file, capture_stdout=True, capture_stderr=False):
-        self.file = file
+    def __init__(self, f,
+                 capture_stdin=True,
+                 capture_stdout=True,
+                 capture_stderr=False,
+                 **kwargs):
+        self.file = f
+        self.cap_stdin = capture_stdin
         self.cap_stdout = capture_stdout
         self.cap_stderr = capture_stderr
+        self.stdin = None
         self.stdout = None
         self.stderr = None
-
-    def __enter__(self):
         if self.cap_stderr:
             self.stderr = sys.stderr
             sys.stderr = self.file
         if self.cap_stdout:
             self.stdout = sys.stdout
             sys.stdout = self.file
+        if self.cap_stdin:
+            self.stdin = sys.stdin
+            sys.stdin = self.file
+        if isinstance(self.file, Printer):
+            self.file = self.file.mode(**kwargs)
+
+    def __enter__(self):
+        if isinstance(self.file, Printer):
+            return self.file.__enter__()
+        return self.file
 
     def __exit__(self, *_, **__):
         if self.cap_stderr:
             sys.stderr = self.stderr
         if self.cap_stdout:
             sys.stdout = self.stdout
+        if self.cap_stdin:
+            sys.stdin = self.stdin
+        if isinstance(self.file, Printer):
+            self.file.__exit__()
 
-_print = print
+    stop = __exit__
+
+
 print = Printer()
+
+
+if __name__ == '__main__':
+
+    print('hello world')
+    print.mode('red')('hell world')
+    print.mode('green')('high world')
+    print('regular world')
+
+    with print.mode(indent=4) as p:
+        p('this is a test')
+        p('am i in here?')
+        p('this is a test')
+    print('-' * 20, '\n')
+
+    print('capture test', ops=('bold', 'underline'))
+    with print.capturing_stdout(silence=False, indent=2) as cap:
+        pythonprint('x', 'y', 'z')
+        pythonprint('this is captured')
+    print()
+    print('Captured record:', underline=True)
+    print(repr(cap.record))
+    print(len(cap.record))
+    print(len('  x y z\n  this is captured\n'))

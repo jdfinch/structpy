@@ -17,7 +17,8 @@ class TestList(list):
 
     def run(self, *args, **kwargs):
         for unit in self:
-            result = unit.run(*args, **kwargs)
+            with unit.try_bind_default(*args, **kwargs):
+                result = unit.run()
 
 
     def append(self, item):
