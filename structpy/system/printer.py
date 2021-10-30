@@ -255,10 +255,16 @@ class PrinterSettings(Dclass):
                 self.fg = Printer.fg(*arg)
         for kw, arg in kwargs.items():
             if arg is not default and (kw in self() or kw in {'op', 'ops'}):
-                if kw == 'fg' and arg in Printer.foreground_colors:
-                    arg = Printer.foreground_colors[arg]
-                elif kw == 'bg' and arg in Printer.background_colors:
-                    arg = Printer.background_colors[arg]
+                if kw == 'fg':
+                    if arg in Printer.foreground_colors:
+                        arg = Printer.foreground_colors[arg]
+                    elif isinstance(arg, tuple) and len(arg) == 3:
+                        arg = Printer.fg(*arg)
+                elif kw == 'bg':
+                    if arg in Printer.background_colors:
+                        arg = Printer.background_colors[arg]
+                    elif isinstance(arg, tuple) and len(arg) == 3:
+                        arg = Printer.bg(*arg)
                 elif kw == 'op' and arg in Printer.options:
                     kw = arg
                     arg = True
@@ -370,7 +376,7 @@ if __name__ == '__main__':
     print.mode('green')('high world')
     print('regular world')
 
-    with print.mode(indent=2) as p:
+    with print.mode(indent=2, bg=(30, 30, 100)) as p:
         p('this is a test')
         with p.mode('indent'):
             p('am i in here?')
