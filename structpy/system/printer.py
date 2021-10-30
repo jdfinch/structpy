@@ -11,7 +11,10 @@ __all__ = [
     'Printer',
     'print',
     'pythonprint',
-    'Capture'
+    'Capture',
+    'capture_stdin',
+    'capture_stdout',
+    'capture_stderr'
 ]
 
 
@@ -176,16 +179,19 @@ class Printer:
         pass
 
     def capturing_stdin(self, silence=False, **kwargs):
-        return Capture(self, capture_stdin=True, record=True,
+        return Capture(self, capture_stdin=True, record=[],
                        file=(None if silence else self.settings.file), **kwargs)
 
     def capturing_stdout(self, silence=False, **kwargs):
-        return Capture(self, capture_stdout=True, record=True,
+        return Capture(self, capture_stdout=True, record=[],
                        file=(None if silence else self.settings.file), **kwargs)
 
     def capturing_stderr(self, silence=False, **kwargs):
-        return Capture(self, capture_stderr=True, record=True,
+        return Capture(self, capture_stderr=True, record=[],
                        file=(None if silence else self.settings.file), **kwargs)
+
+    def indent(self):
+        return self.mode('indent')
 
     @property
     def records(self):
@@ -347,6 +353,15 @@ class Capture:
 
 print = Printer()
 
+def capture_stdout(silence=False, **kwargs):
+    return Printer().capturing_stdout(silence, **kwargs)
+
+def capture_stderr(silence=False, **kwargs):
+    return Printer().capturing_stderr(silence, **kwargs)
+
+def capture_stdin(silence=False, **kwargs):
+    return Printer().capturing_stdin(silence, **kwargs)
+
 
 if __name__ == '__main__':
 
@@ -355,14 +370,19 @@ if __name__ == '__main__':
     print.mode('green')('high world')
     print('regular world')
 
-    with print.mode(indent=4) as p:
+    with print.mode(indent=2) as p:
         p('this is a test')
-        p('am i in here?')
+        with p.mode('indent'):
+            p('am i in here?')
+            p('indentations')
+            with p.mode('in'):
+                p('more indents')
         p('this is a test')
+
     print('-' * 20, '\n')
 
     print('capture test', ops=('bold', 'underline'))
-    with print.capturing_stdout(silence=False, indent=2) as cap:
+    with print.capturing_stdout(silence=False, indent=2, fg='blue') as cap:
         pythonprint('x', 'y', 'z')
         pythonprint('this is captured')
     print()
@@ -370,3 +390,11 @@ if __name__ == '__main__':
     print(repr(cap.record))
     print(len(cap.record))
     print(len('  x y z\n  this is captured\n'))
+    print()
+    with print.capturing_stdout():
+        pythonprint('This will be captured.')
+        record = print.record
+    pythonprint(record.replace('will be', 'has been'))
+    with capture_stdout() as cap:
+        pythonprint('Here is another capture!')
+    pythonprint(cap.record)
