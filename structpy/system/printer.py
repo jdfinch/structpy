@@ -179,7 +179,7 @@ class Printer:
         pass
 
     def capturing_stdin(self, silence=False, **kwargs):
-        return Capture(self, capture_stdin=True, record=[],
+        return Capture(self, capture_stdin=True, capture_stdout=False, record=[],
                        file=(None if silence else self.settings.file), **kwargs)
 
     def capturing_stdout(self, silence=False, **kwargs):
@@ -187,7 +187,7 @@ class Printer:
                        file=(None if silence else self.settings.file), **kwargs)
 
     def capturing_stderr(self, silence=False, **kwargs):
-        return Capture(self, capture_stderr=True, record=[],
+        return Capture(self, capture_stderr=True, capture_stdout=False, record=[],
                        file=(None if silence else self.settings.file), **kwargs)
 
     def indent(self):
@@ -316,7 +316,7 @@ class PrinterMode(Printer):
 class Capture:
 
     def __init__(self, f,
-                 capture_stdin=True,
+                 capture_stdin=False,
                  capture_stdout=True,
                  capture_stderr=False,
                  **kwargs):
@@ -363,10 +363,10 @@ def capture_stdout(silence=False, **kwargs):
     return Printer().capturing_stdout(silence, **kwargs)
 
 def capture_stderr(silence=False, **kwargs):
-    return Printer().capturing_stderr(silence, **kwargs)
+    return Printer(file=sys.stderr).capturing_stderr(silence, **kwargs)
 
 def capture_stdin(silence=False, **kwargs):
-    return Printer().capturing_stdin(silence, **kwargs)
+    return Printer(file=sys.stdin).capturing_stdin(silence, **kwargs)
 
 
 if __name__ == '__main__':

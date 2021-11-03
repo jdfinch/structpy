@@ -1,10 +1,10 @@
-
+import sys
 from time import time
 from traceback import format_exc
 from inspect import signature, Parameter
 from functools import partial
 
-from structpy.system.printer import Printer
+from structpy.system.printer import capture_stdout, capture_stderr
 from structpy.system.dclass import Dclass
 
 
@@ -15,21 +15,60 @@ class UnitTest(Dclass):
     """
 
     def __init__(self, f, **attrs):
-        if isinstance(f, UnitTest):
-            self.function = f.function
-            Dclass.__init__(self, **f())
-        else:
-            self.function = f
-        self.bound_function = partial(self.function)
+        self.function = f
+        self._bound_functions = [self.function]
         Dclass.__init__(self, **attrs)
+
+    @property
+    def bound_function(self):
+        return self._bound_functions[-1]
+
+    def run(self, output=False):
+        stdout_cap = capture_stdout(silence=not output)
+        stderr_cap = capture_stderr(silence=not output)
+        with stdout_cap, stderr_cap:
+            error = None
+            traceback = None
+            bound_args = []
+            bound_kwargs = {}
+            result = None
+            ti = time()
+            try:
+                bound_args = self.bound_function.args
+                bound_kwargs = self.bound_function.keywords
+                ti = time()
+                result = self.bound_function()
+                timedelta = time() - ti
+            except Exception as e:
+                timedelta = time() - ti
+                error = e
+                traceback = format_exc()
+                print(traceback, file=sys.stderr)
+        results = Result(
+            unit=self,
+            args=bound_args,
+            kwargs=bound_kwargs,
+            timedelta=timedelta,
+            error=error,
+            traceback=traceback,
+            stdout=stdout_cap.record,
+            stderr=stderr_cap.record,
+            result=result
+        )
+        return results
 
     def bind(self, *args, **kwargs):
         return self._bind(partial(self.function, *args, **kwargs))
 
+    def unbind(self, all=False):
+        if all:
+            self._bound_functions = self._bound_functions[:1]
+        elif len(self._bound_functions) > 1:
+            self._bound_functions.pop()
+
     def _bind(self, bound_function):
-        context = BoundUnitTestContext(self, bound_function)
-        self.bound_function = bound_function
-        return context
+        self._bound_functions.append(bound_function)
+        return self
 
     def try_bind_default(self, *args, **kwargs):
         f = self._try_bind(self.function, *args, **kwargs)
@@ -75,69 +114,21 @@ class UnitTest(Dclass):
         }
         return partial(f, *args, **kwargs)
 
-    def run(self, *args, **kwargs):
-        stdout_captured = []
-        stderr_captured = []
-        stdout_capture = Printer(file=stdout_captured)
-        stderr_capture = Printer(file=stderr_captured)
-        stdout = stdout_capture.capturing()
-        stderr = stderr_capture.capturing(stdout=False, stderr=True)
-        with stdout, stderr:
-            error = None
-            traceback = None
-            bound_args = []
-            bound_kwargs = {}
-            result = None
-            ti = time()
-            try:
-                f = partial(self.bound_function, *args, **kwargs)
-                bound_args = f.args
-                bound_kwargs = f.keywords
-                ti = time()
-                result = f()
-                timedelta = time() - ti
-            except Exception as e:
-                timedelta = time() - ti
-                error = e
-                traceback = format_exc()
-        results = Result(
-            function=self.function,
-            args=bound_args,
-            kwargs=bound_kwargs,
-            timedelta=timedelta,
-            error=error,
-            traceback=traceback,
-            stdout=''.join(stdout_captured),
-            stderr=''.join(stderr_captured),
-            result=result
-        )
-        return results
-
     @property
     def name(self):
         return self.function.__name__
-
-
-class BoundUnitTestContext(UnitTest):
-
-    def __init__(self, unit, bound_function):
-        UnitTest.__init__(self, unit)
-        self._unit = unit
-        self._old_bound_function = unit.bound_function
-        self.bound_function = bound_function
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self._unit.bound_function = self._old_bound_function
-        self.bound_function = self._old_bound_function
+        self.unbind()
 
 
 class Result(Dclass):
 
     def __init__(self, **attrs):
-        self.function = None
+        self.unit = None
         self.args = None
         self.kwargs = None
         self.timedelta = None
@@ -159,10 +150,10 @@ if __name__ == '__main__':
 
     def my_test(c, e, z, blah=4):
         x = c(e)
-        print('Running my test!', 'Result:', x, ', and z is', z, end='')
+        print('Running my test!', 'Result:', x, ', and z is', z)
         for y in e:
             assert y in x
-        assert len(x) == len(e)
+        assert False
 
     my_unit_test = UnitTest(my_test)
     my_unit_test = my_unit_test.try_bind_default(list, {1, 2, 3}, x=2)
