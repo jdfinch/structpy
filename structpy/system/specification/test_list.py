@@ -1,9 +1,7 @@
 
-from inspect import signature, Parameter, ismodule, getmembers, isfunction, getmodule
-from copy import deepcopy
+from inspect import ismodule, getmembers, isfunction, getmodule
 
 from structpy.system.specification.unit_test import UnitTest
-from structpy.system.dclass import Dclass
 from structpy.system.printer import capture_stdout, capture_stderr
 
 
@@ -21,20 +19,31 @@ class TestList(list):
                 self.append(unit)
 
     def run(self, output=True, condition=None):
+        condition = self._condition(condition)
         results = []
         for unit in self:
-            if not condition or condition(unit):
+            if condition(unit):
                 if output:
                     print(unit)
                 stdout_cap = capture_stdout(silence=not output, indent=True)
                 stderr_cap = capture_stderr(silence=True)
                 with stdout_cap, stderr_cap:
-                    result = unit.run()
+                    result = unit.run(output=output)
                     results.append(result)
         report = Report(results)
         if output:
             print(report)
         return report
+
+    def _condition(self, condition):
+        if condition is None:
+            return lambda _: True
+        elif callable(condition):
+            return condition
+        elif hasattr(condition, '__contains__'):
+            return lambda x: x in condition
+        else:
+            return lambda _: condition
 
     def bind(self, *args, **kwargs):
         for unit in self:
@@ -92,3 +101,21 @@ class Report:
     def __str__(self):
         return f'Report({", ".join((str(r) for r in self))})'
 
+
+
+if __name__ == '__main__':
+
+    def foo():
+        print('testing foo')
+        assert True
+
+    def bat():
+        print('testing bat')
+        assert False
+
+    def baz():
+        print('testing baz')
+        assert True
+
+    tests = TestList(foo, bat, baz)
+    tests.run()

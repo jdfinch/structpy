@@ -179,16 +179,16 @@ class Printer:
         pass
 
     def capturing_stdin(self, silence=False, **kwargs):
-        return Capture(self, capture_stdin=True, capture_stdout=False, record=[],
-                       file=(None if silence else self.settings.file), **kwargs)
+        mode = self.mode(**{**dict(record=[], file=(None if silence else self.settings.file)), **kwargs})
+        return Capture(mode, capture_stdin=True, capture_stdout=False)
 
     def capturing_stdout(self, silence=False, **kwargs):
-        return Capture(self, capture_stdout=True, record=[],
-                       file=(None if silence else self.settings.file), **kwargs)
+        mode = self.mode(**{**dict(record=[], file=(None if silence else self.settings.file)), **kwargs})
+        return Capture(mode, capture_stdout=True)
 
     def capturing_stderr(self, silence=False, **kwargs):
-        return Capture(self, capture_stderr=True, capture_stdout=False, record=[],
-                       file=(None if silence else self.settings.file), **kwargs)
+        mode = self.mode(**{**dict(record=[], file=(None if silence else self.settings.file)), **kwargs})
+        return Capture(mode, capture_stderr=True, capture_stdout=False)
 
     def indent(self):
         return self.mode('indent')
@@ -199,7 +199,10 @@ class Printer:
 
     @property
     def record(self):
-        return ''.join(self.settings.record)
+        try:
+            return ''.join(self.settings.record)
+        except:
+            return self.settings.record
 
 
 class PrinterSettings(Dclass):
@@ -315,25 +318,25 @@ class PrinterMode(Printer):
 
 class Capture:
 
-    def __init__(self, f,
+    def __init__(self, file,
                  capture_stdin=False,
                  capture_stdout=True,
                  capture_stderr=False,
                  **kwargs):
-        self.file = f
-        self.cap_stdin = capture_stdin
-        self.cap_stdout = capture_stdout
-        self.cap_stderr = capture_stderr
+        self.file = file
+        self.capturing_stdin = capture_stdin
+        self.capturing_stdout = capture_stdout
+        self.capturing_stderr = capture_stderr
         self.stdin = None
         self.stdout = None
         self.stderr = None
-        if self.cap_stderr:
+        if self.capturing_stderr:
             self.stderr = sys.stderr
             sys.stderr = self.file
-        if self.cap_stdout:
+        if self.capturing_stdout:
             self.stdout = sys.stdout
             sys.stdout = self.file
-        if self.cap_stdin:
+        if self.capturing_stdin:
             self.stdin = sys.stdin
             sys.stdin = self.file
         if isinstance(self.file, Printer):
@@ -345,16 +348,20 @@ class Capture:
         return self.file
 
     def __exit__(self, *_, **__):
-        if self.cap_stderr:
+        if self.capturing_stderr:
             sys.stderr = self.stderr
-        if self.cap_stdout:
+        if self.capturing_stdout:
             sys.stdout = self.stdout
-        if self.cap_stdin:
+        if self.capturing_stdin:
             sys.stdin = self.stdin
         if isinstance(self.file, Printer):
             self.file.__exit__()
 
     stop = __exit__
+
+    @property
+    def record(self):
+        return self.file.record if isinstance(self.file, Printer) else None
 
 
 print = Printer()
@@ -388,7 +395,7 @@ if __name__ == '__main__':
     print('-' * 20, '\n')
 
     print('capture test', ops=('bold', 'underline'))
-    with print.capturing_stdout(silence=False, indent=2, fg='blue') as cap:
+    with print.capturing_stdout(silence=False, indent=2) as cap:
         pythonprint('x', 'y', 'z')
         pythonprint('this is captured')
     print()
@@ -397,9 +404,9 @@ if __name__ == '__main__':
     print(len(cap.record))
     print(len('  x y z\n  this is captured\n'))
     print()
-    with print.capturing_stdout():
+    with print.capturing_stdout(silence=True) as cap:
         pythonprint('This will be captured.')
-        record = print.record
+        record = cap.record
     pythonprint(record.replace('will be', 'has been'))
     with capture_stdout() as cap:
         pythonprint('Here is another capture!')

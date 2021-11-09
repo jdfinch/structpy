@@ -16,7 +16,7 @@ class UnitTest(Dclass):
 
     def __init__(self, f, **attrs):
         self.function = f
-        self._bound_functions = [self.function]
+        self._bound_functions = [partial(self.function)]
         Dclass.__init__(self, **attrs)
 
     @property
