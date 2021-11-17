@@ -285,7 +285,7 @@ class PrinterSettings(Dclass):
                     continue
                 elif 'indent'.startswith(kw):
                     kw = 'indent'
-                    if not isinstance(arg, (int, float)):
+                    if isinstance(arg, bool) or not isinstance(arg, (int, float)):
                         if arg:
                             arg = self.indent + Printer._indent_size
                         else:

@@ -2,7 +2,7 @@ import sys
 from inspect import ismodule, getmembers, isfunction, getmodule
 
 from structpy.system.specification.unit_test import UnitTest
-from structpy.system.printer import capture_stdout, capture_stderr
+from structpy.system.printer import Printer, capture_stdout
 
 
 class TestList(list):
@@ -21,17 +21,20 @@ class TestList(list):
     def run(self, output=True, condition=None):
         condition = self._condition(condition)
         results = []
+        printer = Printer('bold')
         for unit in self:
             if condition(unit):
                 if output:
-                    print(unit)
-                stdout_cap = capture_stdout(silence=not output, indent=8)
+                    printer(f'{unit.name}:')
+                stdout_cap = capture_stdout(silence=not output, indent=True)
                 with stdout_cap:
                     result = unit.run(output=output)
                     results.append(result)
+                if output:
+                    printer()
         report = Report(results)
         if output:
-            print(report)
+            report.display()
         return report
 
     def _condition(self, condition):
@@ -88,6 +91,30 @@ class Report:
         self.successful = tuple((r for r in results if r.success))
         self.failed = tuple((r for r in results if not r.success))
 
+    @property
+    def summary(self):
+        succeeded = len(self.successful)
+        failed = len(self.failed)
+        time = f'{self.timedelta:.5f}s'
+        return f'{succeeded} succeeded, {failed} failed in {time}'
+
+    @property
+    def timedelta(self):
+        return sum((result.timedelta for result in self.results))
+
+    def display(self):
+        printer = Printer()
+        fullcolor = {**{not self.successful: 'red'}, **{not self.failed: 'green'}}.get(True)
+        with printer.mode('bold', end='', fg=fullcolor):
+            if self.successful:
+                printer.mode('green')(len(self.successful), 'succeeded')
+            if self.failed:
+                if self.successful:
+                    printer(', ')
+                printer.mode('red')(len(self.failed), 'failed')
+            printer(f' in {self.timedelta:.5f}s')
+
+
     def __iter__(self):
         return iter(self.results)
 
@@ -110,7 +137,7 @@ if __name__ == '__main__':
 
     def bat():
         print('testing bat')
-        assert False
+        assert True
 
     def baz():
         print('testing baz')
