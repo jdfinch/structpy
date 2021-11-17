@@ -3,14 +3,14 @@ import sys
 
 from structpy.system.dclass import Dclass
 
-pythonprint = print
+pyprint = print
 default = object()
 
 
 __all__ = [
     'Printer',
     'print',
-    'pythonprint',
+    'pyprint',
     'Capture',
     'capture_stdin',
     'capture_stdout',
@@ -168,12 +168,13 @@ class Printer:
         if isinstance(settings.record, list):
             settings.record.append(printed)
         if settings.file is not None:
-            pythonprint(printed, end='', file=settings.file, flush=settings.flush)
+            pyprint(printed, end='', file=settings.file, flush=settings.flush)
         self.settings._prev_out = printed
         return printed
 
     def write(self, s):
-        self(s, end='')
+        if s:
+            self(s, end='')
 
     def flush(self):
         pass
@@ -396,8 +397,8 @@ if __name__ == '__main__':
 
     print('capture test', ops=('bold', 'underline'))
     with print.capturing_stdout(silence=False, indent=2) as cap:
-        pythonprint('x', 'y', 'z')
-        pythonprint('this is captured')
+        pyprint('x', 'y', 'z')
+        pyprint('this is captured')
     print()
     print('Captured record:', underline=True)
     print(repr(cap.record))
@@ -405,9 +406,9 @@ if __name__ == '__main__':
     print(len('  x y z\n  this is captured\n'))
     print()
     with print.capturing_stdout(silence=True) as cap:
-        pythonprint('This will be captured.')
+        pyprint('This will be captured.')
         record = cap.record
-    pythonprint(record.replace('will be', 'has been'))
+    pyprint(record.replace('will be', 'has been'))
     with capture_stdout() as cap:
-        pythonprint('Here is another capture!')
-    pythonprint(cap.record)
+        pyprint('Here is another capture!')
+    pyprint(cap.record)

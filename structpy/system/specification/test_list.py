@@ -1,4 +1,4 @@
-
+import sys
 from inspect import ismodule, getmembers, isfunction, getmodule
 
 from structpy.system.specification.unit_test import UnitTest
@@ -25,9 +25,8 @@ class TestList(list):
             if condition(unit):
                 if output:
                     print(unit)
-                stdout_cap = capture_stdout(silence=not output, indent=True)
-                stderr_cap = capture_stderr(silence=True)
-                with stdout_cap, stderr_cap:
+                stdout_cap = capture_stdout(silence=not output, indent=8)
+                with stdout_cap:
                     result = unit.run(output=output)
                     results.append(result)
         report = Report(results)

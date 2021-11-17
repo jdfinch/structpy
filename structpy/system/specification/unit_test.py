@@ -1,10 +1,10 @@
 import sys
-from time import time
+from time import perf_counter
 from traceback import format_exc
 from inspect import signature, Parameter
 from functools import partial
 
-from structpy.system.printer import capture_stdout, capture_stderr
+from structpy.system.printer import Printer, capture_stdout, capture_stderr
 from structpy.system.dclass import Dclass
 
 
@@ -25,22 +25,22 @@ class UnitTest(Dclass):
 
     def run(self, output=False):
         stdout_cap = capture_stdout(silence=not output)
-        stderr_cap = capture_stderr(silence=not output)
+        stderr_cap = capture_stderr(file=Printer('red', file=stdout_cap.stdout))
         with stdout_cap, stderr_cap:
             error = None
             traceback = None
             bound_args = []
             bound_kwargs = {}
             result = None
-            ti = time()
+            ti = perf_counter()
             try:
                 bound_args = self.bound_function.args
                 bound_kwargs = self.bound_function.keywords
-                ti = time()
+                ti = perf_counter()
                 result = self.bound_function()
-                timedelta = time() - ti
+                timedelta = perf_counter() - ti
             except Exception as e:
-                timedelta = time() - ti
+                timedelta = perf_counter() - ti
                 error = e
                 traceback = format_exc()
                 print(traceback, file=sys.stderr)
@@ -157,7 +157,8 @@ if __name__ == '__main__':
 
     my_unit_test = UnitTest(my_test)
     my_unit_test = my_unit_test.try_bind_default(list, {1, 2, 3}, x=2)
-    my_result = my_unit_test.run()
-    print(my_unit_test)
-    pprint.pprint(my_result())
+    my_result = my_unit_test.run(output=True)
+    # print(my_unit_test)
+    # pprint.pprint(my_result())
+    print('done')
 
