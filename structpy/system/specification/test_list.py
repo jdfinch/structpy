@@ -1,4 +1,4 @@
-import sys
+
 from inspect import ismodule, getmembers, isfunction, getmodule
 
 from structpy.system.specification.unit_test import UnitTest
@@ -18,7 +18,7 @@ class TestList(list):
             else:
                 self.append(unit)
 
-    def run(self, output=True, condition=None):
+    def run(self, *, output=True, condition=None):
         condition = self._condition(condition)
         results = []
         printer = Printer('bold')
@@ -82,6 +82,7 @@ class TestList(list):
     def __setitem__(self, key, value):
         unit = value if isinstance(value, UnitTest) else UnitTest(value)
         list.__setitem__(self, key, unit)
+        return unit
 
 
 class Report:
@@ -90,13 +91,6 @@ class Report:
         self.results = tuple(results)
         self.successful = tuple((r for r in results if r.success))
         self.failed = tuple((r for r in results if not r.success))
-
-    @property
-    def summary(self):
-        succeeded = len(self.successful)
-        failed = len(self.failed)
-        time = f'{self.timedelta:.5f}s'
-        return f'{succeeded} succeeded, {failed} failed in {time}'
 
     @property
     def timedelta(self):
@@ -113,7 +107,6 @@ class Report:
                     printer(', ')
                 printer.mode('red')(len(self.failed), 'failed')
             printer(f' in {self.timedelta:.5f}s')
-
 
     def __iter__(self):
         return iter(self.results)
@@ -133,15 +126,18 @@ if __name__ == '__main__':
 
     def foo():
         print('testing foo')
-        assert True
+        print('testing...')
+        print('testing...')
+        print('this', '\n', 'is', '\n', 'a', '\n', 'test')
+        assert False
 
     def bat():
         print('testing bat')
-        assert True
+        assert False
 
     def baz():
         print('testing baz')
         assert True
 
     tests = TestList(foo, bat, baz)
-    tests.run()
+    results = tests.run()
