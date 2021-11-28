@@ -8,16 +8,15 @@ from structpy.system.printer import Printer, capture_stdout, capture_stderr
 from structpy.system.dclass import Dclass
 
 
-class UnitTest(Dclass):
+class UnitTest:
     """
     Wrapper for a test function designed to evaluate the correctness
     of some implementation code.
     """
 
-    def __init__(self, f, **attrs):
-        self.function = f
+    def __init__(self, f):
+        self.function = f if not isinstance(f, UnitTest) else f.function
         self._bound_functions = [partial(self.function)]
-        Dclass.__init__(self, **attrs)
 
     @property
     def bound_function(self):

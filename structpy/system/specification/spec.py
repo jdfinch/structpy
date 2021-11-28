@@ -1,6 +1,7 @@
 
 from inspect import signature, getmembers, getmodule, isfunction, ismodule
 from copy import deepcopy
+from functools import lru_cache
 
 from structpy.system.specification.unit_test import UnitTest
 from structpy.system.specification.test_list import TestList, Report
@@ -55,21 +56,24 @@ class Spec(TestList):
         return Report(results.values())
 
     @staticmethod
+    @lru_cache(maxsize=None)
     def units(*units):
+        result = []
         unit_list = []
         for unit in units:
             if ismodule(unit):
-                unit_list.extend(functions_in(unit))
+                unit_list.extend(utilities.functions_in(unit))
             elif isfunction(unit) :
                 unit_list.append(unit)
             elif isinstance(unit, UnitTest):
                 unit_list.append(unit.function)
             else:
                 unit_list.extend(unit)
+        all_units = unit_list
         init_param = None
         getunders = lambda x: 0 if x.endswith('__') else (len(x) - len(x.lstrip('_')))
-        leveled_unit_list = [(unit, getunders(unit.__name__) // 2) for unit in unit_list]
-        family_sequence = familize(leveled_unit_list)
+        leveled_unit_list = [(unit, getunders(unit.__name__) // 2) for unit in all_units]
+        family_sequence = utilities.familize(leveled_unit_list)
         fn_to_unit = {}
         for unit, parent, elder, level in family_sequence:
             params = signature(unit).parameters
@@ -92,11 +96,15 @@ class Spec(TestList):
             copy = fn_to_unit.get(copy)
             unit = Spec.Unit(unit, is_init, ref, copy, is_private)
             fn_to_unit[unit.function] = unit
-            yield unit
+            result.append(unit)
+        return result
 
     @staticmethod
     def sat(other):
-        pass
+        def wrap(f):
+            f.sat = other
+            return f
+        return wrap
 
     class Unit(UnitTest):
 
@@ -106,29 +114,37 @@ class Spec(TestList):
             self.is_init = is_init
             self.ref = ref
             self.copy = copy
+            self.sat = None
             self.is_private = is_private
             UnitTest.__init__(self, unit)
 
 
-def functions_in(module):
-    is_valid_function = lambda m: isfunction(m) and getmodule(module) is module
-    return getmembers(module, predicate=is_valid_function)
+class utilities:
 
+    @staticmethod
+    def functions_in(module):
+        is_valid_function = lambda m: isfunction(m) and (getmodule(m) is module)
+        members = list(zip(*getmembers(module, predicate=is_valid_function)))[1]
+        ordered_members = sorted(members, key=lambda f: f.__code__.co_firstlineno)
+        return ordered_members
 
-def familize(sequence):
-    path = []
-    for item, level in sequence:
-        path = path[:level+1]
-        elder = None
-        parent = None
-        if len(path) > level:
-            elder = path[level]
-        if len(path) > level - 1 and level > 0:
-            parent = path[level - 1]
-        while level >= len(path):
-            path.append(None)
-        path[level] = item
-        yield (item, parent, elder, level)
+    @staticmethod
+    def familize(sequence):
+        result = []
+        path = []
+        for item, level in sequence:
+            path = path[:level+1]
+            elder = None
+            parent = None
+            if len(path) > level:
+                elder = path[level]
+            if len(path) > level - 1 and level > 0:
+                parent = path[level - 1]
+            while level >= len(path):
+                path.append(None)
+            path[level] = item
+            result.append((item, parent, elder, level))
+        return result
 
 
 if __name__ == '__main__':
@@ -159,8 +175,15 @@ if __name__ == '__main__':
     def bam(List):
         print(List((4, 5, 6)))
 
+    @Spec.sat(foo)
+    def sats(List):
+        l = List([1, 2])
+        l.append(3)
+        return l
 
-    spec = Spec(foo, bar, __bat, __bak, baz, bam)
+
+    import sys
+    spec = Spec(sys.modules[__name__])
     report = spec.run(list)
 
 
