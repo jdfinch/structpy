@@ -3,7 +3,7 @@
 Collection of items that can be enumerated.
 """
 
-import structpy.system.specification.specification as spec
+import structpy.system.specification.spec as spec
 
 
 @spec.init

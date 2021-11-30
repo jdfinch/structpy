@@ -2,7 +2,7 @@
 My thing.
 """
 
-import structpy.system.specification.specification as spec
+import structpy.system.specification.spec as spec
 
 if __name__ == '__main__':
 

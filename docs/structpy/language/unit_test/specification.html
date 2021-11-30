@@ -36,8 +36,8 @@ def specification(cls):
     for k, v in cls.__dict__.items():
         if hasattr(v, &#39;__call__&#39;) and v.__name__[0].isalpha():
             properties.append(v)
-    units_from = UnitSequence([unit(prop) for prop in properties])
-    cls.__units__ = units_from
+    _units_from = UnitSequence([unit(prop) for prop in properties])
+    cls.__units__ = _units_from
     cls.verify = verify
     return cls
 
@@ -164,8 +164,8 @@ if __name__ == &#39;__main__&#39;:
     for k, v in cls.__dict__.items():
         if hasattr(v, &#39;__call__&#39;) and v.__name__[0].isalpha():
             properties.append(v)
-    units_from = UnitSequence([unit(prop) for prop in properties])
-    cls.__units__ = units_from
+    _units_from = UnitSequence([unit(prop) for prop in properties])
+    cls.__units__ = _units_from
     cls.verify = verify
     return cls</code></pre>
 </details>

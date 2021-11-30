@@ -79,12 +79,12 @@ def specification(cls):
             else:
                 sequenced.__sequence__.append(v)
     _rebuild(cls, ordering)
-    units_from = SpecificationUnitSequence()
+    _units_from = SpecificationUnitSequence()
     for method_name in ordering:
         method = cls.__dict__[method_name]
         unit = Unit(method, &#39;specification&#39;)
-        units_from.append(unit)
-    cls.__units__ = units_from
+        _units_from.append(unit)
+    cls.__units__ = _units_from
     cls.verify = classmethod(verify)
     cls.__implementations__ = []
     return cls
@@ -221,12 +221,12 @@ if __name__ == &#39;__main__&#39;:
             else:
                 sequenced.__sequence__.append(v)
     _rebuild(cls, ordering)
-    units_from = SpecificationUnitSequence()
+    _units_from = SpecificationUnitSequence()
     for method_name in ordering:
         method = cls.__dict__[method_name]
         unit = Unit(method, &#39;specification&#39;)
-        units_from.append(unit)
-    cls.__units__ = units_from
+        _units_from.append(unit)
+    cls.__units__ = _units_from
     cls.verify = classmethod(verify)
     cls.__implementations__ = []
     return cls</code></pre>
