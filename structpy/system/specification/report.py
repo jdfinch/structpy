@@ -36,5 +36,5 @@ class Report:
         return self.results[item]
 
     def __str__(self):
-        return f'Report({", ".join((str(r) for r in self))})'
+        return f'Report({", ".join((str(r.name) for r in self))})'
 

@@ -289,7 +289,7 @@ class PrinterSettings(Dclass):
                         if arg:
                             arg = self.indent + Printer._indent_size
                         else:
-                            arg = 0
+                            arg = max(self.indent - Printer._indent_size, 0)
                     else:
                         arg = int(arg)
                 self[kw] = arg

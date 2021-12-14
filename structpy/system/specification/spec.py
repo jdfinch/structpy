@@ -1,13 +1,52 @@
 
 from inspect import signature, getmembers, getmodule, isfunction, ismodule
 from copy import deepcopy
+from functools import partial
+from pkgutil import walk_packages
 
 from structpy.system.specification.unit_test import UnitTest
 from structpy.system.specification.report import Report
 from structpy.system.printer import Printer, capture_stdout, capture_stderr
 
 default = object()
+orderedset = dict.fromkeys
+IMP = '__imp__'
 
+
+def iter_modules_recursive(*starts):
+    for start in starts:
+        for loader, module_name, is_pkg in walk_packages(start.__path__):
+            module = loader.find_module(module_name).load_module(module_name)
+            yield module
+
+def collect_specs_and_imps(*modules):
+    if not modules:
+        modules = [sys.modules['__main__']]
+    modules = orderedset(iter_modules_recursive(*modules))
+    specs = [s for mod in modules if hasattr(mod, IMP) for s in getattr(mod, IMP)]
+    return specs
+
+
+def verify(*modules):
+    results = []
+    specs = collect_specs_and_imps(*modules)
+    for s in specs:
+        report = s.verify()
+        results.append(report)
+    return results
+
+def imp(specification, implementation=None):
+    if implementation is None:
+        return partial(imp, specification)
+    else:
+        if not isinstance(specification, Spec):
+            specification = Spec(specification)
+        specification.imps.append(implementation)
+        imp_mod = getmodule(implementation)
+        if not hasattr(imp_mod, IMP):
+            setattr(imp_mod, IMP, {})
+        getattr(imp_mod, IMP).setdefault(specification)
+        return specification
 
 class Spec:
 
@@ -26,6 +65,9 @@ class Spec:
         units = list(filter(condition, self.units))
         results = {}
         for imp in imps:
+            if output and imp is not None:
+                printer('\n')
+                printer(imp, underline=True)
             copies = {unit.copy: None for unit in units}
             outputs = {}
             for unit in units:
@@ -61,10 +103,6 @@ class Spec:
             printer()
             report.display()
         return report
-
-
-    def imp(self, implementation):
-        self.imps.append(implementation)
 
 
     class Unit(UnitTest):
