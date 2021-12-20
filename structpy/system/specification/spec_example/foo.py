@@ -1,10 +1,10 @@
 
-from structpy import specxxx
+from structpy.system.specification import spec
 from structpy.system.specification.spec_example import foo_spec
 
 
-@specxxx.implements(foo_spec)
-class Foo:
+@spec.imp(foo_spec)
+class Foo(list):
 
     def method(self):
         return True
@@ -16,7 +16,4 @@ class Foo:
 if __name__ == '__main__':
 
     # Verify all specs of implementation
-    specxxx.verify(Foo)
-
-    # Verify implementation against a specification
-    specxxx.verify(Foo, spec=foo_spec)
+    spec.verify(foo_spec)

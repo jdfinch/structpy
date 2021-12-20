@@ -3,10 +3,12 @@ from inspect import signature, getmembers, getmodule, isfunction, ismodule
 from copy import deepcopy
 from functools import partial
 from pkgutil import walk_packages
+from importlib import import_module
 
 from structpy.system.specification.unit_test import UnitTest
 from structpy.system.specification.report import Report
 from structpy.system.printer import Printer, capture_stdout, capture_stderr
+from structpy.system.conditional_singleton import ConditionalSingleton
 
 default = object()
 orderedset = dict.fromkeys
@@ -15,17 +17,25 @@ IMP = '__imp__'
 
 def iter_modules_recursive(*starts):
     for start in starts:
-        for loader, module_name, is_pkg in walk_packages(start.__path__):
-            module = loader.find_module(module_name).load_module(module_name)
+        wp = list(walk_packages(start.__path__))
+        for loader, module_name, is_pkg in wp:
+            module_name = f'{start.__name__}.{module_name}'
+            module = import_module(module_name)
             yield module
 
-def collect_specs_and_imps(*modules):
-    if not modules:
+def collect_specs_and_imps(*items):
+    if not items:
         modules = [sys.modules['__main__']]
-    modules = orderedset(iter_modules_recursive(*modules))
-    specs = [s for mod in modules if hasattr(mod, IMP) for s in getattr(mod, IMP)]
-    return specs
-
+    else:
+        modules = [item if ismodule(item) else getmodule(item) for item in items]
+    modules = iter_modules_recursive(*modules)
+    specs = []
+    for mod in modules:
+        if mod.__name__.endswith('_spec'):
+            specs.append(Spec(mod))
+        elif hasattr(mod, IMP):
+            specs.extend(getattr(mod, IMP))
+    return orderedset(specs)
 
 def verify(*modules):
     results = []
@@ -41,17 +51,21 @@ def imp(specification, implementation=None):
     else:
         if not isinstance(specification, Spec):
             specification = Spec(specification)
-        specification.imps.append(implementation)
+        if implementation is not None:
+            specification.imps.append(implementation)
         imp_mod = getmodule(implementation)
         if not hasattr(imp_mod, IMP):
             setattr(imp_mod, IMP, {})
         getattr(imp_mod, IMP).setdefault(specification)
         return specification
 
-class Spec:
 
-    def __init__(self, *units, imps=None):
-        self.units = Spec._units_from(*units)
+class Spec(ConditionalSingleton):
+
+    def __init__(self, module=None, units=None, imps=None):
+        if hasattr(self, 'units') and hasattr(self, 'imps'):
+            return
+        self.units = Spec._units_from(module) if module else list(units)
         self.imps = imps or []
 
     def verify(self, *imps, output=True, condition=None, summary=True):
@@ -134,7 +148,6 @@ class Spec:
         def wrap(f):
             f.sat = other
             return f
-
         return wrap
 
     @staticmethod
@@ -218,6 +231,9 @@ class Spec:
             yield item, parent, elder, level
 
 
+sat = Spec.sat
+
+
 
 if __name__ == '__main__':
 
@@ -255,7 +271,7 @@ if __name__ == '__main__':
 
 
     import sys
-    spec = Spec(sys.modules[__name__])
-    spec.imp(list)
-    spec.imp(set)
+    spec = Spec(units=(foo, bar, __bat, __bak, baz, bam, sats))
+    imp(spec, list)
+    imp(spec, set)
     spec.verify()

@@ -5,12 +5,11 @@ import structpy.system.specification.spec as spec
 def bar():
     assert 3
 
-@spec.tags('fails', 'x')
 def bat():
     assert False
 
 def baz():
-    for i in range(10**9):
+    for i in range(10):
         assert True
 
 
