@@ -17,11 +17,14 @@ IMP = '__imp__'
 
 def iter_modules_recursive(*starts):
     for start in starts:
-        wp = list(walk_packages(start.__path__))
-        for loader, module_name, is_pkg in wp:
-            module_name = f'{start.__name__}.{module_name}'
-            module = import_module(module_name)
-            yield module
+        if hasattr(start, '__path__'):
+            wp = list(walk_packages(start.__path__))
+            for loader, module_name, is_pkg in wp:
+                module_name = f'{start.__name__}.{module_name}'
+                module = import_module(module_name)
+                yield module
+        elif ismodule(start):
+            yield start
 
 def collect_specs_and_imps(*items):
     if not items:
