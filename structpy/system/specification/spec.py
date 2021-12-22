@@ -39,10 +39,15 @@ def collect_specs_and_imps(*items):
 
 def verify(*modules):
     results = []
+    printer = Printer()
     specs = collect_specs_and_imps(*modules)
     for s in specs:
-        report = s.verify()
+        printer(f'\n\n{s}', bold=True, underline=True)
+        with capture_stdout(indent=True):
+            report = s.verify()
         results.append(report)
+    print(f'\n\nPassed: {sum((len(r.successful) for r in results))}')
+    print(f'Failed: {sum((len(r.failed) for r in results))}')
     return results
 
 def imp(specification, implementation=None):
@@ -80,38 +85,41 @@ class Spec(ConditionalSingleton):
         results = {}
         for imp in imps:
             if output and imp is not None:
-                printer('\n')
+                printer()
                 printer(imp, underline=True)
-            copies = {unit.copy: None for unit in units}
-            outputs = {}
-            for unit in units:
-                if imp is None:
-                    unit.try_bind_default()
-                elif unit.is_init:
-                    unit.try_bind_default(imp)
-                elif unit.ref and unit.ref in outputs:
-                    unit.try_bind_default(outputs[unit.ref].result)
-                elif unit.copy and unit.copy in outputs:
-                    unit.try_bind_default(deepcopy(copies[unit.copy]))
-                elif ((unit.ref and unit.ref not in outputs)
-                or (unit.copy and unit.copy not in outputs)):
-                    continue
-                else:
-                    unit.try_bind_default()
-                if output:
-                    printer(f'\n{unit.name}', bold=True)
-                cap_out = capture_stdout(indent=True)
-                cap_err = capture_stderr(silence=True)
-                with cap_out, cap_err:
-                    result = unit.run(output=output)
-                    outputs[unit] = result
-                    results[(imp, unit)] = result
-                if unit in copies:
-                    if unit.is_init:
-                        copies[unit] = deepcopy(outputs[unit].result)
-                    elif unit.ref:
-                        copies[unit] = deepcopy(outputs[unit.ref].result)
-                unit.unbind()
+            with printer.indent() as indented:
+                copies = {unit.copy: None for unit in units}
+                outputs = {}
+                for unit in units:
+                    if imp is None:
+                        unit.try_bind_default()
+                    elif unit.is_init:
+                        unit.try_bind_default(imp)
+                    elif unit.ref and unit.ref in outputs:
+                        unit.try_bind_default(outputs[unit.ref].result)
+                    elif unit.copy and unit.copy in outputs:
+                        unit.try_bind_default(deepcopy(copies[unit.copy]))
+                    elif ((unit.ref and unit.ref not in outputs)
+                    or (unit.copy and unit.copy not in outputs)):
+                        continue
+                    else:
+                        unit.try_bind_default()
+                    if output:
+                        printer(f'{unit.name}', bold=True)
+                    cap_out = capture_stdout(indent=True, file=indented)
+                    cap_err = capture_stderr(silence=True, indent=True, file=indented)
+                    with cap_out, cap_err:
+                        result = unit.run(output=output)
+                        outputs[unit] = result
+                        results[(imp, unit)] = result
+                    if unit in copies:
+                        if unit.is_init:
+                            copies[unit] = deepcopy(outputs[unit].result)
+                        elif unit.ref:
+                            copies[unit] = deepcopy(outputs[unit.ref].result)
+                    unit.unbind()
+                    if output and (result.stdout):
+                        printer()
         report = Report(results.values())
         if summary:
             printer()

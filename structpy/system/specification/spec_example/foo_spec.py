@@ -29,7 +29,7 @@ def __copy_empty(Iterable, iterable):
     """
     Hidden beneath _copy.
     """
-    pass
+    print('This is a subtest!')
 
 def method(iterable, params):
     """
