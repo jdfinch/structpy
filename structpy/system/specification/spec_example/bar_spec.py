@@ -9,8 +9,9 @@ def bat():
     assert False
 
 def baz():
-    for i in range(10):
-        assert True
+    for i in range(10**8):
+        if i % 10**7 == 0:
+            print('.', end='')
 
 
 if __name__ == '__main__':
