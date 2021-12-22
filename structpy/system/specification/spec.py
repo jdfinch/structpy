@@ -70,6 +70,7 @@ class Spec(ConditionalSingleton):
     def __init__(self, module=None, units=None, imps=None):
         if hasattr(self, 'units') and hasattr(self, 'imps'):
             return
+        self.name = module.__name__ if module else object.__str__(self)
         self.units = Spec._units_from(module) if module else list(units)
         self.imps = imps or []
 
@@ -125,6 +126,9 @@ class Spec(ConditionalSingleton):
             printer()
             report.display()
         return report
+
+    def __str__(self):
+        return self.name
 
 
     class Unit(UnitTest):
