@@ -1,211 +1,256 @@
-"""
-Mapping.
-"""
 
-from structpy.spec import *
+from structpy.spec import Spec, detail, expecting
 from structpy.typing import *
 
+from typing import TypeVar
 
-@Spec
-class Map(Protocol):
+from structpy.spec.map.hierarchical_map import Map as HierarchicalMap
+
+
+T_get_default = TypeVar('T_get_default', bound=Hashable)
+
+
+class Map(HierarchicalMap, Spec):
     """
-    Mapping between domain and codomain.
+    Many-to-many mapping between domain and codomain.
+
+    The domain and codomain are each sets of `Hashable` elements in the `Map`. Each element in the domain can be associated to a set of 0 or more elements in the codomain.
+
+    The mapping allows easy access to the set of codomain elements associated with an element in the domain. Additionally, the `Map` is reversible, allowing access of domain elements associated with a codomain element.
     """
 
     def __init__(
             map,
-            mapping: Mapping[Hashable, Hashable] | Iterable[tuple[Hashable, Hashable]] = None
+            mapping: Mapping[Hashable | list[Hashable], Iterable[Hashable]]
+                     | Iterable[Hashable] | Iterable[list[Hashable]] = None,
+            values: Iterable[Hashable] = None,
+            items: Iterable[Iterable[Hashable]] = None
     ):
         """
-        Constructor for `Map`.
+        Constructor.
 
-        :param mapping: mapping between domain and codomain elements.
+        :param mapping:
+        :param values:
+        :param items:
         """
-
-        map = Map([
-            ('Mark', 'Geography'),
-            ('Mark', 'Algebra'),
-            ('Sally', 'Geography'),
-            ('Sally', 'Programming')
-        ])
-
-    def __from_dict(map):
-        """
-        `Map` objects can be constructed from a dict-of-sets object.
-        """
-        assert map == Map({
+        map = Map({
             'Mark': {'Geography', 'Algebra'},
             'Sally': {'Geography'}
         })
 
-    def __copy_constructor(map):
-        """
-        Copy a `Map` using the `Map` constructor.
-        """
-        other = Map([
-            ('Mark', 'Geography'),
-            ('Mark', 'Algebra'),
-            ('Sally', 'Geography'),
-            ('Sally', 'Programming')
-        ])
-        map = Map(other)
-        assert map == other
-        assert map is not other
+        with detail("`Map` objects can be constructed from an iterable of items representing element associations."):
+            assert map == Map(items=[
+                ('Mark', 'Geography'),
+                ('Mark', 'Algebra'),
+                ('Sally', 'Geography'),
+                ('Sally', 'Programming')
+            ])
 
-    def __getitem__(map, key) -> set:
+        with detail("Copy a `Map` using the `Map` constructor."):
+            copy = Map(map)
+            assert map == copy
+            assert map is not copy
+            assert map['Mark'] == copy['Mark']
+            assert map['Mark'] is not copy['Mark']
+            assert next(iter(map['Sally'])) is next(iter(map['Sally']))
+
+        with detail("`Map` can be constructed by defining key and value sets without associations."):
+            m = Map(
+                ['Mark', 'Sally'],
+                ['Chamber', 'Prisoner', 'Infinity', 'Chronicle']
+            )
+            assert m.keys() == {'Mark', 'Sally'}
+            assert m.values() == {'Geography', 'Algebra'}
+            assert m.items() == []
+
+    def __eq__(map, other: Any) -> bool:
         """
-        Get a set of codomain elements associated with `key`.
-        @param key: An element in the `map` domain.
-        @return: `set<value>`
+        A `Map` object `map` is equal to an `Iterable` `other` when:
+
+        1. The domain set of `map` is equal to the set created by iterating over `other`.
+        2. For each domain element `e` in `map`, the set of corresponding codomain elements is equal to the set created by iterating over `other[e]`.
+
+        :param other: An object to compare to `Map`.
+        :return: Whether the mapping in `map` is equivalent to that defined by the iteration and subscripting of `other`.
+        """
+        assert map == {
+            'Mark': ['Geography', 'Algebra'],
+            'Sally': ['Geography']
+        }
+        return ...
+
+    def __getitem__(map, key: Hashable | list[Hashable]) -> set:
+        """
+        Get the set of codomain elements associated with `key`.
+
+        :param key: An element in the `map` domain.
+        :return: Values in the codomain associated with `key`.
         """
         assert map['Mark'] == {'Geography', 'Algebra'}
         assert map['Sally'] == {'Geography'}
 
-    def __getitem_returns_reference(map):
-        """
-        Result of a `__getitem__` call, `map[x]`, is a reference to the associated codomain set.
-        """
-        map['Sally'].add('History')
-        assert map['Sally'] == {'Geography', 'History'}
+        with detail("Calling `map[key]` where `key not in map` raises `KeyError`."):
+            with expecting(KeyError):
+                values = map['Tom']
 
-    def __getitem_bad_key_raises_keyerror(map):
-        """
-        Calling `map[key]` where `key not in map` raises `KeyError`.
-        """
-        with expecting(KeyError):
-            v = map['John']
+        with detail("Return value of `map[x]` is not a reference to the underlying codomain set."):
+            map['Sally'].add('History')
+            assert map['Sally'] == {'Geography'}
+        return ...
 
-    def __contains__(map, key):
+    def __contains__(map, key: Any) -> bool:
         """
-        @param domain_element:
-        @return: `bool` whether `key` is an element in the `map` domain.
+        Check if the `map` contains a domain element.
+
+        :param key:
+        :return: Whether `key` is an element in the `map` domain.
         """
         assert 'Mark' in map
-        assert 'John' not in map
+        assert 'Tom' not in map
 
-    def __len__(map):
+        with detail("Any object can be checked for `in map` without error"):
+            assert {} not in map
+        return ...
+
+    def __len__(map) -> int:
         """
-        @return: Number of elements in the `map` domain.
+        Get the number of elements in the `map` domain.
+
+        Note that the number of elements in the `map` codomain can be found with `len(map.reverse)` or `len(map.values)`.
+
+        :return: Non-negative number of domain elements.
         """
         assert len(map) == 2
+        return ...
 
-    def __iter__(map):
+    def __iter__(map) -> Iterator:
         """
-        @return: Iterator over keys of `map`.
+        The elements of a `Map` domain can be iterated over.
+
+        :return: Iterator over keys of `map`.
         """
         keys = set()
         for key in map:
             keys.add(key)
         assert keys == {'Mark', 'Sally'}
+        return ...
 
-    def keys(map):
+    def keys(map, up_to: int =None) -> set:
         """
-        @return: View keys in `map` domain.
+        :return: A read-only view of the `Map` domain.
         """
         assert map.keys() == {'Mark', 'Sally'}
+        return ...
 
-    def values(map):
+    def values(map) -> set:
         """
-        @return: View of values in `map` codomain.
+        :return: View of values in `map` codomain.
         """
         assert map.values() == {'Geography', 'Algebra'}
+        return ...
 
-    def items(map):
+    def items(map) -> set[tuple[Any, Any]] | list[tuple[list, Any]]:
         """
-        @return: View of (key, value) pairs in `map`.
+        :return: View of (key, value) pairs in `map`.
         """
-        assert set(map.items()) == {
+        assert map.items() == {
             ('Mark', 'Geography'),
             ('Mark', 'Algebra'),
             ('Sally', 'Geography')
         }
+        return ...
+
+    def get(map, key: Hashable, default: T_get_default = None) -> set | T_get_default:
+        """
+        Access values by key without `KeyError`.
+
+        :return: Values associated with `key`, or `default` if `key not in map`.
+        """
+        assert map.get('Mark') == {'Geography', 'Algebra'}
+        assert map.get('John') == set()
+        default = object()
+        assert map.get('John', default) is default
+        return ...
 
     @property
-    def reverse(map):
+    def reverse(map) -> 'Map':
         """
-        @return: View of `map` with domain and codomain inverted.
+        :return: View of `map` with domain and codomain inverted.
         """
         assert map.reverse == {
             'Geography': {'Mark', 'Sally'},
             'Algebra': {'Mark'}
         }
 
-    def __reverse_returns_reference(map):
-        """
-        `map.reverse` is a view of `map` with domain and codomain inverted.
+        with detail("Any mutations to `map.reverse` will be reflected in `map` and vice versa."):
+            map.reverse['Geography'].add('Joe')
+            assert map.reverse == {
+                'Geography': {'Mark', 'Sally', 'Joe'},
+                'Algebra': {'Mark'}
+            }
+            assert map == {
+                'Mark': {'Geography', 'Algebra'},
+                'Sally': {'Geography'},
+                'Joe': {'Geography'}
+            }
+        return ...
 
-        Any mutations to `map.reverse` will be reflected in `map` and vice versa.
-        """
-        return Map({
-            'Geography': {'Mark', 'Sally'},
-            'Algebra': {'Mark'}
-        }).reverse
+    r = reverse
 
-    def __r_alias(map):
-        """
-        `map.r` is an alias for `map.reverse`
-        """
-        assert map.r is map.reverse
+    def issubset(map, other):
+        ...
+    __le__ = issubset
 
-    def get(map, key, default=None):
-        """
-        @return: Value associated with `key`, or `default` if `key not in map`.
-        """
-        assert map.get('Mark') == {'Geography', 'Algebra'}
-        assert map.get('John') is None
-        dflt = object()
-        assert map.get('John', dflt) is dflt
+    def ispropersubset(map, other):
+        ...
+    __lt__ = ispropersubset
 
-    def __setitem__(map, key, values):
+    def issuperset(map, other):
+        ...
+    __ge__ = issuperset
+
+    def ispropersuperset(map, other):
+        ...
+    __gt__ = ispropersuperset
+
+    def isdisjoint(map, other):
+        ...
+
+    def __setitem__(map, key: Hashable, values: Iterable[Hashable]):
         """
-        Assign values from iterable `values` to `key`.
+        Assign values from iterable `values` to `key`, replacing any existing values associated with `key`.
 
         If `key not in map`, add `key` to map keys.
 
-        @param key: to add to `map` domain.
-        @param values: `iterable<value>` to associate with `key` in the `map` codomain.
+        :param key: Key to add to `map` domain.
+        :param values: Values to associate with `key` in the `map` codomain.
         """
         map['John'] = {'Calculus', 'English'}
         assert map['John'] == {'Calculus', 'English'}
+        map['Mark'] = {'Humanities', 'Calculus'}
+        assert map['Mark'] == {'Humanities', 'Calculus'}
 
-    def __setitem_overwrites_values(map):
-        """
-        `map[key] = values` overwrites existing values associated with `key`, replacing them with the items in provided `values`.
-        """
-        map['Mark'] = {'Geography', 'Calculus'}
-        assert map['Mark'] == {'Geography', 'Calculus'}
+        with detail("`Map` value sets are stable, not reconstructed."):
+            marks_values = map['Mark']
+            map['Mark'] = {'Programming'}
+            assert map['Mark'] is marks_values
+            assert marks_values == {'Programming'}
 
-    def __setitem_copies_values(map):
-        """
-        `map[key] = values` will add each item in `values` into the map codomain, not add the entire collection `values` by reference.
-        """
-        values = {'Calculus', 'English'}
-        map['John'] = values
-        assert map['John'] == values
-        assert map['John'] is not values
-
-    def setdefault(map, key, values=None):
-        """
-        Get the values associated with `key` in `map`, adding `key` associated with `values` if `key not in map`.
-
-        @param key: in `map` domain.
-        @param values: `iterable<value>` to associate with `key` in the `map` codomain if `key not in map`.
-        @return: `set<value>` a0ssociated with `key`.
-        """
-        assert map.setdefault('John') == set()
-        assert map['John'] == set()
-        assert map.setdefault('John', {'Algebra', 'Statistics'}) == set()
-        assert map['John'] == set()
-        assert map.setdefault('Jake', {'Algebra'}) == {'Algebra'}
-        assert map['Jake'] == {'Algebra'}
+        with detail("`Map`s use their own `set` to represent `values`, rather than taking a provided `values` collection by reference."):
+            values = {'Calculus', 'English'}
+            map['John'] = values
+            assert map['John'] == values
+            assert map['John'] is not values
 
     def add(map, key, values=None):
         """
-        Alias for `setdefault(key, values=None)`.
+        Add a key and/or values to the `Map`.
 
-        @param key: in `map` domain.
-        @param values: `iterable<value>` to associate with `key` in the `map` codomain if `key not in map`.
-        @return: `set<value>` associated with `key`.
+        Similar to `map.setdefault(key, values)`, but `add` will add `values` to the set of existing values associated with `key`, and will never replace existing values.
+
+        :param key: Key to add to `map` domain.
+        :param values: Values to associate with `key`.
+        :return: `set` of values associated with `key`.
         """
         assert map.add('John') == set()
         assert map['John'] == set()
@@ -214,6 +259,24 @@ class Map(Protocol):
         assert map.add('Jake', {'Algebra'}) == {'Algebra'}
         assert map['Jake'] == {'Algebra'}
 
+    def setdefault(map, key: Hashable, values: Iterable[Hashable] =None) -> set:
+        """
+        Get the values associated with `key` in `map`, adding `key` associated with `values` if `key not in map`.
+
+        Similar to `map.add(key, values)`, but `setdefault` will replace values associated with `key` if `key` already exists in `map`'s domain.
+
+        :param key: Key in `map` domain.
+        :param values: Values to associate with `key` in the `map` codomain if `key not in map`.
+        :return: `set` of values associated with `key`.
+        """
+        assert map.setdefault('John') == set()
+        assert map['John'] == set()
+        assert map.setdefault('John', {'Algebra', 'Statistics'}) == set()
+        assert map['John'] == set()
+        assert map.setdefault('Jake', ['Algebra']) == {'Algebra'}
+        assert map['Jake'] == {'Algebra'}
+        return ...
+
     def __delitem__(map, key):
         """
         Remove `key` from `map` domain.
@@ -221,3 +284,48 @@ class Map(Protocol):
         @param key: to remove from `map` domain.
         """
         # Should values be auto-removed when deleting keys?
+
+    delete = __delitem__
+
+    def remove(map, key, value=None): ...
+
+    def discard(map, key, value=None): ...
+
+    def pop(map, key, default=None): ...
+
+    def popitem(map, key=None):
+        ...
+
+    def clear(map):
+        ...
+
+    def union_update(map, other): ...
+    __ior__ = union_update
+
+    def intersection_update(map, other): ...
+    __iand__ = intersection_update
+
+    def difference_update(map, other): ...
+    __isub__ = difference_update
+
+    def symmetric_difference_update(map, other): ...
+    __ixor__ = symmetric_difference_update
+
+    def union(map, other): ...
+    __or__ = union
+
+    def intersection(map, other): ...
+    __and__ = intersection
+
+    def difference(map, other): ...
+    __sub__ = difference
+
+    def symmetric_difference(map, other): ...
+    __xor__ = symmetric_difference
+
+    @Spec[HierarchicalMap]
+    def __init__(self):
+        """
+        `Map` should satisfy the hierarchical `Map` spec.
+        """
+

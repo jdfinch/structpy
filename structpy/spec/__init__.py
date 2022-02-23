@@ -18,25 +18,44 @@ class expecting:
             return False
 
 
-class Spec:
+class SpecMeta:
 
-    def __init__(self, cls=None, *, instance=None, factory=None):
-        pass
+    @classmethod
+    def __getitem__(cls, item):
+        def dec(f):
+            return f
+        return dec
 
-    def __call__(self, cls):
+
+class Spec(metaclass=SpecMeta):
+
+    @staticmethod
+    def subtest(f):
+        return f
+
+
+class detail:
+    def __init__(self, header: str=None):
+        self.header = header
+    def __enter__(self):
         return self
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        return
 
-    def run_tests(self):
-        return True
+class testing(detail): pass
 
-    def __getattribute__(self, item):
-        return getattr(self, item)
+class spec:
 
+    Spec = Spec
+    details = detail
 
 
 __all__ = [
     'expecting',
     'Spec',
+    'detail',
+    'testing',
+    'spec',
     'Protocol'
 ]
 
