@@ -94,6 +94,7 @@ class UnitTest:
                         del bound_kwargs[param_name]
                     else:
                         bound_args.append(args[i])
+
         bound_f = partial(f, *bound_args, **bound_kwargs)
         return bound_f
 

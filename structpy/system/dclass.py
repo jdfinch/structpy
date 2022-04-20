@@ -59,7 +59,11 @@ class Dclass:
 
 
 def dclass(name):
-    return Dclass(__name__=name)
+    def dclass_factory(*args, **kwargs):
+        obj = Dclass(__name__=name)
+        obj(*args, **kwargs)
+        return obj
+    return dclass_factory
 
 
 if __name__ == '__main__':

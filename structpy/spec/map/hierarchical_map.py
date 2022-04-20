@@ -5,24 +5,24 @@ from structpy.typing import *
 from typing import TypeVar, Generic, Type
 
 
-T_get_default = TypeVar('T_get_default')
-T_KeyChain = TypeVar('T_KeyChain', bound=tuple)
-T_Element = Hashable | list[Hashable]
-T_Elements = Iterable[T_Element]
+DefaultType = TypeVar('DefaultType')
+KeyChain = TypeVar('KeyChain', bound=tuple)
+Element = Hashable | list[Hashable]
+Elements = Iterable[Element]
 
 
-class Map(Generic[T_KeyChain], Spec):
+class Map(Generic[KeyChain], Spec):
     """
     Hierarchical mapping.
     """
 
-    KeyChain: Type[T_KeyChain] = type('KeyChain', (tuple,), {})
+    KeyChain: Type[KeyChain] = type('KeyChain', (tuple,), {})
 
     def __init__(
             map,
-            mapping: Mapping[T_Element, T_Elements] | T_Elements = None,
-            values: T_Elements = None,
-            items: Iterable[tuple[T_Element, T_Element]] = None
+            mapping: Mapping[Element, Elements] | Elements = None,
+            values: Elements = None,
+            items: Iterable[tuple[Element, Element]] = None
     ):
         """
         Constructor.
@@ -127,7 +127,7 @@ class Map(Generic[T_KeyChain], Spec):
             })
         return ...
 
-    def __getitem__(map, key: T_Element) -> set | Mapping[T_Element, T_Elements]:
+    def __getitem__(map, key: Element) -> set | Mapping[Element, Elements]:
         """
         Get the set of codomain elements associated with `key`.
 
@@ -248,7 +248,7 @@ class Map(Generic[T_KeyChain], Spec):
         }
         return ...
 
-    def get(map, key: T_Element, default: T_get_default =None) -> set | T_get_default:
+    def get(map, key: Element, default: DefaultType =None) -> set | DefaultType:
         """
         Access values by key without `KeyError`.
 
@@ -283,7 +283,7 @@ class Map(Generic[T_KeyChain], Spec):
             assert map[['John', 'Marvel']] == {'Infinity', 'Endgame'}
         return ...
 
-    def issubset(map, other: Mapping[T_Element, T_Elements] | T_Elements) -> bool:
+    def issubset(map, other: Mapping[Element, Elements] | Elements) -> bool:
         assert map.issubset({
             'John': {
                 'Harry Potter': {'Chamber', 'Prisoner', 'Goblet'},
@@ -337,7 +337,7 @@ class Map(Generic[T_KeyChain], Spec):
 
     __le__ = issubset
 
-    def ispropersubset(map, other: Mapping[T_Element, T_Elements] | T_Elements) -> bool:
+    def ispropersubset(map, other: Mapping[Element, Elements] | Elements) -> bool:
         assert map.ispropersubset({
             'John': {
                 'Harry Potter': {'Chamber', 'Prisoner', 'Goblet'},
@@ -392,7 +392,7 @@ class Map(Generic[T_KeyChain], Spec):
 
     __lt__ = ispropersubset
 
-    def issuperset(map, other: Mapping[T_Element, T_Elements] | T_Elements) -> bool:
+    def issuperset(map, other: Mapping[Element, Elements] | Elements) -> bool:
         assert map.issuperset({
             'John': {
                 'Harry Potter': {'Chamber'},
@@ -443,7 +443,7 @@ class Map(Generic[T_KeyChain], Spec):
 
     __ge__ = issuperset
 
-    def ispropersuperset(map, other: Mapping[T_Element, T_Elements] | T_Elements) -> bool:
+    def ispropersuperset(map, other: Mapping[Element, Elements] | Elements) -> bool:
         assert map.ispropersuperset({
             'John': {
                 'Harry Potter': {'Chamber'},
@@ -494,7 +494,7 @@ class Map(Generic[T_KeyChain], Spec):
 
     __gt__ = ispropersuperset
 
-    def isdisjoint(map, other: Mapping[T_Element, T_Elements] | T_Elements) -> bool:
+    def isdisjoint(map, other: Mapping[Element, Elements] | Elements) -> bool:
         """
         :param other: A
         :return: Whether the set of keychains are disjoint between `Map` and `other`.
@@ -529,7 +529,7 @@ class Map(Generic[T_KeyChain], Spec):
             assert map.isdisjoint({'Sally', ('Tom', 'Harry Potter')})
         return ...
 
-    def __setitem__(map, key: T_Element, values: Mapping[T_Element, T_Elements] | T_Elements):
+    def __setitem__(map, key: Element, values: Mapping[Element, Elements] | Elements):
         """
         Assign values from iterable `values` to `key`, replacing any existing values associated with `key`.
 
@@ -587,7 +587,7 @@ class Map(Generic[T_KeyChain], Spec):
             }
             assert m.values() == {'Avengers', 'Infinity', 'Endgame'}
 
-    def add(map, key: T_Element, values: Mapping[T_Element, T_Elements] | T_Elements=None):
+    def add(map, key: Element, values: Mapping[Element, Elements] | Elements=None):
         """
         Add a key and/or values to the `Map`.
 
@@ -609,7 +609,7 @@ class Map(Generic[T_KeyChain], Spec):
         map.add(['Tom', 'Star Wars'], {'Attack', 'Revenge'})
         assert map['Tom'] == {'Star Wars': {'Empire', 'Return', 'Attack', 'Revenge'}}
 
-    def additem(map, key: T_Element, value: T_Element):
+    def additem(map, key: Element, value: Element):
         """
         Add a single value to the value set associated with `key`.
 
@@ -622,7 +622,7 @@ class Map(Generic[T_KeyChain], Spec):
         map.add(['Tom', 'Star Wars'], 'Revenge')
         assert map['Tom'] == {'Star Wars': {'Empire', 'Revenge'}}
 
-    def setdefault(map, key: T_Element, values: T_Elements | Mapping[T_Element, T_Elements] = None) -> set | Mapping[T_Element, T_Elements]:
+    def setdefault(map, key: Element, values: Elements | Mapping[Element, Elements] = None) -> set | Mapping[Element, Elements]:
         """
         Get values associated with a key/keychain, or insert the key/keychain with the provided values if it is not in `map`.
 
@@ -647,7 +647,7 @@ class Map(Generic[T_KeyChain], Spec):
         assert map[['Megan', 'Marvel']] == {'Avengers'}
         return ...
 
-    def __delitem__(map, key: T_Element):
+    def __delitem__(map, key: Element):
         """
         Remove a key, and any of its values that are not associated to any other key.
 
@@ -673,7 +673,7 @@ class Map(Generic[T_KeyChain], Spec):
             with expecting(KeyError):
                 del map['Tom']
 
-    def delete(map, key: T_Element, value: T_Elements =None):
+    def delete(map, key: Element, value: Elements =None):
         """
         Remove a key, OR the association between a key and one of its values.
 
@@ -788,7 +788,7 @@ class Map(Generic[T_KeyChain], Spec):
             }
             assert m.values() == {'Chronicle', 'Chamber'}
 
-    def clear(map, key: T_Element =None, value: T_Elements =None):
+    def clear(map, key: Element =None, value: Elements =None):
         """
         Remove a key, OR the association between a key and one of its values.
 
