@@ -6,7 +6,7 @@ import textwrap
 
 class RecompiledFunction:
 
-    def __init__(self, f, globals=None, locals=None):
+    def __init__(self, f, globals=None, locals=None, keep_code=False):
         locals = {} if locals is None else locals
         globals = {} if globals is None else globals
         before_source = textwrap.dedent(inspect.getsource(self.before))
@@ -36,6 +36,10 @@ class RecompiledFunction:
         source = textwrap.dedent(inspect.getsource(f))
         tree = ast.parse(source)
         visitor.visit(tree)
+        if keep_code:
+            self.code = ast.unparse(tree)
+        else:
+            self.code = None
         target = compile(tree, '<string>', 'exec')
         exec(target, globals, locals)
         self.recompiled_function = locals[f.__name__]
@@ -60,6 +64,7 @@ if __name__ == '__main__':
 
     class RecompiledFoo(RecompiledFunction):
         def before(self, x):
+            print('before:', x)
             x = x + 10
         def after(self, z):
             print('After:', z)

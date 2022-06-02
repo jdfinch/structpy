@@ -14,6 +14,24 @@ class UnitTest:
     of some implementation code.
     """
 
+    class Result(Dclass):
+
+        def __init__(self, **attrs):
+            self.unit = None
+            self.args = None
+            self.kwargs = None
+            self.timedelta = None
+            self.error = None
+            self.stdout = None
+            self.stderr = None
+            self.traceback = None
+            self.result = None
+            Dclass.__init__(self, **attrs)
+
+        @property
+        def success(self):
+            return self.error is None
+
     def __init__(self, f):
         self.function = f if not isinstance(f, UnitTest) else f.function
         self._bound_functions = [partial(self.function)]
@@ -43,7 +61,7 @@ class UnitTest:
                 error = e
                 traceback = format_exc()
                 print(traceback, file=sys.stderr)
-        results = Result(
+        results = UnitTest.Result(
             unit=self,
             args=bound_args,
             kwargs=bound_kwargs,
@@ -122,25 +140,6 @@ class UnitTest:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.unbind()
-
-
-class Result(Dclass):
-
-    def __init__(self, **attrs):
-        self.unit = None
-        self.args = None
-        self.kwargs = None
-        self.timedelta = None
-        self.error = None
-        self.stdout = None
-        self.stderr = None
-        self.traceback = None
-        self.result = None
-        Dclass.__init__(self, **attrs)
-
-    @property
-    def success(self):
-        return self.error is None
 
 
 if __name__ == '__main__':
