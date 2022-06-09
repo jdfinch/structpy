@@ -8,7 +8,7 @@ class DefaultBinder:
     def __init__(self, f, default=None, force_namespace=False):
         self.f = f
         if inspect.isfunction(f):
-            self.parameters = inspect.signature(f)
+            self.parameters = inspect.signature(f).parameters
         else:
             self.parameters = {
                 key: inspect.Parameter(
@@ -20,7 +20,7 @@ class DefaultBinder:
         self.default = default
         self.force_namespace = force_namespace
 
-    def __call__(self, *args, **kwargs):
+    def arguments(self, *args, **kwargs):
         arguments = []
         kwarguments = {}
         for i, (name, param) in enumerate(self.parameters.items()):
@@ -30,24 +30,40 @@ class DefaultBinder:
                 elif self.force_namespace and name in kwargs:
                     arguments.append(kwargs[name])
                     del kwargs[name]
-                else:
+                elif param.default is inspect.Parameter.empty:
                     arguments.append(self.default)
+                else:
+                    arguments.append(param.default)
             elif param.kind is inspect.Parameter.POSITIONAL_OR_KEYWORD:
                 if len(args) > i:
                     kwarguments[name] = args[i]
                 elif name in kwargs:
                     kwarguments[name] = kwargs[name]
-                else:
+                elif param.default is inspect.Parameter.empty:
                     kwarguments[name] = self.default
+                else:
+                    kwarguments[name] = param.default
             elif param.kind is inspect.Parameter.VAR_POSITIONAL:
                 arguments.extend(args[i:])
             elif param.kind is inspect.Parameter.KEYWORD_ONLY:
                 if name in kwargs:
                     kwarguments[name] = kwargs[name]
-                else:
+                elif param.default is inspect.Parameter.empty:
                     kwarguments[name] = self.default
+                else:
+                    kwarguments[name] = param.default
             elif param.kind is inspect.Parameter.VAR_KEYWORD:
                 kwarguments.update(kwargs)
         return arguments, kwarguments
 
-    bind = __call__
+    def bound(self, *args, **kwargs):
+        assert callable(self.f)
+        arguments, kwarguments = self.arguments(*args, **kwargs)
+        return functools.partial(self.f, *arguments, **kwarguments)
+
+    def __call__(self, *args, **kwargs):
+        assert callable(self.f)
+        arguments, kwarguments = self.arguments(*args, **kwargs)
+        return self.f(*arguments, **kwarguments)
+
+    call = __call__
