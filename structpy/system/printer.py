@@ -258,8 +258,9 @@ class PrinterSettings(Dclass):
             elif isinstance(arg, tuple) and len(arg) == 3:
                 self.fg = Printer.fg(*arg)
         for kw, arg in kwargs.items():
-            if arg is not default and (kw in self() or kw in {'op', 'ops'}):
-                if kw == 'fg':
+            if arg is not default and (kw in self() or kw in {'op', 'ops', 'color'}):
+                if kw == 'fg' or kw == 'color':
+                    kw = 'fg'
                     if arg in Printer.foreground_colors:
                         arg = Printer.foreground_colors[arg]
                     elif isinstance(arg, tuple) and len(arg) == 3:

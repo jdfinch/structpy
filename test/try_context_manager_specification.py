@@ -20,12 +20,15 @@ with spec:
         global b
         b = 2
         assert a == [1, 2, 3]
+        print(a)
         a.append(4)
         assert a == [1, 2, 3, 4]
+        print(a)
 
     def bat(x, y, z):
         assert a == [1, 2, 3]
         assert b == 2
+        print(a)
 
 
 if __name__ == '__main__':
@@ -33,7 +36,5 @@ if __name__ == '__main__':
     import pprint
 
     spec.implementation([], 10)
-    results = spec.run(True)
-
-    for result in results:
-        pprint.pp(result())
+    spec.implementation((), 2)
+    results = spec.run()
