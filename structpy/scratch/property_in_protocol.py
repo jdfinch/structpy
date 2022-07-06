@@ -24,3 +24,5 @@ class Foo:
 
 f: FooProto = Foo()
 
+x: int = f.alias()
+
